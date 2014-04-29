@@ -1,6 +1,6 @@
 #pragma once
 
-#define LOGD(message)   (projectz::utils::Logger::getInstance().print(message))
+#define LOGD(...)   (projectz::utils::Logger::getInstance().print(__FILE__, __LINE__, __VA_ARGS__))
 
 namespace projectz {
     namespace utils {
@@ -11,11 +11,13 @@ namespace projectz {
                 return instance;
             }
 
-            void print(const char* message);
+            void print(const char* fileName, int32 lineNum, const char* format, ...) const;
 
         private:
             Logger();
             ~Logger();
+
+            static const char* mLogFormat;
         };
     }
 }

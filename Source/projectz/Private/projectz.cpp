@@ -1,5 +1,3 @@
-
-
 #include "projectz.h"
 
 #include "projectz.generated.inl"
