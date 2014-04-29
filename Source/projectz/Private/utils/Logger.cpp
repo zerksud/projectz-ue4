@@ -20,7 +20,7 @@ namespace projectz {
             int32 messageSize = vsnprintf(nullptr, 0, format, args);
             va_end(args);
 
-            if (messageSize > 0) {
+            if (messageSize < 0) {
                 UE_LOG(ProjectZ, Error, TEXT("Can't use format '%s' for logging from %s:%d"), ANSI_TO_TCHAR(format), ANSI_TO_TCHAR(fileName), lineNum);
                 return;
             }
