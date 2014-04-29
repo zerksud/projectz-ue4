@@ -31,11 +31,11 @@ namespace projectz {
             va_end(args);
 
             const FString logMessage = FString::Printf(ANSI_TO_TCHAR(mLogFormat), ANSI_TO_TCHAR(fileName), lineNum, ANSI_TO_TCHAR(userMessage));
-            
+
             UE_LOG(ProjectZ, Log, TEXT("%s"), *logMessage);
 
             if (GEngine) {
-               GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, ANSI_TO_TCHAR(userMessage));
+                GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, ANSI_TO_TCHAR(userMessage));
             }
 
             delete[] userMessage;
