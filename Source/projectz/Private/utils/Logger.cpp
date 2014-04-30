@@ -13,7 +13,7 @@ namespace projectz {
         Logger::~Logger() {
         }
 
-        const char* Logger::mLogFormat = "[%s:%d] %s";
+        const char* Logger::kLogFormat = "[%s:%d] %s";
 
         void Logger::print(ELogVerbosity::Type verbosity, const FColor& color, const ANSICHAR* fileName, int32 lineNum, const ANSICHAR* format, ...) const {
             va_list args;
@@ -31,7 +31,7 @@ namespace projectz {
             vsprintf(userMessage, format, args);
             va_end(args);
 
-            const FString logMessage = FString::Printf(ANSI_TO_TCHAR(mLogFormat), ANSI_TO_TCHAR(fileName), lineNum, ANSI_TO_TCHAR(userMessage));
+            const FString logMessage = FString::Printf(ANSI_TO_TCHAR(kLogFormat), ANSI_TO_TCHAR(fileName), lineNum, ANSI_TO_TCHAR(userMessage));
 
             FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, TEXT("%s"), *logMessage);
 

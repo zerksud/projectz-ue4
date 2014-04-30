@@ -18,7 +18,7 @@ namespace projectz {
             Logger();
             ~Logger();
 
-            static const char* mLogFormat;
+            static const char* kLogFormat;
         };
     }
 }
