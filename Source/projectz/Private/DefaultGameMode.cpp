@@ -11,5 +11,6 @@ ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializePropertie
 void ADefaultGameMode::BeginPlay() {
     Super::BeginPlay();
 
-    LOGD("debug message %s %d %s", "with", 3, "parameters");
+    LOGD("sample debug message %s %d %s", "with", 3, "parameters");
+    LOGE("sample error message");
 }

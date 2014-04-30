@@ -1,4 +1,5 @@
 #include "projectz.h"
+
 #include "Logger.h"
 
 DEFINE_LOG_CATEGORY_STATIC(ProjectZ, All, All)
@@ -14,7 +15,7 @@ namespace projectz {
 
         const char* Logger::mLogFormat = "[%s:%d] %s";
 
-        void Logger::print(const char* fileName, int32 lineNum, const char* format, ...) const {
+        void Logger::print(ELogVerbosity::Type verbosity, const FColor& color, const ANSICHAR* fileName, int32 lineNum, const ANSICHAR* format, ...) const {
             va_list args;
             va_start(args, format);
             int32 messageSize = vsnprintf(nullptr, 0, format, args);
@@ -32,10 +33,10 @@ namespace projectz {
 
             const FString logMessage = FString::Printf(ANSI_TO_TCHAR(mLogFormat), ANSI_TO_TCHAR(fileName), lineNum, ANSI_TO_TCHAR(userMessage));
 
-            UE_LOG(ProjectZ, Log, TEXT("%s"), *logMessage);
+            FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, TEXT("%s"), *logMessage);
 
             if (GEngine) {
-                GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, ANSI_TO_TCHAR(userMessage));
+                GEngine->AddOnScreenDebugMessage(-1, 5.0f, color, ANSI_TO_TCHAR(userMessage));
             }
 
             delete[] userMessage;
