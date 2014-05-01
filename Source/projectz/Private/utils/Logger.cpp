@@ -33,7 +33,7 @@ namespace projectz {
 
             const FString logMessage = FString::Printf(ANSI_TO_TCHAR(kLogFormat), ANSI_TO_TCHAR(fileName), lineNum, ANSI_TO_TCHAR(userMessage));
 
-            FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, TEXT("%s"), *logMessage);
+            FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, *logMessage);
 
             if (GEngine) {
                 GEngine->AddOnScreenDebugMessage(-1, 5.0f, color, ANSI_TO_TCHAR(userMessage));
