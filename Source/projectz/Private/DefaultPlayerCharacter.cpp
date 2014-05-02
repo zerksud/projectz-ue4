@@ -22,6 +22,7 @@ void ADefaultPlayerCharacter::SetupPlayerInputComponent(class UInputComponent* I
 }
 
 void ADefaultPlayerCharacter::Move(EAxis::Type axis, bool reverse) {
+    LOGD("Move along axis %d with reverse = %d", axis, reverse);
     if (Controller != nullptr) {
         AddMovementInput(FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(axis), reverse ? -1.0f : 1.0f);
     }
