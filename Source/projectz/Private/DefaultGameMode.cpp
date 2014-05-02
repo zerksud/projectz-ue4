@@ -1,12 +1,12 @@
 #include "projectz.h"
 #include "DefaultGameMode.h"
 
-#include "DefaultPlayerPawn.h"
+#include "DefaultPlayerCharacter.h"
 #include "utils/Logger.h"
 
 ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP) {
-    DefaultPawnClass = ADefaultPlayerPawn::StaticClass();
+    DefaultPawnClass = ADefaultPlayerCharacter::StaticClass();
 }
 
 void ADefaultGameMode::BeginPlay() {
