@@ -19,6 +19,8 @@ void ADefaultPlayerCharacter::SetupPlayerInputComponent(class UInputComponent* I
     InputComponent->BindAction("MoveBackward", IE_Pressed, this, &ADefaultPlayerCharacter::MoveBackwardAction);
     InputComponent->BindAction("StrafeLeft", IE_Pressed, this, &ADefaultPlayerCharacter::StrafeLeftAction);
     InputComponent->BindAction("StrafeRight", IE_Pressed, this, &ADefaultPlayerCharacter::StrafeRightAction);
+    InputComponent->BindAction("TurnRight", IE_Pressed, this, &ADefaultPlayerCharacter::TurnRight);
+    InputComponent->BindAction("TurnLeft", IE_Pressed, this, &ADefaultPlayerCharacter::TurnLeft);
 }
 
 void ADefaultPlayerCharacter::Move(EAxis::Type axis, bool reverse) {
@@ -42,4 +44,19 @@ void ADefaultPlayerCharacter::StrafeRightAction() {
 
 void ADefaultPlayerCharacter::StrafeLeftAction() {
     Move(EAxis::Y, true);
+}
+
+void ADefaultPlayerCharacter::Turn(bool reverse) {
+    LOGD("Turn with reverse = %d", reverse);
+    if (Controller != nullptr) {
+        AddControllerYawInput(reverse ? -1.0f : 1.0f);
+    }
+}
+
+void ADefaultPlayerCharacter::TurnRight() {
+    Turn();
+}
+
+void ADefaultPlayerCharacter::TurnLeft() {
+    Turn(true);
 }

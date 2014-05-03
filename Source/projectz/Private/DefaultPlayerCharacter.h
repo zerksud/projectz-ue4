@@ -26,6 +26,14 @@ public:
     UFUNCTION()
     void StrafeRightAction();
 
+    void Turn(bool reversed = false);
+
+    UFUNCTION()
+    void TurnRight();
+
+    UFUNCTION()
+    void TurnLeft();
+
 protected:
     virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) OVERRIDE;
 };
