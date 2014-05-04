@@ -4,6 +4,8 @@
 
 DEFINE_LOG_CATEGORY_STATIC(ProjectZ, All, All)
 
+//#define VERBOSE
+
 namespace projectz {
     namespace utils {
 
@@ -13,7 +15,11 @@ namespace projectz {
         Logger::~Logger() {
         }
 
-        const char* Logger::kLogFormat = "[%s][%s:%d] %s";
+        const char* Logger::kLogFormat =
+#ifdef VERBOSE
+            "[%s][%s:%d] "
+#endif
+            "%s";
 
         void Logger::print(ELogVerbosity::Type verbosity, const FColor& color, const ANSICHAR* fileName, int32 lineNum, const ANSICHAR* format, ...) const {
             va_list args;
@@ -32,7 +38,11 @@ namespace projectz {
             va_end(args);
 
             const FString currentDate = FDateTime::UtcNow().ToString();
-            const FString logMessage = FString::Printf(ANSI_TO_TCHAR(kLogFormat), *currentDate, ANSI_TO_TCHAR(fileName), lineNum, ANSI_TO_TCHAR(userMessage));
+            const FString logMessage = FString::Printf(ANSI_TO_TCHAR(kLogFormat),
+#ifdef VERBOSE
+                *currentDate, ANSI_TO_TCHAR(fileName), lineNum,
+#endif
+                ANSI_TO_TCHAR(userMessage));
 
             FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, *logMessage);
 
