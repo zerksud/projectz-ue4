@@ -27,8 +27,14 @@ void ADefaultPlayerCharacter::Move(EAxis::Type axis, bool reverse) {
     LOGD("Move along axis %d with reverse = %d", axis, reverse);
     if (Controller != nullptr) {
         LOGD("location before move: %s", TCHAR_TO_ANSI(*GetActorLocation().ToString()));
-        const FVector direction = (reverse ? -1.0f : 1.0f) * FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(axis);
-        CharacterMovement->Velocity += direction * 10000.0f;
+
+        FVector moveDistance = 100.0f * (reverse ? -1.0f : 1.0f) * FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(axis);
+        LOGD("move direction: %s", TCHAR_TO_ANSI(*moveDistance.ToString()));
+
+        FVector destination = GetActorLocation() + moveDistance;
+        LOGD("destination: %s", TCHAR_TO_ANSI(*destination.ToString()));
+
+        GetWorld()->GetNavigationSystem()->SimpleMoveToLocation(Controller, destination);
     }
 }
 
