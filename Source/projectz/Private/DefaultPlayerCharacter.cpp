@@ -26,7 +26,9 @@ void ADefaultPlayerCharacter::SetupPlayerInputComponent(class UInputComponent* I
 void ADefaultPlayerCharacter::Move(EAxis::Type axis, bool reverse) {
     LOGD("Move along axis %d with reverse = %d", axis, reverse);
     if (Controller != nullptr) {
-        AddMovementInput(FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(axis), reverse ? -1.0f : 1.0f);
+        LOGD("location before move: %s", TCHAR_TO_ANSI(*GetActorLocation().ToString()));
+        const FVector direction = (reverse ? -1.0f : 1.0f) * FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(axis);
+        CharacterMovement->Velocity += direction * 10000.0f;
     }
 }
 
@@ -49,7 +51,9 @@ void ADefaultPlayerCharacter::StrafeLeftAction() {
 void ADefaultPlayerCharacter::Turn(bool reverse) {
     LOGD("Turn with reverse = %d", reverse);
     if (Controller != nullptr) {
-        AddControllerYawInput(reverse ? -1.0f : 1.0f);
+        FRotator rotation = Controller->GetControlRotation();
+        rotation.Yaw += (reverse ? -1.0f : 1.0f) * 90.0f;
+        Controller->SetControlRotation(rotation);
     }
 }
 
