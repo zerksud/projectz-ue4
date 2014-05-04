@@ -34,6 +34,9 @@ public:
     UFUNCTION()
     void TurnLeft();
 
+    UFUNCTION()
+    void DebugPrintCurrentLocation();
+
 protected:
     virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) OVERRIDE;
 };

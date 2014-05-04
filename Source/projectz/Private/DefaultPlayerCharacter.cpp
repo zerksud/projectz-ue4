@@ -21,13 +21,12 @@ void ADefaultPlayerCharacter::SetupPlayerInputComponent(class UInputComponent* I
     InputComponent->BindAction("StrafeRight", IE_Pressed, this, &ADefaultPlayerCharacter::StrafeRightAction);
     InputComponent->BindAction("TurnRight", IE_Pressed, this, &ADefaultPlayerCharacter::TurnRight);
     InputComponent->BindAction("TurnLeft", IE_Pressed, this, &ADefaultPlayerCharacter::TurnLeft);
+    InputComponent->BindAction("DebugPrintCurrentLocation", IE_Pressed, this, &ADefaultPlayerCharacter::DebugPrintCurrentLocation);
 }
 
 void ADefaultPlayerCharacter::Move(EAxis::Type axis, bool reverse) {
     LOGD("Move along axis %d with reverse = %d", axis, reverse);
     if (Controller != nullptr) {
-        LOGD("location before move: %s", TCHAR_TO_ANSI(*GetActorLocation().ToString()));
-
         FVector moveDistance = 100.0f * (reverse ? -1.0f : 1.0f) * FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(axis);
         LOGD("move direction: %s", TCHAR_TO_ANSI(*moveDistance.ToString()));
 
@@ -69,4 +68,8 @@ void ADefaultPlayerCharacter::TurnRight() {
 
 void ADefaultPlayerCharacter::TurnLeft() {
     Turn(true);
+}
+
+void ADefaultPlayerCharacter::DebugPrintCurrentLocation() {
+    LOGD("current location: %s", TCHAR_TO_ANSI(*GetActorLocation().ToString()));
 }
