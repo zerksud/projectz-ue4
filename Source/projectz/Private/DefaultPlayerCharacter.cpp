@@ -33,7 +33,13 @@ void ADefaultPlayerCharacter::Move(EAxis::Type axis, bool reverse) {
         FVector destination = GetActorLocation() + moveDistance;
         LOGD("destination: %s", TCHAR_TO_ANSI(*destination.ToString()));
 
-        GetWorld()->GetNavigationSystem()->SimpleMoveToLocation(Controller, destination);
+        UNavigationComponent* navComp = nullptr;
+        UPathFollowingComponent* pathComp = nullptr;
+
+        Controller->InitNavigationControl(navComp, pathComp);
+        if (navComp && pathComp && navComp->FindPathToLocation(destination)) {
+            pathComp->RequestMove(navComp->GetPath(), nullptr, 0.0f, false);
+        }
     }
 }
 
