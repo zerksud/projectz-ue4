@@ -41,6 +41,14 @@ void ADefaultPlayerController::Move(EAxis::Type axis, bool reverse) {
     }
 }
 
+void ADefaultPlayerController::Turn(bool reverse) {
+    LOGD("Turn with reverse = %d", reverse);
+
+    FRotator rotation = GetControlRotation();
+    rotation.Yaw += (reverse ? -1.0f : 1.0f) * 90.0f;
+    SetControlRotation(rotation);
+}
+
 void ADefaultPlayerController::MoveForwardAction() {
     Move(EAxis::X);
 }
@@ -55,14 +63,6 @@ void ADefaultPlayerController::StrafeRightAction() {
 
 void ADefaultPlayerController::StrafeLeftAction() {
     Move(EAxis::Y, true);
-}
-
-void ADefaultPlayerController::Turn(bool reverse) {
-    LOGD("Turn with reverse = %d", reverse);
-
-    FRotator rotation = GetControlRotation();
-    rotation.Yaw += (reverse ? -1.0f : 1.0f) * 90.0f;
-    SetControlRotation(rotation);
 }
 
 void ADefaultPlayerController::TurnRight() {

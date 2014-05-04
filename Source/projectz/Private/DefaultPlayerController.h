@@ -10,8 +10,6 @@ UCLASS()
 class ADefaultPlayerController : public APlayerController {
     GENERATED_UCLASS_BODY()
 public:
-    void Move(EAxis::Type axis, bool reverse = false);
-
     UFUNCTION()
     void MoveForwardAction();
 
@@ -24,8 +22,6 @@ public:
     UFUNCTION()
     void StrafeRightAction();
 
-    void Turn(bool reversed = false);
-
     UFUNCTION()
     void TurnRight();
 
@@ -37,4 +33,8 @@ public:
 
 protected:
     virtual void SetupInputComponent() OVERRIDE;
+
+private:
+    void Move(EAxis::Type axis, bool reverse = false);
+    void Turn(bool reversed = false);
 };
