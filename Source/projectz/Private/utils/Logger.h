@@ -1,7 +1,7 @@
 #pragma once
 
-#define LOGD(...)   (projectz::utils::Logger::getInstance().print(ELogVerbosity::Log, FColor::Yellow, __FILE__, __LINE__, __VA_ARGS__))
-#define LOGE(...)   (projectz::utils::Logger::getInstance().print(ELogVerbosity::Error, FColor::Red, __FILE__, __LINE__, __VA_ARGS__))
+#define LOGD(format, ...)   (projectz::utils::Logger::getInstance().print(ELogVerbosity::Log, FColor::Yellow, __FILE__, __LINE__, FString::Printf(ANSI_TO_TCHAR(format), __VA_ARGS__)))
+#define LOGE(format, ...)   (projectz::utils::Logger::getInstance().print(ELogVerbosity::Error, FColor::Red, __FILE__, __LINE__, FString::Printf(ANSI_TO_TCHAR(format), __VA_ARGS__)))
 
 namespace projectz {
     namespace utils {
@@ -12,7 +12,7 @@ namespace projectz {
                 return instance;
             }
 
-            void print(ELogVerbosity::Type verbosity, const FColor& color, const ANSICHAR* fileName, int32 lineNum, const ANSICHAR* format, ...) const;
+            void print(ELogVerbosity::Type verbosity, const FColor& color, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const;
 
         private:
             Logger();

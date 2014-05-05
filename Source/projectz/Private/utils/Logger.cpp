@@ -21,36 +21,19 @@ namespace projectz {
 #endif
             "%s";
 
-        void Logger::print(ELogVerbosity::Type verbosity, const FColor& color, const ANSICHAR* fileName, int32 lineNum, const ANSICHAR* format, ...) const {
-            va_list args;
-            va_start(args, format);
-            int32 messageSize = vsnprintf(nullptr, 0, format, args);
-            va_end(args);
-
-            if (messageSize < 0) {
-                UE_LOG(ProjectZ, Error, TEXT("Can't use format '%s' for logging from %s:%d"), ANSI_TO_TCHAR(format), ANSI_TO_TCHAR(fileName), lineNum);
-                return;
-            }
-
-            char* userMessage = new char[messageSize + 1];
-            va_start(args, format);
-            vsprintf(userMessage, format, args);
-            va_end(args);
-
+        void Logger::print(ELogVerbosity::Type verbosity, const FColor& color, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const {
             const FString currentDate = FDateTime::UtcNow().ToString();
             const FString logMessage = FString::Printf(ANSI_TO_TCHAR(kLogFormat),
 #ifdef VERBOSE
                 *currentDate, ANSI_TO_TCHAR(fileName), lineNum,
 #endif
-                ANSI_TO_TCHAR(userMessage));
+                *userMessage);
 
             FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, *logMessage);
 
             if (GEngine) {
-                GEngine->AddOnScreenDebugMessage(-1, 5.0f, color, ANSI_TO_TCHAR(userMessage));
+                GEngine->AddOnScreenDebugMessage(-1, 5.0f, color, userMessage);
             }
-
-            delete[] userMessage;
         }
     }
 }

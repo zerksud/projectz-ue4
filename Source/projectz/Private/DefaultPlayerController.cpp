@@ -21,15 +21,15 @@ void ADefaultPlayerController::SetupInputComponent() {
 }
 
 void ADefaultPlayerController::Move(EAxis::Type axis, bool reverse) {
-    LOGD("Move along axis %d with reverse = %d", axis, reverse);
+    LOGD("Move along axis %d with reverse = %d", (int32) axis, reverse);
 
     APawn* pawn = GetPawn();
     if (pawn) {
         FVector moveDistance = 100.0f * (reverse ? -1.0f : 1.0f) * FRotationMatrix(GetControlRotation()).GetScaledAxis(axis);
-        LOGD("move direction: %s", TCHAR_TO_ANSI(*moveDistance.ToString()));
+        LOGD("move direction: %s", *moveDistance.ToString());
 
         FVector destination = pawn->GetActorLocation() + moveDistance;
-        LOGD("destination: %s", TCHAR_TO_ANSI(*destination.ToString()));
+        LOGD("destination: %s", *destination.ToString());
 
         UNavigationComponent* navComp = nullptr;
         UPathFollowingComponent* pathComp = nullptr;
@@ -76,6 +76,6 @@ void ADefaultPlayerController::TurnLeft() {
 void ADefaultPlayerController::DebugPrintCurrentLocation() {
     APawn* pawn = GetPawn();
     if (pawn) {
-        LOGD("current location: %s", TCHAR_TO_ANSI(*pawn->GetActorLocation().ToString()));
+        LOGD("current location: %s", *pawn->GetActorLocation().ToString());
     }
 }
