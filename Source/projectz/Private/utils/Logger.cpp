@@ -22,7 +22,9 @@ namespace projectz {
             "%s";
 
         void Logger::print(ELogVerbosity::Type verbosity, const FColor& color, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const {
+#ifdef VERBOSE
             const FString currentDate = FDateTime::UtcNow().ToString();
+#endif
             const FString logMessage = FString::Printf(ANSI_TO_TCHAR(kLogFormat),
 #ifdef VERBOSE
                 *currentDate, ANSI_TO_TCHAR(fileName), lineNum,
