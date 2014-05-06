@@ -25,7 +25,7 @@ void ADefaultPlayerController::Move(EAxis::Type axis, bool reverse) {
 
     APawn* pawn = GetPawn();
     if (pawn) {
-        FVector moveDistance = 100.0f * (reverse ? -1.0f : 1.0f) * FRotationMatrix(GetControlRotation()).GetScaledAxis(axis);
+        FVector moveDistance = 500.0f * (reverse ? -1.0f : 1.0f) * FRotationMatrix(GetControlRotation()).GetScaledAxis(axis);
         LOGD("move direction: %s", *moveDistance.ToString());
 
         FVector destination = pawn->GetActorLocation() + moveDistance;
