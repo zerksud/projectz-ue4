@@ -37,4 +37,7 @@ protected:
 private:
     void Move(EAxis::Type axis, bool reverse = false);
     void Turn(bool reversed = false);
+
+    FVector mPlayerLocation;
+    bool mPlayerLocationInitialized = false;
 };
