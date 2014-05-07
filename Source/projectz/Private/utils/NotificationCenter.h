@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace projectz {
+namespace prz {
     namespace utils {
 
         typedef std::function<void(void*)> ObserverHandle;

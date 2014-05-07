@@ -6,7 +6,7 @@ DEFINE_LOG_CATEGORY_STATIC(ProjectZ, All, All)
 
 //#define VERBOSE
 
-namespace projectz {
+namespace prz {
     namespace utils {
 
         Logger::Logger() {

@@ -86,5 +86,5 @@ void ADefaultPlayerController::DebugPrintCurrentLocation() {
         LOGD("current location: %s", *pawn->GetActorLocation().ToString());
     }
 
-    projectz::utils::NotificationCenter::getInstance().postNotification("testNotification");
+    prz::utils::NotificationCenter::getInstance().postNotification("testNotification");
 }

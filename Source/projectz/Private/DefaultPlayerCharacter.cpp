@@ -13,7 +13,7 @@ void ADefaultPlayerCharacter::BeginPlay() {
     Super::BeginPlay();
 
     LOGD("DefaultPlayerPawn created");
-    projectz::utils::NotificationCenter::getInstance().addObserver("testNotification", this, [](void*){
+    prz::utils::NotificationCenter::getInstance().addObserver("testNotification", this, [](void*) {
         LOGD("testNotification posted");
     });
 }

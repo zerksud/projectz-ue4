@@ -4,7 +4,7 @@
 
 #include "NotificationCenter.h"
 
-namespace projectz {
+namespace prz {
     namespace utils {
 
         NotificationCenter::NotificationCenter() {
