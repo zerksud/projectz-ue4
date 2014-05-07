@@ -2,6 +2,7 @@
 #include "DefaultPlayerController.h"
 
 #include "utils/Logger.h"
+#include "utils/NotificationCenter.h"
 
 ADefaultPlayerController::ADefaultPlayerController(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP) {
@@ -84,4 +85,6 @@ void ADefaultPlayerController::DebugPrintCurrentLocation() {
     if (pawn) {
         LOGD("current location: %s", *pawn->GetActorLocation().ToString());
     }
+
+    projectz::utils::NotificationCenter::getInstance().postNotification("testNotification");
 }
