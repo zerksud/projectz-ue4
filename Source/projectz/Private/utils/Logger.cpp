@@ -21,7 +21,7 @@ namespace prz {
 #endif
             "%s";
 
-        void Logger::print(ELogVerbosity::Type verbosity, const FColor& color, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const {
+        void Logger::Print(ELogVerbosity::Type verbosity, const FColor& color, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const {
 #ifdef VERBOSE
             const FString currentDate = FDateTime::UtcNow().ToString();
 #endif

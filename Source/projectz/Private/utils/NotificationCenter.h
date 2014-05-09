@@ -11,16 +11,16 @@ namespace prz {
 
         class NotificationCenter {
         public:
-            static NotificationCenter& getInstance() {
+            static NotificationCenter& GetInstance() {
                 static NotificationCenter instance;
                 return instance;
             };
 
-            void addObserver(const std::string& name, void* observerOwner, ObserverHandle observerHandle);
-            void removeObserver(const std::string& name, void* observerOwner);
+            void AddObserver(const std::string& name, void* observerOwner, ObserverHandle observerHandle);
+            void RemoveObserver(const std::string& name, void* observerOwner);
 
-            void postNotification(const std::string& name);
-            void postNotification(const std::string& name, void* params);
+            void PostNotification(const std::string& name);
+            void PostNotification(const std::string& name, void* params);
 
         private:
             NotificationCenter();

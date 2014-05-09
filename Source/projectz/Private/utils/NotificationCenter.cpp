@@ -17,7 +17,7 @@ namespace prz {
             }
         }
 
-        void NotificationCenter::addObserver(const std::string& name, void* observerOwner, ObserverHandle observerHandle) {
+        void NotificationCenter::AddObserver(const std::string& name, void* observerOwner, ObserverHandle observerHandle) {
             ObserverList* list;
             ObserverListTable::iterator pos = mObservers.find(name);
             if (pos == mObservers.end()) {
@@ -39,7 +39,7 @@ namespace prz {
             list->push_back(Observer(observerOwner, observerHandle));
         }
 
-        void NotificationCenter::removeObserver(const std::string& name, void* observerOwner) {
+        void NotificationCenter::RemoveObserver(const std::string& name, void* observerOwner) {
             ObserverList* list;
             ObserverListTable::iterator pos = mObservers.find(name);
             if (pos == mObservers.end()) {
@@ -61,11 +61,11 @@ namespace prz {
             list->erase(listPos);
         }
 
-        void NotificationCenter::postNotification(const std::string& name) {
-            postNotification(name, nullptr);
+        void NotificationCenter::PostNotification(const std::string& name) {
+            PostNotification(name, nullptr);
         }
 
-        void NotificationCenter::postNotification(const std::string& name, void* params) {
+        void NotificationCenter::PostNotification(const std::string& name, void* params) {
             ObserverListTable::iterator pos = mObservers.find(name);
             if (pos != mObservers.end()) {
                 ObserverList* list = pos->second;
