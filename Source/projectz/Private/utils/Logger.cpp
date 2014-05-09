@@ -9,19 +9,19 @@ DEFINE_LOG_CATEGORY_STATIC(ProjectZ, All, All)
 namespace prz {
     namespace utils {
 
-        Logger::Logger() {
+        ZLogger::ZLogger() {
         }
 
-        Logger::~Logger() {
+        ZLogger::~ZLogger() {
         }
 
-        const char* Logger::kLogFormat =
+        const char* ZLogger::kLogFormat =
 #ifdef VERBOSE
             "[%s][%s:%d] "
 #endif
             "%s";
 
-        void Logger::Print(ELogVerbosity::Type verbosity, const FColor& color, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const {
+        void ZLogger::Print(ELogVerbosity::Type verbosity, const FColor& color, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const {
 #ifdef VERBOSE
             const FString currentDate = FDateTime::UtcNow().ToString();
 #endif

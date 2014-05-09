@@ -7,27 +7,27 @@
 namespace prz {
     namespace utils {
 
-        NotificationCenter::NotificationCenter() {
+        ZNotificationCenter::ZNotificationCenter() {
         }
 
-        NotificationCenter::~NotificationCenter() {
-            for (const ObserverListTablePair& e : mObservers) {
-                ObserverList* list = e.second;
+        ZNotificationCenter::~ZNotificationCenter() {
+            for (const ZObserverListTablePair& e : mObservers) {
+                ZObserverList* list = e.second;
                 delete list;
             }
         }
 
-        void NotificationCenter::AddObserver(const std::string& name, void* observerOwner, ObserverHandle observerHandle) {
-            ObserverList* list;
-            ObserverListTable::iterator pos = mObservers.find(name);
+        void ZNotificationCenter::AddObserver(const std::string& name, void* observerOwner, ZObserverHandle observerHandle) {
+            ZObserverList* list;
+            ZObserverListTable::iterator pos = mObservers.find(name);
             if (pos == mObservers.end()) {
-                list = new ObserverList();
+                list = new ZObserverList();
                 mObservers[name] = list;
             } else {
                 list = pos->second;
             }
 
-            ObserverList::const_iterator listPos = std::find_if(list->begin(), list->end(), [observerOwner](const Observer& handle) {
+            ZObserverList::const_iterator listPos = std::find_if(list->begin(), list->end(), [observerOwner](const ZObserver& handle) {
                 return (observerOwner == handle.observerOwner);
             });
 
@@ -36,12 +36,12 @@ namespace prz {
                 return;
             }
 
-            list->push_back(Observer(observerOwner, observerHandle));
+            list->push_back(ZObserver(observerOwner, observerHandle));
         }
 
-        void NotificationCenter::RemoveObserver(const std::string& name, void* observerOwner) {
-            ObserverList* list;
-            ObserverListTable::iterator pos = mObservers.find(name);
+        void ZNotificationCenter::RemoveObserver(const std::string& name, void* observerOwner) {
+            ZObserverList* list;
+            ZObserverListTable::iterator pos = mObservers.find(name);
             if (pos == mObservers.end()) {
                 //LOGE("Can't remove not added observer for %s", name.c_str());
                 return;
@@ -49,7 +49,7 @@ namespace prz {
                 list = pos->second;
             }
 
-            ObserverList::iterator listPos = std::find_if(list->begin(), list->end(), [observerOwner](const Observer& handle) {
+            ZObserverList::iterator listPos = std::find_if(list->begin(), list->end(), [observerOwner](const ZObserver& handle) {
                 return (observerOwner == handle.observerOwner);
             });
 
@@ -61,15 +61,15 @@ namespace prz {
             list->erase(listPos);
         }
 
-        void NotificationCenter::PostNotification(const std::string& name) {
+        void ZNotificationCenter::PostNotification(const std::string& name) {
             PostNotification(name, nullptr);
         }
 
-        void NotificationCenter::PostNotification(const std::string& name, void* params) {
-            ObserverListTable::iterator pos = mObservers.find(name);
+        void ZNotificationCenter::PostNotification(const std::string& name, void* params) {
+            ZObserverListTable::iterator pos = mObservers.find(name);
             if (pos != mObservers.end()) {
-                ObserverList* list = pos->second;
-                for (Observer& observer : *list) {
+                ZObserverList* list = pos->second;
+                for (ZObserver& observer : *list) {
                     observer.handle(params);
                 }
             }

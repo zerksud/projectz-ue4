@@ -3,10 +3,10 @@
 
 namespace prz {
     namespace utils {
-        ServiceManager::ServiceManager() {
+        ZServiceManager::ZServiceManager() {
         }
 
-        ServiceManager::~ServiceManager() {
+        ZServiceManager::~ZServiceManager() {
             for (auto& kv : mServiceMap) {
                 kv.second->destructor();
                 delete kv.second;

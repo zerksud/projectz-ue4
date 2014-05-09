@@ -7,42 +7,42 @@
 namespace prz {
     namespace utils {
 
-        typedef std::function<void(void*)> ObserverHandle;
+        typedef std::function<void(void*)> ZObserverHandle;
 
-        class NotificationCenter {
+        class ZNotificationCenter {
         public:
-            static NotificationCenter& GetInstance() {
-                static NotificationCenter instance;
+            static ZNotificationCenter& GetInstance() {
+                static ZNotificationCenter instance;
                 return instance;
             };
 
-            void AddObserver(const std::string& name, void* observerOwner, ObserverHandle observerHandle);
+            void AddObserver(const std::string& name, void* observerOwner, ZObserverHandle observerHandle);
             void RemoveObserver(const std::string& name, void* observerOwner);
 
             void PostNotification(const std::string& name);
             void PostNotification(const std::string& name, void* params);
 
         private:
-            NotificationCenter();
-            NotificationCenter(const NotificationCenter& other);
-            NotificationCenter& operator=(const NotificationCenter& other);
-            virtual ~NotificationCenter();
+            ZNotificationCenter();
+            ZNotificationCenter(const ZNotificationCenter& other);
+            ZNotificationCenter& operator=(const ZNotificationCenter& other);
+            virtual ~ZNotificationCenter();
 
-            struct Observer {
+            struct ZObserver {
                 void* observerOwner;
-                ObserverHandle handle;
+                ZObserverHandle handle;
 
-                Observer(void* observerPtr, ObserverHandle handlePtr) {
+                ZObserver(void* observerPtr, ZObserverHandle handlePtr) {
                     observerOwner = observerPtr;
                     handle = handlePtr;
                 }
             };
 
-            typedef std::vector<Observer> ObserverList;
-            typedef std::unordered_map<std::string, ObserverList*> ObserverListTable;
-            typedef std::pair<std::string, ObserverList*> ObserverListTablePair;
+            typedef std::vector<ZObserver> ZObserverList;
+            typedef std::unordered_map<std::string, ZObserverList*> ZObserverListTable;
+            typedef std::pair<std::string, ZObserverList*> ZObserverListTablePair;
 
-            ObserverListTable mObservers;
+            ZObserverListTable mObservers;
         };
     }
 }

@@ -7,15 +7,15 @@
 
 namespace prz {
     namespace utils {
-        class ServiceManager {
+        class ZServiceManager {
         public:
-            static ServiceManager& GetInstance() {
-                static ServiceManager instance;
+            static ZServiceManager& GetInstance() {
+                static ZServiceManager instance;
                 return instance;
             }
 
             template<typename ServiceType> void Register(ServiceType* instance) {
-                ServiceBox* box = new ServiceBox();
+                ZServiceBox* box = new ZServiceBox();
                 box->instance = instance;
                 box->destructor = [instance]() {
                     delete instance;
@@ -23,7 +23,7 @@ namespace prz {
 
                 std::type_index index = std::type_index(typeid(ServiceType));
 
-                ServiceMap::iterator pos = mServiceMap.find(index);
+                ZServiceMap::iterator pos = mServiceMap.find(index);
                 if (pos != mServiceMap.end()) {
                     pos->second->destructor();
                     delete pos->second;
@@ -34,7 +34,7 @@ namespace prz {
 
             template<typename ServiceType> ServiceType* Resolve() {
                 std::type_index index = std::type_index(typeid(ServiceType));
-                ServiceMap::iterator pos = mServiceMap.find(index);
+                ZServiceMap::iterator pos = mServiceMap.find(index);
                 if (pos != mServiceMap.end()) {
                     return static_cast<ServiceType*>(pos->second->instance);
                 }
@@ -43,17 +43,17 @@ namespace prz {
             }
 
         private:
-            ServiceManager();
-            virtual ~ServiceManager();
+            ZServiceManager();
+            virtual ~ZServiceManager();
 
-            typedef std::function<void()> ServiceDestructor;
-            struct ServiceBox {
+            typedef std::function<void()> ZServiceDestructor;
+            struct ZServiceBox {
                 void* instance = nullptr;
-                ServiceDestructor destructor;
+                ZServiceDestructor destructor;
             };
-            typedef std::unordered_map<std::type_index, ServiceBox*> ServiceMap;
+            typedef std::unordered_map<std::type_index, ZServiceBox*> ZServiceMap;
 
-            ServiceMap mServiceMap;
+            ZServiceMap mServiceMap;
         };
     }
 }
