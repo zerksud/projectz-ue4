@@ -14,14 +14,14 @@ namespace prz {
                 return instance;
             }
 
-            template<typename ServiceType> void Register(ServiceType* instance) {
+            template<typename TServiceType> void Register(TServiceType* instance) {
                 ZServiceBox* box = new ZServiceBox();
                 box->instance = instance;
                 box->destructor = [instance]() {
                     delete instance;
                 };
 
-                std::type_index index = std::type_index(typeid(ServiceType));
+                std::type_index index = std::type_index(typeid(TServiceType));
 
                 ZServiceMap::iterator pos = mServiceMap.find(index);
                 if (pos != mServiceMap.end()) {
@@ -32,11 +32,11 @@ namespace prz {
                 mServiceMap[index] = box;
             }
 
-            template<typename ServiceType> ServiceType* Resolve() {
-                std::type_index index = std::type_index(typeid(ServiceType));
+            template<typename TServiceType> TServiceType* Resolve() {
+                std::type_index index = std::type_index(typeid(TServiceType));
                 ZServiceMap::iterator pos = mServiceMap.find(index);
                 if (pos != mServiceMap.end()) {
-                    return static_cast<ServiceType*>(pos->second->instance);
+                    return static_cast<TServiceType*>(pos->second->instance);
                 }
 
                 return nullptr;
