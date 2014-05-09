@@ -21,17 +21,20 @@ namespace prz {
                     delete instance;
                 };
 
-                ServiceMap::iterator pos = mServiceMap.find(std::type_index(typeid(ServiceType)));
+                std::type_index index = std::type_index(typeid(ServiceType));
+
+                ServiceMap::iterator pos = mServiceMap.find(index);
                 if (pos != mServiceMap.end()) {
                     pos->second->destructor();
                     delete pos->second;
                 }
 
-                mServiceMap[std::type_index(typeid(ServiceType))] = box;
+                mServiceMap[index] = box;
             }
 
             template<typename ServiceType> ServiceType* Resolve() {
-                ServiceMap::iterator pos = mServiceMap.find(std::type_index(typeid(ServiceType)));
+                std::type_index index = std::type_index(typeid(ServiceType));
+                ServiceMap::iterator pos = mServiceMap.find(index);
                 if (pos != mServiceMap.end()) {
                     return static_cast<ServiceType*>(pos->second->instance);
                 }
