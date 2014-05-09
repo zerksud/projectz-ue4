@@ -18,7 +18,7 @@ namespace prz {
                 ServiceBox* box = new ServiceBox();
                 box->instance = instance;
                 box->destructor = [instance]() {
-                    delete ((ServiceType*)instance);
+                    delete instance;
                 };
 
                 ServiceMap::iterator pos = mServiceMap.find(std::type_index(typeid(ServiceType)));
@@ -33,7 +33,7 @@ namespace prz {
             template<typename ServiceType> ServiceType* Resolve() {
                 ServiceMap::iterator pos = mServiceMap.find(std::type_index(typeid(ServiceType)));
                 if (pos != mServiceMap.end()) {
-                    return ((ServiceType*)pos->second->instance);
+                    return static_cast<ServiceType*>(pos->second->instance);
                 }
 
                 return nullptr;
