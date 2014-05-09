@@ -7,9 +7,9 @@ namespace prz {
         }
 
         ServiceManager::~ServiceManager() {
-            for (ServiceMap::iterator i = mServiceMap.begin(), end = mServiceMap.end(); i != end; ++i) {
-                i->second->destructor();
-                delete i->second;
+            for (auto& kv : mServiceMap) {
+                kv.second->destructor();
+                delete kv.second;
             }
         }
     }
