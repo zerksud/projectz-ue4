@@ -9,10 +9,8 @@ namespace prz {
     namespace utils {
         class ZServiceManager {
         public:
-            static ZServiceManager& GetInstance() {
-                static ZServiceManager instance;
-                return instance;
-            }
+            ZServiceManager();
+            virtual ~ZServiceManager();
 
             template<typename TServiceType> void Register(TServiceType* instance) {
                 ZServiceBox* box = new ZServiceBox();
@@ -43,9 +41,6 @@ namespace prz {
             }
 
         private:
-            ZServiceManager();
-            virtual ~ZServiceManager();
-
             typedef std::function<void()> ZServiceDestructor;
             struct ZServiceBox {
                 void* instance = nullptr;

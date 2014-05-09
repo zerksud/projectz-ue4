@@ -3,7 +3,7 @@
 
 #include "utils/Logger.h"
 #include "utils/NotificationCenter.h"
-#include "utils/ServiceManager.h"
+#include "utils/Services.h"
 
 ADefaultPlayerController::ADefaultPlayerController(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP) {
@@ -104,7 +104,7 @@ void ADefaultPlayerController::DebugPrintCurrentLocation() {
 
     prz::utils::ZNotificationCenter::GetInstance().PostNotification("testNotification");
 
-    prz::utils::ZServiceManager::GetInstance().Register<Sample>(new Sample(42));
-    prz::utils::ZServiceManager::GetInstance().Resolve<Sample>()->PrintValue();
-    prz::utils::ZServiceManager::GetInstance().Register<Sample>(new Sample(1337));
+    prz::utils::ZServices::GetInstance().Register<Sample>(new Sample(42));
+    prz::utils::ZServices::GetInstance().Resolve<Sample>()->PrintValue();
+    prz::utils::ZServices::GetInstance().Register<Sample>(new Sample(1337));
 }
