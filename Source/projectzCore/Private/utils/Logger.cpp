@@ -1,8 +1,6 @@
 #include "projectzCorePrivatePCH.h"
 #include "Logger.h"
 
-#include "Engine.h"
-
 DEFINE_LOG_CATEGORY_STATIC(ProjectZ, All, All)
 
 //#define VERBOSE
@@ -22,7 +20,7 @@ namespace prz {
 #endif
             "%s";
 
-        void ZLogger::Print(ELogVerbosity::Type verbosity, const FColor& color, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const {
+        void ZLogger::Print(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const {
 #ifdef VERBOSE
             const FString currentDate = FDateTime::UtcNow().ToString();
 #endif
@@ -34,9 +32,13 @@ namespace prz {
 
             FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, *logMessage);
 
-            if (GEngine) {
-                GEngine->AddOnScreenDebugMessage(-1, 5.0f, color, userMessage);
+            if (mLogCallback) {
+                mLogCallback(verbosity, userMessage);
             }
+        }
+
+        void ZLogger::SetLogCallback(ZLogCallback callback) {
+            mLogCallback = callback;
         }
     }
 }

@@ -7,7 +7,7 @@ public class projectzCore : ModuleRules {
 
         PrivateIncludePaths.Add(Path.Combine(ModulePath, "Private"));
 
-        PublicDependencyModuleNames.Add("Engine");
+        PublicDependencyModuleNames.Add("Core");
     }
 
     private readonly string ModulePath;
