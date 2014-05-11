@@ -20,7 +20,7 @@ namespace prz {
 #endif
             "%s";
 
-        void ZLogger::Print(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const {
+        void ZLogger::Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const {
 #ifdef VERBOSE
             const FString currentDate = FDateTime::UtcNow().ToString();
 #endif
