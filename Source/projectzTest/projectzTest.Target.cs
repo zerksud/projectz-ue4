@@ -20,6 +20,12 @@ public class projectzTestTarget : TargetRules {
             InModuleNames: new List<string> { "projectzTest" }));
     }
 
+    public override bool GetSupportedPlatforms(ref List<UnrealTargetPlatform> OutPlatforms) {
+        OutPlatforms.Add(UnrealTargetPlatform.Win64);
+
+        return true;
+    }
+
     public override bool ShouldCompileMonolithic(UnrealTargetPlatform InPlatform, UnrealTargetConfiguration InConfiguration) {
         return true;
     }
