@@ -1,5 +1,7 @@
-#include "projectzTest.h"
+#include "projectzTestPrivatePCH.h"
 #include "RequiredProgramMainCPPInclude.h"
+
+#include "Core.h"
 
 #include "gtest/gtest.h"
 

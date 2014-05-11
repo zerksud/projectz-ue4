@@ -10,6 +10,8 @@ public class projectzTest : ModuleRules {
         PublicIncludePaths.Add(Path.Combine(UESourcePath, "Runtime/Launch/Public/"));
         PrivateIncludePaths.Add(Path.Combine(UESourcePath, "Runtime/Launch/Private/"));
 
+        PrivateIncludePaths.Add(Path.Combine(ModulePath, "Private/"));
+
         PrivateDependencyModuleNames.Add("Core");
         PrivateDependencyModuleNames.Add("Projects");
         PrivateDependencyModuleNames.Add("GTest");
