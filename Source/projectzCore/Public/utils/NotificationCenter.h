@@ -11,10 +11,10 @@ namespace prz {
 
         class ZNotificationCenter {
         public:
-            static ZNotificationCenter& GetInstance() {
-                static ZNotificationCenter instance;
-                return instance;
-            };
+            ZNotificationCenter();
+            ZNotificationCenter(const ZNotificationCenter& other);
+            ZNotificationCenter& operator=(const ZNotificationCenter& other);
+            virtual ~ZNotificationCenter();
 
             void AddObserver(const std::string& name, void* observerOwner, ZObserverHandle observerHandle);
             void RemoveObserver(const std::string& name, void* observerOwner);
@@ -23,11 +23,6 @@ namespace prz {
             void PostNotification(const std::string& name, void* params);
 
         private:
-            ZNotificationCenter();
-            ZNotificationCenter(const ZNotificationCenter& other);
-            ZNotificationCenter& operator=(const ZNotificationCenter& other);
-            virtual ~ZNotificationCenter();
-
             struct ZObserver {
                 void* observerOwner;
                 ZObserverHandle handle;
