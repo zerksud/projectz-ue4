@@ -13,6 +13,7 @@ public class projectzTest : ModuleRules {
         PrivateDependencyModuleNames.Add("Core");
         PrivateDependencyModuleNames.Add("Projects");
         PrivateDependencyModuleNames.Add("GTest");
+        PrivateDependencyModuleNames.Add("projectzCore");
     }
 
     private readonly string ModulePath;
