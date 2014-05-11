@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine.h"
+
 #define LOGD(format, ...)   (prz::utils::ZLogger::GetInstance().Print(ELogVerbosity::Log, FColor::Yellow, __FILE__, __LINE__, FString::Printf(ANSI_TO_TCHAR(format), __VA_ARGS__)))
 #define LOGE(format, ...)   (prz::utils::ZLogger::GetInstance().Print(ELogVerbosity::Error, FColor::Red, __FILE__, __LINE__, FString::Printf(ANSI_TO_TCHAR(format), __VA_ARGS__)))
 

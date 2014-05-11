@@ -1,4 +1,4 @@
-#include "projectz.h"
+#include "projectzCorePrivatePCH.h"
 #include "Services.h"
 
 namespace prz {

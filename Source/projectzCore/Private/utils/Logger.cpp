@@ -1,6 +1,7 @@
-#include "projectz.h"
-
+#include "projectzCorePrivatePCH.h"
 #include "Logger.h"
+
+#include "Engine.h"
 
 DEFINE_LOG_CATEGORY_STATIC(ProjectZ, All, All)
 

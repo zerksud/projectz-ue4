@@ -1,8 +1,7 @@
-#include "projectz.h"
+#include "projectzCorePrivatePCH.h"
+#include "NotificationCenter.h"
 
 #include <algorithm>
-
-#include "NotificationCenter.h"
 
 namespace prz {
     namespace utils {
