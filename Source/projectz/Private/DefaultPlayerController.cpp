@@ -2,8 +2,6 @@
 #include "DefaultPlayerController.h"
 
 #include "utils/Logger.h"
-#include "utils/NotificationCenter.h"
-#include "utils/Services.h"
 
 ADefaultPlayerController::ADefaultPlayerController(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP) {
@@ -81,30 +79,9 @@ void ADefaultPlayerController::TurnLeft() {
     Turn(true);
 }
 
-class Sample {
-public:
-    Sample(int32 value) {
-        mValue = value;
-    }
-    void PrintValue() {
-        LOGD("PrintValue called for instance with mValue = %d", mValue);
-    }
-    virtual ~Sample() {
-        LOGD("destructor called for instance with mValue = %d", mValue);
-    }
-private:
-    int32 mValue = 0;
-};
-
 void ADefaultPlayerController::DebugPrintCurrentLocation() {
     APawn* pawn = GetPawn();
     if (pawn) {
         LOGD("current location: %s", *pawn->GetActorLocation().ToString());
     }
-
-    prz::utils::ZNotificationCenter::GetInstance().PostNotification("testNotification");
-
-    prz::utils::ZServices::GetInstance().Register<Sample>(new Sample(42));
-    prz::utils::ZServices::GetInstance().Resolve<Sample>()->PrintValue();
-    prz::utils::ZServices::GetInstance().Register<Sample>(new Sample(1337));
 }
