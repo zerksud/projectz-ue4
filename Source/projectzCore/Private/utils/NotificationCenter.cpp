@@ -3,6 +3,8 @@
 
 #include <algorithm>
 
+#include "utils/LoggerANSI.h"
+
 namespace prz {
     namespace utils {
 
@@ -31,7 +33,7 @@ namespace prz {
             });
 
             if (listPos != list->end()) {
-                //LOGE("Can't add already added observer for %s", name.c_str());
+                LOGE("Can't add already added observer for %s", name.c_str());
                 return;
             }
 
@@ -42,7 +44,7 @@ namespace prz {
             ZObserverList* list;
             ZObserverListTable::iterator pos = mObservers.find(name);
             if (pos == mObservers.end()) {
-                //LOGE("Can't remove not added observer for %s", name.c_str());
+                LOGE("Can't remove not added observer for %s", name.c_str());
                 return;
             } else {
                 list = pos->second;
@@ -53,7 +55,7 @@ namespace prz {
             });
 
             if (listPos == list->end()) {
-                //LOGE("Can't remove not added observer for %s", name.c_str());
+                LOGE("Can't remove not added observer for %s", name.c_str());
                 return;
             }
 
