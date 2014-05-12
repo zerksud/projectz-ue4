@@ -24,7 +24,7 @@ namespace prz {
                 return false;
             }
 
-            if (observerOwner == nullptr) {
+            if (!observerOwner) {
                 LOGE("Can't add nullptr observer for notification %s", name.c_str());
                 return false;
             }
