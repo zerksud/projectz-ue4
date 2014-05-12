@@ -1,26 +1,24 @@
 #pragma once
 
-#include <functional>
 #include <unordered_map>
 #include <vector>
 
+#include "utils/INotificationCenter.h"
+
 namespace prz {
     namespace utils {
-
-        typedef std::function<void(void*)> ZObserverHandle;
-
-        class ZNotificationCenter {
+        class ZNotificationCenter : public INotificationCenter {
         public:
             ZNotificationCenter();
             ZNotificationCenter(const ZNotificationCenter& other);
             ZNotificationCenter& operator=(const ZNotificationCenter& other);
             virtual ~ZNotificationCenter();
 
-            void AddObserver(const std::string& name, void* observerOwner, ZObserverHandle observerHandle);
-            void RemoveObserver(const std::string& name, void* observerOwner);
+            virtual void AddObserver(const std::string& name, void* observerOwner, ZObserverHandle observerHandle) override;
+            virtual void RemoveObserver(const std::string& name, void* observerOwner) override;
 
-            void PostNotification(const std::string& name);
-            void PostNotification(const std::string& name, void* params);
+            virtual void PostNotification(const std::string& name) override;
+            virtual void PostNotification(const std::string& name, void* params) override;
 
         private:
             struct ZObserver {
