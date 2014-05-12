@@ -18,7 +18,7 @@ namespace prz {
             }
         }
 
-        void ZNotificationCenter::AddObserver(const std::string& name, void* observerOwner, ZObserverHandle observerHandle) {
+        void ZNotificationCenter::AddObserver(const std::string& name, void* observerOwner, ZNotificationEventHandler handler) {
             ZObserverList* list;
             ZObserverListTable::iterator pos = mObservers.find(name);
             if (pos == mObservers.end()) {
@@ -28,8 +28,8 @@ namespace prz {
                 list = pos->second;
             }
 
-            ZObserverList::const_iterator listPos = std::find_if(list->begin(), list->end(), [observerOwner](const ZObserver& handle) {
-                return (observerOwner == handle.observerOwner);
+            ZObserverList::const_iterator listPos = std::find_if(list->begin(), list->end(), [observerOwner](const ZObserver& observer) {
+                return (observerOwner == observer.observerOwner);
             });
 
             if (listPos != list->end()) {
@@ -37,7 +37,7 @@ namespace prz {
                 return;
             }
 
-            list->push_back(ZObserver(observerOwner, observerHandle));
+            list->push_back(ZObserver(observerOwner, handler));
         }
 
         void ZNotificationCenter::RemoveObserver(const std::string& name, void* observerOwner) {
@@ -50,8 +50,8 @@ namespace prz {
                 list = pos->second;
             }
 
-            ZObserverList::iterator listPos = std::find_if(list->begin(), list->end(), [observerOwner](const ZObserver& handle) {
-                return (observerOwner == handle.observerOwner);
+            ZObserverList::iterator listPos = std::find_if(list->begin(), list->end(), [observerOwner](const ZObserver& observer) {
+                return (observerOwner == observer.observerOwner);
             });
 
             if (listPos == list->end()) {
@@ -71,7 +71,7 @@ namespace prz {
             if (pos != mObservers.end()) {
                 ZObserverList* list = pos->second;
                 for (ZObserver& observer : *list) {
-                    observer.handle(params);
+                    observer.handler(params);
                 }
             }
         }

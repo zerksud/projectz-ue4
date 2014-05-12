@@ -14,7 +14,7 @@ namespace prz {
             ZNotificationCenter& operator=(const ZNotificationCenter& other);
             virtual ~ZNotificationCenter();
 
-            virtual void AddObserver(const std::string& name, void* observerOwner, ZObserverHandle observerHandle) override;
+            virtual void AddObserver(const std::string& name, void* observerOwner, ZNotificationEventHandler handler) override;
             virtual void RemoveObserver(const std::string& name, void* observerOwner) override;
 
             virtual void PostNotification(const std::string& name) override;
@@ -23,11 +23,11 @@ namespace prz {
         private:
             struct ZObserver {
                 void* observerOwner;
-                ZObserverHandle handle;
+                ZNotificationEventHandler handler;
 
-                ZObserver(void* observerPtr, ZObserverHandle handlePtr) {
-                    observerOwner = observerPtr;
-                    handle = handlePtr;
+                ZObserver(void* observerOwner, ZNotificationEventHandler handler) {
+                    this->observerOwner = observerOwner;
+                    this->handler = handler;
                 }
             };
 
