@@ -24,6 +24,11 @@ namespace prz {
                 return false;
             }
 
+            if (observerOwner == nullptr) {
+                LOGE("Can't add nullptr observer for notification %s", name.c_str());
+                return false;
+            }
+
             ZObserverList* list;
             ZObserverListTable::iterator pos = mObservers.find(name);
             if (pos == mObservers.end()) {
