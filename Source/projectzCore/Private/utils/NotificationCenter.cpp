@@ -18,7 +18,7 @@ namespace prz {
             }
         }
 
-        void ZNotificationCenter::AddObserver(const std::string& name, void* observerOwner, ZNotificationEventHandler handler) {
+        bool ZNotificationCenter::AddObserver(const std::string& name, void* observerOwner, ZNotificationEventHandler handler) {
             ZObserverList* list;
             ZObserverListTable::iterator pos = mObservers.find(name);
             if (pos == mObservers.end()) {
@@ -34,18 +34,19 @@ namespace prz {
 
             if (listPos != list->end()) {
                 LOGE("Can't add already added observer for %s", name.c_str());
-                return;
+                return false;
             }
 
             list->push_back(ZObserver(observerOwner, handler));
+            return true;
         }
 
-        void ZNotificationCenter::RemoveObserver(const std::string& name, void* observerOwner) {
+        bool ZNotificationCenter::RemoveObserver(const std::string& name, void* observerOwner) {
             ZObserverList* list;
             ZObserverListTable::iterator pos = mObservers.find(name);
             if (pos == mObservers.end()) {
                 LOGE("Can't remove not added observer for %s", name.c_str());
-                return;
+                return false;
             } else {
                 list = pos->second;
             }
@@ -56,17 +57,23 @@ namespace prz {
 
             if (listPos == list->end()) {
                 LOGE("Can't remove not added observer for %s", name.c_str());
-                return;
+                return false;
             }
 
             list->erase(listPos);
+            return true;
         }
 
-        void ZNotificationCenter::PostNotification(const std::string& name) {
-            PostNotification(name, nullptr);
+        bool ZNotificationCenter::PostNotification(const std::string& name) {
+            return PostNotification(name, nullptr);
         }
 
-        void ZNotificationCenter::PostNotification(const std::string& name, void* params) {
+        bool ZNotificationCenter::PostNotification(const std::string& name, void* params) {
+            if (name.empty()) {
+                LOGE("Can't post empty notification");
+                return false;
+            }
+
             ZObserverListTable::iterator pos = mObservers.find(name);
             if (pos != mObservers.end()) {
                 ZObserverList* list = pos->second;
@@ -74,6 +81,8 @@ namespace prz {
                     observer.handler(params);
                 }
             }
+
+            return true;
         }
     }
 }
