@@ -29,6 +29,11 @@ namespace prz {
                 return false;
             }
 
+            if (!handler) {
+                LOGE("Can't add observer with handler without callable target for notification %s", name.c_str());
+                return false;
+            }
+
             ZObserverList* list;
             ZObserverListTable::iterator pos = mObservers.find(name);
             if (pos == mObservers.end()) {
