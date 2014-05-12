@@ -44,7 +44,7 @@ namespace prz {
 
         const ZNotificationEventHandler NotificationCenterTest::kEmptyHandler = [](void*) {};
 
-        utils::INotificationCenter::ZNotificationEventHandler makeIncrementValueHandler(ValueOwner* owner, int valueIncrement) {
+        ZNotificationEventHandler makeIncrementValueHandler(ValueOwner* owner, int valueIncrement) {
             return[owner, valueIncrement](void*) {
                 owner->value += valueIncrement;
             };
