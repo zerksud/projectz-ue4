@@ -19,6 +19,11 @@ namespace prz {
         }
 
         bool ZNotificationCenter::AddObserver(const std::string& name, void* observerOwner, ZNotificationEventHandler handler) {
+            if (name.empty()) {
+                LOGE("Can't add observer for empty notification");
+                return false;
+            }
+
             ZObserverList* list;
             ZObserverListTable::iterator pos = mObservers.find(name);
             if (pos == mObservers.end()) {
