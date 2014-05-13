@@ -83,7 +83,7 @@ namespace prz {
             return PostNotification(name, nullptr);
         }
 
-        bool ZNotificationCenter::PostNotification(const std::string& name, const void* params) {
+        bool ZNotificationCenter::PostNotification(const std::string& name, const void* argument) {
             if (name.empty()) {
                 LOGE("Can't post empty notification");
                 return false;
@@ -93,7 +93,7 @@ namespace prz {
             if (pos != mObservers.end()) {
                 ZObserverList* list = pos->second;
                 for (ZObserver& observer : *list) {
-                    observer.handler(params);
+                    observer.handler(argument);
                 }
             }
 

@@ -169,8 +169,8 @@ namespace prz {
             ValueOwner owner = {kDefaultValue};
             ValueOwner anotherOwner = {kSomeValue};
 
-            nc->AddObserver(kSomeNotification, &owner, [&owner](const void* args) {
-                const ValueOwner* argsOwner = static_cast<const ValueOwner*>(args);
+            nc->AddObserver(kSomeNotification, &owner, [&owner](const void* argument) {
+                const ValueOwner* argsOwner = static_cast<const ValueOwner*>(argument);
                 owner.value = argsOwner->value;
             });
 
