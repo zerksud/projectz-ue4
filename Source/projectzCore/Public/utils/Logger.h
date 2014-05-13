@@ -1,31 +1,21 @@
 #pragma once
 
-#include "ILogger.h"
-
-#define LOGD(format, ...)   (prz::utils::ZLogger::GetInstance().Log(ELogVerbosity::Log, __FILE__, __LINE__, FString::Printf(ANSI_TO_TCHAR(format), __VA_ARGS__)))
-#define LOGE(format, ...)   (prz::utils::ZLogger::GetInstance().Log(ELogVerbosity::Error, __FILE__, __LINE__, FString::Printf(ANSI_TO_TCHAR(format), __VA_ARGS__)))
-
-#define LOGD_ANSI(format, ...)  (prz::utils::ZLogger::GetInstance().Log(ELogVerbosity::Log, __FILE__, __LINE__, format, __VA_ARGS__))
-#define LOGE_ANSI(format, ...)  (prz::utils::ZLogger::GetInstance().Log(ELogVerbosity::Error, __FILE__, __LINE__, format, __VA_ARGS__))
+#include "utils/ILogger.h"
 
 namespace prz {
     namespace utils {
         class ZLogger : public ILogger {
         public:
-            static ZLogger& GetInstance() {
-                static ZLogger instance;
-                return instance;
-            }
+            ZLogger();
+            ~ZLogger();
 
             virtual void Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const override;
             virtual void Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const ANSICHAR* format, ...) const override;
             virtual void SetLogCallback(ZLogCallback callback) override;
 
         private:
-            ZLogger();
-            ~ZLogger();
-
             static const char* kLogFormat;
+
             ZLogCallback mLogCallback;
         };
     }

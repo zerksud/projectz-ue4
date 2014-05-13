@@ -3,6 +3,8 @@
 
 #include "DefaultPlayerCharacter.h"
 #include "DefaultPlayerController.h"
+
+#include "utils/LOG.h"
 #include "utils/Logger.h"
 
 ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializeProperties& PCIP)
@@ -11,14 +13,24 @@ ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializePropertie
     PlayerControllerClass = ADefaultPlayerController::StaticClass();
 }
 
-void ADefaultGameMode::BeginPlay() {
-    Super::BeginPlay();
+void initializeServices() {
+    using namespace prz::utils;
 
-    prz::utils::ZLogger::GetInstance().SetLogCallback([](ELogVerbosity::Type verbosity, const FString& message) {
+    ILogger* loggerService = new ZLogger();
+
+    loggerService->SetLogCallback([](ELogVerbosity::Type verbosity, const FString& message) {
         if (GEngine) {
             GEngine->AddOnScreenDebugMessage(-1, 5.0f, (verbosity == ELogVerbosity::Error) ? FColor::Red : FColor::Yellow, message);
         }
     });
+
+    ZServices::GetInstance().Register<ILogger>(loggerService);
+}
+
+void ADefaultGameMode::BeginPlay() {
+    Super::BeginPlay();
+
+    initializeServices();
 
     LOGD("DefaultGameMode created");
 }

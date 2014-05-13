@@ -5,8 +5,6 @@
 #include <typeinfo>
 #include <unordered_map>
 
-#include "utils/LoggerANSI.h"
-
 namespace prz {
     namespace utils {
         class ZServiceManager {
@@ -16,7 +14,7 @@ namespace prz {
 
             template<typename TServiceType> bool Register(TServiceType* instance) {
                 if (!instance) {
-                    LOGE("Can't register service of type %s with nullptr instance", typeid(TServiceType).name());
+                    //LOGE("Can't register service of type %s with nullptr instance", typeid(TServiceType).name());
                     return false;
                 }
 

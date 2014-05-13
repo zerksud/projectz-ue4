@@ -1,7 +1,7 @@
 #include "projectz.h"
 #include "DefaultPlayerController.h"
 
-#include "utils/Logger.h"
+#include "utils/LOG.h"
 
 ADefaultPlayerController::ADefaultPlayerController(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP) {
