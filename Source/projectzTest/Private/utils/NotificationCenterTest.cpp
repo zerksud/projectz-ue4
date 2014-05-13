@@ -42,10 +42,10 @@ namespace prz {
         const char* NotificationCenterTest::kSomeNotification = "some_notification";
         const char* NotificationCenterTest::kAnotherNotification = "another_notification";
 
-        const ZNotificationEventHandler NotificationCenterTest::kEmptyHandler = [](void*) {};
+        const ZNotificationEventHandler NotificationCenterTest::kEmptyHandler = [](const void*) {};
 
         ZNotificationEventHandler makeIncrementValueHandler(ValueOwner* owner, int valueIncrement) {
-            return[owner, valueIncrement](void*) {
+            return[owner, valueIncrement](const void*) {
                 owner->value += valueIncrement;
             };
         }
@@ -167,15 +167,16 @@ namespace prz {
 
         TEST_F(NotificationCenterTest, PostNotification_NotificationArgumentsArePassedToObserver) {
             ValueOwner owner = {kDefaultValue};
-            ValueOwner anotherOwner = {kDefaultValue};
+            ValueOwner anotherOwner = {kSomeValue};
 
-            nc->AddObserver(kSomeNotification, &owner, [](void* args) {
-                static_cast<ValueOwner*>(args)->value = kSomeValue;
+            nc->AddObserver(kSomeNotification, &owner, [&owner](const void* args) {
+                const ValueOwner* argsOwner = static_cast<const ValueOwner*>(args);
+                owner.value = argsOwner->value;
             });
 
             nc->PostNotification(kSomeNotification, &anotherOwner);
 
-            ASSERT_EQ(kSomeValue, anotherOwner.value);
+            ASSERT_EQ(kSomeValue, owner.value);
         }
     }
 }
