@@ -4,8 +4,6 @@
 
 #include "utils/NotificationCenter.h"
 
-#include "Core.h"
-
 namespace prz {
     namespace testing {
 
