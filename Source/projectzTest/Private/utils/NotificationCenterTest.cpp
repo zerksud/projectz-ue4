@@ -134,7 +134,7 @@ namespace prz {
             ASSERT_EQ(kSomeValue * notificationCount, owner.value);
         }
 
-        TEST_F(NotificationCenterTest, PostNotification_HandlerNotFiredOnAnotherNotification) {
+        TEST_F(NotificationCenterTest, PostNotification_HandlerIsNotFiredOnAnotherNotification) {
             ValueOwner owner = {kDefaultValue};
             nc->AddObserver(kSomeNotification, &owner, makeIncrementValueHandler(&owner, kSomeValue));
 
@@ -143,7 +143,7 @@ namespace prz {
             ASSERT_EQ(kDefaultValue, owner.value);
         }
 
-        TEST_F(NotificationCenterTest, PostNotification_EachHandlerFiredOnlyOnHisNotification) {
+        TEST_F(NotificationCenterTest, PostNotification_EachHandlerIsFiredOnlyOnHisNotification) {
             ValueOwner owner = {kDefaultValue};
             ValueOwner anotherOwner = {kDefaultValue};
 
