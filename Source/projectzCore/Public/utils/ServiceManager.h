@@ -30,7 +30,7 @@ namespace prz {
                 mServiceMap[index] = box;
             }
 
-            template<typename TServiceType> TServiceType* Resolve() {
+            template<typename TServiceType> TServiceType* GetService() {
                 std::type_index index = std::type_index(typeid(TServiceType));
                 ZServiceMap::iterator pos = mServiceMap.find(index);
                 if (pos != mServiceMap.end()) {
