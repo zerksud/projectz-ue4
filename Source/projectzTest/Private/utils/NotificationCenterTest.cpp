@@ -76,6 +76,13 @@ namespace prz {
             ASSERT_FALSE(success);
         }
 
+        TEST_F(NotificationCenterTest, AddObserver_NormalObserverCanBeAddedSuccessfully) {
+            ValueOwner owner = {kDefaultValue};
+            bool success = nc->AddObserver(kSomeNotification, &owner, kEmptyHandler);
+
+            ASSERT_TRUE(success);
+        }
+
         TEST_F(NotificationCenterTest, RemoveObserver_HandlerIsNotFiredForRemovedObserver) {
             ValueOwner owner = {kDefaultValue};
             nc->AddObserver(kSomeNotification, &owner, makeIncrementValueHandler(&owner, kSomeValue));
@@ -103,6 +110,14 @@ namespace prz {
             bool success = nc->RemoveObserver(kSomeNotification, &owner);
 
             ASSERT_FALSE(success);
+        }
+
+        TEST_F(NotificationCenterTest, RemoveObserver_AddedObserverCanBeRemovedSuccessfully) {
+            ValueOwner owner = {kDefaultValue};
+            nc->AddObserver(kSomeNotification, &owner, kEmptyHandler);
+            bool success = nc->RemoveObserver(kSomeNotification, &owner);
+
+            ASSERT_TRUE(success);
         }
 
         TEST_F(NotificationCenterTest, RemoveObserver_AddedObserverCantBeRemovedUsingAnotherNotification) {
@@ -161,6 +176,12 @@ namespace prz {
             bool success = nc->PostNotification(kEmptyNotification);
 
             ASSERT_FALSE(success);
+        }
+
+        TEST_F(NotificationCenterTest, PostNotification_NormalNotificationCanBePostedSuccessfully) {
+            bool success = nc->PostNotification(kSomeNotification);
+
+            ASSERT_TRUE(success);
         }
 
         TEST_F(NotificationCenterTest, PostNotification_NotificationArgumentsArePassedToObserver) {
