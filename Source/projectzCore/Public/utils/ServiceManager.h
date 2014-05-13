@@ -12,7 +12,7 @@ namespace prz {
             ZServiceManager();
             virtual ~ZServiceManager();
 
-            template<typename TServiceType> void Register(TServiceType* instance) {
+            template<typename TServiceType> bool Register(TServiceType* instance) {
                 ZServiceBox* box = new ZServiceBox();
                 box->instance = instance;
                 box->destructor = [instance]() {
@@ -28,6 +28,8 @@ namespace prz {
                 }
 
                 mServiceMap[index] = box;
+
+                return true;
             }
 
             template<typename TServiceType> TServiceType* GetService() {
