@@ -6,6 +6,7 @@
 
 #include "utils/LOG.h"
 #include "utils/Logger.h"
+#include "utils/NotificationCenter.h"
 
 ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP) {
@@ -25,6 +26,7 @@ void initializeServices() {
     });
 
     ZServices::GetInstance().Register<ILogger>(loggerService);
+    ZServices::GetInstance().Register<INotificationCenter>(new prz::utils::ZNotificationCenter());
 }
 
 void ADefaultGameMode::BeginPlay() {
