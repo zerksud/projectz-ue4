@@ -1,10 +1,6 @@
 #pragma once
 
 #include "projectzCorePrivatePCH.h"
-#include "projectzCoreModule.h"
+#include "ModuleManager.h"
 
-bool ZProjectzCoreModule::IsGameModule() const {
-    return true;
-}
-
-IMPLEMENT_MODULE(ZProjectzCoreModule, projectzCore)
+IMPLEMENT_MODULE(FDefaultGameModuleImpl, projectzCore)
