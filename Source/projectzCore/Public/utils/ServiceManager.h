@@ -5,9 +5,11 @@
 #include <typeinfo>
 #include <unordered_map>
 
+#include "Core.h"
+
 namespace prz {
     namespace utils {
-        class ZServiceManager {
+        class PROJECTZCORE_API ZServiceManager {
         public:
             ZServiceManager();
             virtual ~ZServiceManager();

@@ -4,7 +4,7 @@
 
 namespace prz {
     namespace utils {
-        class ZLogger : public ILogger {
+        class PROJECTZCORE_API ZLogger : public ILogger {
         public:
             ZLogger();
             ~ZLogger();

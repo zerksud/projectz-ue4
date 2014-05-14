@@ -3,11 +3,13 @@
 #include <unordered_map>
 #include <vector>
 
+#include "Core.h"
+
 #include "utils/INotificationCenter.h"
 
 namespace prz {
     namespace utils {
-        class ZNotificationCenter : public INotificationCenter {
+        class PROJECTZCORE_API ZNotificationCenter : public INotificationCenter {
         public:
             ZNotificationCenter();
             ZNotificationCenter(const ZNotificationCenter& other);
