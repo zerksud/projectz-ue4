@@ -18,7 +18,7 @@ namespace prz {
             virtual bool RemoveObserver(const std::string& name, void* observerOwner) override;
 
             virtual bool PostNotification(const std::string& name) override;
-            virtual bool PostNotification(const std::string& name, const void* argument) override;
+            virtual bool PostNotification(const std::string& name, const ZDictionary& dict) override;
 
         private:
             ZNotificationCenter(const ZNotificationCenter& other);

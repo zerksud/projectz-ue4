@@ -19,6 +19,7 @@ namespace prz {
             virtual ~ZDictionary();
 
             ZDictionary& operator[](const char* key);
+            const ZDictionary& operator[](const char* key) const;
 
             const int AsInt() const;
             const bool AsBool() const;

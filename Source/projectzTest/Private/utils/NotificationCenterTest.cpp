@@ -40,10 +40,10 @@ namespace prz {
         const char* NotificationCenterTest::kSomeNotification = "some_notification";
         const char* NotificationCenterTest::kAnotherNotification = "another_notification";
 
-        const ZNotificationEventHandler NotificationCenterTest::kEmptyHandler = [](const void*) {};
+        const ZNotificationEventHandler NotificationCenterTest::kEmptyHandler = [](const utils::ZDictionary& dict) {};
 
         ZNotificationEventHandler makeIncrementValueHandler(ValueOwner* owner, int valueIncrement) {
-            return[owner, valueIncrement](const void*) {
+            return[owner, valueIncrement](const utils::ZDictionary& dict) {
                 owner->value += valueIncrement;
             };
         }
@@ -186,14 +186,15 @@ namespace prz {
 
         TEST_F(NotificationCenterTest, PostNotification_NotificationArgumentsArePassedToObserver) {
             ValueOwner owner = {kDefaultValue};
-            ValueOwner anotherOwner = {kSomeValue};
 
-            nc->AddObserver(kSomeNotification, &owner, [&owner](const void* argument) {
-                const ValueOwner* argsOwner = static_cast<const ValueOwner*>(argument);
-                owner.value = argsOwner->value;
+            nc->AddObserver(kSomeNotification, &owner, [&owner](const utils::ZDictionary& dict) {
+                owner.value = dict["value"].AsInt();
             });
 
-            nc->PostNotification(kSomeNotification, &anotherOwner);
+            utils::ZDictionary dict;
+            dict["value"] = kSomeValue;
+
+            nc->PostNotification(kSomeNotification, dict);
 
             ASSERT_EQ(kSomeValue, owner.value);
         }

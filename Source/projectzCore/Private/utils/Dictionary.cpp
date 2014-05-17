@@ -63,6 +63,15 @@ namespace prz {
             return (*this)[key];
         }
 
+        const ZDictionary& ZDictionary::operator[](const char* key) const {
+            if (mValueType == mapValue) {
+                return (*mValue.asMap)[key];
+            }
+
+            LOGE("Can't access const ZDictionary value of type %d by key %s", mValueType, key);
+            return *this;
+        }
+
         const int ZDictionary::AsInt() const {
             if (mValueType == intValue) {
                 return mValue.asInt;
