@@ -20,6 +20,12 @@ namespace prz {
         const char* DictionaryTestWithInstance::kSomeKey = "some_key";
         const char* DictionaryTestWithInstance::kAnotherKey = "another_key";
 
+        utils::ZDictionary makeDictWithValue(utils::ZDictionary dict, const char* key, int value) {
+            dict[key] = value;
+
+            return dict;
+        }
+
         TEST_F(DictionaryTestWithInstance, IntCanBeStoredAndRetrievedByKey) {
             dict[kSomeKey] = kSomeInt;
 
@@ -52,6 +58,12 @@ namespace prz {
             dict[kSomeKey] = kSomeBool;
 
             ASSERT_EQ(kSomeInt, anotherDict[kSomeKey].AsInt());
+        }
+
+        TEST_F(DictionaryTestWithInstance, MoveConstructor_MovesDictionary) {
+            dict = makeDictWithValue(utils::ZDictionary(), kSomeKey, kSomeInt);
+
+            ASSERT_EQ(kSomeInt, dict[kSomeKey].AsInt());
         }
 
         TEST_F(DictionaryTestWithInstance, AssignmentOperator_CopiesDictionary) {
