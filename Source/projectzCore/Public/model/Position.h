@@ -1,0 +1,41 @@
+#pragma once
+
+#include "Core.h"
+
+namespace prz {
+    namespace mdl {
+        class ZPositionDiff {
+        public:
+            ZPositionDiff();
+            ZPositionDiff(int dXValue, int dYValue);
+            virtual ~ZPositionDiff();
+
+            int GetdX() const;
+            int GetdY() const;
+
+        private:
+            int mdX;
+            int mdY;
+        };
+
+        class ZPosition {
+        public:
+            ZPosition();
+            ZPosition(const ZPosition& other);
+            ZPosition(int xValue, int yValue);
+            virtual ~ZPosition();
+
+            int GetX() const;
+            int GetY() const;
+
+            const ZPosition operator+(const ZPositionDiff& diff) const;
+            const ZPositionDiff operator-(const ZPosition& other) const;
+            bool operator==(const ZPosition& other) const;
+            ZPosition& operator=(const ZPosition& other);
+
+        private:
+            int mX;
+            int mY;
+        };
+    }
+}
