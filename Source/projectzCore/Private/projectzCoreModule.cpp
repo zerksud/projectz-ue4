@@ -1,5 +1,3 @@
-#pragma once
-
 #include "projectzCorePrivatePCH.h"
 #include "ModuleManager.h"
 
