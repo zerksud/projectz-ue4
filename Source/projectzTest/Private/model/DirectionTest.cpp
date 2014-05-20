@@ -150,5 +150,15 @@ namespace prz {
             ASSERT_EQ(kPositionDiffs[Direction::HalfLeft].GetdX(), diff.GetdX());
             ASSERT_EQ(kPositionDiffs[Direction::HalfLeft].GetdY(), diff.GetdY());
         }
+
+        TEST_F(DirectionTest, Align_AlignsToCloseToRightDiff) {
+            mdl::ZPositionDiff diff(-kSomeBigCoordinateDiff, kSomeBigCoordinateDiff * 3);
+            dir.Align(diff);
+
+            diff = dir.PredictMove();
+
+            ASSERT_EQ(kPositionDiffs[Direction::Right].GetdX(), diff.GetdX());
+            ASSERT_EQ(kPositionDiffs[Direction::Right].GetdY(), diff.GetdY());
+        }
     }
 }
