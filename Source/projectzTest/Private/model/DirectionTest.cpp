@@ -84,7 +84,7 @@ namespace prz {
         }
 
         TEST_F(DirectionTest, RotateLeft_400RotateLeftsRotateToForward) {
-            for (int i = 0; i < 4; ++i) {
+            for (int i = 0; i < 400; ++i) {
                 dir.RotateLeft();
             }
 
