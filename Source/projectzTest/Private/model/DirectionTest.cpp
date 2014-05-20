@@ -7,9 +7,10 @@
 namespace prz {
     namespace testing {
         class DirectionTest : public ::testing::Test {
-        protected:
+        public:
             static const mdl::ZPositionDiff kPositionDiffs[];
 
+        protected:
             mdl::ZDirection dir;
         };
 
@@ -19,7 +20,9 @@ namespace prz {
             mdl::ZPositionDiff(0, 1),
             mdl::ZPositionDiff(-1, 0),
             mdl::ZPositionDiff(1, -1),
-            mdl::ZPositionDiff(1, 1)
+            mdl::ZPositionDiff(1, 1),
+            mdl::ZPositionDiff(-1, -1),
+            mdl::ZPositionDiff(-1, 1)
         };
 
         namespace Direction {
@@ -101,5 +104,19 @@ namespace prz {
             ASSERT_EQ(kPositionDiffs[Direction::Forward].GetdX(), diff.GetdX());
             ASSERT_EQ(kPositionDiffs[Direction::Forward].GetdY(), diff.GetdY());
         }
+
+        class DirectionAlignTest : public DirectionTest,
+            public ::testing::WithParamInterface<mdl::ZPositionDiff> {
+        };
+
+        TEST_P(DirectionAlignTest, Align_AlignsExactlyToPassedBaseDiff) {
+            dir.Align(GetParam());
+            mdl::ZPositionDiff diff = dir.PredictMove();
+
+            ASSERT_EQ(GetParam().GetdX(), diff.GetdX());
+            ASSERT_EQ(GetParam().GetdY(), diff.GetdY());
+        }
+
+        INSTANTIATE_TEST_CASE_P(BaseDiffs, DirectionAlignTest, ::testing::ValuesIn(DirectionAlignTest::kPositionDiffs));
     }
 }
