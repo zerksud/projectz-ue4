@@ -50,13 +50,7 @@ namespace prz {
         int ZDirection::GetAngleFromDiff(const ZPositionDiff& diff) {
             double dx = diff.GetdX();
             double dy = -diff.GetdY();
-            double hypotenuse = sqrt(dx * dx + dy * dy);
-            double sinAlpha = dy / hypotenuse;
-            double cosAlpha = dx / hypotenuse;
-            double alpha = acos(cosAlpha);
-            if (sinAlpha < 0) {
-                alpha = kPi * 2 - alpha;
-            }
+            double alpha = atan2(dy, dx);
             alpha = alpha / kPi * 180.0;
 
             return round(alpha);
