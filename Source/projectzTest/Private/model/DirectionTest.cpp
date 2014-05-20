@@ -5,7 +5,7 @@
 #include "model/Direction.h"
 
 #define ASSERT_POSITION_DIFF_EQ(x, y)  \
-    ASSERT_EQ(x##.GetdX(), y##.GetdX()); \
+    EXPECT_EQ(x##.GetdX(), y##.GetdX()); \
     ASSERT_EQ(x##.GetdY(), y##.GetdY());
 
 namespace prz {
