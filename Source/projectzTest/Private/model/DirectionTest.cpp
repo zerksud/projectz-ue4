@@ -8,68 +8,76 @@ namespace prz {
     namespace testing {
         class DirectionTest : public ::testing::Test {
         protected:
-            static const mdl::ZPositionDiff kForward;
-            static const mdl::ZPositionDiff kLeft;
-            static const mdl::ZPositionDiff kRight;
-            static const mdl::ZPositionDiff kBackward;
-            static const mdl::ZPositionDiff kHalfLeft;
-            static const mdl::ZPositionDiff kHalfRight;
+            static const mdl::ZPositionDiff kPositionDiffs[];
 
             mdl::ZDirection dir;
         };
 
-        const mdl::ZPositionDiff DirectionTest::kForward(1, 0);
-        const mdl::ZPositionDiff DirectionTest::kLeft(0, -1);
-        const mdl::ZPositionDiff DirectionTest::kRight(0, 1);
-        const mdl::ZPositionDiff DirectionTest::kBackward(-1, 0);
-        const mdl::ZPositionDiff DirectionTest::kHalfLeft(1, -1);
-        const mdl::ZPositionDiff DirectionTest::kHalfRight(1, 1);
+        const mdl::ZPositionDiff DirectionTest::kPositionDiffs[] = {
+            mdl::ZPositionDiff(1, 0),
+            mdl::ZPositionDiff(0, -1),
+            mdl::ZPositionDiff(0, 1),
+            mdl::ZPositionDiff(-1, 0),
+            mdl::ZPositionDiff(1, -1),
+            mdl::ZPositionDiff(1, 1)
+        };
+
+        namespace Direction {
+            enum Type {
+                Forward = 0,
+                Left,
+                Right,
+                Backward,
+                HalfLeft,
+                HalfRight
+            };
+        }
 
         TEST_F(DirectionTest, DefaultDirectionPredictsForwardMove) {
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_EQ(kForward.GetdX(), diff.GetdX());
-            ASSERT_EQ(kForward.GetdY(), diff.GetdY());
+            ASSERT_EQ(kPositionDiffs[Direction::Forward].GetdX(), diff.GetdX());
+            ASSERT_EQ(kPositionDiffs[Direction::Forward].GetdY(), diff.GetdY());
         }
 
         TEST_F(DirectionTest, RotateLeft_PredictsLeftMove) {
             dir.RotateLeft();
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_EQ(kLeft.GetdX(), diff.GetdX());
-            ASSERT_EQ(kLeft.GetdY(), diff.GetdY());
+            ASSERT_EQ(kPositionDiffs[Direction::Left].GetdX(), diff.GetdX());
+            ASSERT_EQ(kPositionDiffs[Direction::Left].GetdY(), diff.GetdY());
         }
 
         TEST_F(DirectionTest, RotateLeft_PredictsRightMove) {
             dir.RotateRight();
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_EQ(kRight.GetdX(), diff.GetdX());
-            ASSERT_EQ(kRight.GetdY(), diff.GetdY());
+            ASSERT_EQ(kPositionDiffs[Direction::Right].GetdX(), diff.GetdX());
+            ASSERT_EQ(kPositionDiffs[Direction::Right].GetdY(), diff.GetdY());
         }
 
         TEST_F(DirectionTest, RotateLeft_PredictsBackwardMove) {
             dir.RotateBack();
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_EQ(kBackward.GetdX(), diff.GetdX());
-            ASSERT_EQ(kBackward.GetdY(), diff.GetdY());
+            ASSERT_EQ(kPositionDiffs[Direction::Backward].GetdX(), diff.GetdX());
+            ASSERT_EQ(kPositionDiffs[Direction::Backward].GetdY(), diff.GetdY());
         }
 
         TEST_F(DirectionTest, RotateLeft_PredictsHalfLeftMove) {
             dir.RotateHalfLeft();
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_EQ(kHalfLeft.GetdX(), diff.GetdX());
-            ASSERT_EQ(kHalfLeft.GetdY(), diff.GetdY());
+            ASSERT_EQ(kPositionDiffs[Direction::HalfLeft].GetdX(), diff.GetdX());
+            ASSERT_EQ(kPositionDiffs[Direction::HalfLeft].GetdY(), diff.GetdY());
         }
 
         TEST_F(DirectionTest, RotateLeft_PredictsHalfRightMove) {
             dir.RotateHalfRight();
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_EQ(kHalfRight.GetdX(), diff.GetdX());
-            ASSERT_EQ(kHalfRight.GetdY(), diff.GetdY());
+            ASSERT_EQ(kPositionDiffs[Direction::HalfRight].GetdX(), diff.GetdX());
+            ASSERT_EQ(kPositionDiffs[Direction::HalfRight].GetdY(), diff.GetdY());
         }
 
         TEST_F(DirectionTest, RotateLeft_FourthRotateLeftsRotateToForward) {
@@ -79,8 +87,8 @@ namespace prz {
 
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_EQ(kForward.GetdX(), diff.GetdX());
-            ASSERT_EQ(kForward.GetdY(), diff.GetdY());
+            ASSERT_EQ(kPositionDiffs[Direction::Forward].GetdX(), diff.GetdX());
+            ASSERT_EQ(kPositionDiffs[Direction::Forward].GetdY(), diff.GetdY());
         }
 
         TEST_F(DirectionTest, RotateLeft_400RotateLeftsRotateToForward) {
@@ -90,8 +98,8 @@ namespace prz {
 
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_EQ(kForward.GetdX(), diff.GetdX());
-            ASSERT_EQ(kForward.GetdY(), diff.GetdY());
+            ASSERT_EQ(kPositionDiffs[Direction::Forward].GetdX(), diff.GetdX());
+            ASSERT_EQ(kPositionDiffs[Direction::Forward].GetdY(), diff.GetdY());
         }
     }
 }
