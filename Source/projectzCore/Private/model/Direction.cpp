@@ -48,9 +48,9 @@ namespace prz {
         }
 
         int ZDirection::GetAngleFromDiff(const ZPositionDiff& diff) {
-            double dx = diff.GetdX();
-            double dy = -diff.GetdY();
-            double alpha = atan2(dy, dx);
+            int dx = diff.GetdX();
+            int dy = -diff.GetdY();
+            float alpha = atan2(dy, dx);
             alpha = alpha / kPi * 180.0;
 
             return round(alpha);
