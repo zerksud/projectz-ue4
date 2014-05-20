@@ -77,14 +77,6 @@ namespace prz {
             int angle = GetAngleFromDiff(diff);
             int discreteDiff = round((angle - mAngle) / 45.0f) * 45;
 
-            if (discreteDiff < 0) {
-                discreteDiff += 360;
-            }
-
-            if (discreteDiff > 180) {
-                discreteDiff -= 360;
-            }
-
             Rotate(discreteDiff);
         }
 
