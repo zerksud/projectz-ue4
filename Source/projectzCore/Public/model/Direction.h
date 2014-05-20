@@ -25,7 +25,7 @@ namespace prz {
 
             static const double kPi;
             static ZPredictedMovesMap kPredictedMoves;
-            static int GetAngleFromDiff(const ZPositionDiff& diff);
+            static float GetAngleFromDiff(const ZPositionDiff& diff);
             static ZPositionDiff GetPositionDiff(int angle);
 
             void Rotate(int angle);

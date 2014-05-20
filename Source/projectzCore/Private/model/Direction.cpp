@@ -47,13 +47,13 @@ namespace prz {
             Rotate(-45);
         }
 
-        int ZDirection::GetAngleFromDiff(const ZPositionDiff& diff) {
+        float ZDirection::GetAngleFromDiff(const ZPositionDiff& diff) {
             int dx = diff.GetdX();
             int dy = -diff.GetdY();
             float alpha = atan2(dy, dx);
             alpha = alpha / kPi * 180.0;
 
-            return round(alpha);
+            return alpha;
         }
 
         ZPositionDiff ZDirection::GetPositionDiff(int angle) {
