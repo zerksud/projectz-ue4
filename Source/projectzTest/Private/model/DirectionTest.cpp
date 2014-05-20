@@ -11,6 +11,8 @@ namespace prz {
             static const mdl::ZPositionDiff kPositionDiffs[];
 
         protected:
+            static const int kSomeBigCoordinateDiff = 42;
+            static const int kSomeSmallCoordinateDiff = 2;
             mdl::ZDirection dir;
         };
 
@@ -118,5 +120,35 @@ namespace prz {
         }
 
         INSTANTIATE_TEST_CASE_P(BaseDiffs, DirectionAlignTest, ::testing::ValuesIn(DirectionAlignTest::kPositionDiffs));
+
+        TEST_F(DirectionTest, Align_AlignsToAlmostForwardDiff) {
+            mdl::ZPositionDiff diff(kSomeBigCoordinateDiff, kSomeSmallCoordinateDiff);
+            dir.Align(diff);
+
+            diff = dir.PredictMove();
+
+            ASSERT_EQ(kPositionDiffs[Direction::Forward].GetdX(), diff.GetdX());
+            ASSERT_EQ(kPositionDiffs[Direction::Forward].GetdY(), diff.GetdY());
+        }
+
+        TEST_F(DirectionTest, Align_AlignsToAlmostBackwardDiff) {
+            mdl::ZPositionDiff diff(-kSomeBigCoordinateDiff, -kSomeSmallCoordinateDiff);
+            dir.Align(diff);
+
+            diff = dir.PredictMove();
+
+            ASSERT_EQ(kPositionDiffs[Direction::Backward].GetdX(), diff.GetdX());
+            ASSERT_EQ(kPositionDiffs[Direction::Backward].GetdY(), diff.GetdY());
+        }
+
+        TEST_F(DirectionTest, Align_AlignsToAlmostHalfLeftDiff) {
+            mdl::ZPositionDiff diff(kSomeBigCoordinateDiff + kSomeSmallCoordinateDiff, -kSomeBigCoordinateDiff + kSomeSmallCoordinateDiff);
+            dir.Align(diff);
+
+            diff = dir.PredictMove();
+
+            ASSERT_EQ(kPositionDiffs[Direction::HalfLeft].GetdX(), diff.GetdX());
+            ASSERT_EQ(kPositionDiffs[Direction::HalfLeft].GetdY(), diff.GetdY());
+        }
     }
 }
