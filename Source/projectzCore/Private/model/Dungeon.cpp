@@ -5,10 +5,30 @@
 
 namespace prz {
     namespace mdl {
-        ZDungeon::ZDungeon(int width, int height, ZDungeonCell::Type* terrain, const ZPosition& startPosition) {
+        ZDungeon::ZDungeon(int width, int height, const ZMapCell* map, const ZPosition& startPosition) {
             mWidth = width;
             mHeight = height;
-            mTerrain = terrain;
+            ParseMap(map);
+        }
+
+        void ZDungeon::ParseMap(const ZMapCell* map) {
+            mTerrain = new ZDungeonCell::Type[mWidth * mHeight];
+
+            int w = mWidth;
+            int h = mHeight;
+            for (int y = 0; y < h; ++y) {
+                for (int x = 0; x < w; ++x) {
+                    int index = CalcCellLinearIndex(x, y);
+                    ZDungeonCell::Type cell = ZDungeonCell::Solid;
+
+                    const ZMapCell cellChar = map[index];
+                    if (cellChar == '.') {
+                        cell = ZDungeonCell::Hollow;
+                    }
+
+                    mTerrain[index] = cell;
+                }
+            }
         }
 
         ZDungeon::~ZDungeon() {
