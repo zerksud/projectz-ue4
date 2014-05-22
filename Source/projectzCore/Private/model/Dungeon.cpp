@@ -8,7 +8,9 @@ namespace prz {
 
         const ZDungeon::ZMapToTerrainCellMap ZDungeon::kMapToTerrainCellMap = {
             {kSolidCell, ZDungeonCell::Solid},
-            {kHollowCell, ZDungeonCell::Hollow}
+            {kHollowCell, ZDungeonCell::Hollow},
+            {kStairsUpCell, ZDungeonCell::Hollow},
+            {kStairsDownCell, ZDungeonCell::Hollow}
         };
 
         ZDungeon::ZDungeon(int width, int height, const ZMapCell* map, const ZPosition& startPosition) {
@@ -27,10 +29,18 @@ namespace prz {
                     int index = CalcCellLinearIndex(x, y);
                     const ZMapCell mapCell = map[index];
 
+                    if (mapCell == kStairsUpCell) {
+                        mStairsUp.push_back(ZPosition(x, y));
+                    } else if (mapCell == kStairsDownCell) {
+                        mStairsDown.push_back(ZPosition(x, y));
+                    }
+
                     auto mapCellReplacement = kMapToTerrainCellMap.find(mapCell);
 
                     if (mapCellReplacement != kMapToTerrainCellMap.end()) {
                         cell = mapCellReplacement->second;
+                    } else {
+                        LOGE("Got unknown map cell type '%c'", mapCell);
                     }
 
                     mTerrain[index] = cell;
@@ -74,6 +84,14 @@ namespace prz {
 
         bool ZDungeon::CellIsSolid(const ZPosition& pos) const {
             return CellIsSolid(pos.GetX(), pos.GetY());
+        }
+
+        const ZDungeon::StairsList& ZDungeon::GetStairsUp() const {
+            return mStairsUp;
+        }
+
+        const ZDungeon::StairsList& ZDungeon::GetStairsDown() const {
+            return mStairsDown;
         }
 
         bool ZDungeon::CellIndicesAreValid(int x, int y) const {
