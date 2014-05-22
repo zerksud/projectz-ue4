@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+
 #include "model/Position.h"
 
 namespace prz {
@@ -31,6 +33,12 @@ namespace prz {
             bool CellIsSolid(const ZPosition& pos) const;
 
         private:
+            static const ZMapCell kSolidCell = '#';
+            static const ZMapCell kHollowCell = '.';
+            
+            typedef std::unordered_map<ZMapCell, ZDungeonCell::Type> ZMapToTerrainCellMap;
+            static const ZMapToTerrainCellMap kMapToTerrainCellMap;
+
             void ParseMap(const ZMapCell* terrain);
             bool CellIndicesAreValid(int x, int y) const;
             int CalcCellLinearIndex(int x, int y) const;
@@ -41,6 +49,5 @@ namespace prz {
             int mHeight;
             ZDungeonCell::Type* mTerrain;
         };
-
     }
 }

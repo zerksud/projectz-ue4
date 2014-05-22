@@ -5,6 +5,12 @@
 
 namespace prz {
     namespace mdl {
+
+        const ZDungeon::ZMapToTerrainCellMap ZDungeon::kMapToTerrainCellMap = {
+            {kSolidCell, ZDungeonCell::Solid},
+            {kHollowCell, ZDungeonCell::Hollow}
+        };
+
         ZDungeon::ZDungeon(int width, int height, const ZMapCell* map, const ZPosition& startPosition) {
             mWidth = width;
             mHeight = height;
@@ -14,16 +20,17 @@ namespace prz {
         void ZDungeon::ParseMap(const ZMapCell* map) {
             mTerrain = new ZDungeonCell::Type[mWidth * mHeight];
 
-            int w = mWidth;
-            int h = mHeight;
-            for (int y = 0; y < h; ++y) {
-                for (int x = 0; x < w; ++x) {
-                    int index = CalcCellLinearIndex(x, y);
+            for (int y = 0; y < mHeight; ++y) {
+                for (int x = 0; x < mWidth; ++x) {
                     ZDungeonCell::Type cell = ZDungeonCell::Solid;
 
-                    const ZMapCell cellChar = map[index];
-                    if (cellChar == '.') {
-                        cell = ZDungeonCell::Hollow;
+                    int index = CalcCellLinearIndex(x, y);
+                    const ZMapCell mapCell = map[index];
+
+                    auto mapCellReplacement = kMapToTerrainCellMap.find(mapCell);
+
+                    if (mapCellReplacement != kMapToTerrainCellMap.end()) {
+                        cell = mapCellReplacement->second;
                     }
 
                     mTerrain[index] = cell;
