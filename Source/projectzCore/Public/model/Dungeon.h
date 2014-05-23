@@ -20,7 +20,7 @@ namespace prz {
             typedef char ZMapCell;
             typedef std::vector<ZPosition> StairsList;
 
-            ZDungeon(int width, int height, const ZMapCell* map, const ZPosition& startPosition);
+            ZDungeon(int width, int height, const ZMapCell* map);
             ZDungeon(const ZDungeon& other);
             ZDungeon& operator=(const ZDungeon& other);
             virtual ~ZDungeon();

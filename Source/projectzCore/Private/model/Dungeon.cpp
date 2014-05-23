@@ -13,7 +13,7 @@ namespace prz {
             {kStairsDownCell, ZDungeonCell::Hollow}
         };
 
-        ZDungeon::ZDungeon(int width, int height, const ZMapCell* map, const ZPosition& startPosition) {
+        ZDungeon::ZDungeon(int width, int height, const ZMapCell* map) {
             mWidth = width;
             mHeight = height;
             ParseMap(map);
