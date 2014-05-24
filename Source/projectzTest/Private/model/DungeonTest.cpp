@@ -21,12 +21,23 @@ namespace prz {
             "#####";
         const mdl::ZPosition DungeonTest::kSomeMapSomeEmptyCell = mdl::ZPosition(1, 2);
         const mdl::ZPosition DungeonTest::kSomeMapSomeSolidCell = mdl::ZPosition(2, 1);
-            
-        TEST_F(DungeonTest, GetWidthAndGetHeightReturnExpectedValues) {
-            mdl::ZDungeon dungeon(kSomeMapWidth, kSomeMapHeight, kSomeMap);
 
-            EXPECT_EQ(kSomeMapWidth, dungeon.GetWidth());
-            ASSERT_EQ(kSomeMapHeight, dungeon.GetHeight());
+        class DungeonWithSomeMapTest : public DungeonTest {
+        protected:
+            void SetUp() {
+                mDungeon = new mdl::ZDungeon(kSomeMapWidth, kSomeMapHeight, kSomeMap);
+            }
+
+            void TearDown() {
+                delete mDungeon;
+            }
+
+            mdl::ZDungeon* mDungeon;
+        };
+
+        TEST_F(DungeonWithSomeMapTest, GetWidthAndGetHeightReturnExpectedValues) {
+            EXPECT_EQ(kSomeMapWidth, mDungeon->GetWidth());
+            ASSERT_EQ(kSomeMapHeight, mDungeon->GetHeight());
         }
     }
 }
