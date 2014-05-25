@@ -46,6 +46,8 @@ namespace prz {
             typedef std::unordered_map<ZMapCell, ZDungeonCell::Type> ZMapToTerrainCellMap;
             static const ZMapToTerrainCellMap kMapToTerrainCellMap;
 
+            void CreateFailSafeDungeon();
+
             void ParseMap(const ZMapCell* terrain);
             bool CellIndicesAreValid(int x, int y) const;
             int CalcCellLinearIndex(int x, int y) const;

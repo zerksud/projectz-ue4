@@ -1,5 +1,7 @@
 #include "projectzCorePrivatePCH.h"
 
+#include <cstring>
+
 #include "model/Dungeon.h"
 #include "utils/LOG_ANSI.h"
 
@@ -13,7 +15,28 @@ namespace prz {
             {kStairsDownCell, ZDungeonCell::Hollow}
         };
 
+        void ZDungeon::CreateFailSafeDungeon() {
+            mWidth = 3;
+            mHeight = 3;
+            ParseMap(""
+            "###"
+            "#.#"
+            "###");
+        }
+
         ZDungeon::ZDungeon(int width, int height, const ZMapCell* map) {
+            if (width <= 0 || height <= 0) {
+                LOGE("Can't create dungeon with size %dx%d", width, height);
+                CreateFailSafeDungeon();
+                return;
+            }
+
+            if (strlen(map) != width * height) {
+                LOGE("Can't create dungeon with size %dx%d from %s", width, height, map);
+                CreateFailSafeDungeon();
+                return;
+            }
+
             mWidth = width;
             mHeight = height;
             ParseMap(map);
