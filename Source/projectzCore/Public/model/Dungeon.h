@@ -21,8 +21,6 @@ namespace prz {
             typedef std::vector<ZPosition> StairsList;
 
             ZDungeon(int width, int height, const ZMapCell* map);
-            ZDungeon(const ZDungeon& other);
-            ZDungeon& operator=(const ZDungeon& other);
             virtual ~ZDungeon();
 
             int GetWidth() const;
@@ -38,6 +36,9 @@ namespace prz {
             const StairsList& GetStairsDown() const;
 
         private:
+            ZDungeon(const ZDungeon& other);
+            ZDungeon& operator=(const ZDungeon& other);
+
             static const ZMapCell kSolidCell = '#';
             static const ZMapCell kHollowCell = '.';
             static const ZMapCell kStairsUpCell = '<';
