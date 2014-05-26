@@ -115,5 +115,28 @@ namespace prz {
         TEST_F(DungeonWithSomeMapTest, CellIsEmpty_CoordinatesWorksJustLikePosition) {
             ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeMapSomeHollowCell.GetX(), kSomeMapSomeHollowCell.GetY()));
         }
+
+        TEST_F(DungeonTest, GetStairsUp_ReturnsNoCellsForMapWithoutStairsUp) {
+            const char* map = ""
+                "###"
+                "#>#"
+                "###";
+            mdl::ZDungeon dungeon(3, 3, map);
+
+            ASSERT_EQ(0, dungeon.GetStairsUp().size());
+        }
+
+        TEST_F(DungeonTest, GetStairsUp_ReturnsExactCellForMapWithSingleStairsUp) {
+            const char* map = ""
+                "####"
+                "#.<#"
+                "####";
+            mdl::ZDungeon dungeon(4, 3, map);
+
+            ASSERT_EQ(1, dungeon.GetStairsUp().size());
+            const mdl::ZPosition& pos = dungeon.GetStairsUp()[0];
+            EXPECT_EQ(2, pos.GetX());
+            ASSERT_EQ(1, pos.GetY());
+        }
     }
 }
