@@ -3,8 +3,6 @@
 
 #include "Core.h"
 
-#include "gtest/gtest.h"
-
 #include "utils/Services.h"
 #include "utils/Logger.h"
 

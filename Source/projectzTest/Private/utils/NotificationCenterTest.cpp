@@ -1,7 +1,5 @@
 #include "projectzTestPrivatePCH.h"
 
-#include "gtest/gtest.h"
-
 #include "utils/NotificationCenter.h"
 
 namespace prz {

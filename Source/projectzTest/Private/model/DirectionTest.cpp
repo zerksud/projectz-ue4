@@ -1,7 +1,5 @@
 #include "projectzTestPrivatePCH.h"
 
-#include "gtest/gtest.h"
-
 #include "model/Direction.h"
 
 #define ASSERT_POSITION_DIFF_EQ(x, y)  \

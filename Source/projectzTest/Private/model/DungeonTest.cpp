@@ -1,7 +1,5 @@
 #include "projectzTestPrivatePCH.h"
 
-#include "gtest/gtest.h"
-
 #include "model/Dungeon.h"
 
 #include "model/PositionTest.h"
