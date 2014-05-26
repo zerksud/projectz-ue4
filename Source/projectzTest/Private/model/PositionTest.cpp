@@ -1,8 +1,6 @@
 #include "projectzTestPrivatePCH.h"
 
-#include "gtest/gtest.h"
-
-#include "model/Position.h"
+#include "model/PositionTest.h"
 
 namespace prz {
     namespace testing {

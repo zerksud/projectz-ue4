@@ -4,6 +4,8 @@
 
 #include "model/Dungeon.h"
 
+#include "model/PositionTest.h"
+
 #define ASSERT_DUNGEON_WITH_FAIL_SAFE_MAP(dungeon) \
     EXPECT_EQ(kFailSafeMapWidth, dungeon.GetWidth()); \
     EXPECT_EQ(kFailSafeMapHeight, dungeon.GetHeight()); \
@@ -134,9 +136,9 @@ namespace prz {
             mdl::ZDungeon dungeon(4, 3, map);
 
             ASSERT_EQ(1, dungeon.GetStairsUp().size());
+            
             const mdl::ZPosition& pos = dungeon.GetStairsUp()[0];
-            EXPECT_EQ(2, pos.GetX());
-            ASSERT_EQ(1, pos.GetY());
+            ASSERT_POSITION_EQ(mdl::ZPosition(2, 1), pos);
         }
     }
 }
