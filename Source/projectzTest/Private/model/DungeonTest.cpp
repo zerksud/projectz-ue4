@@ -76,6 +76,26 @@ namespace prz {
             ASSERT_DUNGEON_WITH_FAIL_SAFE_MAP(dungeon);
         }
 
+        TEST_F(DungeonWithSomeMapTest, CellIsSolid_HollowCellsAreNotSolid) {
+            ASSERT_FALSE(mDungeon->CellIsSolid(kSomeMapSomeHollowCell));
+        }
+
+        TEST_F(DungeonWithSomeMapTest, CellIsSolid_StairsUpCellsAreNotSolid) {
+            ASSERT_FALSE(mDungeon->CellIsSolid(kSomeMapStairsUpCell));
+        }
+
+        TEST_F(DungeonWithSomeMapTest, CellIsSolid_StairsDownCellsAreNotSolid) {
+            ASSERT_FALSE(mDungeon->CellIsSolid(kSomeMapStairsDownCell));
+        }
+
+        TEST_F(DungeonWithSomeMapTest, CellIsSolid_SolidCellsAreIndeedSolid) {
+            ASSERT_TRUE(mDungeon->CellIsSolid(kSomeMapSomeSolidCell));
+        }
+
+        TEST_F(DungeonWithSomeMapTest, CellIsSolid_CoordinatesWorksJustLikePosition) {
+            ASSERT_TRUE(mDungeon->CellIsSolid(kSomeMapSomeSolidCell.GetX(), kSomeMapSomeSolidCell.GetY()));
+        }
+
         TEST_F(DungeonWithSomeMapTest, CellIsEmpty_HollowCellsAreEmpty) {
             ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeMapSomeHollowCell));
         }
