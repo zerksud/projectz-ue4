@@ -16,8 +16,10 @@ namespace prz {
             const static mdl::ZDungeon::ZMapCell* kSomeMap;
             const static int kSomeMapWidth = 5;
             const static int kSomeMapHeight = 3;
-            const static mdl::ZPosition kSomeMapSomeEmptyCell;
+            const static mdl::ZPosition kSomeMapSomeHollowCell;
             const static mdl::ZPosition kSomeMapSomeSolidCell;
+            const static mdl::ZPosition kSomeMapStairsUpCell;
+            const static mdl::ZPosition kSomeMapStairsDownCell;
 
             const static int kSomeIncorrectMapWidth = 0;
             const static int kSomeIncorrectMapHeight = -5;
@@ -31,8 +33,10 @@ namespace prz {
             "#####"
             "#<.>#"
             "#####";
-        const mdl::ZPosition DungeonTest::kSomeMapSomeEmptyCell = mdl::ZPosition(1, 2);
-        const mdl::ZPosition DungeonTest::kSomeMapSomeSolidCell = mdl::ZPosition(2, 1);
+        const mdl::ZPosition DungeonTest::kSomeMapSomeHollowCell = mdl::ZPosition(2, 1);
+        const mdl::ZPosition DungeonTest::kSomeMapSomeSolidCell = mdl::ZPosition(1, 2);
+        const mdl::ZPosition DungeonTest::kSomeMapStairsUpCell = mdl::ZPosition(1, 1);
+        const mdl::ZPosition DungeonTest::kSomeMapStairsDownCell = mdl::ZPosition(3, 1);
 
         const mdl::ZPosition DungeonTest::kFailSafeMapEmptyCell = mdl::ZPosition(1, 1);
 
@@ -70,6 +74,26 @@ namespace prz {
             mdl::ZDungeon dungeon(kSomeMapWidth, kSomeMapHeight + 1, kSomeMap);
 
             ASSERT_DUNGEON_WITH_FAIL_SAFE_MAP(dungeon);
+        }
+
+        TEST_F(DungeonWithSomeMapTest, CellIsEmpty_HollowCellsAreEmpty) {
+            ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeMapSomeHollowCell));
+        }
+
+        TEST_F(DungeonWithSomeMapTest, CellIsEmpty_StairsUpCellsAreEmpty) {
+            ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeMapStairsUpCell));
+        }
+
+        TEST_F(DungeonWithSomeMapTest, CellIsEmpty_StairsDownCellsAreEmpty) {
+            ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeMapStairsDownCell));
+        }
+
+        TEST_F(DungeonWithSomeMapTest, CellIsEmpty_SolidCellsAreNotEmpty) {
+            ASSERT_FALSE(mDungeon->CellIsEmpty(kSomeMapSomeSolidCell));
+        }
+
+        TEST_F(DungeonWithSomeMapTest, CellIsEmpty_CoordinatesWorksJustLikePosition) {
+            ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeMapSomeHollowCell.GetX(), kSomeMapSomeHollowCell.GetY()));
         }
     }
 }
