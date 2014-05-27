@@ -11,8 +11,8 @@ namespace prz {
         const ZDungeon::ZMapToTerrainCellMap ZDungeon::kMapToTerrainCellMap = {
             {kSolidCell, ZDungeonCell::Solid},
             {kHollowCell, ZDungeonCell::Hollow},
-            {kStairsUpCell, ZDungeonCell::Hollow},
-            {kStairsDownCell, ZDungeonCell::Hollow}
+            {kUpStaircaseCell, ZDungeonCell::Hollow},
+            {kDownStaircaseCell, ZDungeonCell::Hollow}
         };
 
         void ZDungeon::CreateFailSafeDungeon() {
@@ -52,10 +52,10 @@ namespace prz {
                     int index = CalcCellLinearIndex(x, y);
                     const ZMapCell mapCell = map[index];
 
-                    if (mapCell == kStairsUpCell) {
-                        mStairsUp.push_back(ZPosition(x, y));
-                    } else if (mapCell == kStairsDownCell) {
-                        mStairsDown.push_back(ZPosition(x, y));
+                    if (mapCell == kUpStaircaseCell) {
+                        mUpStaircases.push_back(ZPosition(x, y));
+                    } else if (mapCell == kDownStaircaseCell) {
+                        mDownStaircases.push_back(ZPosition(x, y));
                     }
 
                     auto mapCellReplacement = kMapToTerrainCellMap.find(mapCell);
@@ -109,12 +109,12 @@ namespace prz {
             return CellIsSolid(pos.GetX(), pos.GetY());
         }
 
-        const ZDungeon::StairsList& ZDungeon::GetStairsUp() const {
-            return mStairsUp;
+        const ZDungeon::StaircaseList& ZDungeon::GetUpStaircases() const {
+            return mUpStaircases;
         }
 
-        const ZDungeon::StairsList& ZDungeon::GetStairsDown() const {
-            return mStairsDown;
+        const ZDungeon::StaircaseList& ZDungeon::GetDownStaircases() const {
+            return mDownStaircases;
         }
 
         bool ZDungeon::CellIndicesAreValid(int x, int y) const {

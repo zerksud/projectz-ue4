@@ -18,7 +18,7 @@ namespace prz {
         class ZDungeon {
         public:
             typedef char ZMapCell;
-            typedef std::vector<ZPosition> StairsList;
+            typedef std::vector<ZPosition> StaircaseList;
 
             ZDungeon(int width, int height, const ZMapCell* map);
             virtual ~ZDungeon();
@@ -32,8 +32,8 @@ namespace prz {
             bool CellIsSolid(int x, int y) const;
             bool CellIsSolid(const ZPosition& pos) const;
 
-            const StairsList& GetStairsUp() const;
-            const StairsList& GetStairsDown() const;
+            const StaircaseList& GetUpStaircases() const;
+            const StaircaseList& GetDownStaircases() const;
 
         private:
             ZDungeon(const ZDungeon& other);
@@ -41,8 +41,8 @@ namespace prz {
 
             static const ZMapCell kSolidCell = '#';
             static const ZMapCell kHollowCell = '.';
-            static const ZMapCell kStairsUpCell = '<';
-            static const ZMapCell kStairsDownCell = '>';
+            static const ZMapCell kUpStaircaseCell = '<';
+            static const ZMapCell kDownStaircaseCell = '>';
             
             typedef std::unordered_map<ZMapCell, ZDungeonCell::Type> ZMapToTerrainCellMap;
             static const ZMapToTerrainCellMap kMapToTerrainCellMap;
@@ -59,8 +59,8 @@ namespace prz {
             int mHeight;
             ZDungeonCell::Type* mTerrain;
             
-            StairsList mStairsUp;
-            StairsList mStairsDown;
+            StaircaseList mUpStaircases;
+            StaircaseList mDownStaircases;
         };
     }
 }
