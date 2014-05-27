@@ -3,6 +3,7 @@
 #include "model/Dungeon.h"
 
 #include "model/PositionTest.h"
+#include "TestHelpers.h"
 
 #define ASSERT_DUNGEON_WITH_FAIL_SAFE_MAP(dungeon) \
     EXPECT_EQ(kFailSafeMapWidth, dungeon.GetWidth()); \
@@ -116,27 +117,140 @@ namespace prz {
             ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeMapSomeHollowCell.GetX(), kSomeMapSomeHollowCell.GetY()));
         }
 
-        TEST_F(DungeonTest, GetStairsUp_ReturnsNoCellsForMapWithoutStairsUp) {
-            const char* map = ""
-                "###"
-                "#>#"
-                "###";
-            mdl::ZDungeon dungeon(3, 3, map);
+        class DungeonSingleStairsDownTest : public ::testing::Test {
+        protected:
+            const static mdl::ZPosition kStairsDownPosition;
 
-            ASSERT_EQ(0, dungeon.GetStairsUp().size());
+            void SetUp() {
+                mDungeon = new mdl::ZDungeon(4, 3, ""
+                "####"
+                "#.>#"
+                "####");
+            }
+
+            void TearDown() {
+                delete mDungeon;
+            }
+
+            mdl::ZDungeon* mDungeon;
+        };
+
+        const mdl::ZPosition DungeonSingleStairsDownTest::kStairsDownPosition = mdl::ZPosition(2, 1);
+
+
+        class DungeonSingleStairsUpTest : public ::testing::Test {
+        protected:
+            const static mdl::ZPosition kStairsUpPosition;
+
+            void SetUp() {
+                mDungeon = new mdl::ZDungeon(4, 3, ""
+                    "####"
+                    "#.<#"
+                    "####");
+            }
+
+            void TearDown() {
+                delete mDungeon;
+            }
+
+            mdl::ZDungeon* mDungeon;
+        };
+
+        const mdl::ZPosition DungeonSingleStairsUpTest::kStairsUpPosition = mdl::ZPosition(2, 1);
+
+
+        class DungeonTwoDifferentStairsTest : public ::testing::Test {
+        protected:
+            const static mdl::ZPosition kStairsUpPosition;
+            const static mdl::ZPosition kStairsDownPosition;
+
+            void SetUp() {
+                mDungeon = new mdl::ZDungeon(4, 3, ""
+                    "####"
+                    "#><#"
+                    "####");
+            }
+
+            void TearDown() {
+                delete mDungeon;
+            }
+
+            mdl::ZDungeon* mDungeon;
+        };
+
+        const mdl::ZPosition DungeonTwoDifferentStairsTest::kStairsUpPosition = mdl::ZPosition(2, 1);
+        const mdl::ZPosition DungeonTwoDifferentStairsTest::kStairsDownPosition = mdl::ZPosition(1, 1);
+
+
+        class DungeonTwoStairsPairsTest : public ::testing::Test {
+        protected:
+            const static mdl::ZPosition kStairsUpPosition1st;
+            const static mdl::ZPosition kStairsUpPosition2nd;
+            const static mdl::ZPosition kStairsDownPosition1st;
+            const static mdl::ZPosition kStairsDownPosition2nd;
+
+            void SetUp() {
+                mDungeon = new mdl::ZDungeon(6, 4, ""
+                    "######"
+                    "#<..>#"
+                    "#.><.#"
+                    "######");
+            }
+
+            void TearDown() {
+                delete mDungeon;
+            }
+
+            mdl::ZDungeon* mDungeon;
+        };
+
+        const mdl::ZPosition DungeonTwoStairsPairsTest::kStairsUpPosition1st = mdl::ZPosition(1, 1);
+        const mdl::ZPosition DungeonTwoStairsPairsTest::kStairsUpPosition2nd = mdl::ZPosition(3, 2);
+        const mdl::ZPosition DungeonTwoStairsPairsTest::kStairsDownPosition1st = mdl::ZPosition(4, 1);
+        const mdl::ZPosition DungeonTwoStairsPairsTest::kStairsDownPosition2nd = mdl::ZPosition(2, 2);
+
+        TEST_F(DungeonSingleStairsDownTest, GetStairsUp_ReturnsNoCellsForMapWithoutStairsUp) {
+            ASSERT_EQ(0, mDungeon->GetStairsUp().size());
         }
 
-        TEST_F(DungeonTest, GetStairsUp_ReturnsExactCellForMapWithSingleStairsUp) {
-            const char* map = ""
-                "####"
-                "#.<#"
-                "####";
-            mdl::ZDungeon dungeon(4, 3, map);
+        TEST_F(DungeonSingleStairsUpTest, GetStairsUp_ReturnsExactCellForMapWithSingleStairsUp) {
+            ASSERT_EQ(1, mDungeon->GetStairsUp().size());
+            ASSERT_CONTAINS(mDungeon->GetStairsUp(), kStairsUpPosition);
+        }
 
-            ASSERT_EQ(1, dungeon.GetStairsUp().size());
-            
-            const mdl::ZPosition& pos = dungeon.GetStairsUp()[0];
-            ASSERT_POSITION_EQ(mdl::ZPosition(2, 1), pos);
+        TEST_F(DungeonTwoDifferentStairsTest, GetStairsUp_ReturnsExactCellForMapWithTwoDifferentStairs) {
+            ASSERT_EQ(1, mDungeon->GetStairsUp().size());
+            ASSERT_CONTAINS(mDungeon->GetStairsUp(), kStairsUpPosition);
+        }
+
+        TEST_F(DungeonTwoStairsPairsTest, GetStairsUp_ReturnsTwoCellsForMapWithTwoStairsUp) {
+            const mdl::ZDungeon::StairsList& stairs = mDungeon->GetStairsUp();
+
+            EXPECT_EQ(2, stairs.size());
+            EXPECT_CONTAINS(stairs, kStairsUpPosition1st);
+            ASSERT_CONTAINS(stairs, kStairsUpPosition2nd);
+        }
+
+        TEST_F(DungeonSingleStairsUpTest, GetStairsDown_ReturnsNoCellsForMapWithoutStairsDown) {
+            ASSERT_EQ(0, mDungeon->GetStairsDown().size());
+        }
+
+        TEST_F(DungeonSingleStairsDownTest, GetStairsDown_ReturnsExactCellForMapWithSingleStairsDown) {
+            ASSERT_EQ(1, mDungeon->GetStairsDown().size());
+            ASSERT_CONTAINS(mDungeon->GetStairsDown(), kStairsDownPosition);
+        }
+
+        TEST_F(DungeonTwoDifferentStairsTest, GetStairsDown_ReturnsExactCellForMapWithTwoDifferentStairs) {
+            ASSERT_EQ(1, mDungeon->GetStairsDown().size());
+            ASSERT_CONTAINS(mDungeon->GetStairsDown(), kStairsDownPosition);
+        }
+
+        TEST_F(DungeonTwoStairsPairsTest, GetStairsDown_ReturnsTwoCellsForMapWithTwoStairsDown) {
+            const mdl::ZDungeon::StairsList& stairs = mDungeon->GetStairsDown();
+
+            EXPECT_EQ(2, stairs.size());
+            EXPECT_CONTAINS(stairs, kStairsDownPosition1st);
+            ASSERT_CONTAINS(stairs, kStairsDownPosition2nd);
         }
     }
 }
