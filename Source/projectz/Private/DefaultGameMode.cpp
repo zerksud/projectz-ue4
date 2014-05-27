@@ -3,6 +3,7 @@
 
 #include "DefaultPlayerCharacter.h"
 #include "DefaultPlayerController.h"
+#include "DefaultHUD.h"
 
 #include "utils/LOG.h"
 #include "utils/Logger.h"
@@ -12,6 +13,7 @@ ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializePropertie
 : Super(PCIP) {
     DefaultPawnClass = ADefaultPlayerCharacter::StaticClass();
     PlayerControllerClass = ADefaultPlayerController::StaticClass();
+    HUDClass = ADefaultHUD::StaticClass();
 }
 
 void initializeServices() {
