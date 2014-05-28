@@ -29,7 +29,7 @@ namespace prz {
             mdl::ZPositionDiff(-1, 1)
         };
 
-        namespace Direction {
+        namespace EDirection {
             enum Type {
                 Forward = 0,
                 Left,
@@ -43,42 +43,42 @@ namespace prz {
         TEST_F(DirectionTest, DefaultDirectionPredictsForwardMove) {
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[Direction::Forward], diff);
+            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Forward], diff);
         }
 
         TEST_F(DirectionTest, RotateLeft_PredictsLeftMove) {
             dir.RotateLeft();
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[Direction::Left], diff);
+            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Left], diff);
         }
 
         TEST_F(DirectionTest, RotateLeft_PredictsRightMove) {
             dir.RotateRight();
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[Direction::Right], diff);
+            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Right], diff);
         }
 
         TEST_F(DirectionTest, RotateLeft_PredictsBackwardMove) {
             dir.RotateBack();
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[Direction::Backward], diff);
+            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Backward], diff);
         }
 
         TEST_F(DirectionTest, RotateLeft_PredictsHalfLeftMove) {
             dir.RotateHalfLeft();
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[Direction::HalfLeft], diff);
+            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::HalfLeft], diff);
         }
 
         TEST_F(DirectionTest, RotateLeft_PredictsHalfRightMove) {
             dir.RotateHalfRight();
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[Direction::HalfRight], diff);
+            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::HalfRight], diff);
         }
 
         TEST_F(DirectionTest, RotateLeft_FourthRotateLeftsRotateToForward) {
@@ -88,7 +88,7 @@ namespace prz {
 
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[Direction::Forward], diff);
+            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Forward], diff);
         }
 
         TEST_F(DirectionTest, RotateLeft_400RotateLeftsRotateToForward) {
@@ -98,7 +98,7 @@ namespace prz {
 
             mdl::ZPositionDiff diff = dir.PredictMove();
 
-            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[Direction::Forward], diff);
+            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Forward], diff);
         }
 
         class DirectionAlignTest : public DirectionTest,
@@ -120,7 +120,7 @@ namespace prz {
 
             diff = dir.PredictMove();
 
-            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[Direction::Forward], diff);
+            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Forward], diff);
         }
 
         TEST_F(DirectionTest, Align_AlignsToAlmostBackwardDiff) {
@@ -129,7 +129,7 @@ namespace prz {
 
             diff = dir.PredictMove();
 
-            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[Direction::Backward], diff);
+            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Backward], diff);
         }
 
         TEST_F(DirectionTest, Align_AlignsToAlmostHalfLeftDiff) {
@@ -138,7 +138,7 @@ namespace prz {
 
             diff = dir.PredictMove();
 
-            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[Direction::HalfLeft], diff);
+            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::HalfLeft], diff);
         }
 
         TEST_F(DirectionTest, Align_AlignsToCloseToRightDiff) {
@@ -147,7 +147,7 @@ namespace prz {
 
             diff = dir.PredictMove();
 
-            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[Direction::Right], diff);
+            ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Right], diff);
         }
     }
 }
