@@ -9,10 +9,10 @@ namespace prz {
     namespace mdl {
 
         const ZDungeon::ZMapToTerrainCellMap ZDungeon::kMapToTerrainCellMap = {
-            {kSolidCell, ZDungeonCell::Solid},
-            {kHollowCell, ZDungeonCell::Hollow},
-            {kUpStaircaseCell, ZDungeonCell::Hollow},
-            {kDownStaircaseCell, ZDungeonCell::Hollow}
+            {kSolidCell, EDungeonCell::Solid},
+            {kHollowCell, EDungeonCell::Hollow},
+            {kUpStaircaseCell, EDungeonCell::Hollow},
+            {kDownStaircaseCell, EDungeonCell::Hollow}
         };
 
         void ZDungeon::CreateFailSafeDungeon() {
@@ -43,11 +43,11 @@ namespace prz {
         }
 
         void ZDungeon::ParseMap(const ZMapCell* map) {
-            mTerrain = new ZDungeonCell::Type[mWidth * mHeight];
+            mTerrain = new EDungeonCell::Type[mWidth * mHeight];
 
             for (int y = 0; y < mHeight; ++y) {
                 for (int x = 0; x < mWidth; ++x) {
-                    ZDungeonCell::Type cell = ZDungeonCell::Solid;
+                    EDungeonCell::Type cell = EDungeonCell::Solid;
 
                     int index = CalcCellLinearIndex(x, y);
                     const ZMapCell mapCell = map[index];
@@ -129,10 +129,10 @@ namespace prz {
             bool solid = true;
             int index = CalcCellLinearIndex(x, y);
             switch (mTerrain[index]) {
-            case ZDungeonCell::Solid:
+            case EDungeonCell::Solid:
                 solid = true;
                 break;
-            case ZDungeonCell::Hollow:
+            case EDungeonCell::Hollow:
                 solid = false;
                 break;
             default:

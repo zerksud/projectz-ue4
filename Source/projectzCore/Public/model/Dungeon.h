@@ -4,11 +4,12 @@
 #include <vector>
 
 #include "model/Position.h"
+#include "model/Monster.h"
 
 namespace prz {
     namespace mdl {
 
-        namespace ZDungeonCell {
+        namespace EDungeonCell {
             enum Type {
                 Solid,
                 Hollow
@@ -43,8 +44,8 @@ namespace prz {
             static const ZMapCell kHollowCell = '.';
             static const ZMapCell kUpStaircaseCell = '<';
             static const ZMapCell kDownStaircaseCell = '>';
-            
-            typedef std::unordered_map<ZMapCell, ZDungeonCell::Type> ZMapToTerrainCellMap;
+
+            typedef std::unordered_map<ZMapCell, EDungeonCell::Type> ZMapToTerrainCellMap;
             static const ZMapToTerrainCellMap kMapToTerrainCellMap;
 
             void CreateFailSafeDungeon();
@@ -57,8 +58,8 @@ namespace prz {
 
             int mWidth;
             int mHeight;
-            ZDungeonCell::Type* mTerrain;
-            
+            EDungeonCell::Type* mTerrain;
+
             StaircaseList mUpStaircases;
             StaircaseList mDownStaircases;
         };
