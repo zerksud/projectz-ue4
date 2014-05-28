@@ -12,6 +12,8 @@ namespace prz {
         class PROJECTZCORE_API ZNotificationCenter : public INotificationCenter {
         public:
             ZNotificationCenter();
+            ZNotificationCenter(const ZNotificationCenter& other) = delete;
+            ZNotificationCenter& operator=(const ZNotificationCenter& other) = delete;
             virtual ~ZNotificationCenter();
 
             virtual bool AddObserver(const std::string& name, void* observerOwner, ZNotificationEventHandler handler) override;
@@ -21,9 +23,6 @@ namespace prz {
             virtual bool PostNotification(const std::string& name, const ZDictionary& dict) override;
 
         private:
-            ZNotificationCenter(const ZNotificationCenter& other);
-            ZNotificationCenter& operator=(const ZNotificationCenter& other);
-
             struct ZObserver {
                 void* observerOwner;
                 ZNotificationEventHandler handler;
