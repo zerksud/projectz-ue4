@@ -8,7 +8,7 @@
 #include "Core.h"
 
 namespace prz {
-    namespace utils {
+    namespace utl {
         class PROJECTZCORE_API ZServiceManager {
         public:
             ZServiceManager();

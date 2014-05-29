@@ -7,7 +7,7 @@
 #include "utils/IUniqueIdRegistry.h"
 
 namespace prz {
-    namespace utils {
+    namespace utl {
 
         class PROJECTZCORE_API ZUniqueIdRegistry : public IUniqueIdRegistry {
         public:

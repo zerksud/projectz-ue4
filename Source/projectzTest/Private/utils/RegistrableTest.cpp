@@ -7,13 +7,13 @@ namespace prz {
 
         class RegistrableTest : public ::testing::Test {
             protected:
-                static const utils::ZIdType kSomeId = 42;
+                static const utl::ZIdType kSomeId = 42;
 
-                utils::ZRegistrable mRegistrable;
+                utl::ZRegistrable mRegistrable;
         };
 
         TEST_F(RegistrableTest, Constructor_SetsNoId) {
-            ASSERT_EQ(utils::ZRegistrable::kNoId, mRegistrable.GetId());
+            ASSERT_EQ(utl::ZRegistrable::kNoId, mRegistrable.GetId());
         }
 
         TEST_F(RegistrableTest, SetId_StoresPassedId) {

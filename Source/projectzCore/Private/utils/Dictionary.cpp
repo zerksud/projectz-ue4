@@ -4,7 +4,7 @@
 #include "utils/LOG_ANSI.h"
 
 namespace prz {
-    namespace utils {
+    namespace utl {
         ZDictionary::ZDictionary() {
         }
 

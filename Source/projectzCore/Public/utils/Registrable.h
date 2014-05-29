@@ -1,7 +1,7 @@
 #pragma once
 
 namespace prz {
-    namespace utils {
+    namespace utl {
 
         typedef unsigned int ZIdType;
 

@@ -5,7 +5,7 @@
 #include "utils/LOG_ANSI.h"
 
 namespace prz {
-    namespace utils {
+    namespace utl {
 
         ZUniqueIdRegistry::ZUniqueIdRegistry(ZIdType maxId) :
             mMaxId(maxId),

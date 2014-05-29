@@ -3,7 +3,7 @@
 #include "utils/Registrable.h"
 
 namespace prz {
-    namespace utils {
+    namespace utl {
 
         class IUniqueIdRegistry {
         public:

@@ -6,7 +6,7 @@ DEFINE_LOG_CATEGORY_STATIC(ProjectZ, All, All)
 //#define VERBOSE
 
 namespace prz {
-    namespace utils {
+    namespace utl {
 
         ZLogger::ZLogger() {
         }

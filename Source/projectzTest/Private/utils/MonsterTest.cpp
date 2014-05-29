@@ -42,21 +42,21 @@ namespace prz {
             ASSERT_POSITION_DIFF_EQ(kBackwardPositionDiff, expectedMove);
         }
 
-        class UniqueIdRegistryMock : public utils::IUniqueIdRegistry {
+        class UniqueIdRegistryMock : public utl::IUniqueIdRegistry {
         public:
             static const int kSomeId = 42;
 
-            virtual bool AssignUniqueId(utils::ZRegistrable* object) override {
+            virtual bool AssignUniqueId(utl::ZRegistrable* object) override {
                 object->SetId(kSomeId);
                 return true;
             }
-            virtual bool ReleaseUniqueId(utils::ZRegistrable* object) override {
+            virtual bool ReleaseUniqueId(utl::ZRegistrable* object) override {
                 return true;
             }
         };
 
         TEST(MonsterTest, CreateMonster_CreatesUnregisteredMonsterIfThereIsNoIUniqueIdRegistryService) {
-            using namespace utils;
+            using namespace utl;
             using namespace mdl;
 
             ZServices::GetInstance().Unregister<IUniqueIdRegistry>();
@@ -68,7 +68,7 @@ namespace prz {
         }
 
         TEST(MonsterTest, CreateMonster_CreatesRegisteredMonsterIfThereIsIUniqueIdRegistryService) {
-            using namespace utils;
+            using namespace utl;
             using namespace mdl;
 
             ZServices::GetInstance().Register<IUniqueIdRegistry>(new UniqueIdRegistryMock());

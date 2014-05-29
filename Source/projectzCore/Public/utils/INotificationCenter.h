@@ -5,7 +5,7 @@
 #include "utils/Dictionary.h"
 
 namespace prz {
-    namespace utils {
+    namespace utl {
         class INotificationCenter {
         public:
             typedef std::function<void(const ZDictionary& dict)> ZNotificationEventHandler;

@@ -3,7 +3,7 @@
 #include "ServiceManager.h"
 
 namespace prz {
-    namespace utils {
+    namespace utl {
 
         class ZServices {
         public:

@@ -31,7 +31,7 @@ namespace prz {
 
         class ServiceManagerWithInstanceTest : public ServiceManagerTest {
         protected:
-            utils::ZServiceManager sm;
+            utl::ZServiceManager sm;
         };
 
         TEST_F(ServiceManagerWithInstanceTest, SetService_NormalServicesAreAddedSuccessfully) {
@@ -90,7 +90,7 @@ namespace prz {
         }
 
         TEST_F(ServiceManagerTest, DestroysAddedServiceInDestructor) {
-            utils::ZServiceManager* sm = new utils::ZServiceManager();
+            utl::ZServiceManager* sm = new utl::ZServiceManager();
 
             int value = kSomeValue;
             sm->Register<SomeService>(new SomeService(&value));

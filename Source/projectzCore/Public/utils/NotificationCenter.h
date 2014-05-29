@@ -8,7 +8,7 @@
 #include "utils/INotificationCenter.h"
 
 namespace prz {
-    namespace utils {
+    namespace utl {
         class PROJECTZCORE_API ZNotificationCenter : public INotificationCenter {
         public:
             ZNotificationCenter();

@@ -3,7 +3,7 @@
 #include "utils/ILogger.h"
 
 namespace prz {
-    namespace utils {
+    namespace utl {
         class PROJECTZCORE_API ZLogger : public ILogger {
         public:
             ZLogger();

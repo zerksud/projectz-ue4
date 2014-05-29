@@ -5,7 +5,7 @@
 #include "Core.h"
 
 namespace prz {
-    namespace utils {
+    namespace utl {
         class ILogger {
         public:
             typedef std::function<void(ELogVerbosity::Type verbosity, const FString& message)> ZLogCallback;

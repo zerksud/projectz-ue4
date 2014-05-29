@@ -9,7 +9,7 @@
 IMPLEMENT_APPLICATION(projectzTest, "projectzTest");
 
 void initializeLoggerService() {
-    using namespace prz::utils;
+    using namespace prz::utl;
     ZServices::GetInstance().Register<ILogger>(new ZLogger());
 }
 

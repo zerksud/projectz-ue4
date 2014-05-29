@@ -12,13 +12,13 @@ namespace prz {
             static const int kAnotherInt = 1337;
             static const bool kSomeBool = true;
 
-            utils::ZDictionary dict;
+            utl::ZDictionary dict;
         };
 
         const char* DictionaryTestWithInstance::kSomeKey = "some_key";
         const char* DictionaryTestWithInstance::kAnotherKey = "another_key";
 
-        utils::ZDictionary makeDictWithValue(utils::ZDictionary dict, const char* key, int value) {
+        utl::ZDictionary makeDictWithValue(utl::ZDictionary dict, const char* key, int value) {
             dict[key] = value;
 
             return dict;
@@ -37,7 +37,7 @@ namespace prz {
         }
 
         TEST_F(DictionaryTestWithInstance, DictionaryCanBeStoredAndRetrievedByKey) {
-            dict[kSomeKey] = utils::ZDictionary();
+            dict[kSomeKey] = utl::ZDictionary();
             dict[kSomeKey][kAnotherKey] = kSomeInt;
 
             ASSERT_EQ(kSomeInt, dict[kSomeKey][kAnotherKey].AsInt());
@@ -45,28 +45,28 @@ namespace prz {
 
         TEST_F(DictionaryTestWithInstance, CopyConstructor_CopiesDictionary) {
             dict[kSomeKey] = kSomeInt;
-            utils::ZDictionary anotherDict(dict);
+            utl::ZDictionary anotherDict(dict);
 
             ASSERT_EQ(kSomeInt, anotherDict[kSomeKey].AsInt());
         }
 
         TEST_F(DictionaryTestWithInstance, CopyConstructor_CreatesIndependentCopyOfDictionary) {
             dict[kSomeKey] = kSomeInt;
-            utils::ZDictionary anotherDict = dict;
+            utl::ZDictionary anotherDict = dict;
             dict[kSomeKey] = kSomeBool;
 
             ASSERT_EQ(kSomeInt, anotherDict[kSomeKey].AsInt());
         }
 
         TEST_F(DictionaryTestWithInstance, MoveConstructor_MovesDictionary) {
-            dict = makeDictWithValue(utils::ZDictionary(), kSomeKey, kSomeInt);
+            dict = makeDictWithValue(utl::ZDictionary(), kSomeKey, kSomeInt);
 
             ASSERT_EQ(kSomeInt, dict[kSomeKey].AsInt());
         }
 
         TEST_F(DictionaryTestWithInstance, AssignmentOperator_CopiesDictionary) {
             dict[kSomeKey] = kSomeInt;
-            utils::ZDictionary anotherDict;
+            utl::ZDictionary anotherDict;
             anotherDict = dict;
 
             ASSERT_EQ(kSomeInt, anotherDict[kSomeKey].AsInt());
@@ -74,7 +74,7 @@ namespace prz {
 
         TEST_F(DictionaryTestWithInstance, AssignmentOperator_CreatesIndependentCopyOfDictionary) {
             dict[kSomeKey] = kSomeInt;
-            utils::ZDictionary anotherDict;
+            utl::ZDictionary anotherDict;
             anotherDict = dict;
             dict[kSomeKey] = kSomeBool;
 

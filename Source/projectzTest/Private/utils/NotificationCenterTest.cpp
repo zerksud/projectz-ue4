@@ -9,7 +9,7 @@ namespace prz {
             int value;
         };
 
-        typedef utils::INotificationCenter::ZNotificationEventHandler ZNotificationEventHandler;
+        typedef utl::INotificationCenter::ZNotificationEventHandler ZNotificationEventHandler;
 
         class NotificationCenterTest : public ::testing::Test {
         protected:
@@ -24,24 +24,24 @@ namespace prz {
             static const int kAnotherValue = 1337;
 
             virtual void SetUp() override {
-                nc = new utils::ZNotificationCenter();
+                nc = new utl::ZNotificationCenter();
             }
 
             virtual void TearDown() override {
                 delete nc;
             }
 
-            utils::INotificationCenter* nc;
+            utl::INotificationCenter* nc;
         };
 
         const char* NotificationCenterTest::kEmptyNotification = "";
         const char* NotificationCenterTest::kSomeNotification = "some_notification";
         const char* NotificationCenterTest::kAnotherNotification = "another_notification";
 
-        const ZNotificationEventHandler NotificationCenterTest::kEmptyHandler = [](const utils::ZDictionary& dict) {};
+        const ZNotificationEventHandler NotificationCenterTest::kEmptyHandler = [](const utl::ZDictionary& dict) {};
 
         ZNotificationEventHandler makeIncrementValueHandler(ValueOwner* owner, int valueIncrement) {
-            return[owner, valueIncrement](const utils::ZDictionary& dict) {
+            return[owner, valueIncrement](const utl::ZDictionary& dict) {
                 owner->value += valueIncrement;
             };
         }
@@ -185,11 +185,11 @@ namespace prz {
         TEST_F(NotificationCenterTest, PostNotification_NotificationArgumentsArePassedToObserver) {
             ValueOwner owner = {kDefaultValue};
 
-            nc->AddObserver(kSomeNotification, &owner, [&owner](const utils::ZDictionary& dict) {
+            nc->AddObserver(kSomeNotification, &owner, [&owner](const utl::ZDictionary& dict) {
                 owner.value = dict["value"].AsInt();
             });
 
-            utils::ZDictionary dict;
+            utl::ZDictionary dict;
             dict["value"] = kSomeValue;
 
             nc->PostNotification(kSomeNotification, dict);

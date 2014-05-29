@@ -9,7 +9,7 @@ namespace prz {
         ZMonster ZMonster::CreateMonster() {
             ZMonster monster;
 
-            utils::IUniqueIdRegistry* registry = utils::ZServices::GetInstance().GetService<utils::IUniqueIdRegistry>();
+            utl::IUniqueIdRegistry* registry = utl::ZServices::GetInstance().GetService<utl::IUniqueIdRegistry>();
             if (registry) {
                 registry->AssignUniqueId(&monster);
             }

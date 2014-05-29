@@ -17,7 +17,7 @@ ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializePropertie
 }
 
 void initializeServices() {
-    using namespace prz::utils;
+    using namespace prz::utl;
 
     ILogger* loggerService = new ZLogger();
 
@@ -28,7 +28,7 @@ void initializeServices() {
     });
 
     ZServices::GetInstance().Register<ILogger>(loggerService);
-    ZServices::GetInstance().Register<INotificationCenter>(new prz::utils::ZNotificationCenter());
+    ZServices::GetInstance().Register<INotificationCenter>(new prz::utl::ZNotificationCenter());
 }
 
 void ADefaultGameMode::BeginPlay() {

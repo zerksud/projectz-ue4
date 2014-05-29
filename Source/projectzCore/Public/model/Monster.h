@@ -6,7 +6,7 @@
 namespace prz {
     namespace mdl {
 
-        class ZMonster : public utils::ZRegistrable {
+        class ZMonster : public utl::ZRegistrable {
         public:
             static ZMonster CreateMonster();
 

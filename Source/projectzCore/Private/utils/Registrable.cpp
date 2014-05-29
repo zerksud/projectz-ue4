@@ -6,14 +6,14 @@
 #include "utils/LOG_ANSI.h"
 
 namespace prz {
-    namespace utils {
+    namespace utl {
 
         ZRegistrable::ZRegistrable() : mId(kNoId) {
         }
 
         ZRegistrable::~ZRegistrable() {
             if (IsRegistered()) {
-                IUniqueIdRegistry* registry = utils::ZServices::GetInstance().GetService<utils::IUniqueIdRegistry>();
+                IUniqueIdRegistry* registry = utl::ZServices::GetInstance().GetService<utl::IUniqueIdRegistry>();
                 if (registry) {
                     registry->ReleaseUniqueId(this);
                 } else {

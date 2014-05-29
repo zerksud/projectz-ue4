@@ -2,7 +2,7 @@
 #include "ServiceManager.h"
 
 namespace prz {
-    namespace utils {
+    namespace utl {
         ZServiceManager::ZServiceManager() {
         }
 
