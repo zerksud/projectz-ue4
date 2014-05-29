@@ -1,6 +1,9 @@
 #include "projectzCorePrivatePCH.h"
-
 #include "utils/Registrable.h"
+
+#include "utils/Services.h"
+#include "utils/IUniqueIdRegistry.h"
+#include "utils/LOG_ANSI.h"
 
 namespace prz {
     namespace utils {
@@ -9,6 +12,14 @@ namespace prz {
         }
 
         ZRegistrable::~ZRegistrable() {
+            if (IsRegistered()) {
+                IUniqueIdRegistry* registry = utils::ZServices::GetInstance().GetService<utils::IUniqueIdRegistry>();
+                if (registry) {
+                    registry->ReleaseUniqueId(this);
+                } else {
+                    LOGE("Can't release id = %d cause there is no IUniqueIdRegistry service", mId);
+                }
+            }
         }
 
         ZIdType ZRegistrable::GetId() const {
