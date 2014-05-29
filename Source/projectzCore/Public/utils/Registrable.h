@@ -10,7 +10,8 @@ namespace prz {
             static const ZIdType kNoId = 0;
 
             ZRegistrable();
-            ZRegistrable(const ZRegistrable& other) = delete;
+            ZRegistrable(const ZRegistrable& other) = default;
+            ZRegistrable& operator=(const ZRegistrable& other) = default;
             virtual ~ZRegistrable();
 
             ZIdType GetId() const;
