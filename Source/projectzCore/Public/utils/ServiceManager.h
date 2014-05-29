@@ -30,7 +30,6 @@ namespace prz {
 
                 ZServiceMap::iterator pos = mServiceMap.find(index);
                 if (pos != mServiceMap.end()) {
-                    pos->second->destructor();
                     delete pos->second;
                 }
 
@@ -49,11 +48,28 @@ namespace prz {
                 return nullptr;
             }
 
+            template<typename TServiceType> bool Unregister() {
+                std::type_index index = std::type_index(typeid(TServiceType));
+                ZServiceMap::iterator pos = mServiceMap.find(index);
+                if (pos != mServiceMap.end()) {
+                    delete pos->second;
+                    return true;
+                }
+
+                return false;
+            }
+
         private:
             typedef std::function<void()> ZServiceDestructor;
             struct ZServiceBox {
                 void* instance = nullptr;
                 ZServiceDestructor destructor;
+
+                ~ZServiceBox() {
+                    if (destructor) {
+                        destructor();
+                    }
+                }
             };
             typedef std::unordered_map<std::type_index, ZServiceBox*> ZServiceMap;
 

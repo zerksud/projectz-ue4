@@ -8,7 +8,6 @@ namespace prz {
 
         ZServiceManager::~ZServiceManager() {
             for (auto& kv : mServiceMap) {
-                kv.second->destructor();
                 delete kv.second;
             }
         }
