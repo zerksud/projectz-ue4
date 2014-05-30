@@ -42,7 +42,7 @@ namespace prz {
             ASSERT_POSITION_DIFF_EQ(kBackwardPositionDiff, expectedMove);
         }
 
-        class UniqueIdRegistryMock : public utl::IUniqueIdRegistry {
+        class UniqueIdRegistryMonsterTestMock : public utl::IUniqueIdRegistry {
         public:
             static const int kSomeId = 42;
 
@@ -71,12 +71,14 @@ namespace prz {
             using namespace utl;
             using namespace mdl;
 
-            ZServices::GetInstance().Register<IUniqueIdRegistry>(new UniqueIdRegistryMock());
+            ZServices::GetInstance().Register<IUniqueIdRegistry>(new UniqueIdRegistryMonsterTestMock());
             ZMonster* monster = new ZMonster(ZMonster::CreateMonster());
             ZIdType monsterId = monster->GetId();
             delete monster;
 
-            ASSERT_EQ(UniqueIdRegistryMock::kSomeId, monsterId);
+            ZServices::GetInstance().Unregister<IUniqueIdRegistry>();
+
+            ASSERT_EQ(UniqueIdRegistryMonsterTestMock::kSomeId, monsterId);
         }
     }
 }
