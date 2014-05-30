@@ -53,6 +53,8 @@ namespace prz {
                 ZServiceMap::iterator pos = mServiceMap.find(index);
                 if (pos != mServiceMap.end()) {
                     delete pos->second;
+                    mServiceMap.erase(pos);
+
                     return true;
                 }
 
