@@ -55,7 +55,7 @@ namespace prz {
 
             Log(verbosity, fileName, lineNum, ANSI_TO_TCHAR(userMessage));
 
-            delete userMessage;
+            delete[] userMessage;
         }
 
         void ZLogger::SetLogCallback(ZLogCallback callback) {
