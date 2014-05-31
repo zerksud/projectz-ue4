@@ -1,6 +1,7 @@
 #include "projectzCorePrivatePCH.h"
-
 #include "model/Position.h"
+
+#include "utils/StringHelpers.h"
 
 namespace prz {
     namespace mdl {
@@ -23,6 +24,10 @@ namespace prz {
 
         int ZPositionDiff::GetdY() const {
             return mdY;
+        }
+
+        std::string ZPositionDiff::ToString() const {
+            return utl::ZString::Format("[%d;%d]", mdX, mdY);
         }
 
         ZPosition::ZPosition() {
@@ -75,5 +80,10 @@ namespace prz {
 
             return *this;
         }
+
+        std::string ZPosition::ToString() const {
+            return utl::ZString::Format("[%d;%d]", mX, mY);
+        }
+
     }
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "Core.h"
 
 namespace prz {
@@ -12,6 +14,8 @@ namespace prz {
 
             int GetdX() const;
             int GetdY() const;
+
+            std::string ToString() const;
 
         private:
             int mdX;
@@ -32,6 +36,8 @@ namespace prz {
             const ZPositionDiff operator-(const ZPosition& other) const;
             bool operator==(const ZPosition& other) const;
             ZPosition& operator=(const ZPosition& other);
+
+            std::string ToString() const;
 
         private:
             int mX;

@@ -1,6 +1,7 @@
 #include "projectzTestPrivatePCH.h"
 
 #include "model/PositionTest.h"
+#include "utils/StringHelpers.h"
 
 namespace prz {
     namespace testing {
@@ -94,6 +95,20 @@ namespace prz {
             bool equal = pos == anotherPos;
 
             ASSERT_FALSE(equal);
+        }
+
+        TEST_F(PositionTest, Position_ToStringReturnsStringInSomeFormat) {
+            mdl::ZPosition pos(kSomeValue, kAnotherValue);
+            std::string expectedString = utl::ZString::Format("[%d;%d]", kSomeValue, kAnotherValue);
+
+            ASSERT_EQ(expectedString, pos.ToString());
+        }
+
+        TEST_F(PositionTest, PositionDiff_ToStringReturnsStringInSomeFormat) {
+            mdl::ZPositionDiff diff(kSomeValue, kAnotherValue);
+            std::string expectedString = utl::ZString::Format("[%d;%d]", kSomeValue, kAnotherValue);
+
+            ASSERT_EQ(expectedString, diff.ToString());
         }
     }
 }
