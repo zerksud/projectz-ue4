@@ -16,6 +16,15 @@ namespace prz {
             };
         }
 
+        namespace EMoveDirection {
+            enum Type {
+                Forward,
+                Backward,
+                Left,
+                Right
+            };
+        }
+
         class ZDungeon {
         public:
             typedef char ZMapCell;
@@ -39,7 +48,7 @@ namespace prz {
             bool PlaceMonster(const ZMonster& monster, const ZPosition& position);
             const ZPosition* GetMonsterPosition(utl::ZIdType monsterId) const;
             ZMonster* GetMonster(utl::ZIdType monsterId);
-            //bool TryToMoveMonster(utl::ZIdType monsterId, )
+            bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
 
         private:
             ZDungeon(const ZDungeon& other);
@@ -53,6 +62,9 @@ namespace prz {
             typedef std::unordered_map<ZMapCell, EDungeonCell::Type> ZMapToTerrainCellMap;
             static const ZMapToTerrainCellMap kMapToTerrainCellMap;
 
+            typedef std::map<EMoveDirection::Type, ETurnDirection::Type> ZMoveToTurnDirectionMap;
+            static const ZMoveToTurnDirectionMap kMoveToTurnDirectionMap;
+
             void CreateFailSafeDungeon();
 
             void ParseMap(const ZMapCell* terrain);
@@ -63,6 +75,8 @@ namespace prz {
 
             bool CellIsSolidImpl(int x, int y) const;
             bool CellIsEmptyImpl(int x, int y) const;
+
+            bool MovementIsDiagonalAroundTheCorner(const ZPosition& origin, const ZPositionDiff& diff) const;
 
             int mWidth;
             int mHeight;
@@ -82,6 +96,7 @@ namespace prz {
             typedef std::unordered_map<int, utl::ZIdType> ZMonsterIdByPositionMap;
             typedef std::unordered_map<utl::ZIdType, ZPlacedMonster*> ZMonsterList;
 
+            ZPlacedMonster* GetPlacedMonster(utl::ZIdType monsterId);
 
             ZMonsterIdByPositionMap mMonsterIdByPosition;
             ZMonsterList mMonsterList;

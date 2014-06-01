@@ -334,6 +334,11 @@ namespace prz {
             ASSERT_FALSE(mDungeon->PlaceMonster(anotherMonster, validPosition));
         }
 
+        TEST_F(DungeonMonsterTest, CellIsEmpty_OccupiedCellsAreNotEmpty) {
+            mDungeon->PlaceMonster(mdl::ZMonster::CreateMonster(), kSomeMapSomeHollowCell);
+            ASSERT_FALSE(mDungeon->CellIsEmpty(kSomeMapSomeHollowCell));
+        }
+
         TEST_F(DungeonMonsterTest, GetMonsterPosition_ReturnsPositionOfPlacedMonster) {
             using namespace mdl;
 
@@ -433,6 +438,92 @@ namespace prz {
             ZServices::GetInstance().Unregister<IUniqueIdRegistry>();
 
             ASSERT_EQ(monsterId, anotherMonster.GetId());
+        }
+
+        class DungeonMoveMonsterTest : public ::testing::Test {
+        protected:
+            static const int kMapWidth = 5;
+            static const int kMapHeight = 5;
+            static const char* kMap;
+
+            static const mdl::ZPosition kDeadEndPosition;
+            static const mdl::ZPositionDiff kExpectedForwardMoveDiff;
+            static const mdl::ZPositionDiff kExpectedRightMoveDiff;
+            static const mdl::ZPosition kAnotherMonsterPosition;
+
+            void SetUp() {
+                using namespace mdl;
+                using namespace utl;
+
+                ZServices::GetInstance().Register<IUniqueIdRegistry>(new ZUniqueIdRegistry());
+
+                mDungeon = new ZDungeon(kMapWidth, kMapHeight, kMap);
+
+                ZMonster monster = ZMonster::CreateMonster();
+                monster.GetDirection().Turn(ETurnDirection::Left);
+                mMonsterId = monster.GetId();
+                mDungeon->PlaceMonster(monster, kDeadEndPosition);
+
+                monster = ZMonster::CreateMonster();
+                mAnotherMonsterId = monster.GetId();
+                mDungeon->PlaceMonster(monster, kAnotherMonsterPosition);
+            }
+
+            void TearDown() {
+                using namespace utl;
+
+                delete mDungeon;
+                ZServices::GetInstance().Unregister<IUniqueIdRegistry>();
+            }
+
+            mdl::ZDungeon* mDungeon;
+            utl::ZIdType mMonsterId;
+            utl::ZIdType mAnotherMonsterId;
+        };
+
+        const char* DungeonMoveMonsterTest::kMap = ""
+            "#####"
+            "#...#"
+            "#...#"
+            "##.##"
+            "#####";
+        const mdl::ZPosition DungeonMoveMonsterTest::kDeadEndPosition = mdl::ZPosition(2, 3);
+        const mdl::ZPositionDiff DungeonMoveMonsterTest::kExpectedForwardMoveDiff = mdl::ZPositionDiff(0, -1);
+        const mdl::ZPositionDiff DungeonMoveMonsterTest::kExpectedRightMoveDiff = mdl::ZPositionDiff(1, 0);
+        const mdl::ZPosition DungeonMoveMonsterTest::kAnotherMonsterPosition = mdl::ZPosition(2, 1);
+
+        TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnsTrueForMoveIntoEmptyCell) {
+            ASSERT_TRUE(mDungeon->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
+        }
+
+        TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnsCorrectExpectedMoveDiffForMoveIntoEmptyCell) {
+            mdl::ZPositionDiff expectedMoveDiff;
+            mDungeon->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward, &expectedMoveDiff);
+
+            ASSERT_POSITION_DIFF_EQ(kExpectedForwardMoveDiff, expectedMoveDiff);
+        }
+
+        TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnsFalseForMoveIntoSolidCell) {
+            ASSERT_FALSE(mDungeon->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Right));
+        }
+
+        TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnsCorrectExpectedMoveDiffForMoveIntoSolidCell) {
+            mdl::ZPositionDiff expectedMoveDiff;
+            mDungeon->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Right, &expectedMoveDiff);
+
+            ASSERT_POSITION_DIFF_EQ(kExpectedRightMoveDiff, expectedMoveDiff);
+        }
+
+        TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_DiagonalMovesAroundCornerAreNotPermitted) {
+            mDungeon->GetMonster(mMonsterId)->GetDirection().Turn(mdl::ETurnDirection::ForwardRight);
+
+            ASSERT_FALSE(mDungeon->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
+        }
+
+        TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnFalseForMoveIntoOccupiedCell) {
+            mDungeon->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward);
+
+            ASSERT_FALSE(mDungeon->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
         }
 
     }

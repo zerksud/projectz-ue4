@@ -17,6 +17,13 @@ namespace prz {
             {kDownStaircaseCell, EDungeonCell::Hollow}
         };
 
+        const ZDungeon::ZMoveToTurnDirectionMap ZDungeon::kMoveToTurnDirectionMap = {
+            {EMoveDirection::Forward, ETurnDirection::Forward},
+            {EMoveDirection::Backward, ETurnDirection::Back},
+            {EMoveDirection::Left, ETurnDirection::Left},
+            {EMoveDirection::Right, ETurnDirection::Right}
+        };
+
         void ZDungeon::CreateFailSafeDungeon() {
             mWidth = 3;
             mHeight = 3;
@@ -174,13 +181,72 @@ namespace prz {
         }
 
         ZMonster* ZDungeon::GetMonster(utl::ZIdType monsterId) {
+            ZPlacedMonster* placedMonster = GetPlacedMonster(monsterId);
+            if (placedMonster == nullptr) {
+                LOGE("Can't return not-placed monster with id = %d", monsterId);
+                return nullptr;
+            }
+
+            return &placedMonster->monster;
+        }
+
+        ZDungeon::ZPlacedMonster* ZDungeon::GetPlacedMonster(utl::ZIdType monsterId) {
             auto pos = mMonsterList.find(monsterId);
             if (pos == mMonsterList.end()) {
                 LOGE("Can't return not-placed monster with id = %d", monsterId);
                 return nullptr;
             }
 
-            return &pos->second->monster;
+            return pos->second;
+        }
+
+        bool ZDungeon::MovementIsDiagonalAroundTheCorner(const ZPosition& origin, const ZPositionDiff& diff) const {
+            int sum = abs(diff.GetdX()) + abs(diff.GetdY());
+            if (sum <= 1) {
+                return false;
+            }
+
+            return CellIsSolidImpl(origin.GetX(), origin.GetY() + diff.GetdY()) ||
+                CellIsSolidImpl(origin.GetX() + diff.GetdX(), origin.GetY());
+        }
+
+        bool ZDungeon::TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff) {
+            ZPlacedMonster* placedMonster = GetPlacedMonster(monsterId);
+            if (placedMonster == nullptr) {
+                LOGE("Can't move not-placed monster with id = %d", monsterId);
+                return false;
+            }
+
+            auto pos = kMoveToTurnDirectionMap.find(direction);
+            if (pos == kMoveToTurnDirectionMap.end()) {
+                LOGE("Got unsupported move direction %d", direction);
+                return false;
+            }
+
+            ZDirection alignedDirection = placedMonster->monster.GetDirection();
+            alignedDirection.Turn(pos->second);
+
+            ZPositionDiff expectedDiff = alignedDirection.PredictMove();
+            ZPosition expectedPosition = placedMonster->position + expectedDiff;
+
+            bool movementIsPossible = CellIsEmptyImpl(expectedPosition.GetX(), expectedPosition.GetY()) &&
+                !MovementIsDiagonalAroundTheCorner(placedMonster->position, expectedDiff);
+
+            if (movementIsPossible) {
+                int oldLinearIndex = CalcCellLinearIndex(placedMonster->position);
+                mMonsterIdByPosition.erase(oldLinearIndex);
+
+                placedMonster->position = expectedPosition;
+
+                int newLinearIndex = CalcCellLinearIndex(expectedPosition);
+                mMonsterIdByPosition[newLinearIndex] = monsterId;
+            }
+
+            if (OutExpectedMoveDiff != nullptr) {
+                *OutExpectedMoveDiff = expectedDiff;
+            }
+
+            return movementIsPossible;
         }
 
         bool ZDungeon::CellIndicesAreValid(int x, int y) const {
@@ -216,6 +282,14 @@ namespace prz {
 
         bool ZDungeon::CellIsEmptyImpl(int x, int y) const {
             bool empty = !CellIsSolidImpl(x, y);
+
+            if (empty) {
+                int linearIndex = CalcCellLinearIndex(x, y);
+                auto pos = mMonsterIdByPosition.find(linearIndex);
+                if (pos != mMonsterIdByPosition.end()) {
+                    empty = false;
+                }
+            }
 
             return empty;
         }
