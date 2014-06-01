@@ -1,10 +1,7 @@
 #include "projectzTestPrivatePCH.h"
 
 #include "model/Direction.h"
-
-#define ASSERT_POSITION_DIFF_EQ(x, y)  \
-    EXPECT_EQ(x##.GetdX(), y##.GetdX()); \
-    ASSERT_EQ(x##.GetdY(), y##.GetdY());
+#include "model/PositionTest.h"
 
 namespace prz {
     namespace testing {
