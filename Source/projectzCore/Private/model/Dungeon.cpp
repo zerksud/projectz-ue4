@@ -3,6 +3,8 @@
 #include <cstring>
 
 #include "model/Dungeon.h"
+#include "utils/IUniqueIdRegistry.h"
+#include "utils/Services.h"
 #include "utils/LOG_ANSI.h"
 
 namespace prz {
@@ -72,6 +74,20 @@ namespace prz {
         }
 
         ZDungeon::~ZDungeon() {
+            using namespace utl;
+
+            IUniqueIdRegistry* registry = ZServices::GetInstance().GetService<IUniqueIdRegistry>();
+            if (registry) {
+                for (auto& pair : mMonsterList) {
+                    ZMonster& monster = pair.second->monster;
+                    if (monster.IsRegistered()) {
+                        registry->ReleaseUniqueId(&monster);
+                    }
+
+                    delete pair.second;
+                }
+            }
+
             delete mTerrain;
         }
 
@@ -117,12 +133,66 @@ namespace prz {
             return mDownStaircases;
         }
 
+        bool ZDungeon::PlaceMonster(const ZMonster& monster, const ZPosition& position) {
+            if (!monster.IsRegistered()) {
+                LOGE("Can't place non-registered monster");
+                return false;
+            }
+
+            if (CellIsSolid(position)) {
+                LOGE("Can't place monster in solid cell %s", position.ToString().c_str());
+                return false;
+            }
+
+            auto pos = mMonsterList.find(monster.GetId());
+            if (pos != mMonsterList.end()) {
+                LOGE("Can't place already placed monster with id = %d", monster.GetId());
+                return false;
+            }
+
+            int linearPositionIndex = CalcCellLinearIndex(position);
+            auto positionMonsterLink = mMonsterIdByPosition.find(linearPositionIndex);
+            if (positionMonsterLink != mMonsterIdByPosition.end()) {
+                LOGE("Can't place monster in already occupied cell %s", position.ToString().c_str());
+                return false;
+            }
+
+            mMonsterList[monster.GetId()] = new ZPlacedMonster(monster, position);
+            mMonsterIdByPosition[linearPositionIndex] = monster.GetId();
+
+            return true;
+        }
+
+        const ZPosition* ZDungeon::GetMonsterPosition(utl::ZIdType monsterId) const {
+            auto pos = mMonsterList.find(monsterId);
+            if (pos == mMonsterList.end()) {
+                LOGE("Can't return position of not-placed monster with id = %d", monsterId);
+                return nullptr;
+            }
+
+            return &pos->second->position;
+        }
+
+        ZMonster* ZDungeon::GetMonster(utl::ZIdType monsterId) {
+            auto pos = mMonsterList.find(monsterId);
+            if (pos == mMonsterList.end()) {
+                LOGE("Can't return not-placed monster with id = %d", monsterId);
+                return nullptr;
+            }
+
+            return &pos->second->monster;
+        }
+
         bool ZDungeon::CellIndicesAreValid(int x, int y) const {
             return (x >= 0 && x < mWidth && y >= 0 && y < mHeight);
         }
 
         int ZDungeon::CalcCellLinearIndex(int x, int y) const {
             return (y * mWidth + x);
+        }
+
+        int ZDungeon::CalcCellLinearIndex(const ZPosition& position) const {
+            return CalcCellLinearIndex(position.GetX(), position.GetY());
         }
 
         bool ZDungeon::CellIsSolidImpl(int x, int y) const {

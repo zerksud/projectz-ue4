@@ -36,6 +36,10 @@ namespace prz {
             const StaircaseList& GetUpStaircases() const;
             const StaircaseList& GetDownStaircases() const;
 
+            bool PlaceMonster(const ZMonster& monster, const ZPosition& position);
+            const ZPosition* GetMonsterPosition(utl::ZIdType monsterId) const;
+            ZMonster* GetMonster(utl::ZIdType monsterId);
+
         private:
             ZDungeon(const ZDungeon& other);
             ZDungeon& operator=(const ZDungeon& other);
@@ -52,7 +56,10 @@ namespace prz {
 
             void ParseMap(const ZMapCell* terrain);
             bool CellIndicesAreValid(int x, int y) const;
+
             int CalcCellLinearIndex(int x, int y) const;
+            int CalcCellLinearIndex(const ZPosition& position) const;
+
             bool CellIsSolidImpl(int x, int y) const;
             bool CellIsEmptyImpl(int x, int y) const;
 
@@ -62,6 +69,21 @@ namespace prz {
 
             StaircaseList mUpStaircases;
             StaircaseList mDownStaircases;
+
+            struct ZPlacedMonster {
+                ZMonster monster;
+                ZPosition position;
+
+                ZPlacedMonster(const ZMonster& pMonster, const ZPosition& pPosition) :
+                    monster(pMonster), position(pPosition) {
+                }
+            };
+            typedef std::unordered_map<int, utl::ZIdType> ZMonsterIdByPositionMap;
+            typedef std::unordered_map<utl::ZIdType, ZPlacedMonster*> ZMonsterList;
+
+
+            ZMonsterIdByPositionMap mMonsterIdByPosition;
+            ZMonsterList mMonsterList;
         };
     }
 }

@@ -1,6 +1,8 @@
 #include "projectzTestPrivatePCH.h"
 
 #include "model/Dungeon.h"
+#include "utils/Services.h"
+#include "utils/UniqueIdRegistry.h"
 
 #include "model/PositionTest.h"
 #include "TestHelpers.h"
@@ -252,5 +254,186 @@ namespace prz {
             EXPECT_CONTAINS(stairs, kDownStaircasePosition1st);
             ASSERT_CONTAINS(stairs, kDownStaircasePosition2nd);
         }
+
+        class DungeonMonsterTest : public DungeonWithSomeMapTest {
+        protected:
+            void SetUp() {
+                using namespace utl;
+
+                DungeonWithSomeMapTest::SetUp();
+
+                ZServices::GetInstance().Register<IUniqueIdRegistry>(new ZUniqueIdRegistry());
+            }
+
+            void TearDown() {
+                using namespace utl;
+
+                DungeonWithSomeMapTest::TearDown();
+
+                ZServices::GetInstance().Unregister<IUniqueIdRegistry>();
+            }
+        };
+
+        TEST_F(DungeonMonsterTest, PlaceMonster_MonsterCanBePlacedInEmptyCell) {
+            using namespace mdl;
+
+            ZMonster monster = ZMonster::CreateMonster();
+            ZPosition validPosition = kSomeMapSomeHollowCell;
+
+            ASSERT_TRUE(mDungeon->PlaceMonster(monster, validPosition));
+        }
+
+        TEST_F(DungeonMonsterTest, PlaceMonster_MonsterCanBePlacedInStaircaseCell) {
+            using namespace mdl;
+
+            ZMonster monster = ZMonster::CreateMonster();
+            ZPosition validPosition = kSomeMapUpStaircaseCell;
+
+            ASSERT_TRUE(mDungeon->PlaceMonster(monster, validPosition));
+        }
+
+        TEST_F(DungeonMonsterTest, PlaceMonster_NonRegisteredMonstersAreNotPermitted) {
+            using namespace mdl;
+
+            ZMonster monster = ZMonster::CreateMonster();
+            monster.SetId(utl::ZRegistrable::kNoId);
+            ZPosition validPosition = kSomeMapSomeHollowCell;
+
+            ASSERT_FALSE(mDungeon->PlaceMonster(monster, validPosition));
+        }
+
+        TEST_F(DungeonMonsterTest, PlaceMonster_MonsterCantBePlacedInSolidCell) {
+            using namespace mdl;
+
+            ZMonster monster = ZMonster::CreateMonster();
+            ZPosition validPosition = kSomeMapSomeSolidCell;
+
+            ASSERT_FALSE(mDungeon->PlaceMonster(monster, validPosition));
+        }
+
+        TEST_F(DungeonMonsterTest, PlaceMonster_SameMonsterCantBePlacedTwice) {
+            using namespace mdl;
+
+            ZMonster monster = ZMonster::CreateMonster();
+            ZPosition validPosition = kSomeMapUpStaircaseCell;
+            ZPosition anotherValidPosition = kSomeMapUpStaircaseCell;
+
+            mDungeon->PlaceMonster(monster, validPosition);
+            ASSERT_FALSE(mDungeon->PlaceMonster(monster, anotherValidPosition));
+        }
+
+        TEST_F(DungeonMonsterTest, PlaceMonster_MonsterCantBePlacedInCellWhichIsOccupiedByAnotherMonster) {
+            using namespace mdl;
+
+            ZMonster monster = ZMonster::CreateMonster();
+            ZPosition validPosition = kSomeMapSomeHollowCell;
+
+            mDungeon->PlaceMonster(monster, validPosition);
+
+            ZMonster anotherMonster = ZMonster::CreateMonster();
+            ASSERT_FALSE(mDungeon->PlaceMonster(anotherMonster, validPosition));
+        }
+
+        TEST_F(DungeonMonsterTest, GetMonsterPosition_ReturnsPositionOfPlacedMonster) {
+            using namespace mdl;
+
+            ZMonster monster = ZMonster::CreateMonster();
+            ZPosition validPosition = kSomeMapSomeHollowCell;
+
+            mDungeon->PlaceMonster(monster, validPosition);
+
+            ZPosition returnedMonsterPosition = *mDungeon->GetMonsterPosition(monster.GetId());
+
+            ASSERT_POSITION_EQ(validPosition, returnedMonsterPosition);
+        }
+
+        TEST_F(DungeonMonsterTest, GetMonsterPosition_ReturnsExactMonsterPositionInsteadOfSomeMonsterPosition) {
+            using namespace mdl;
+
+            ZMonster monster = ZMonster::CreateMonster();
+            ZPosition validPosition = kSomeMapSomeHollowCell;
+
+            ZMonster anotherMonster = ZMonster::CreateMonster();
+            ZPosition anotherValidPosition = kSomeMapUpStaircaseCell;
+
+            mDungeon->PlaceMonster(monster, validPosition);
+            mDungeon->PlaceMonster(anotherMonster, anotherValidPosition);
+
+            ZPosition returnedMonsterPosition = *mDungeon->GetMonsterPosition(anotherMonster.GetId());
+
+            ASSERT_POSITION_EQ(anotherValidPosition, returnedMonsterPosition);
+        }
+
+        TEST_F(DungeonMonsterTest, GetMonsterPosition_ReturnsNullptrForNotPlacedMonster) {
+            using namespace mdl;
+
+            ZMonster monster = ZMonster::CreateMonster();
+
+            ASSERT_EQ(nullptr, mDungeon->GetMonsterPosition(monster.GetId()));
+        }
+
+        TEST_F(DungeonMonsterTest, GetMonster_ReturnsPlacedMonster) {
+            using namespace mdl;
+
+            ZMonster monster = ZMonster::CreateMonster();
+            monster.GetDirection().RotateBack();
+            ZPositionDiff monsterPredictedMove = monster.GetDirection().PredictMove();
+
+            ZPosition validPosition = kSomeMapSomeHollowCell;
+
+            mDungeon->PlaceMonster(monster, validPosition);
+
+            ZPositionDiff returnedMonsterPredictedMove = mDungeon->GetMonster(monster.GetId())->GetDirection().PredictMove();
+
+            ASSERT_POSITION_DIFF_EQ(monsterPredictedMove, returnedMonsterPredictedMove);
+        }
+
+        TEST_F(DungeonMonsterTest, GetMonster_ReturnsExactlyPlacedMonsterInsteadOfSomeOtherMonster) {
+            using namespace mdl;
+
+            ZMonster monster = ZMonster::CreateMonster();
+            ZPosition validPosition = kSomeMapSomeHollowCell;
+
+            ZMonster anotherMonster = ZMonster::CreateMonster();
+            anotherMonster.GetDirection().RotateBack();
+            ZPositionDiff monsterPredictedMove = anotherMonster.GetDirection().PredictMove();
+            ZPosition anotherValidPosition = kSomeMapUpStaircaseCell;
+
+            mDungeon->PlaceMonster(monster, validPosition);
+            mDungeon->PlaceMonster(anotherMonster, anotherValidPosition);
+
+            ZPositionDiff returnedMonsterPredictedMove = mDungeon->GetMonster(anotherMonster.GetId())->GetDirection().PredictMove();
+
+            ASSERT_POSITION_DIFF_EQ(monsterPredictedMove, returnedMonsterPredictedMove);
+        }
+
+        TEST_F(DungeonMonsterTest, GetMonsterPosition_ReturnsNullptrForNotPlacedMonsterId) {
+            using namespace mdl;
+
+            ZMonster monster = ZMonster::CreateMonster();
+
+            ASSERT_EQ(nullptr, mDungeon->GetMonster(monster.GetId()));
+        }
+
+        TEST_F(DungeonTest, Destructor_ReleasesMonsterIds) {
+            using namespace mdl;
+            using namespace utl;
+
+            ZDungeon* dungeon = new ZDungeon(kSomeMapWidth, kSomeMapHeight, kSomeMap);
+
+            ZServices::GetInstance().Register<IUniqueIdRegistry>(new ZUniqueIdRegistry());
+            ZMonster monster = ZMonster::CreateMonster();
+            ZIdType monsterId = monster.GetId();
+
+            dungeon->PlaceMonster(monster, kSomeMapSomeHollowCell);
+            delete dungeon;
+
+            ZMonster anotherMonster = ZMonster::CreateMonster();
+
+            ZServices::GetInstance().Unregister<IUniqueIdRegistry>();
+
+            ASSERT_EQ(monsterId, anotherMonster.GetId());
+        }
+
     }
 }
