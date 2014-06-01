@@ -11,11 +11,11 @@ namespace prz {
             ZDirection();
             virtual ~ZDirection();
 
-            void RotateLeft();
-            void RotateRight();
-            void RotateBack();
-            void RotateHalfLeft();
-            void RotateHalfRight();
+            void TurnLeft();
+            void TurnRight();
+            void TurnBack();
+            void TurnForwardLeft();
+            void TurnForwardRight();
 
             ZPositionDiff PredictMove() const;
             void Align(const ZPositionDiff& diff);

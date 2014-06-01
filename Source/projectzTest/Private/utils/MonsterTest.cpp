@@ -36,7 +36,7 @@ namespace prz {
 
         TEST_F(MonsterWithInstanceTest, HoldsDirectionBetweenCalls) {
             mdl::ZDirection& direction = mMonster->GetDirection();
-            direction.RotateBack();
+            direction.TurnBack();
 
             mdl::ZPositionDiff expectedMove = mMonster->GetDirection().PredictMove();
             ASSERT_POSITION_DIFF_EQ(kBackwardPositionDiff, expectedMove);

@@ -27,23 +27,23 @@ namespace prz {
         ZDirection::~ZDirection() {
         }
 
-        void ZDirection::RotateLeft() {
+        void ZDirection::TurnLeft() {
             Rotate(90);
         }
 
-        void ZDirection::RotateRight() {
+        void ZDirection::TurnRight() {
             Rotate(-90);
         }
 
-        void ZDirection::RotateBack() {
+        void ZDirection::TurnBack() {
             Rotate(180);
         }
 
-        void ZDirection::RotateHalfLeft() {
+        void ZDirection::TurnForwardLeft() {
             Rotate(45);
         }
 
-        void ZDirection::RotateHalfRight() {
+        void ZDirection::TurnForwardRight() {
             Rotate(-45);
         }
 
