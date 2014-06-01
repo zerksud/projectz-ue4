@@ -50,28 +50,28 @@ namespace prz {
             ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Left], diff);
         }
 
-        TEST_F(DirectionTest, TurnLeft_PredictsRightMove) {
+        TEST_F(DirectionTest, TurnRight_PredictsRightMove) {
             dir.TurnRight();
             mdl::ZPositionDiff diff = dir.PredictMove();
 
             ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Right], diff);
         }
 
-        TEST_F(DirectionTest, TurnLeft_PredictsBackwardMove) {
+        TEST_F(DirectionTest, TurnBack_PredictsBackwardMove) {
             dir.TurnBack();
             mdl::ZPositionDiff diff = dir.PredictMove();
 
             ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Backward], diff);
         }
 
-        TEST_F(DirectionTest, TurnLeft_PredictsHalfLeftMove) {
+        TEST_F(DirectionTest, TurnForwardLeft_PredictsForwardLeftMove) {
             dir.TurnForwardLeft();
             mdl::ZPositionDiff diff = dir.PredictMove();
 
             ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::HalfLeft], diff);
         }
 
-        TEST_F(DirectionTest, TurnLeft_PredictsHalfRightMove) {
+        TEST_F(DirectionTest, TurnForwardRight_PredictsForwardRightMove) {
             dir.TurnForwardRight();
             mdl::ZPositionDiff diff = dir.PredictMove();
 
