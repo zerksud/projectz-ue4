@@ -19,10 +19,10 @@ namespace prz {
             static const mdl::ZDungeon::ZMapCell* kSomeMap;
             static const int kSomeMapWidth = 5;
             static const int kSomeMapHeight = 3;
-            static const mdl::ZPosition kSomeMapSomeHollowCell;
-            static const mdl::ZPosition kSomeMapSomeSolidCell;
-            static const mdl::ZPosition kSomeMapUpStaircaseCell;
-            static const mdl::ZPosition kSomeMapDownStaircaseCell;
+            static const mdl::ZPosition kSomeHollowCell;
+            static const mdl::ZPosition kSomeSolidCell;
+            static const mdl::ZPosition kUpStaircaseCell;
+            static const mdl::ZPosition kDownStaircaseCell;
 
             static const int kSomeIncorrectMapWidth = 0;
             static const int kSomeIncorrectMapHeight = -5;
@@ -36,10 +36,10 @@ namespace prz {
             "#####"
             "#<.>#"
             "#####";
-        const mdl::ZPosition DungeonTest::kSomeMapSomeHollowCell = mdl::ZPosition(2, 1);
-        const mdl::ZPosition DungeonTest::kSomeMapSomeSolidCell = mdl::ZPosition(1, 2);
-        const mdl::ZPosition DungeonTest::kSomeMapUpStaircaseCell = mdl::ZPosition(1, 1);
-        const mdl::ZPosition DungeonTest::kSomeMapDownStaircaseCell = mdl::ZPosition(3, 1);
+        const mdl::ZPosition DungeonTest::kSomeHollowCell = mdl::ZPosition(2, 1);
+        const mdl::ZPosition DungeonTest::kSomeSolidCell = mdl::ZPosition(1, 2);
+        const mdl::ZPosition DungeonTest::kUpStaircaseCell = mdl::ZPosition(1, 1);
+        const mdl::ZPosition DungeonTest::kDownStaircaseCell = mdl::ZPosition(3, 1);
 
         const mdl::ZPosition DungeonTest::kFailSafeMapEmptyCell = mdl::ZPosition(1, 1);
 
@@ -80,43 +80,43 @@ namespace prz {
         }
 
         TEST_F(DungeonWithSomeMapTest, CellIsSolid_HollowCellsAreNotSolid) {
-            ASSERT_FALSE(mDungeon->CellIsSolid(kSomeMapSomeHollowCell));
+            ASSERT_FALSE(mDungeon->CellIsSolid(kSomeHollowCell));
         }
 
         TEST_F(DungeonWithSomeMapTest, CellIsSolid_UpStaircaseCellsAreNotSolid) {
-            ASSERT_FALSE(mDungeon->CellIsSolid(kSomeMapUpStaircaseCell));
+            ASSERT_FALSE(mDungeon->CellIsSolid(kUpStaircaseCell));
         }
 
         TEST_F(DungeonWithSomeMapTest, CellIsSolid_DownStaircaseCellsAreNotSolid) {
-            ASSERT_FALSE(mDungeon->CellIsSolid(kSomeMapDownStaircaseCell));
+            ASSERT_FALSE(mDungeon->CellIsSolid(kDownStaircaseCell));
         }
 
         TEST_F(DungeonWithSomeMapTest, CellIsSolid_SolidCellsAreIndeedSolid) {
-            ASSERT_TRUE(mDungeon->CellIsSolid(kSomeMapSomeSolidCell));
+            ASSERT_TRUE(mDungeon->CellIsSolid(kSomeSolidCell));
         }
 
         TEST_F(DungeonWithSomeMapTest, CellIsSolid_CoordinatesWorksJustLikePosition) {
-            ASSERT_TRUE(mDungeon->CellIsSolid(kSomeMapSomeSolidCell.GetX(), kSomeMapSomeSolidCell.GetY()));
+            ASSERT_TRUE(mDungeon->CellIsSolid(kSomeSolidCell.GetX(), kSomeSolidCell.GetY()));
         }
 
         TEST_F(DungeonWithSomeMapTest, CellIsEmpty_HollowCellsAreEmpty) {
-            ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeMapSomeHollowCell));
+            ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeHollowCell));
         }
 
         TEST_F(DungeonWithSomeMapTest, CellIsEmpty_UpStaircaseCellsAreEmpty) {
-            ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeMapUpStaircaseCell));
+            ASSERT_TRUE(mDungeon->CellIsEmpty(kUpStaircaseCell));
         }
 
         TEST_F(DungeonWithSomeMapTest, CellIsEmpty_DownStaircaseCellsAreEmpty) {
-            ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeMapDownStaircaseCell));
+            ASSERT_TRUE(mDungeon->CellIsEmpty(kDownStaircaseCell));
         }
 
         TEST_F(DungeonWithSomeMapTest, CellIsEmpty_SolidCellsAreNotEmpty) {
-            ASSERT_FALSE(mDungeon->CellIsEmpty(kSomeMapSomeSolidCell));
+            ASSERT_FALSE(mDungeon->CellIsEmpty(kSomeSolidCell));
         }
 
         TEST_F(DungeonWithSomeMapTest, CellIsEmpty_CoordinatesWorksJustLikePosition) {
-            ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeMapSomeHollowCell.GetX(), kSomeMapSomeHollowCell.GetY()));
+            ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeHollowCell.GetX(), kSomeHollowCell.GetY()));
         }
 
         class DungeonSingleDownStaircaseTest : public ::testing::Test {
@@ -278,7 +278,7 @@ namespace prz {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
-            ZPosition validPosition = kSomeMapSomeHollowCell;
+            ZPosition validPosition = kSomeHollowCell;
 
             ASSERT_TRUE(mDungeon->PlaceMonster(monster, validPosition));
         }
@@ -287,7 +287,7 @@ namespace prz {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
-            ZPosition validPosition = kSomeMapUpStaircaseCell;
+            ZPosition validPosition = kUpStaircaseCell;
 
             ASSERT_TRUE(mDungeon->PlaceMonster(monster, validPosition));
         }
@@ -297,7 +297,7 @@ namespace prz {
 
             ZMonster monster = ZMonster::CreateMonster();
             monster.SetId(utl::ZRegistrable::kNoId);
-            ZPosition validPosition = kSomeMapSomeHollowCell;
+            ZPosition validPosition = kSomeHollowCell;
 
             ASSERT_FALSE(mDungeon->PlaceMonster(monster, validPosition));
         }
@@ -306,7 +306,7 @@ namespace prz {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
-            ZPosition validPosition = kSomeMapSomeSolidCell;
+            ZPosition validPosition = kSomeSolidCell;
 
             ASSERT_FALSE(mDungeon->PlaceMonster(monster, validPosition));
         }
@@ -315,8 +315,8 @@ namespace prz {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
-            ZPosition validPosition = kSomeMapUpStaircaseCell;
-            ZPosition anotherValidPosition = kSomeMapUpStaircaseCell;
+            ZPosition validPosition = kUpStaircaseCell;
+            ZPosition anotherValidPosition = kUpStaircaseCell;
 
             mDungeon->PlaceMonster(monster, validPosition);
             ASSERT_FALSE(mDungeon->PlaceMonster(monster, anotherValidPosition));
@@ -326,7 +326,7 @@ namespace prz {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
-            ZPosition validPosition = kSomeMapSomeHollowCell;
+            ZPosition validPosition = kSomeHollowCell;
 
             mDungeon->PlaceMonster(monster, validPosition);
 
@@ -335,15 +335,15 @@ namespace prz {
         }
 
         TEST_F(DungeonMonsterTest, CellIsEmpty_OccupiedCellsAreNotEmpty) {
-            mDungeon->PlaceMonster(mdl::ZMonster::CreateMonster(), kSomeMapSomeHollowCell);
-            ASSERT_FALSE(mDungeon->CellIsEmpty(kSomeMapSomeHollowCell));
+            mDungeon->PlaceMonster(mdl::ZMonster::CreateMonster(), kSomeHollowCell);
+            ASSERT_FALSE(mDungeon->CellIsEmpty(kSomeHollowCell));
         }
 
         TEST_F(DungeonMonsterTest, GetMonsterPosition_ReturnsPositionOfPlacedMonster) {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
-            ZPosition validPosition = kSomeMapSomeHollowCell;
+            ZPosition validPosition = kSomeHollowCell;
 
             mDungeon->PlaceMonster(monster, validPosition);
 
@@ -356,10 +356,10 @@ namespace prz {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
-            ZPosition validPosition = kSomeMapSomeHollowCell;
+            ZPosition validPosition = kSomeHollowCell;
 
             ZMonster anotherMonster = ZMonster::CreateMonster();
-            ZPosition anotherValidPosition = kSomeMapUpStaircaseCell;
+            ZPosition anotherValidPosition = kUpStaircaseCell;
 
             mDungeon->PlaceMonster(monster, validPosition);
             mDungeon->PlaceMonster(anotherMonster, anotherValidPosition);
@@ -384,7 +384,7 @@ namespace prz {
             monster.GetDirection().Turn(ETurnDirection::Back);
             ZPositionDiff monsterPredictedMove = monster.GetDirection().PredictMove();
 
-            ZPosition validPosition = kSomeMapSomeHollowCell;
+            ZPosition validPosition = kSomeHollowCell;
 
             mDungeon->PlaceMonster(monster, validPosition);
 
@@ -397,12 +397,12 @@ namespace prz {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
-            ZPosition validPosition = kSomeMapSomeHollowCell;
+            ZPosition validPosition = kSomeHollowCell;
 
             ZMonster anotherMonster = ZMonster::CreateMonster();
             anotherMonster.GetDirection().Turn(ETurnDirection::Back);
             ZPositionDiff monsterPredictedMove = anotherMonster.GetDirection().PredictMove();
-            ZPosition anotherValidPosition = kSomeMapUpStaircaseCell;
+            ZPosition anotherValidPosition = kUpStaircaseCell;
 
             mDungeon->PlaceMonster(monster, validPosition);
             mDungeon->PlaceMonster(anotherMonster, anotherValidPosition);
@@ -430,7 +430,7 @@ namespace prz {
             ZMonster monster = ZMonster::CreateMonster();
             ZIdType monsterId = monster.GetId();
 
-            dungeon->PlaceMonster(monster, kSomeMapSomeHollowCell);
+            dungeon->PlaceMonster(monster, kSomeHollowCell);
             delete dungeon;
 
             ZMonster anotherMonster = ZMonster::CreateMonster();
