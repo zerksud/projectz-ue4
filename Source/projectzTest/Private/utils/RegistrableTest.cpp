@@ -36,35 +36,5 @@ namespace prz {
             ASSERT_TRUE(mRegistrable.IsRegistered());
         }
 
-        class UniqueIdRegistryRegistrableTestMock : public utl::IUniqueIdRegistry {
-        public:
-            utl::ZIdType mLastReleasedId = 0;
-
-            virtual bool AssignUniqueId(utl::ZRegistrable* object) override {
-                return true;
-            }
-            virtual bool ReleaseUniqueId(utl::ZRegistrable* object) override {
-                mLastReleasedId = object->GetId();
-                return true;
-            }
-        };
-
-        TEST_F(RegistrableTest, Destructor_ReleasesAssignedUniqueId) {
-            using namespace utl;
-
-            ZRegistrable* object = new utl::ZRegistrable();
-            object->SetId(kSomeId);
-
-            UniqueIdRegistryRegistrableTestMock* registry = new UniqueIdRegistryRegistrableTestMock();
-            ZServices::GetInstance().Register<IUniqueIdRegistry>(registry);
-
-            delete object;
-
-            ZIdType lastReleasedId = registry->mLastReleasedId;
-            ZServices::GetInstance().Unregister<IUniqueIdRegistry>();
-
-            ASSERT_EQ(kSomeId, lastReleasedId);
-        }
-
     }
 }
