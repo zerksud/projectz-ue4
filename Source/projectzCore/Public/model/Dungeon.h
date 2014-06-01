@@ -39,6 +39,7 @@ namespace prz {
             bool PlaceMonster(const ZMonster& monster, const ZPosition& position);
             const ZPosition* GetMonsterPosition(utl::ZIdType monsterId) const;
             ZMonster* GetMonster(utl::ZIdType monsterId);
+            //bool TryToMoveMonster(utl::ZIdType monsterId, )
 
         private:
             ZDungeon(const ZDungeon& other);

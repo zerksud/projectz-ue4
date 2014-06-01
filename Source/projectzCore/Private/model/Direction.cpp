@@ -10,7 +10,7 @@ namespace prz {
     namespace mdl {
         const double ZDirection::kPi = 3.14159265359;
 
-        ZDirection::ZPredictedMovesMap ZDirection::kPredictedMoves = {
+        const ZDirection::ZPredictedMovesMap ZDirection::kPredictedMoves = {
             {0, ZPositionDiff(1.0f, 0.0f)},
             {45, ZPositionDiff(1.0f, -1.0f)},
             {90, ZPositionDiff(0.0f, -1.0f)},
@@ -20,6 +20,15 @@ namespace prz {
             {270, ZPositionDiff(0.0f, 1.0f)},
             {315, ZPositionDiff(1.0f, 1.0f)}};
 
+        const ZDirection::ZTurnDirectionToAngleMap ZDirection::kTurnDirectionToAngle = {
+            {ETurnDirection::Forward, 0},
+            {ETurnDirection::Left, 90},
+            {ETurnDirection::Right, -90},
+            {ETurnDirection::Back, 180},
+            {ETurnDirection::ForwardLeft, 45},
+            {ETurnDirection::ForwardRight, -45},
+        };
+
         ZDirection::ZDirection() {
             mAngle = 0;
         }
@@ -27,24 +36,13 @@ namespace prz {
         ZDirection::~ZDirection() {
         }
 
-        void ZDirection::TurnLeft() {
-            Rotate(90);
-        }
-
-        void ZDirection::TurnRight() {
-            Rotate(-90);
-        }
-
-        void ZDirection::TurnBack() {
-            Rotate(180);
-        }
-
-        void ZDirection::TurnForwardLeft() {
-            Rotate(45);
-        }
-
-        void ZDirection::TurnForwardRight() {
-            Rotate(-45);
+        void ZDirection::Turn(ETurnDirection::Type direction) {
+            auto pos = kTurnDirectionToAngle.find(direction);
+            if (pos != kTurnDirectionToAngle.end()) {
+                Rotate(pos->second);
+            } else {
+                LOGE("Got unsupported ETurnDirection = %d", direction);
+            }
         }
 
         float ZDirection::GetAngleFromDiff(const ZPositionDiff& diff) {

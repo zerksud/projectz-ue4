@@ -376,7 +376,7 @@ namespace prz {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
-            monster.GetDirection().TurnBack();
+            monster.GetDirection().Turn(ETurnDirection::Back);
             ZPositionDiff monsterPredictedMove = monster.GetDirection().PredictMove();
 
             ZPosition validPosition = kSomeMapSomeHollowCell;
@@ -395,7 +395,7 @@ namespace prz {
             ZPosition validPosition = kSomeMapSomeHollowCell;
 
             ZMonster anotherMonster = ZMonster::CreateMonster();
-            anotherMonster.GetDirection().TurnBack();
+            anotherMonster.GetDirection().Turn(ETurnDirection::Back);
             ZPositionDiff monsterPredictedMove = anotherMonster.GetDirection().PredictMove();
             ZPosition anotherValidPosition = kSomeMapUpStaircaseCell;
 

@@ -6,25 +6,36 @@
 
 namespace prz {
     namespace mdl {
+
+        namespace ETurnDirection {
+            enum Type {
+                Forward = 0,
+                Left,
+                Right,
+                Back,
+                ForwardLeft,
+                ForwardRight
+            };
+        }
+
         class ZDirection {
         public:
             ZDirection();
             virtual ~ZDirection();
 
-            void TurnLeft();
-            void TurnRight();
-            void TurnBack();
-            void TurnForwardLeft();
-            void TurnForwardRight();
+            void Turn(ETurnDirection::Type direction);
 
             ZPositionDiff PredictMove() const;
             void Align(const ZPositionDiff& diff);
 
         private:
             typedef std::map<int, ZPositionDiff> ZPredictedMovesMap;
+            typedef std::map<ETurnDirection::Type, int> ZTurnDirectionToAngleMap;
 
             static const double kPi;
-            static ZPredictedMovesMap kPredictedMoves;
+            static const ZPredictedMovesMap kPredictedMoves;
+            static const ZTurnDirectionToAngleMap kTurnDirectionToAngle;
+
             static float GetAngleFromDiff(const ZPositionDiff& diff);
             static ZPositionDiff GetPositionDiff(int angle);
 

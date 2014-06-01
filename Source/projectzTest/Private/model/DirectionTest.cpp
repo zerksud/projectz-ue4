@@ -44,35 +44,35 @@ namespace prz {
         }
 
         TEST_F(DirectionTest, TurnLeft_PredictsLeftMove) {
-            dir.TurnLeft();
+            dir.Turn(mdl::ETurnDirection::Left);
             mdl::ZPositionDiff diff = dir.PredictMove();
 
             ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Left], diff);
         }
 
         TEST_F(DirectionTest, TurnRight_PredictsRightMove) {
-            dir.TurnRight();
+            dir.Turn(mdl::ETurnDirection::Right);
             mdl::ZPositionDiff diff = dir.PredictMove();
 
             ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Right], diff);
         }
 
         TEST_F(DirectionTest, TurnBack_PredictsBackwardMove) {
-            dir.TurnBack();
+            dir.Turn(mdl::ETurnDirection::Back);
             mdl::ZPositionDiff diff = dir.PredictMove();
 
             ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::Backward], diff);
         }
 
         TEST_F(DirectionTest, TurnForwardLeft_PredictsForwardLeftMove) {
-            dir.TurnForwardLeft();
+            dir.Turn(mdl::ETurnDirection::ForwardLeft);
             mdl::ZPositionDiff diff = dir.PredictMove();
 
             ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::HalfLeft], diff);
         }
 
         TEST_F(DirectionTest, TurnForwardRight_PredictsForwardRightMove) {
-            dir.TurnForwardRight();
+            dir.Turn(mdl::ETurnDirection::ForwardRight);
             mdl::ZPositionDiff diff = dir.PredictMove();
 
             ASSERT_POSITION_DIFF_EQ(kPositionDiffs[EDirection::HalfRight], diff);
@@ -80,7 +80,7 @@ namespace prz {
 
         TEST_F(DirectionTest, TurnLeft_FourthTurnLeftsTurnToForward) {
             for (int i = 0; i < 4; ++i) {
-                dir.TurnLeft();
+                dir.Turn(mdl::ETurnDirection::Left);
             }
 
             mdl::ZPositionDiff diff = dir.PredictMove();
@@ -90,7 +90,7 @@ namespace prz {
 
         TEST_F(DirectionTest, TurnLeft_400TurnLeftsTurnToForward) {
             for (int i = 0; i < 400; ++i) {
-                dir.TurnLeft();
+                dir.Turn(mdl::ETurnDirection::Left);
             }
 
             mdl::ZPositionDiff diff = dir.PredictMove();
