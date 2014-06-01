@@ -12,12 +12,12 @@ namespace prz {
 
             ZMonster(const ZMonster& other) = default;
             ZMonster& operator=(const ZMonster& other) = default;
-            virtual ~ZMonster();
+            virtual ~ZMonster() = default;
 
             ZDirection& GetDirection();
 
         private:
-            ZMonster();
+            ZMonster() = default;
             ZDirection mDirection;
         };
 

@@ -17,12 +17,6 @@ namespace prz {
             return monster;
         }
 
-        ZMonster::ZMonster() {
-        }
-
-        ZMonster::~ZMonster() {
-        }
-
         ZDirection& ZMonster::GetDirection() {
             return mDirection;
         }
