@@ -16,20 +16,20 @@ namespace prz {
     namespace testing {
         class DungeonTest : public ::testing::Test {
         protected:
-            const static mdl::ZDungeon::ZMapCell* kSomeMap;
-            const static int kSomeMapWidth = 5;
-            const static int kSomeMapHeight = 3;
-            const static mdl::ZPosition kSomeMapSomeHollowCell;
-            const static mdl::ZPosition kSomeMapSomeSolidCell;
-            const static mdl::ZPosition kSomeMapUpStaircaseCell;
-            const static mdl::ZPosition kSomeMapDownStaircaseCell;
+            static const mdl::ZDungeon::ZMapCell* kSomeMap;
+            static const int kSomeMapWidth = 5;
+            static const int kSomeMapHeight = 3;
+            static const mdl::ZPosition kSomeMapSomeHollowCell;
+            static const mdl::ZPosition kSomeMapSomeSolidCell;
+            static const mdl::ZPosition kSomeMapUpStaircaseCell;
+            static const mdl::ZPosition kSomeMapDownStaircaseCell;
 
-            const static int kSomeIncorrectMapWidth = 0;
-            const static int kSomeIncorrectMapHeight = -5;
+            static const int kSomeIncorrectMapWidth = 0;
+            static const int kSomeIncorrectMapHeight = -5;
 
-            const static int kFailSafeMapWidth = 3;
-            const static int kFailSafeMapHeight = 3;
-            const static mdl::ZPosition kFailSafeMapEmptyCell;
+            static const int kFailSafeMapWidth = 3;
+            static const int kFailSafeMapHeight = 3;
+            static const mdl::ZPosition kFailSafeMapEmptyCell;
         };
 
         const mdl::ZDungeon::ZMapCell* DungeonTest::kSomeMap = ""
@@ -121,7 +121,7 @@ namespace prz {
 
         class DungeonSingleDownStaircaseTest : public ::testing::Test {
         protected:
-            const static mdl::ZPosition kDownStaircasePosition;
+            static const mdl::ZPosition kDownStaircasePosition;
 
             void SetUp() {
                 mDungeon = new mdl::ZDungeon(4, 3, ""
@@ -142,7 +142,7 @@ namespace prz {
 
         class DungeonSingleUpStaircaseTest : public ::testing::Test {
         protected:
-            const static mdl::ZPosition kUpStaircasePosition;
+            static const mdl::ZPosition kUpStaircasePosition;
 
             void SetUp() {
                 mDungeon = new mdl::ZDungeon(4, 3, ""
@@ -163,8 +163,8 @@ namespace prz {
 
         class DungeonTwoDifferentStairsTest : public ::testing::Test {
         protected:
-            const static mdl::ZPosition kUpStaircasePosition;
-            const static mdl::ZPosition kDownStaircasePosition;
+            static const mdl::ZPosition kUpStaircasePosition;
+            static const mdl::ZPosition kDownStaircasePosition;
 
             void SetUp() {
                 mDungeon = new mdl::ZDungeon(4, 3, ""
@@ -186,10 +186,10 @@ namespace prz {
 
         class DungeonTwoStairsPairsTest : public ::testing::Test {
         protected:
-            const static mdl::ZPosition kUpStaircasePosition1st;
-            const static mdl::ZPosition kUpStaircasePosition2nd;
-            const static mdl::ZPosition kDownStaircasePosition1st;
-            const static mdl::ZPosition kDownStaircasePosition2nd;
+            static const mdl::ZPosition kUpStaircasePosition1st;
+            static const mdl::ZPosition kUpStaircasePosition2nd;
+            static const mdl::ZPosition kDownStaircasePosition1st;
+            static const mdl::ZPosition kDownStaircasePosition2nd;
 
             void SetUp() {
                 mDungeon = new mdl::ZDungeon(6, 4, ""
