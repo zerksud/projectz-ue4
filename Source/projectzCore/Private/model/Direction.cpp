@@ -39,7 +39,7 @@ namespace prz {
         void ZDirection::Turn(ETurnDirection::Type direction) {
             auto pos = kTurnDirectionToAngle.find(direction);
             if (pos != kTurnDirectionToAngle.end()) {
-                Rotate(pos->second);
+                Turn(pos->second);
             } else {
                 LOGE("Got unsupported ETurnDirection = %d", direction);
             }
@@ -75,10 +75,10 @@ namespace prz {
             int angle = GetAngleFromDiff(diff);
             int discreteDiff = round((angle - mAngle) / 45.0f) * 45;
 
-            Rotate(discreteDiff);
+            Turn(discreteDiff);
         }
 
-        void ZDirection::Rotate(int angle) {
+        void ZDirection::Turn(int angle) {
             int newAngle = mAngle + angle;
             while (newAngle < 0) {
                 newAngle += 360;

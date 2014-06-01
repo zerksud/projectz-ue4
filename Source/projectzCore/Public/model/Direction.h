@@ -39,7 +39,7 @@ namespace prz {
             static float GetAngleFromDiff(const ZPositionDiff& diff);
             static ZPositionDiff GetPositionDiff(int angle);
 
-            void Rotate(int angle);
+            void Turn(int angle);
 
             int mAngle;
         };
