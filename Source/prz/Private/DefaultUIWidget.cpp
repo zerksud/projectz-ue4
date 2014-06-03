@@ -25,5 +25,25 @@ void SDefaultUIWidget::Construct(const FArguments& InArgs) {
                 "#...# \n"
                 "#.### "))
             ]
+            + SOverlay::Slot()
+            .VAlign(VAlign_Bottom)
+            .HAlign(HAlign_Left)
+            [
+                SNew(SImage)
+                .Image(this, &SDefaultUIWidget::GetImage)
+            ]
         ];
+}
+const FSlateBrush*  SDefaultUIWidget::GetImage() const {
+    if (mImage.IsValid()) {
+        return mImage.Get();
+    }
+
+    return nullptr;
+}
+void SDefaultUIWidget::SetImage(UTexture2D* image) {
+    if (image) {
+        mImage.Reset();
+        mImage = TSharedPtr<FSlateDynamicImageBrush>(new FSlateDynamicImageBrush(image, FVector2D(128, 128), image->GetFName()));
+    }
 }

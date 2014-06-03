@@ -10,4 +10,6 @@ public:
     TSharedPtr<class SDefaultUIWidget> DefaultUIWidget;
 
     void BeginPlay();
+private:
+    UTexture2D* mImage;
 };
