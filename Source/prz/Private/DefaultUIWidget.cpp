@@ -4,6 +4,8 @@
 void SDefaultUIWidget::Construct(const FArguments& InArgs) {
     OwnerHUD = InArgs._OwnerHUD;
 
+    TSharedPtr<SUniformGridPanel> navigationPanel;
+
     ChildSlot
         .VAlign(VAlign_Fill)
         .HAlign(HAlign_Fill)
@@ -29,21 +31,33 @@ void SDefaultUIWidget::Construct(const FArguments& InArgs) {
             .VAlign(VAlign_Bottom)
             .HAlign(HAlign_Left)
             [
-                SNew(SImage)
-                .Image(this, &SDefaultUIWidget::GetImage)
+                SAssignNew(navigationPanel, SUniformGridPanel)
             ]
         ];
+
+    int32 rowCount = 2;
+    int32 colCount = 3;
+    for (int32 row = 0; row < rowCount; ++row) {
+        for (int32 col = 0; col < colCount; ++col) {
+            navigationPanel->AddSlot(col, row)
+            [
+                SNew(SImage).Image(this, &SDefaultUIWidget::GetImage, (int32)(row * colCount + col))
+            ];
+        }
+    }
 }
-const FSlateBrush*  SDefaultUIWidget::GetImage() const {
-    if (mImage.IsValid()) {
-        return mImage.Get();
+const FSlateBrush*  SDefaultUIWidget::GetImage(const int32 index) const {
+    if (mImages[index].IsValid()) {
+        return mImages[index].Get();
     }
 
     return nullptr;
 }
-void SDefaultUIWidget::SetImage(UTexture2D* image) {
-    if (image) {
-        mImage.Reset();
-        mImage = TSharedPtr<FSlateDynamicImageBrush>(new FSlateDynamicImageBrush(image, FVector2D(128, 128), image->GetFName()));
+void SDefaultUIWidget::SetImages(TTextureArray& images) {
+    mImages.Reset();
+    for (int32 i = 0; i < images.Num(); ++i) {
+        UTexture2D* image = images[i];
+        FSlateDynamicImageBrush* brush = new FSlateDynamicImageBrush(image, FVector2D(image->GetSizeX(), image->GetSizeY()), image->GetFName());
+        mImages.Add(TSharedPtr<FSlateDynamicImageBrush>(brush));
     }
 }

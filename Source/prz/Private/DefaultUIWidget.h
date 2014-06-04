@@ -14,12 +14,13 @@ class SDefaultUIWidget : public SCompoundWidget {
 public:
     void Construct(const FArguments& InArgs);
 
-    void SetImage(UTexture2D* image);
+    void SetImages(TTextureArray& images);
 
 protected:
-    const FSlateBrush*  GetImage() const;
+    const FSlateBrush*  GetImage(const int32 index) const;
 private:
     TWeakObjectPtr<class ADefaultHUD> OwnerHUD;
 
-    TSharedPtr<FSlateDynamicImageBrush> mImage;
+    typedef TArray<TSharedPtr<FSlateDynamicImageBrush> > TImageBrushArray;
+    TImageBrushArray mImages;
 };

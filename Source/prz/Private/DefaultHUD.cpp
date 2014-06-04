@@ -5,14 +5,20 @@
 
 ADefaultHUD::ADefaultHUD(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP) {
-    static ConstructorHelpers::FObjectFinder<UTexture2D> ImageObj(TEXT("/Game/UI/ForwardButton"));
-    mImage = ImageObj.Object;
+    const char* pathPrefix = "/Game/UI/HUD/";
+    const char* buttonsTextures[] = {"TurnLeft", "MoveForward", "TurnRight", "StrafeLeft", "MoveBackward", "StrafeRight"};
+
+    for (int8 i = 0; i < 6; ++i) {
+        FString texturePath = FString::Printf(TEXT("%s%s"), ANSI_TO_TCHAR(pathPrefix), ANSI_TO_TCHAR(buttonsTextures[i]));
+        ConstructorHelpers::FObjectFinder<UTexture2D> imageObj(*texturePath);
+        mImages.Add(imageObj.Object);
+    }
 }
 
 void ADefaultHUD::BeginPlay() {
     SAssignNew(DefaultUIWidget, SDefaultUIWidget).OwnerHUD(this);
 
-    DefaultUIWidget->SetImage(mImage);
+    DefaultUIWidget->SetImages(mImages);
 
     if (GEngine->IsValidLowLevel()) {
         GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(DefaultUIWidget.ToSharedRef()));

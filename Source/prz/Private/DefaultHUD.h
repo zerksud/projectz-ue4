@@ -3,6 +3,8 @@
 #include "GameFramework/HUD.h"
 #include "DefaultHUD.generated.h"
 
+typedef TArray<UTexture2D*> TTextureArray;
+
 UCLASS()
 class ADefaultHUD : public AHUD {
     GENERATED_UCLASS_BODY()
@@ -11,5 +13,5 @@ public:
 
     void BeginPlay();
 private:
-    UTexture2D* mImage;
+    TTextureArray mImages;
 };
