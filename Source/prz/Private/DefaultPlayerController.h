@@ -29,6 +29,9 @@ public:
     void TurnLeft();
 
     UFUNCTION()
+    void Quit();
+
+    UFUNCTION()
     void DebugPrintCurrentLocation();
 
 protected:

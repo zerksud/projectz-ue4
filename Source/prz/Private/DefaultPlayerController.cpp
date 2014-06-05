@@ -17,6 +17,7 @@ void ADefaultPlayerController::SetupInputComponent() {
     InputComponent->BindAction("StrafeRight", IE_Pressed, this, &ADefaultPlayerController::StrafeRightAction);
     InputComponent->BindAction("TurnRight", IE_Pressed, this, &ADefaultPlayerController::TurnRight);
     InputComponent->BindAction("TurnLeft", IE_Pressed, this, &ADefaultPlayerController::TurnLeft);
+    InputComponent->BindAction("Quit", IE_Pressed, this, &ADefaultPlayerController::Quit);
     InputComponent->BindAction("DebugPrintCurrentLocation", IE_Pressed, this, &ADefaultPlayerController::DebugPrintCurrentLocation);
 }
 
@@ -77,6 +78,10 @@ void ADefaultPlayerController::TurnRight() {
 
 void ADefaultPlayerController::TurnLeft() {
     Turn(true);
+}
+
+void ADefaultPlayerController::Quit() {
+    ConsoleCommand("quit");
 }
 
 void ADefaultPlayerController::DebugPrintCurrentLocation() {
