@@ -41,7 +41,11 @@ void SDefaultUIWidget::Construct(const FArguments& InArgs) {
         for (int32 col = 0; col < colCount; ++col) {
             navigationPanel->AddSlot(col, row)
             [
-                SNew(SImage).Image(this, &SDefaultUIWidget::GetImage, (int32)(row * colCount + col))
+                SNew(SButton)
+                .ButtonStyle(FCoreStyle::Get(), "NoBorder")
+                [
+                    SNew(SImage).Image(this, &SDefaultUIWidget::GetImage, (int32)(row * colCount + col))
+                ]
             ];
         }
     }
