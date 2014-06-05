@@ -22,7 +22,7 @@ void ADefaultPlayerController::SetupInputComponent() {
 }
 
 void ADefaultPlayerController::Move(EAxis::Type axis, bool reverse) {
-    LOGD("Move along axis %d with reverse = %d", (int32) axis, reverse);
+    LOGD("Move along axis %d with reverse = %d", (int32)axis, reverse);
 
     APawn* pawn = GetPawn();
     if (pawn) {
