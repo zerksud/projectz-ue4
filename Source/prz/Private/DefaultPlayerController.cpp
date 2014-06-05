@@ -5,7 +5,8 @@
 
 ADefaultPlayerController::ADefaultPlayerController(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP) {
-
+    bShowMouseCursor = 1;
+    bEnableClickEvents = 1;
 }
 
 void ADefaultPlayerController::SetupInputComponent() {
