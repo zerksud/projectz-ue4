@@ -5,7 +5,7 @@ public class przTest : ModuleRules {
     public przTest(TargetInfo Target) {
         ModulePath = Path.GetDirectoryName(RulesCompiler.GetModuleFilename(this.GetType().Name));
 
-        string UESourcePath = Path.Combine(ModulePath, "../../../unreal_engine/src/Engine/Source/");
+        string UESourcePath = Path.Combine(ModulePath, "../../../unreal_engine/Engine/Source/");
 
         PublicIncludePaths.Add(Path.Combine(UESourcePath, "Runtime/Launch/Public/"));
         PrivateIncludePaths.Add(Path.Combine(UESourcePath, "Runtime/Launch/Private/"));
