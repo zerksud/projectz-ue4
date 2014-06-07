@@ -4,7 +4,6 @@
 
 #include "DefaultHUD.h"
 
-UCLASS()
 class SDefaultUIWidget : public SCompoundWidget {
     SLATE_BEGIN_ARGS(SDefaultUIWidget) {
     }
