@@ -60,7 +60,7 @@ const FSlateBrush*  SDefaultUIWidget::GetImage(const int32 index) const {
 void SDefaultUIWidget::SetImages(TTextureArray& images) {
     mImages.Reset();
     for (int32 i = 0; i < images.Num(); ++i) {
-        UTexture2D* image = images[i];
+        UTexture2D* image = images[i].Get();
         FSlateDynamicImageBrush* brush = new FSlateDynamicImageBrush(image, FVector2D(image->GetSizeX(), image->GetSizeY()), image->GetFName());
         mImages.Add(TSharedPtr<FSlateDynamicImageBrush>(brush));
     }
