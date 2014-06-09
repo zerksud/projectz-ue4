@@ -18,6 +18,8 @@ public:
 protected:
     const FSlateBrush*  GetImage(const int32 index) const;
 private:
+    FReply OnButtonClicked(int32 buttonIndex);
+
     TWeakObjectPtr<class ADefaultHUD> OwnerHUD;
 
     typedef TArray<TSharedPtr<FSlateDynamicImageBrush> > TImageBrushArray;

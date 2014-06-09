@@ -1,6 +1,8 @@
 #include "prz.h"
 #include "DefaultUIWidget.h"
 
+#include "utils/LOG_ANSI.h"
+
 void SDefaultUIWidget::Construct(const FArguments& InArgs) {
     OwnerHUD = InArgs._OwnerHUD;
 
@@ -39,17 +41,26 @@ void SDefaultUIWidget::Construct(const FArguments& InArgs) {
     int32 colCount = 3;
     for (int32 row = 0; row < rowCount; ++row) {
         for (int32 col = 0; col < colCount; ++col) {
+            int32 linearButtonIndex = row * colCount + col;
             navigationPanel->AddSlot(col, row)
             [
                 SNew(SButton)
                 .ButtonStyle(FCoreStyle::Get(), "NoBorder")
+                .OnClicked(this, &SDefaultUIWidget::OnButtonClicked, linearButtonIndex)
                 [
-                    SNew(SImage).Image(this, &SDefaultUIWidget::GetImage, (int32)(row * colCount + col))
+                    SNew(SImage).Image(this, &SDefaultUIWidget::GetImage, linearButtonIndex)
                 ]
             ];
         }
     }
 }
+
+FReply SDefaultUIWidget::OnButtonClicked(int32 buttonIndex) {
+    LOGD("#%d button clicked", buttonIndex);
+
+    return FReply::Handled();
+}
+
 const FSlateBrush*  SDefaultUIWidget::GetImage(const int32 index) const {
     if (mImages[index].IsValid()) {
         return mImages[index].Get();
@@ -57,10 +68,11 @@ const FSlateBrush*  SDefaultUIWidget::GetImage(const int32 index) const {
 
     return nullptr;
 }
+
 void SDefaultUIWidget::SetImages(TTextureArray& images) {
     mImages.Reset();
     for (int32 i = 0; i < images.Num(); ++i) {
-        UTexture2D* image = images[i].Get();
+        UTexture2D* image = images[i];
         FSlateDynamicImageBrush* brush = new FSlateDynamicImageBrush(image, FVector2D(image->GetSizeX(), image->GetSizeY()), image->GetFName());
         mImages.Add(TSharedPtr<FSlateDynamicImageBrush>(brush));
     }
