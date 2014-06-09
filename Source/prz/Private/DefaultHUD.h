@@ -11,7 +11,7 @@ class ADefaultHUD : public AHUD {
 public:
     TSharedPtr<class SDefaultUIWidget> DefaultUIWidget;
 
-    void BeginPlay();
+    virtual void BeginPlay() OVERRIDE;
 private:
     TTextureArray mImages;
 };
