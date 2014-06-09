@@ -11,7 +11,7 @@ ADefaultHUD::ADefaultHUD(const class FPostConstructInitializeProperties& PCIP)
     for (int8 i = 0; i < 6; ++i) {
         FString texturePath = FString::Printf(TEXT("%s%s"), ANSI_TO_TCHAR(pathPrefix), ANSI_TO_TCHAR(buttonsTextures[i]));
         ConstructorHelpers::FObjectFinder<UTexture2D> imageObj(*texturePath);
-        mImages.Add(UTexture2DPtr(imageObj.Object));
+        mImages.Add(imageObj.Object);
     }
 }
 

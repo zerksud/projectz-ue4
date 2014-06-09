@@ -3,8 +3,7 @@
 #include "GameFramework/HUD.h"
 #include "DefaultHUD.generated.h"
 
-typedef TSharedPtr<UTexture2D> TUTexture2DPtr;
-typedef TArray<TUTexture2DPtr> TTextureArray;
+typedef TArray<UTexture2D*> TTextureArray;
 
 UCLASS()
 class ADefaultHUD : public AHUD {
