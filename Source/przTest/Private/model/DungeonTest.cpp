@@ -8,9 +8,9 @@
 #include "TestHelpers.h"
 
 #define ASSERT_DUNGEON_WITH_FAIL_SAFE_MAP(dungeon) \
-    EXPECT_EQ(kFailSafeMapWidth, dungeon.GetWidth()); \
-    EXPECT_EQ(kFailSafeMapHeight, dungeon.GetHeight()); \
-    ASSERT_TRUE(dungeon.CellIsEmpty(kFailSafeMapEmptyCell));
+    EXPECT_EQ(kFailSafeMapWidth, (dungeon).GetWidth()); \
+    EXPECT_EQ(kFailSafeMapHeight, (dungeon).GetHeight()); \
+    ASSERT_TRUE((dungeon).CellIsEmpty(kFailSafeMapEmptyCell));
 
 namespace prz {
     namespace testing {
