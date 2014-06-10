@@ -1,25 +1,20 @@
-
-
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class przTarget : TargetRules
-{
-	public przTarget(TargetInfo Target)
-	{
-		Type = TargetType.Game;
-	}
+public class przTarget : TargetRules {
+    public przTarget(TargetInfo Target) {
+        Type = TargetType.Game;
+    }
 
-	//
-	// TargetRules interface.
-	//
+    //
+    // TargetRules interface.
+    //
 
-	public override void SetupBinaries(
-		TargetInfo Target,
-		ref List<UEBuildBinaryConfiguration> OutBuildBinaryConfigurations,
-		ref List<string> OutExtraModuleNames
-		)
-	{
-		OutExtraModuleNames.AddRange( new string[] { "prz" } );
-	}
+    public override void SetupBinaries(
+        TargetInfo Target,
+        ref List<UEBuildBinaryConfiguration> OutBuildBinaryConfigurations,
+        ref List<string> OutExtraModuleNames
+        ) {
+        OutExtraModuleNames.AddRange(new string[] { "prz" });
+    }
 }
