@@ -3,7 +3,7 @@
 
 #include "DefaultPlayerCharacter.h"
 #include "DefaultPlayerController.h"
-#include "DefaultHUD.h"
+#include "UI/DefaultHUD.h"
 
 #include "utils/LOG.h"
 #include "utils/Logger.h"
