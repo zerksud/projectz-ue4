@@ -3,6 +3,12 @@
 #include "SlateWidgetStyleContainerBase.h"
 #include "NavigationWidgetStyle.generated.h"
 
+#define DECLARE_STYLE_FIELD_SETTER(styleType, fieldType, fieldName) \
+    styleType& Set##fieldName(const fieldType& value) { \
+    fieldName = value; \
+    return *this; \
+    }
+
 USTRUCT()
 struct FNavigationStyle : public FSlateWidgetStyle {
     GENERATED_USTRUCT_BODY()
@@ -21,52 +27,31 @@ struct FNavigationStyle : public FSlateWidgetStyle {
 
     UPROPERTY(EditAnywhere, Category = Appearance)
     FButtonStyle ButtonStyle;
-    FNavigationStyle& SetButtonStyle(const FButtonStyle& InButtonStyle) {
-        ButtonStyle = InButtonStyle;
-        return *this;
-    }
+    DECLARE_STYLE_FIELD_SETTER(FNavigationStyle, FButtonStyle, ButtonStyle)
 
     UPROPERTY(EditAnywhere, Category = Appearance)
     FSlateBrush TurnLeftButtonIcon;
-    FNavigationStyle& SetTurnLeftButtonIcon(const FSlateBrush& value) {
-        TurnLeftButtonIcon = value;
-        return *this;
-    }
+    DECLARE_STYLE_FIELD_SETTER(FNavigationStyle, FSlateBrush, TurnLeftButtonIcon)
 
     UPROPERTY(EditAnywhere, Category = Appearance)
     FSlateBrush MoveForwardButtonIcon;
-    FNavigationStyle& SetForwardButton(const FSlateBrush& value) {
-        MoveForwardButtonIcon = value;
-        return *this;
-    }
+    DECLARE_STYLE_FIELD_SETTER(FNavigationStyle, FSlateBrush, MoveForwardButtonIcon)
 
     UPROPERTY(EditAnywhere, Category = Appearance)
     FSlateBrush TurnRightButtonIcon;
-    FNavigationStyle& SetTurnRightButtonIcon(const FSlateBrush& value) {
-        TurnRightButtonIcon = value;
-        return *this;
-    }
+    DECLARE_STYLE_FIELD_SETTER(FNavigationStyle, FSlateBrush, TurnRightButtonIcon)
 
     UPROPERTY(EditAnywhere, Category = Appearance)
     FSlateBrush StrafeLeftButtonIcon;
-    FNavigationStyle& SetStrafeLeftButtonIcon(const FSlateBrush& value) {
-        StrafeLeftButtonIcon = value;
-        return *this;
-    }
+    DECLARE_STYLE_FIELD_SETTER(FNavigationStyle, FSlateBrush, StrafeLeftButtonIcon)
 
     UPROPERTY(EditAnywhere, Category = Appearance)
     FSlateBrush MoveBackwardButtonIcon;
-    FNavigationStyle& SetMoveBackwardButtonIcon(const FSlateBrush& value) {
-        MoveBackwardButtonIcon = value;
-        return *this;
-    }
+    DECLARE_STYLE_FIELD_SETTER(FNavigationStyle, FSlateBrush, MoveBackwardButtonIcon)
 
     UPROPERTY(EditAnywhere, Category = Appearance)
     FSlateBrush StrafeRightButtonIcon;
-    FNavigationStyle& SetStrafeRightButtonIcon(const FSlateBrush& value) {
-        StrafeRightButtonIcon = value;
-        return *this;
-    }
+    DECLARE_STYLE_FIELD_SETTER(FNavigationStyle, FSlateBrush, StrafeRightButtonIcon)
 };
 
 UCLASS(hidecategories = Object, MinimalAPI)
