@@ -12,5 +12,9 @@ public:
     void Construct(const FArguments& InArgs);
 
 private:
+    static const char* kNotificationNames[];
+
+    FReply OnButtonClicked(int32 notificationIndex);
+
     TWeakObjectPtr<class ADefaultHUD> OwnerHUD;
 };

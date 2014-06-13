@@ -3,7 +3,21 @@
 
 #include "UI/Styles/PrzStyleManager.h"
 #include "UI/Styles/NavigationWidgetStyle.h"
+
+#include "model/PlayerNavigation.h"
+
 #include "utils/LOG_ANSI.h"
+#include "utils/Services.h"
+#include "utils/INotificationCenter.h"
+
+const char* SNavigationWidget::kNotificationNames[] = {
+    prz::mdl::ZPlayerNavigation::kTurnLeftNotification,
+    prz::mdl::ZPlayerNavigation::kMoveForwardNotification,
+    prz::mdl::ZPlayerNavigation::kTurnRightNotification,
+    prz::mdl::ZPlayerNavigation::kStrafeLeftNotification,
+    prz::mdl::ZPlayerNavigation::kMoveBackwardNotification,
+    prz::mdl::ZPlayerNavigation::kStrafeRightNotification
+};
 
 void SNavigationWidget::Construct(const FArguments& InArgs) {
     OwnerHUD = InArgs._OwnerHUD;
@@ -35,6 +49,7 @@ void SNavigationWidget::Construct(const FArguments& InArgs) {
             [
                 SNew(SButton)
                 .ButtonStyle(&style->ButtonStyle)
+                .OnClicked(this, &SNavigationWidget::OnButtonClicked, linearIndex)
                 [
                     SNew(SImage)
                     .Image(icons[linearIndex])
@@ -42,4 +57,13 @@ void SNavigationWidget::Construct(const FArguments& InArgs) {
             ];
         }
     }
+}
+
+FReply SNavigationWidget::OnButtonClicked(int32 notificationIndex) {
+    using namespace prz::utl;
+
+    INotificationCenter* nc = ZServices::GetInstance().GetService<INotificationCenter>();
+    nc->PostNotification(kNotificationNames[notificationIndex]);
+
+    return FReply::Handled();
 }
