@@ -5,15 +5,12 @@
 namespace prz {
     namespace utl {
 
-        class ZServices {
+        class PRZCORE_API ZServices {
         public:
             ZServices() = delete;
             virtual ~ZServices() = delete;
 
-            static ZServiceManager& GetInstance() {
-                static ZServiceManager instance;
-                return instance;
-            }
+            static ZServiceManager& GetInstance();
         };
 
     }
