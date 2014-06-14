@@ -89,6 +89,8 @@ namespace prz {
                 return false;
             }
 
+            LOGD("PostNotification %s", name.c_str());
+
             ZObserverListTable::iterator pos = mObservers.find(name);
             if (pos != mObservers.end()) {
                 ZObserverList* list = pos->second;
