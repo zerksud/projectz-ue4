@@ -1,5 +1,6 @@
 # Unreal Engine 4 folders:
 /Binaries/
+/Build/
 /DerivedDataCache/
 /Intermediate/
 /Saved/
