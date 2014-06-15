@@ -9,7 +9,7 @@ namespace prz {
         const char* ZPlayerNavigation::kTurnRightNotification = "TurnRightNotification";
         const char* ZPlayerNavigation::kStrafeLeftNotification = "StrafeLeftNotification";
         const char* ZPlayerNavigation::kMoveBackwardNotification = "MoveBackwardNotification";
-        const char* ZPlayerNavigation::kStrafeRightNotification = "StrafeLeftNotification";
+        const char* ZPlayerNavigation::kStrafeRightNotification = "StrafeRightNotification";
 
     }
 }
