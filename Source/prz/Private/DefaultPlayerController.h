@@ -38,6 +38,8 @@ protected:
     virtual void SetupInputComponent() OVERRIDE;
 
 private:
+    void SetupObservers();
+
     void Move(EAxis::Type axis, bool reverse = false);
     void Turn(bool reversed = false);
 

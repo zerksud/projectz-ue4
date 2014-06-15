@@ -1,7 +1,13 @@
 #include "prz.h"
 #include "DefaultPlayerController.h"
 
+#include <map>
+
+#include "utils/Services.h"
+#include "utils/INotificationCenter.h"
 #include "utils/LOG.h"
+
+#include "model/PlayerNavigation.h"
 
 ADefaultPlayerController::ADefaultPlayerController(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP) {
@@ -20,6 +26,34 @@ void ADefaultPlayerController::SetupInputComponent() {
     InputComponent->BindAction("TurnLeft", IE_Pressed, this, &ADefaultPlayerController::TurnLeft);
     InputComponent->BindAction("Quit", IE_Pressed, this, &ADefaultPlayerController::Quit);
     InputComponent->BindAction("DebugPrintCurrentLocation", IE_Pressed, this, &ADefaultPlayerController::DebugPrintCurrentLocation);
+
+    SetupObservers();
+}
+
+void ADefaultPlayerController::SetupObservers() {
+    using namespace prz::utl;
+    using namespace prz::mdl;
+
+    INotificationCenter* nc = ZServices::GetInstance().GetService<INotificationCenter>();
+    if (nc) {
+        typedef void (ADefaultPlayerController::*FMethodNoParamsPtr)();
+
+        std::map<std::string, FMethodNoParamsPtr> notificationMethodMap = {
+            {ZPlayerNavigation::kTurnLeftNotification, &ADefaultPlayerController::TurnLeft},
+            {ZPlayerNavigation::kMoveForwardNotification, &ADefaultPlayerController::MoveForwardAction},
+            {ZPlayerNavigation::kTurnRightNotification, &ADefaultPlayerController::TurnRight},
+            {ZPlayerNavigation::kStrafeLeftNotification, &ADefaultPlayerController::StrafeLeftAction},
+            {ZPlayerNavigation::kMoveBackwardNotification, &ADefaultPlayerController::MoveBackwardAction},
+            {ZPlayerNavigation::kStrafeRightNotification, &ADefaultPlayerController::StrafeRightAction}
+        };
+
+        for (auto& pair : notificationMethodMap) {
+            FMethodNoParamsPtr method = pair.second;
+            nc->AddObserver(pair.first, this, [this, method](const ZDictionary& dict) {
+                (this->*method)();
+            });
+        }
+    }
 }
 
 void ADefaultPlayerController::Move(EAxis::Type axis, bool reverse) {
