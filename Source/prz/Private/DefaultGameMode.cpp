@@ -9,13 +9,6 @@
 #include "utils/Logger.h"
 #include "utils/NotificationCenter.h"
 
-ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializeProperties& PCIP)
-: Super(PCIP) {
-    DefaultPawnClass = ADefaultPlayerCharacter::StaticClass();
-    PlayerControllerClass = ADefaultPlayerController::StaticClass();
-    HUDClass = ADefaultHUD::StaticClass();
-}
-
 void initializeServices() {
     using namespace prz::utl;
 
@@ -31,10 +24,17 @@ void initializeServices() {
     ZServices::GetInstance().Register<INotificationCenter>(new prz::utl::ZNotificationCenter());
 }
 
+ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializeProperties& PCIP)
+: Super(PCIP) {
+    initializeServices();
+
+    DefaultPawnClass = ADefaultPlayerCharacter::StaticClass();
+    PlayerControllerClass = ADefaultPlayerController::StaticClass();
+    HUDClass = ADefaultHUD::StaticClass();
+}
+
 void ADefaultGameMode::BeginPlay() {
     Super::BeginPlay();
-
-    initializeServices();
 
     LOGD("DefaultGameMode created");
 }
