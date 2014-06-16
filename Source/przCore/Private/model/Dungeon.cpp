@@ -10,6 +10,11 @@
 namespace prz {
     namespace mdl {
 
+        const ZDungeon::ZMapCell ZDungeon::kSolidCell = '#';
+        const ZDungeon::ZMapCell ZDungeon::kHollowCell = '.';
+        const ZDungeon::ZMapCell ZDungeon::kUpStaircaseCell = '<';
+        const ZDungeon::ZMapCell ZDungeon::kDownStaircaseCell = '>';
+
         const ZDungeon::ZMapToTerrainCellMap ZDungeon::kMapToTerrainCellMap = {
             {kSolidCell, EDungeonCell::Solid},
             {kHollowCell, EDungeonCell::Hollow},

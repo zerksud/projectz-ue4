@@ -54,10 +54,10 @@ namespace prz {
             ZDungeon(const ZDungeon& other);
             ZDungeon& operator=(const ZDungeon& other);
 
-            static const ZMapCell kSolidCell = '#';
-            static const ZMapCell kHollowCell = '.';
-            static const ZMapCell kUpStaircaseCell = '<';
-            static const ZMapCell kDownStaircaseCell = '>';
+            static const ZMapCell kSolidCell;
+            static const ZMapCell kHollowCell;
+            static const ZMapCell kUpStaircaseCell;
+            static const ZMapCell kDownStaircaseCell;
 
             typedef std::unordered_map<ZMapCell, EDungeonCell::Type> ZMapToTerrainCellMap;
             static const ZMapToTerrainCellMap kMapToTerrainCellMap;
