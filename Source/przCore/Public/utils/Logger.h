@@ -7,7 +7,7 @@ namespace prz {
         class PRZCORE_API ZLogger : public ILogger {
         public:
             ZLogger();
-            ~ZLogger();
+            virtual ~ZLogger();
 
             virtual void Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const override;
             virtual void Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const ANSICHAR* format, ...) const override;

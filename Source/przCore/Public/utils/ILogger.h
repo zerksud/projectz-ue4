@@ -8,6 +8,8 @@ namespace prz {
     namespace utl {
         class ILogger {
         public:
+            virtual ~ILogger() = default;
+
             typedef std::function<void(ELogVerbosity::Type verbosity, const FString& message)> ZLogCallback;
 
             virtual void Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const = 0;
