@@ -34,7 +34,7 @@ void ADefaultPlayerController::SetupObservers() {
     using namespace prz::utl;
     using namespace prz::mdl;
 
-    INotificationCenter* nc = ZServices::GetInstance().GetService<INotificationCenter>();
+    INotificationCenter* nc = GET_SERVICE(prz::utl::INotificationCenter);
     if (nc) {
         typedef void (ADefaultPlayerController::*FMethodNoParamsPtr)();
 

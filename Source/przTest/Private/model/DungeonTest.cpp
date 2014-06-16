@@ -262,7 +262,7 @@ namespace prz {
 
                 DungeonWithSomeMapTest::SetUp();
 
-                ZServices::GetInstance().Register<IUniqueIdRegistry>(new ZUniqueIdRegistry());
+                REGISTER_SERVICE(prz::utl::IUniqueIdRegistry, new ZUniqueIdRegistry());
             }
 
             void TearDown() {
@@ -270,7 +270,7 @@ namespace prz {
 
                 DungeonWithSomeMapTest::TearDown();
 
-                ZServices::GetInstance().Unregister<IUniqueIdRegistry>();
+                UNREGISTER_SERVICE(prz::utl::IUniqueIdRegistry);
             }
         };
 
@@ -426,7 +426,7 @@ namespace prz {
 
             ZDungeon* dungeon = new ZDungeon(kSomeMapWidth, kSomeMapHeight, kSomeMap);
 
-            ZServices::GetInstance().Register<IUniqueIdRegistry>(new ZUniqueIdRegistry());
+            REGISTER_SERVICE(prz::utl::IUniqueIdRegistry, new ZUniqueIdRegistry());
             ZMonster monster = ZMonster::CreateMonster();
             ZIdType monsterId = monster.GetId();
 
@@ -435,7 +435,7 @@ namespace prz {
 
             ZMonster anotherMonster = ZMonster::CreateMonster();
 
-            ZServices::GetInstance().Unregister<IUniqueIdRegistry>();
+            UNREGISTER_SERVICE(prz::utl::IUniqueIdRegistry);
 
             ASSERT_EQ(monsterId, anotherMonster.GetId());
         }
@@ -455,7 +455,7 @@ namespace prz {
                 using namespace mdl;
                 using namespace utl;
 
-                ZServices::GetInstance().Register<IUniqueIdRegistry>(new ZUniqueIdRegistry());
+                REGISTER_SERVICE(prz::utl::IUniqueIdRegistry, new ZUniqueIdRegistry());
 
                 mDungeon = new ZDungeon(kMapWidth, kMapHeight, kMap);
 
@@ -473,7 +473,7 @@ namespace prz {
                 using namespace utl;
 
                 delete mDungeon;
-                ZServices::GetInstance().Unregister<IUniqueIdRegistry>();
+                UNREGISTER_SERVICE(prz::utl::IUniqueIdRegistry);
             }
 
             mdl::ZDungeon* mDungeon;

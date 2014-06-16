@@ -59,7 +59,7 @@ namespace prz {
             using namespace utl;
             using namespace mdl;
 
-            ZServices::GetInstance().Unregister<IUniqueIdRegistry>();
+            UNREGISTER_SERVICE(prz::utl::IUniqueIdRegistry);
             ZMonster* monster = new ZMonster(ZMonster::CreateMonster());
             ZIdType monsterId = monster->GetId();
             delete monster;
@@ -71,12 +71,12 @@ namespace prz {
             using namespace utl;
             using namespace mdl;
 
-            ZServices::GetInstance().Register<IUniqueIdRegistry>(new UniqueIdRegistryMonsterTestMock());
+            REGISTER_SERVICE(prz::utl::IUniqueIdRegistry, new UniqueIdRegistryMonsterTestMock());
             ZMonster* monster = new ZMonster(ZMonster::CreateMonster());
             ZIdType monsterId = monster->GetId();
             delete monster;
 
-            ZServices::GetInstance().Unregister<IUniqueIdRegistry>();
+            UNREGISTER_SERVICE(prz::utl::IUniqueIdRegistry);
 
             ASSERT_EQ(UniqueIdRegistryMonsterTestMock::kSomeId, monsterId);
         }

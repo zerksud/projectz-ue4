@@ -1,6 +1,15 @@
 #pragma once
 
-#include "ServiceManager.h"
+#include "utils/ServiceManager.h"
+
+#define REGISTER_SERVICE(typeName, instance) \
+    (prz::utl::ZServices::GetInstance().Register< ::typeName >(instance, #typeName))
+
+#define GET_SERVICE(typeName) \
+    (prz::utl::ZServices::GetInstance().GetService< ::typeName >(#typeName))
+
+#define UNREGISTER_SERVICE(typeName) \
+    (prz::utl::ZServices::GetInstance().Unregister< ::typeName >(#typeName))
 
 namespace prz {
     namespace utl {

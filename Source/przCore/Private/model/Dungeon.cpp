@@ -88,7 +88,7 @@ namespace prz {
         ZDungeon::~ZDungeon() {
             using namespace utl;
 
-            IUniqueIdRegistry* registry = ZServices::GetInstance().GetService<IUniqueIdRegistry>();
+            IUniqueIdRegistry* registry = GET_SERVICE(prz::utl::IUniqueIdRegistry);
             if (registry) {
                 for (auto& pair : mMonsterList) {
                     ZMonster& monster = pair.second->monster;

@@ -7,6 +7,7 @@ namespace prz {
         class SomeService {
         public:
             static const int kDestructorValue = 1337;
+            static const char* kName;
 
             SomeService(int* value = nullptr) : mValue(value) {
             }
@@ -21,8 +22,14 @@ namespace prz {
             int* mValue;
         };
 
+        const char* SomeService::kName = "SomeService";
+
         class AnotherService {
+        public:
+            static const char* kName;
         };
+
+        const char* AnotherService::kName = "AnotherService";
 
         class ServiceManagerTest : public ::testing::Test {
         protected:
@@ -35,13 +42,19 @@ namespace prz {
         };
 
         TEST_F(ServiceManagerWithInstanceTest, SetService_NormalServicesAreAddedSuccessfully) {
-            bool success = sm.Register<SomeService>(new SomeService());
+            bool success = sm.Register<SomeService>(new SomeService(), SomeService::kName);
 
             ASSERT_TRUE(success);
         }
 
+        TEST_F(ServiceManagerWithInstanceTest, SetService_EmptyServiceTypeNamesAreNotPermitted) {
+            bool success = sm.Register<SomeService>(new SomeService(), "");
+
+            ASSERT_FALSE(success);
+        }
+
         TEST_F(ServiceManagerWithInstanceTest, SetService_NullServiceInstancesAreNotPermitted) {
-            bool success = sm.Register<SomeService>(nullptr);
+            bool success = sm.Register<SomeService>(nullptr, SomeService::kName);
 
             ASSERT_FALSE(success);
         }
@@ -49,8 +62,8 @@ namespace prz {
         TEST_F(ServiceManagerWithInstanceTest, SetService_DestroysOldService) {
             int value = kSomeValue;
 
-            sm.Register<SomeService>(new SomeService(&value));
-            sm.Register<SomeService>(new SomeService());
+            sm.Register<SomeService>(new SomeService(&value), SomeService::kName);
+            sm.Register<SomeService>(new SomeService(), SomeService::kName);
 
             ASSERT_EQ(SomeService::kDestructorValue, value);
         }
@@ -59,21 +72,21 @@ namespace prz {
             SomeService* service = new SomeService();
             SomeService* anotherService = new SomeService();
 
-            sm.Register<SomeService>(service);
-            sm.Register<SomeService>(anotherService);
+            sm.Register<SomeService>(service, SomeService::kName);
+            sm.Register<SomeService>(anotherService, SomeService::kName);
 
-            ASSERT_EQ(anotherService, sm.GetService<SomeService>());
+            ASSERT_EQ(anotherService, sm.GetService<SomeService>(SomeService::kName));
         }
 
         TEST_F(ServiceManagerWithInstanceTest, GetService_ReturnsSetService) {
             SomeService* service = new SomeService();
-            sm.Register<SomeService>(service);
+            sm.Register<SomeService>(service, SomeService::kName);
 
-            ASSERT_EQ(service, sm.GetService<SomeService>());
+            ASSERT_EQ(service, sm.GetService<SomeService>(SomeService::kName));
         }
 
         TEST_F(ServiceManagerWithInstanceTest, GetService_ReturnsNullIfHasNotService) {
-            SomeService* service = sm.GetService<SomeService>();
+            SomeService* service = sm.GetService<SomeService>(SomeService::kName);
 
             ASSERT_EQ(nullptr, service);
         }
@@ -82,18 +95,18 @@ namespace prz {
             SomeService* service = new SomeService();
             AnotherService* anotherService = new AnotherService();
 
-            sm.Register<SomeService>(service);
-            sm.Register<AnotherService>(anotherService);
+            sm.Register<SomeService>(service, SomeService::kName);
+            sm.Register<AnotherService>(anotherService, AnotherService::kName);
 
-            ASSERT_EQ(service, sm.GetService<SomeService>());
-            ASSERT_EQ(anotherService, sm.GetService<AnotherService>());
+            ASSERT_EQ(service, sm.GetService<SomeService>(SomeService::kName));
+            ASSERT_EQ(anotherService, sm.GetService<AnotherService>(AnotherService::kName));
         }
 
         TEST_F(ServiceManagerTest, DestroysAddedServiceInDestructor) {
             utl::ZServiceManager* sm = new utl::ZServiceManager();
 
             int value = kSomeValue;
-            sm->Register<SomeService>(new SomeService(&value));
+            sm->Register<SomeService>(new SomeService(&value), SomeService::kName);
 
             delete sm;
 
@@ -102,14 +115,14 @@ namespace prz {
 
         TEST_F(ServiceManagerWithInstanceTest, Unregister_DestroysUnregisteredService) {
             int value = kSomeValue;
-            sm.Register<SomeService>(new SomeService(&value));
+            sm.Register<SomeService>(new SomeService(&value), SomeService::kName);
 
-            EXPECT_TRUE(sm.Unregister<SomeService>());
+            EXPECT_TRUE(sm.Unregister<SomeService>(SomeService::kName));
             ASSERT_EQ(SomeService::kDestructorValue, value);
         }
 
         TEST_F(ServiceManagerWithInstanceTest, Unregister_ReturnsFalseIfUnregisteringServiceWasNotRegistered) {
-            ASSERT_FALSE(sm.Unregister<SomeService>());
+            ASSERT_FALSE(sm.Unregister<SomeService>(SomeService::kName));
         }
     }
 }

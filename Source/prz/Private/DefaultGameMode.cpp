@@ -20,8 +20,8 @@ void initializeServices() {
         }
     });
 
-    ZServices::GetInstance().Register<ILogger>(loggerService);
-    ZServices::GetInstance().Register<INotificationCenter>(new prz::utl::ZNotificationCenter());
+    REGISTER_SERVICE(prz::utl::ILogger, loggerService);
+    REGISTER_SERVICE(prz::utl::INotificationCenter, new prz::utl::ZNotificationCenter());
 }
 
 ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializeProperties& PCIP)

@@ -10,7 +10,7 @@ IMPLEMENT_APPLICATION(przTest, "przTest");
 
 void initializeLoggerService() {
     using namespace prz::utl;
-    ZServices::GetInstance().Register<ILogger>(new ZLogger());
+    REGISTER_SERVICE(prz::utl::ILogger, new ZLogger());
 }
 
 INT32_MAIN_INT32_ARGC_TCHAR_ARGV() {
