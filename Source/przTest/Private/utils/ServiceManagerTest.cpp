@@ -75,18 +75,18 @@ namespace prz {
             sm.Register<SomeService>(service, SomeService::kName);
             sm.Register<SomeService>(anotherService, SomeService::kName);
 
-            ASSERT_EQ(anotherService, sm.GetService<SomeService>(SomeService::kName));
+            ASSERT_EQ(anotherService, sm.Get<SomeService>(SomeService::kName));
         }
 
         TEST_F(ServiceManagerWithInstanceTest, GetService_ReturnsSetService) {
             SomeService* service = new SomeService();
             sm.Register<SomeService>(service, SomeService::kName);
 
-            ASSERT_EQ(service, sm.GetService<SomeService>(SomeService::kName));
+            ASSERT_EQ(service, sm.Get<SomeService>(SomeService::kName));
         }
 
         TEST_F(ServiceManagerWithInstanceTest, GetService_ReturnsNullIfHasNotService) {
-            SomeService* service = sm.GetService<SomeService>(SomeService::kName);
+            SomeService* service = sm.Get<SomeService>(SomeService::kName);
 
             ASSERT_EQ(nullptr, service);
         }
@@ -98,8 +98,8 @@ namespace prz {
             sm.Register<SomeService>(service, SomeService::kName);
             sm.Register<AnotherService>(anotherService, AnotherService::kName);
 
-            ASSERT_EQ(service, sm.GetService<SomeService>(SomeService::kName));
-            ASSERT_EQ(anotherService, sm.GetService<AnotherService>(AnotherService::kName));
+            ASSERT_EQ(service, sm.Get<SomeService>(SomeService::kName));
+            ASSERT_EQ(anotherService, sm.Get<AnotherService>(AnotherService::kName));
         }
 
         TEST_F(ServiceManagerTest, DestroysAddedServiceInDestructor) {

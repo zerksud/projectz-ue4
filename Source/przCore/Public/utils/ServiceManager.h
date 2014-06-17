@@ -40,7 +40,7 @@ namespace prz {
                 return true;
             }
 
-            template<typename TServiceType> TServiceType* GetService(std::string typeName) {
+            template<typename TServiceType> TServiceType* Get(std::string typeName) {
                 ZServiceMap::iterator pos = mServiceMap.find(typeName);
                 if (pos != mServiceMap.end()) {
                     return static_cast<TServiceType*>(pos->second->instance);

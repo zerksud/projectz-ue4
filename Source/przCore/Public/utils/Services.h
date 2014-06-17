@@ -6,7 +6,7 @@
     (prz::utl::ZServices::GetInstance().Register< ::typeName >(instance, #typeName))
 
 #define GET_SERVICE(typeName) \
-    (prz::utl::ZServices::GetInstance().GetService< ::typeName >(#typeName))
+    (prz::utl::ZServices::GetInstance().Get< ::typeName >(#typeName))
 
 #define UNREGISTER_SERVICE(typeName) \
     (prz::utl::ZServices::GetInstance().Unregister< ::typeName >(#typeName))
