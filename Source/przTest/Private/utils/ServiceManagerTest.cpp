@@ -41,25 +41,25 @@ namespace prz {
             utl::ZServiceManager sm;
         };
 
-        TEST_F(ServiceManagerWithInstanceTest, SetService_NormalServicesAreAddedSuccessfully) {
+        TEST_F(ServiceManagerWithInstanceTest, Register_NormalServicesAreAddedSuccessfully) {
             bool success = sm.Register<SomeService>(new SomeService(), SomeService::kName);
 
             ASSERT_TRUE(success);
         }
 
-        TEST_F(ServiceManagerWithInstanceTest, SetService_EmptyServiceTypeNamesAreNotPermitted) {
+        TEST_F(ServiceManagerWithInstanceTest, Register_EmptyServiceTypeNamesAreNotPermitted) {
             bool success = sm.Register<SomeService>(new SomeService(), "");
 
             ASSERT_FALSE(success);
         }
 
-        TEST_F(ServiceManagerWithInstanceTest, SetService_NullServiceInstancesAreNotPermitted) {
+        TEST_F(ServiceManagerWithInstanceTest, Register_NullServiceInstancesAreNotPermitted) {
             bool success = sm.Register<SomeService>(nullptr, SomeService::kName);
 
             ASSERT_FALSE(success);
         }
 
-        TEST_F(ServiceManagerWithInstanceTest, SetService_DestroysOldService) {
+        TEST_F(ServiceManagerWithInstanceTest, Register_DestroysOldService) {
             int value = kSomeValue;
 
             sm.Register<SomeService>(new SomeService(&value), SomeService::kName);
@@ -68,7 +68,7 @@ namespace prz {
             ASSERT_EQ(SomeService::kDestructorValue, value);
         }
 
-        TEST_F(ServiceManagerWithInstanceTest, SetService_RewritesOldServiceWithNewOne) {
+        TEST_F(ServiceManagerWithInstanceTest, Register_RewritesOldServiceWithNewOne) {
             SomeService* service = new SomeService();
             SomeService* anotherService = new SomeService();
 
@@ -78,20 +78,20 @@ namespace prz {
             ASSERT_EQ(anotherService, sm.Get<SomeService>(SomeService::kName));
         }
 
-        TEST_F(ServiceManagerWithInstanceTest, GetService_ReturnsSetService) {
+        TEST_F(ServiceManagerWithInstanceTest, Get_ReturnsSetService) {
             SomeService* service = new SomeService();
             sm.Register<SomeService>(service, SomeService::kName);
 
             ASSERT_EQ(service, sm.Get<SomeService>(SomeService::kName));
         }
 
-        TEST_F(ServiceManagerWithInstanceTest, GetService_ReturnsNullIfHasNotService) {
+        TEST_F(ServiceManagerWithInstanceTest, Get_ReturnsNullIfHasNotService) {
             SomeService* service = sm.Get<SomeService>(SomeService::kName);
 
             ASSERT_EQ(nullptr, service);
         }
 
-        TEST_F(ServiceManagerWithInstanceTest, GetService_ReturnsExactlyAddedServiceByItsType) {
+        TEST_F(ServiceManagerWithInstanceTest, Get_ReturnsExactlyAddedServiceByItsType) {
             SomeService* service = new SomeService();
             AnotherService* anotherService = new AnotherService();
 
