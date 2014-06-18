@@ -15,6 +15,7 @@ namespace prz {
 
         private:
             static const char* kLogFormat;
+            static FString FormatUserMessage(const ANSICHAR* fileName, int32 lineNum, const TCHAR* userMessage);
 
             ZLogCallback mLogCallback;
         };
