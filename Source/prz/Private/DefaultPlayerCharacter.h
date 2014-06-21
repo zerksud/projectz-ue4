@@ -9,6 +9,4 @@
 UCLASS()
 class ADefaultPlayerCharacter : public ACharacter {
     GENERATED_UCLASS_BODY()
-public:
-    virtual void BeginPlay() OVERRIDE;
 };

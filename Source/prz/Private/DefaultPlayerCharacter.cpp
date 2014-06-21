@@ -7,9 +7,3 @@ ADefaultPlayerCharacter::ADefaultPlayerCharacter(const class FPostConstructIniti
 : Super(PCIP) {
 
 }
-
-void ADefaultPlayerCharacter::BeginPlay() {
-    Super::BeginPlay();
-
-    LOGD("DefaultPlayerPawn created");
-}

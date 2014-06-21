@@ -32,9 +32,3 @@ ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializePropertie
     PlayerControllerClass = ADefaultPlayerController::StaticClass();
     HUDClass = ADefaultHUD::StaticClass();
 }
-
-void ADefaultGameMode::BeginPlay() {
-    Super::BeginPlay();
-
-    LOGD("DefaultGameMode created");
-}

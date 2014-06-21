@@ -9,6 +9,4 @@
 UCLASS()
 class ADefaultGameMode : public AGameMode {
     GENERATED_UCLASS_BODY()
-public:
-    virtual void BeginPlay() OVERRIDE;
 };
