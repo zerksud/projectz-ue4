@@ -2,14 +2,14 @@
 
 #include "utils/ServiceManager.h"
 
-#define REGISTER_SERVICE(typeName, instance) \
-    (prz::utl::ZServices::GetInstance().Register< ::typeName >(instance, #typeName))
+#define REGISTER_SERVICE(serviceTypeName, serviceInstance) \
+    SERVICE_MANAGER_REGISTER_SERVICE(prz::utl::ZServices::GetInstance(), serviceTypeName, serviceInstance)
 
-#define GET_SERVICE(typeName) \
-    (prz::utl::ZServices::GetInstance().Get< ::typeName >(#typeName))
+#define GET_SERVICE(serviceTypeName) \
+    SERVICE_MANAGER_GET_SERVICE(prz::utl::ZServices::GetInstance(), serviceTypeName)
 
-#define UNREGISTER_SERVICE(typeName) \
-    (prz::utl::ZServices::GetInstance().Unregister< ::typeName >(#typeName))
+#define UNREGISTER_SERVICE(serviceTypeName) \
+    SERVICE_MANAGER_UNREGISTER_SERVICE(prz::utl::ZServices::GetInstance(), serviceTypeName)
 
 namespace prz {
     namespace utl {

@@ -6,6 +6,15 @@
 
 #include "Core.h"
 
+#define SERVICE_MANAGER_REGISTER_SERVICE(serviceManagerInstance, serviceTypeName, serviceInstance) \
+    ((serviceManagerInstance).Register< ::serviceTypeName >(serviceInstance, #serviceTypeName))
+
+#define SERVICE_MANAGER_GET_SERVICE(serviceManagerInstance, serviceTypeName) \
+    ((serviceManagerInstance).Get< ::serviceTypeName >(#serviceTypeName))
+
+#define SERVICE_MANAGER_UNREGISTER_SERVICE(serviceManagerInstance, serviceTypeName) \
+    ((serviceManagerInstance).Unregister< ::serviceTypeName >(#serviceTypeName))
+
 namespace prz {
     namespace utl {
         class PRZCORE_API ZServiceManager {
