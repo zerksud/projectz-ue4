@@ -10,4 +10,5 @@ public:
     TSharedPtr<class SNavigationWidget> mNavigationWidget;
 
     virtual void BeginPlay() OVERRIDE;
+    virtual void DrawHUD() OVERRIDE;
 };

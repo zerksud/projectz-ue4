@@ -27,11 +27,19 @@ void SNavigationWidget::Construct(const FArguments& InArgs) {
     TSharedPtr<SUniformGridPanel> gridPanel;
 
     ChildSlot
-        .VAlign(VAlign_Bottom)
-        .HAlign(HAlign_Left)
+    [
+        SNew(SDPIScaler)
+        .DPIScale(this, &SNavigationWidget::GetDPIScale)
         [
-            SAssignNew(gridPanel, SUniformGridPanel)
-        ];
+            SNew(SOverlay)
+            + SOverlay::Slot()
+            .VAlign(VAlign_Bottom)
+            .HAlign(HAlign_Left)
+            [
+                SAssignNew(gridPanel, SUniformGridPanel)
+            ]
+        ]
+    ];
 
     const FSlateBrush* icons[] = {
         &style->TurnLeftButtonIcon,
@@ -57,6 +65,14 @@ void SNavigationWidget::Construct(const FArguments& InArgs) {
             ];
         }
     }
+}
+
+float SNavigationWidget::GetDPIScale() const {
+    return mScale;
+}
+
+void SNavigationWidget::SetDPIScale(int32 scale) {
+    mScale = scale;
 }
 
 FReply SNavigationWidget::OnButtonClicked(int32 notificationIndex) {
