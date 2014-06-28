@@ -7,7 +7,7 @@ UCLASS()
 class ADefaultHUD : public AHUD {
     GENERATED_UCLASS_BODY()
 public:
-    TSharedPtr<class SNavigationWidget> mNavigationWidget;
+    TSharedPtr<class SRootWidget> mRootWidget;
 
     virtual void BeginPlay() OVERRIDE;
     virtual void DrawHUD() OVERRIDE;

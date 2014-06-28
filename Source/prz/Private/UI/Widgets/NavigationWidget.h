@@ -11,13 +11,8 @@ class SNavigationWidget : public SCompoundWidget {
 public:
     void Construct(const FArguments& InArgs);
 
-    float GetDPIScale() const;
-    void SetDPIScale(int32 scale);
-
 private:
     static const char* kNotificationNames[];
-
-    int32 mScale = 1;
 
     FReply OnButtonClicked(int32 notificationIndex);
 

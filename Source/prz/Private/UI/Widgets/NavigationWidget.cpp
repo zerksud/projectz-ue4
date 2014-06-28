@@ -28,17 +28,7 @@ void SNavigationWidget::Construct(const FArguments& InArgs) {
 
     ChildSlot
     [
-        SNew(SDPIScaler)
-        .DPIScale(this, &SNavigationWidget::GetDPIScale)
-        [
-            SNew(SOverlay)
-            + SOverlay::Slot()
-            .VAlign(VAlign_Bottom)
-            .HAlign(HAlign_Left)
-            [
-                SAssignNew(gridPanel, SUniformGridPanel)
-            ]
-        ]
+        SAssignNew(gridPanel, SUniformGridPanel)
     ];
 
     const FSlateBrush* icons[] = {
@@ -65,14 +55,6 @@ void SNavigationWidget::Construct(const FArguments& InArgs) {
             ];
         }
     }
-}
-
-float SNavigationWidget::GetDPIScale() const {
-    return mScale;
-}
-
-void SNavigationWidget::SetDPIScale(int32 scale) {
-    mScale = scale;
 }
 
 FReply SNavigationWidget::OnButtonClicked(int32 notificationIndex) {

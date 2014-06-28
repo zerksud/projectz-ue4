@@ -3,6 +3,7 @@
 
 #include <algorithm>
 
+#include "UI/Widgets/RootWidget.h"
 #include "UI/Widgets/NavigationWidget.h"
 
 ADefaultHUD::ADefaultHUD(const class FPostConstructInitializeProperties& PCIP)
@@ -10,14 +11,21 @@ ADefaultHUD::ADefaultHUD(const class FPostConstructInitializeProperties& PCIP)
 }
 
 void ADefaultHUD::BeginPlay() {
-    SAssignNew(mNavigationWidget, SNavigationWidget).OwnerHUD(this);
+    SAssignNew(mRootWidget, SRootWidget).OwnerHUD(this);
+    
+    mRootWidget->AddSlot()
+        .VAlign(VAlign_Bottom)
+        .HAlign(HAlign_Left)
+        [
+            SNew(SNavigationWidget).OwnerHUD(this)
+        ];
 
     if (GEngine->IsValidLowLevel()) {
-        GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(mNavigationWidget.ToSharedRef()));
+        GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(mRootWidget.ToSharedRef()));
     }
 
-    if (mNavigationWidget.IsValid()) {
-        mNavigationWidget->SetVisibility(EVisibility::Visible);
+    if (mRootWidget.IsValid()) {
+        mRootWidget->SetVisibility(EVisibility::Visible);
     }
 }
 
@@ -30,7 +38,7 @@ void ADefaultHUD::DrawHUD() {
     float scaleY = sizeY / 120.0f / RequestedContentScaleFactor;
 
     int32 scale = std::floor(std::min(scaleX, scaleY));
-    mNavigationWidget->SetDPIScale(scale);
+    mRootWidget->SetDPIScale(scale);
 
     Super::DrawHUD();
 }
