@@ -57,8 +57,6 @@ void ADefaultPlayerController::SetupObservers() {
 }
 
 void ADefaultPlayerController::Move(EAxis::Type axis, bool reverse) {
-    LOGD("Move along axis %d with reverse = %d", (int32)axis, reverse);
-
     APawn* pawn = GetPawn();
     if (pawn) {
         if (!mPlayerLocationInitialized) {
@@ -67,7 +65,6 @@ void ADefaultPlayerController::Move(EAxis::Type axis, bool reverse) {
         }
 
         FVector moveDistance = 500.0f * (reverse ? -1.0f : 1.0f) * FRotationMatrix(GetControlRotation()).GetScaledAxis(axis);
-        LOGD("move direction: %s", *moveDistance.ToString());
 
         FVector destination = mPlayerLocation + moveDistance;
         LOGD("destination: %s", *destination.ToString());
@@ -84,8 +81,6 @@ void ADefaultPlayerController::Move(EAxis::Type axis, bool reverse) {
 }
 
 void ADefaultPlayerController::Turn(bool reverse) {
-    LOGD("Turn with reverse = %d", reverse);
-
     FRotator rotation = GetControlRotation();
     rotation.Yaw += (reverse ? -1.0f : 1.0f) * 90.0f;
     SetControlRotation(rotation);
