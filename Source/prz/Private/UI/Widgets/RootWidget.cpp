@@ -24,6 +24,7 @@ float SRootWidget::GetDPIScale() const {
 void SRootWidget::SetDPIScale(int32 scale) {
     if (scale <= 0) {
         LOGE("Can't set non-positive scale = %d", scale);
+        return;
     }
 
     mScale = scale;
