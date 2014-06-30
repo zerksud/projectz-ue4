@@ -83,13 +83,6 @@ namespace prz {
 
             bool MovementIsDiagonalAroundTheCorner(const ZPosition& origin, const ZPositionDiff& diff) const;
 
-            int mWidth;
-            int mHeight;
-            EDungeonCell::Type* mTerrain;
-
-            StaircaseList mUpStaircases;
-            StaircaseList mDownStaircases;
-
             struct ZPlacedMonster {
                 ZMonster monster;
                 ZPosition position;
@@ -102,6 +95,13 @@ namespace prz {
             typedef std::unordered_map<utl::ZIdType, ZPlacedMonster*> ZMonsterList;
 
             ZPlacedMonster* GetPlacedMonster(utl::ZIdType monsterId);
+
+            int mWidth;
+            int mHeight;
+            EDungeonCell::Type* mTerrain;
+
+            StaircaseList mUpStaircases;
+            StaircaseList mDownStaircases;
 
             ZMonsterIdByPositionMap mMonsterIdByPosition;
             ZMonsterList mMonsterList;
