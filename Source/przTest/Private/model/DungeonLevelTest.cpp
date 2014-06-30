@@ -1,22 +1,22 @@
 #include "przTestPrivatePCH.h"
 
-#include "model/Dungeon.h"
+#include "model/DungeonLevel.h"
 #include "utils/Services.h"
 #include "utils/UniqueIdRegistry.h"
 
 #include "model/PositionTest.h"
 #include "TestHelpers.h"
 
-#define ASSERT_DUNGEON_WITH_FAIL_SAFE_MAP(dungeon) \
-    EXPECT_EQ(kFailSafeMapWidth, (dungeon).GetWidth()); \
-    EXPECT_EQ(kFailSafeMapHeight, (dungeon).GetHeight()); \
-    ASSERT_TRUE((dungeon).CellIsEmpty(kFailSafeMapEmptyCell));
+#define ASSERT_DUNGEON_WITH_FAIL_SAFE_MAP(dungeonLevel) \
+    EXPECT_EQ(kFailSafeMapWidth, (dungeonLevel).GetWidth()); \
+    EXPECT_EQ(kFailSafeMapHeight, (dungeonLevel).GetHeight()); \
+    ASSERT_TRUE((dungeonLevel).CellIsEmpty(kFailSafeMapEmptyCell));
 
 namespace prz {
     namespace testing {
-        class DungeonTest : public ::testing::Test {
+        class DungeonLevelTest : public ::testing::Test {
         protected:
-            static const mdl::ZDungeon::ZMapCell* kSomeMap;
+            static const mdl::ZDungeonLevel::ZMapCell* kSomeMap;
             static const int kSomeMapWidth = 5;
             static const int kSomeMapHeight = 3;
             static const mdl::ZPosition kSomeHollowCell;
@@ -32,91 +32,91 @@ namespace prz {
             static const mdl::ZPosition kFailSafeMapEmptyCell;
         };
 
-        const mdl::ZDungeon::ZMapCell* DungeonTest::kSomeMap = ""
+        const mdl::ZDungeonLevel::ZMapCell* DungeonLevelTest::kSomeMap = ""
             "#####"
             "#<.>#"
             "#####";
-        const mdl::ZPosition DungeonTest::kSomeHollowCell = mdl::ZPosition(2, 1);
-        const mdl::ZPosition DungeonTest::kSomeSolidCell = mdl::ZPosition(1, 2);
-        const mdl::ZPosition DungeonTest::kUpStaircaseCell = mdl::ZPosition(1, 1);
-        const mdl::ZPosition DungeonTest::kDownStaircaseCell = mdl::ZPosition(3, 1);
+        const mdl::ZPosition DungeonLevelTest::kSomeHollowCell = mdl::ZPosition(2, 1);
+        const mdl::ZPosition DungeonLevelTest::kSomeSolidCell = mdl::ZPosition(1, 2);
+        const mdl::ZPosition DungeonLevelTest::kUpStaircaseCell = mdl::ZPosition(1, 1);
+        const mdl::ZPosition DungeonLevelTest::kDownStaircaseCell = mdl::ZPosition(3, 1);
 
-        const mdl::ZPosition DungeonTest::kFailSafeMapEmptyCell = mdl::ZPosition(1, 1);
+        const mdl::ZPosition DungeonLevelTest::kFailSafeMapEmptyCell = mdl::ZPosition(1, 1);
 
-        class DungeonWithSomeMapTest : public DungeonTest {
+        class DungeonLevelWithSomeMapTest : public DungeonLevelTest {
         protected:
             void SetUp() {
-                mDungeon = new mdl::ZDungeon(kSomeMapWidth, kSomeMapHeight, kSomeMap);
+                mDungeonLevel = new mdl::ZDungeonLevel(kSomeMapWidth, kSomeMapHeight, kSomeMap);
             }
 
             void TearDown() {
-                delete mDungeon;
+                delete mDungeonLevel;
             }
 
-            mdl::ZDungeon* mDungeon;
+            mdl::ZDungeonLevel* mDungeonLevel;
         };
 
-        TEST_F(DungeonWithSomeMapTest, GetWidthAndGetHeightReturnExpectedValues) {
-            EXPECT_EQ(kSomeMapWidth, mDungeon->GetWidth());
-            ASSERT_EQ(kSomeMapHeight, mDungeon->GetHeight());
+        TEST_F(DungeonLevelWithSomeMapTest, GetWidthAndGetHeightReturnExpectedValues) {
+            EXPECT_EQ(kSomeMapWidth, mDungeonLevel->GetWidth());
+            ASSERT_EQ(kSomeMapHeight, mDungeonLevel->GetHeight());
         }
 
-        TEST_F(DungeonTest, IncorrectWidthCausesCreationOfDungeonWithFailSafeMap) {
-            mdl::ZDungeon dungeon(kSomeIncorrectMapWidth, kSomeMapHeight, kSomeMap);
+        TEST_F(DungeonLevelTest, IncorrectWidthCausesCreationOfDungeonWithFailSafeMap) {
+            mdl::ZDungeonLevel dungeonLevel(kSomeIncorrectMapWidth, kSomeMapHeight, kSomeMap);
 
-            ASSERT_DUNGEON_WITH_FAIL_SAFE_MAP(dungeon);
+            ASSERT_DUNGEON_WITH_FAIL_SAFE_MAP(dungeonLevel);
         }
 
-        TEST_F(DungeonTest, IncorrectHeightCausesCreationOfDungeonWithFailSafeMap) {
-            mdl::ZDungeon dungeon(kSomeMapWidth, kSomeIncorrectMapHeight, kSomeMap);
+        TEST_F(DungeonLevelTest, IncorrectHeightCausesCreationOfDungeonWithFailSafeMap) {
+            mdl::ZDungeonLevel dungeonLevel(kSomeMapWidth, kSomeIncorrectMapHeight, kSomeMap);
 
-            ASSERT_DUNGEON_WITH_FAIL_SAFE_MAP(dungeon);
+            ASSERT_DUNGEON_WITH_FAIL_SAFE_MAP(dungeonLevel);
         }
 
-        TEST_F(DungeonTest, MapWithSizeInconsistentWithWidthAndHeightCausesCreationOfDungeonWithFailSafeMap) {
-            mdl::ZDungeon dungeon(kSomeMapWidth, kSomeMapHeight + 1, kSomeMap);
+        TEST_F(DungeonLevelTest, MapWithSizeInconsistentWithWidthAndHeightCausesCreationOfDungeonWithFailSafeMap) {
+            mdl::ZDungeonLevel dungeonLevel(kSomeMapWidth, kSomeMapHeight + 1, kSomeMap);
 
-            ASSERT_DUNGEON_WITH_FAIL_SAFE_MAP(dungeon);
+            ASSERT_DUNGEON_WITH_FAIL_SAFE_MAP(dungeonLevel);
         }
 
-        TEST_F(DungeonWithSomeMapTest, CellIsSolid_HollowCellsAreNotSolid) {
-            ASSERT_FALSE(mDungeon->CellIsSolid(kSomeHollowCell));
+        TEST_F(DungeonLevelWithSomeMapTest, CellIsSolid_HollowCellsAreNotSolid) {
+            ASSERT_FALSE(mDungeonLevel->CellIsSolid(kSomeHollowCell));
         }
 
-        TEST_F(DungeonWithSomeMapTest, CellIsSolid_UpStaircaseCellsAreNotSolid) {
-            ASSERT_FALSE(mDungeon->CellIsSolid(kUpStaircaseCell));
+        TEST_F(DungeonLevelWithSomeMapTest, CellIsSolid_UpStaircaseCellsAreNotSolid) {
+            ASSERT_FALSE(mDungeonLevel->CellIsSolid(kUpStaircaseCell));
         }
 
-        TEST_F(DungeonWithSomeMapTest, CellIsSolid_DownStaircaseCellsAreNotSolid) {
-            ASSERT_FALSE(mDungeon->CellIsSolid(kDownStaircaseCell));
+        TEST_F(DungeonLevelWithSomeMapTest, CellIsSolid_DownStaircaseCellsAreNotSolid) {
+            ASSERT_FALSE(mDungeonLevel->CellIsSolid(kDownStaircaseCell));
         }
 
-        TEST_F(DungeonWithSomeMapTest, CellIsSolid_SolidCellsAreIndeedSolid) {
-            ASSERT_TRUE(mDungeon->CellIsSolid(kSomeSolidCell));
+        TEST_F(DungeonLevelWithSomeMapTest, CellIsSolid_SolidCellsAreIndeedSolid) {
+            ASSERT_TRUE(mDungeonLevel->CellIsSolid(kSomeSolidCell));
         }
 
-        TEST_F(DungeonWithSomeMapTest, CellIsSolid_CoordinatesWorksJustLikePosition) {
-            ASSERT_TRUE(mDungeon->CellIsSolid(kSomeSolidCell.GetX(), kSomeSolidCell.GetY()));
+        TEST_F(DungeonLevelWithSomeMapTest, CellIsSolid_CoordinatesWorksJustLikePosition) {
+            ASSERT_TRUE(mDungeonLevel->CellIsSolid(kSomeSolidCell.GetX(), kSomeSolidCell.GetY()));
         }
 
-        TEST_F(DungeonWithSomeMapTest, CellIsEmpty_HollowCellsAreEmpty) {
-            ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeHollowCell));
+        TEST_F(DungeonLevelWithSomeMapTest, CellIsEmpty_HollowCellsAreEmpty) {
+            ASSERT_TRUE(mDungeonLevel->CellIsEmpty(kSomeHollowCell));
         }
 
-        TEST_F(DungeonWithSomeMapTest, CellIsEmpty_UpStaircaseCellsAreEmpty) {
-            ASSERT_TRUE(mDungeon->CellIsEmpty(kUpStaircaseCell));
+        TEST_F(DungeonLevelWithSomeMapTest, CellIsEmpty_UpStaircaseCellsAreEmpty) {
+            ASSERT_TRUE(mDungeonLevel->CellIsEmpty(kUpStaircaseCell));
         }
 
-        TEST_F(DungeonWithSomeMapTest, CellIsEmpty_DownStaircaseCellsAreEmpty) {
-            ASSERT_TRUE(mDungeon->CellIsEmpty(kDownStaircaseCell));
+        TEST_F(DungeonLevelWithSomeMapTest, CellIsEmpty_DownStaircaseCellsAreEmpty) {
+            ASSERT_TRUE(mDungeonLevel->CellIsEmpty(kDownStaircaseCell));
         }
 
-        TEST_F(DungeonWithSomeMapTest, CellIsEmpty_SolidCellsAreNotEmpty) {
-            ASSERT_FALSE(mDungeon->CellIsEmpty(kSomeSolidCell));
+        TEST_F(DungeonLevelWithSomeMapTest, CellIsEmpty_SolidCellsAreNotEmpty) {
+            ASSERT_FALSE(mDungeonLevel->CellIsEmpty(kSomeSolidCell));
         }
 
-        TEST_F(DungeonWithSomeMapTest, CellIsEmpty_CoordinatesWorksJustLikePosition) {
-            ASSERT_TRUE(mDungeon->CellIsEmpty(kSomeHollowCell.GetX(), kSomeHollowCell.GetY()));
+        TEST_F(DungeonLevelWithSomeMapTest, CellIsEmpty_CoordinatesWorksJustLikePosition) {
+            ASSERT_TRUE(mDungeonLevel->CellIsEmpty(kSomeHollowCell.GetX(), kSomeHollowCell.GetY()));
         }
 
         class DungeonSingleDownStaircaseTest : public ::testing::Test {
@@ -124,17 +124,17 @@ namespace prz {
             static const mdl::ZPosition kDownStaircasePosition;
 
             void SetUp() {
-                mDungeon = new mdl::ZDungeon(4, 3, ""
+                mDungeonLevel = new mdl::ZDungeonLevel(4, 3, ""
                 "####"
                 "#.>#"
                 "####");
             }
 
             void TearDown() {
-                delete mDungeon;
+                delete mDungeonLevel;
             }
 
-            mdl::ZDungeon* mDungeon;
+            mdl::ZDungeonLevel* mDungeonLevel;
         };
 
         const mdl::ZPosition DungeonSingleDownStaircaseTest::kDownStaircasePosition = mdl::ZPosition(2, 1);
@@ -145,17 +145,17 @@ namespace prz {
             static const mdl::ZPosition kUpStaircasePosition;
 
             void SetUp() {
-                mDungeon = new mdl::ZDungeon(4, 3, ""
+                mDungeonLevel = new mdl::ZDungeonLevel(4, 3, ""
                     "####"
                     "#.<#"
                     "####");
             }
 
             void TearDown() {
-                delete mDungeon;
+                delete mDungeonLevel;
             }
 
-            mdl::ZDungeon* mDungeon;
+            mdl::ZDungeonLevel* mDungeonLevel;
         };
 
         const mdl::ZPosition DungeonSingleUpStaircaseTest::kUpStaircasePosition = mdl::ZPosition(2, 1);
@@ -167,17 +167,17 @@ namespace prz {
             static const mdl::ZPosition kDownStaircasePosition;
 
             void SetUp() {
-                mDungeon = new mdl::ZDungeon(4, 3, ""
+                mDungeonLevel = new mdl::ZDungeonLevel(4, 3, ""
                     "####"
                     "#><#"
                     "####");
             }
 
             void TearDown() {
-                delete mDungeon;
+                delete mDungeonLevel;
             }
 
-            mdl::ZDungeon* mDungeon;
+            mdl::ZDungeonLevel* mDungeonLevel;
         };
 
         const mdl::ZPosition DungeonTwoDifferentStairsTest::kUpStaircasePosition = mdl::ZPosition(2, 1);
@@ -192,7 +192,7 @@ namespace prz {
             static const mdl::ZPosition kDownStaircasePosition2nd;
 
             void SetUp() {
-                mDungeon = new mdl::ZDungeon(6, 4, ""
+                mDungeonLevel = new mdl::ZDungeonLevel(6, 4, ""
                     "######"
                     "#<..>#"
                     "#.><.#"
@@ -200,10 +200,10 @@ namespace prz {
             }
 
             void TearDown() {
-                delete mDungeon;
+                delete mDungeonLevel;
             }
 
-            mdl::ZDungeon* mDungeon;
+            mdl::ZDungeonLevel* mDungeonLevel;
         };
 
         const mdl::ZPosition DungeonTwoStairsPairsTest::kUpStaircasePosition1st = mdl::ZPosition(1, 1);
@@ -212,21 +212,21 @@ namespace prz {
         const mdl::ZPosition DungeonTwoStairsPairsTest::kDownStaircasePosition2nd = mdl::ZPosition(2, 2);
 
         TEST_F(DungeonSingleDownStaircaseTest, GetUpStaircase_ReturnsNoCellsForMapWithoutUpStaircase) {
-            ASSERT_EQ(0, mDungeon->GetUpStaircases().size());
+            ASSERT_EQ(0, mDungeonLevel->GetUpStaircases().size());
         }
 
         TEST_F(DungeonSingleUpStaircaseTest, GetUpStaircase_ReturnsExactCellForMapWithSingleUpStaircase) {
-            ASSERT_EQ(1, mDungeon->GetUpStaircases().size());
-            ASSERT_CONTAINS(mDungeon->GetUpStaircases(), kUpStaircasePosition);
+            ASSERT_EQ(1, mDungeonLevel->GetUpStaircases().size());
+            ASSERT_CONTAINS(mDungeonLevel->GetUpStaircases(), kUpStaircasePosition);
         }
 
         TEST_F(DungeonTwoDifferentStairsTest, GetUpStaircase_ReturnsExactCellForMapWithTwoDifferentStairs) {
-            ASSERT_EQ(1, mDungeon->GetUpStaircases().size());
-            ASSERT_CONTAINS(mDungeon->GetUpStaircases(), kUpStaircasePosition);
+            ASSERT_EQ(1, mDungeonLevel->GetUpStaircases().size());
+            ASSERT_CONTAINS(mDungeonLevel->GetUpStaircases(), kUpStaircasePosition);
         }
 
         TEST_F(DungeonTwoStairsPairsTest, GetUpStaircase_ReturnsTwoCellsForMapWithTwoUpStaircase) {
-            const mdl::ZDungeon::StaircaseList& stairs = mDungeon->GetUpStaircases();
+            const mdl::ZDungeonLevel::StaircaseList& stairs = mDungeonLevel->GetUpStaircases();
 
             EXPECT_EQ(2, stairs.size());
             EXPECT_CONTAINS(stairs, kUpStaircasePosition1st);
@@ -234,33 +234,33 @@ namespace prz {
         }
 
         TEST_F(DungeonSingleUpStaircaseTest, GetDownStaircase_ReturnsNoCellsForMapWithoutDownStaircase) {
-            ASSERT_EQ(0, mDungeon->GetDownStaircases().size());
+            ASSERT_EQ(0, mDungeonLevel->GetDownStaircases().size());
         }
 
         TEST_F(DungeonSingleDownStaircaseTest, GetDownStaircase_ReturnsExactCellForMapWithSingleDownStaircase) {
-            ASSERT_EQ(1, mDungeon->GetDownStaircases().size());
-            ASSERT_CONTAINS(mDungeon->GetDownStaircases(), kDownStaircasePosition);
+            ASSERT_EQ(1, mDungeonLevel->GetDownStaircases().size());
+            ASSERT_CONTAINS(mDungeonLevel->GetDownStaircases(), kDownStaircasePosition);
         }
 
         TEST_F(DungeonTwoDifferentStairsTest, GetDownStaircase_ReturnsExactCellForMapWithTwoDifferentStairs) {
-            ASSERT_EQ(1, mDungeon->GetDownStaircases().size());
-            ASSERT_CONTAINS(mDungeon->GetDownStaircases(), kDownStaircasePosition);
+            ASSERT_EQ(1, mDungeonLevel->GetDownStaircases().size());
+            ASSERT_CONTAINS(mDungeonLevel->GetDownStaircases(), kDownStaircasePosition);
         }
 
         TEST_F(DungeonTwoStairsPairsTest, GetDownStaircase_ReturnsTwoCellsForMapWithTwoDownStaircase) {
-            const mdl::ZDungeon::StaircaseList& stairs = mDungeon->GetDownStaircases();
+            const mdl::ZDungeonLevel::StaircaseList& stairs = mDungeonLevel->GetDownStaircases();
 
             EXPECT_EQ(2, stairs.size());
             EXPECT_CONTAINS(stairs, kDownStaircasePosition1st);
             ASSERT_CONTAINS(stairs, kDownStaircasePosition2nd);
         }
 
-        class DungeonMonsterTest : public DungeonWithSomeMapTest {
+        class DungeonMonsterTest : public DungeonLevelWithSomeMapTest {
         protected:
             void SetUp() {
                 using namespace utl;
 
-                DungeonWithSomeMapTest::SetUp();
+                DungeonLevelWithSomeMapTest::SetUp();
 
                 REGISTER_SERVICE(prz::utl::IUniqueIdRegistry, new ZUniqueIdRegistry());
             }
@@ -268,7 +268,7 @@ namespace prz {
             void TearDown() {
                 using namespace utl;
 
-                DungeonWithSomeMapTest::TearDown();
+                DungeonLevelWithSomeMapTest::TearDown();
 
                 UNREGISTER_SERVICE(prz::utl::IUniqueIdRegistry);
             }
@@ -280,7 +280,7 @@ namespace prz {
             ZMonster monster = ZMonster::CreateMonster();
             ZPosition validPosition = kSomeHollowCell;
 
-            ASSERT_TRUE(mDungeon->PlaceMonster(monster, validPosition));
+            ASSERT_TRUE(mDungeonLevel->PlaceMonster(monster, validPosition));
         }
 
         TEST_F(DungeonMonsterTest, PlaceMonster_MonsterCanBePlacedInStaircaseCell) {
@@ -289,7 +289,7 @@ namespace prz {
             ZMonster monster = ZMonster::CreateMonster();
             ZPosition validPosition = kUpStaircaseCell;
 
-            ASSERT_TRUE(mDungeon->PlaceMonster(monster, validPosition));
+            ASSERT_TRUE(mDungeonLevel->PlaceMonster(monster, validPosition));
         }
 
         TEST_F(DungeonMonsterTest, PlaceMonster_NonRegisteredMonstersAreNotPermitted) {
@@ -299,7 +299,7 @@ namespace prz {
             monster.SetId(utl::ZRegistrable::kNoId);
             ZPosition validPosition = kSomeHollowCell;
 
-            ASSERT_FALSE(mDungeon->PlaceMonster(monster, validPosition));
+            ASSERT_FALSE(mDungeonLevel->PlaceMonster(monster, validPosition));
         }
 
         TEST_F(DungeonMonsterTest, PlaceMonster_MonsterCantBePlacedInSolidCell) {
@@ -308,7 +308,7 @@ namespace prz {
             ZMonster monster = ZMonster::CreateMonster();
             ZPosition validPosition = kSomeSolidCell;
 
-            ASSERT_FALSE(mDungeon->PlaceMonster(monster, validPosition));
+            ASSERT_FALSE(mDungeonLevel->PlaceMonster(monster, validPosition));
         }
 
         TEST_F(DungeonMonsterTest, PlaceMonster_SameMonsterCantBePlacedTwice) {
@@ -318,8 +318,8 @@ namespace prz {
             ZPosition validPosition = kUpStaircaseCell;
             ZPosition anotherValidPosition = kUpStaircaseCell;
 
-            mDungeon->PlaceMonster(monster, validPosition);
-            ASSERT_FALSE(mDungeon->PlaceMonster(monster, anotherValidPosition));
+            mDungeonLevel->PlaceMonster(monster, validPosition);
+            ASSERT_FALSE(mDungeonLevel->PlaceMonster(monster, anotherValidPosition));
         }
 
         TEST_F(DungeonMonsterTest, PlaceMonster_MonsterCantBePlacedInCellWhichIsOccupiedByAnotherMonster) {
@@ -328,15 +328,15 @@ namespace prz {
             ZMonster monster = ZMonster::CreateMonster();
             ZPosition validPosition = kSomeHollowCell;
 
-            mDungeon->PlaceMonster(monster, validPosition);
+            mDungeonLevel->PlaceMonster(monster, validPosition);
 
             ZMonster anotherMonster = ZMonster::CreateMonster();
-            ASSERT_FALSE(mDungeon->PlaceMonster(anotherMonster, validPosition));
+            ASSERT_FALSE(mDungeonLevel->PlaceMonster(anotherMonster, validPosition));
         }
 
         TEST_F(DungeonMonsterTest, CellIsEmpty_OccupiedCellsAreNotEmpty) {
-            mDungeon->PlaceMonster(mdl::ZMonster::CreateMonster(), kSomeHollowCell);
-            ASSERT_FALSE(mDungeon->CellIsEmpty(kSomeHollowCell));
+            mDungeonLevel->PlaceMonster(mdl::ZMonster::CreateMonster(), kSomeHollowCell);
+            ASSERT_FALSE(mDungeonLevel->CellIsEmpty(kSomeHollowCell));
         }
 
         TEST_F(DungeonMonsterTest, GetMonsterPosition_ReturnsPositionOfPlacedMonster) {
@@ -345,9 +345,9 @@ namespace prz {
             ZMonster monster = ZMonster::CreateMonster();
             ZPosition validPosition = kSomeHollowCell;
 
-            mDungeon->PlaceMonster(monster, validPosition);
+            mDungeonLevel->PlaceMonster(monster, validPosition);
 
-            ZPosition returnedMonsterPosition = *mDungeon->GetMonsterPosition(monster.GetId());
+            ZPosition returnedMonsterPosition = *mDungeonLevel->GetMonsterPosition(monster.GetId());
 
             ASSERT_POSITION_EQ(validPosition, returnedMonsterPosition);
         }
@@ -361,10 +361,10 @@ namespace prz {
             ZMonster anotherMonster = ZMonster::CreateMonster();
             ZPosition anotherValidPosition = kUpStaircaseCell;
 
-            mDungeon->PlaceMonster(monster, validPosition);
-            mDungeon->PlaceMonster(anotherMonster, anotherValidPosition);
+            mDungeonLevel->PlaceMonster(monster, validPosition);
+            mDungeonLevel->PlaceMonster(anotherMonster, anotherValidPosition);
 
-            ZPosition returnedMonsterPosition = *mDungeon->GetMonsterPosition(anotherMonster.GetId());
+            ZPosition returnedMonsterPosition = *mDungeonLevel->GetMonsterPosition(anotherMonster.GetId());
 
             ASSERT_POSITION_EQ(anotherValidPosition, returnedMonsterPosition);
         }
@@ -374,7 +374,7 @@ namespace prz {
 
             ZMonster monster = ZMonster::CreateMonster();
 
-            ASSERT_EQ(nullptr, mDungeon->GetMonsterPosition(monster.GetId()));
+            ASSERT_EQ(nullptr, mDungeonLevel->GetMonsterPosition(monster.GetId()));
         }
 
         TEST_F(DungeonMonsterTest, GetMonster_ReturnsPlacedMonster) {
@@ -386,9 +386,9 @@ namespace prz {
 
             ZPosition validPosition = kSomeHollowCell;
 
-            mDungeon->PlaceMonster(monster, validPosition);
+            mDungeonLevel->PlaceMonster(monster, validPosition);
 
-            ZPositionDiff returnedMonsterPredictedMove = mDungeon->GetMonster(monster.GetId())->GetDirection().PredictMove();
+            ZPositionDiff returnedMonsterPredictedMove = mDungeonLevel->GetMonster(monster.GetId())->GetDirection().PredictMove();
 
             ASSERT_POSITION_DIFF_EQ(monsterPredictedMove, returnedMonsterPredictedMove);
         }
@@ -404,10 +404,10 @@ namespace prz {
             ZPositionDiff monsterPredictedMove = anotherMonster.GetDirection().PredictMove();
             ZPosition anotherValidPosition = kUpStaircaseCell;
 
-            mDungeon->PlaceMonster(monster, validPosition);
-            mDungeon->PlaceMonster(anotherMonster, anotherValidPosition);
+            mDungeonLevel->PlaceMonster(monster, validPosition);
+            mDungeonLevel->PlaceMonster(anotherMonster, anotherValidPosition);
 
-            ZPositionDiff returnedMonsterPredictedMove = mDungeon->GetMonster(anotherMonster.GetId())->GetDirection().PredictMove();
+            ZPositionDiff returnedMonsterPredictedMove = mDungeonLevel->GetMonster(anotherMonster.GetId())->GetDirection().PredictMove();
 
             ASSERT_POSITION_DIFF_EQ(monsterPredictedMove, returnedMonsterPredictedMove);
         }
@@ -417,21 +417,21 @@ namespace prz {
 
             ZMonster monster = ZMonster::CreateMonster();
 
-            ASSERT_EQ(nullptr, mDungeon->GetMonster(monster.GetId()));
+            ASSERT_EQ(nullptr, mDungeonLevel->GetMonster(monster.GetId()));
         }
 
-        TEST_F(DungeonTest, Destructor_ReleasesMonsterIds) {
+        TEST_F(DungeonLevelTest, Destructor_ReleasesMonsterIds) {
             using namespace mdl;
             using namespace utl;
 
-            ZDungeon* dungeon = new ZDungeon(kSomeMapWidth, kSomeMapHeight, kSomeMap);
+            ZDungeonLevel* dungeonLevel = new ZDungeonLevel(kSomeMapWidth, kSomeMapHeight, kSomeMap);
 
             REGISTER_SERVICE(prz::utl::IUniqueIdRegistry, new ZUniqueIdRegistry());
             ZMonster monster = ZMonster::CreateMonster();
             ZIdType monsterId = monster.GetId();
 
-            dungeon->PlaceMonster(monster, kSomeHollowCell);
-            delete dungeon;
+            dungeonLevel->PlaceMonster(monster, kSomeHollowCell);
+            delete dungeonLevel;
 
             ZMonster anotherMonster = ZMonster::CreateMonster();
 
@@ -457,26 +457,26 @@ namespace prz {
 
                 REGISTER_SERVICE(prz::utl::IUniqueIdRegistry, new ZUniqueIdRegistry());
 
-                mDungeon = new ZDungeon(kMapWidth, kMapHeight, kMap);
+                mDungeonLevel = new ZDungeonLevel(kMapWidth, kMapHeight, kMap);
 
                 ZMonster monster = ZMonster::CreateMonster();
                 monster.GetDirection().Turn(ETurnDirection::Left);
                 mMonsterId = monster.GetId();
-                mDungeon->PlaceMonster(monster, kDeadEndPosition);
+                mDungeonLevel->PlaceMonster(monster, kDeadEndPosition);
 
                 monster = ZMonster::CreateMonster();
                 mAnotherMonsterId = monster.GetId();
-                mDungeon->PlaceMonster(monster, kAnotherMonsterPosition);
+                mDungeonLevel->PlaceMonster(monster, kAnotherMonsterPosition);
             }
 
             void TearDown() {
                 using namespace utl;
 
-                delete mDungeon;
+                delete mDungeonLevel;
                 UNREGISTER_SERVICE(prz::utl::IUniqueIdRegistry);
             }
 
-            mdl::ZDungeon* mDungeon;
+            mdl::ZDungeonLevel* mDungeonLevel;
             utl::ZIdType mMonsterId;
             utl::ZIdType mAnotherMonsterId;
         };
@@ -493,37 +493,37 @@ namespace prz {
         const mdl::ZPosition DungeonMoveMonsterTest::kAnotherMonsterPosition = mdl::ZPosition(2, 1);
 
         TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnsTrueForMoveIntoEmptyCell) {
-            ASSERT_TRUE(mDungeon->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
+            ASSERT_TRUE(mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
         }
 
         TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnsCorrectExpectedMoveDiffForMoveIntoEmptyCell) {
             mdl::ZPositionDiff expectedMoveDiff;
-            mDungeon->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward, &expectedMoveDiff);
+            mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward, &expectedMoveDiff);
 
             ASSERT_POSITION_DIFF_EQ(kExpectedForwardMoveDiff, expectedMoveDiff);
         }
 
         TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnsFalseForMoveIntoSolidCell) {
-            ASSERT_FALSE(mDungeon->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Right));
+            ASSERT_FALSE(mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Right));
         }
 
         TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnsCorrectExpectedMoveDiffForMoveIntoSolidCell) {
             mdl::ZPositionDiff expectedMoveDiff;
-            mDungeon->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Right, &expectedMoveDiff);
+            mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Right, &expectedMoveDiff);
 
             ASSERT_POSITION_DIFF_EQ(kExpectedRightMoveDiff, expectedMoveDiff);
         }
 
         TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_DiagonalMovesAroundCornerAreNotPermitted) {
-            mDungeon->GetMonster(mMonsterId)->GetDirection().Turn(mdl::ETurnDirection::ForwardRight);
+            mDungeonLevel->GetMonster(mMonsterId)->GetDirection().Turn(mdl::ETurnDirection::ForwardRight);
 
-            ASSERT_FALSE(mDungeon->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
+            ASSERT_FALSE(mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
         }
 
         TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnFalseForMoveIntoOccupiedCell) {
-            mDungeon->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward);
+            mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward);
 
-            ASSERT_FALSE(mDungeon->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
+            ASSERT_FALSE(mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
         }
 
     }

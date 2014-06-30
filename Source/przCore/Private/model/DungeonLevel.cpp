@@ -2,7 +2,7 @@
 
 #include <cstring>
 
-#include "model/Dungeon.h"
+#include "model/DungeonLevel.h"
 #include "utils/IUniqueIdRegistry.h"
 #include "utils/Services.h"
 #include "utils/LOG_ANSI.h"
@@ -10,26 +10,26 @@
 namespace prz {
     namespace mdl {
 
-        const ZDungeon::ZMapCell ZDungeon::kSolidCell = '#';
-        const ZDungeon::ZMapCell ZDungeon::kHollowCell = '.';
-        const ZDungeon::ZMapCell ZDungeon::kUpStaircaseCell = '<';
-        const ZDungeon::ZMapCell ZDungeon::kDownStaircaseCell = '>';
+        const ZDungeonLevel::ZMapCell ZDungeonLevel::kSolidCell = '#';
+        const ZDungeonLevel::ZMapCell ZDungeonLevel::kHollowCell = '.';
+        const ZDungeonLevel::ZMapCell ZDungeonLevel::kUpStaircaseCell = '<';
+        const ZDungeonLevel::ZMapCell ZDungeonLevel::kDownStaircaseCell = '>';
 
-        const ZDungeon::ZMapToTerrainCellMap ZDungeon::kMapToTerrainCellMap = {
+        const ZDungeonLevel::ZMapToTerrainCellMap ZDungeonLevel::kMapToTerrainCellMap = {
             {kSolidCell, EDungeonCell::Solid},
             {kHollowCell, EDungeonCell::Hollow},
             {kUpStaircaseCell, EDungeonCell::Hollow},
             {kDownStaircaseCell, EDungeonCell::Hollow}
         };
 
-        const ZDungeon::ZMoveToTurnDirectionMap ZDungeon::kMoveToTurnDirectionMap = {
+        const ZDungeonLevel::ZMoveToTurnDirectionMap ZDungeonLevel::kMoveToTurnDirectionMap = {
             {EMoveDirection::Forward, ETurnDirection::Forward},
             {EMoveDirection::Backward, ETurnDirection::Back},
             {EMoveDirection::Left, ETurnDirection::Left},
             {EMoveDirection::Right, ETurnDirection::Right}
         };
 
-        void ZDungeon::CreateFailSafeDungeon() {
+        void ZDungeonLevel::CreateFailSafeDungeon() {
             mWidth = 3;
             mHeight = 3;
             ParseMap(""
@@ -38,7 +38,7 @@ namespace prz {
             "###");
         }
 
-        ZDungeon::ZDungeon(int width, int height, const ZMapCell* map) {
+        ZDungeonLevel::ZDungeonLevel(int width, int height, const ZMapCell* map) {
             if (width <= 0 || height <= 0) {
                 LOGE("Can't create dungeon with size %dx%d", width, height);
                 CreateFailSafeDungeon();
@@ -56,7 +56,7 @@ namespace prz {
             ParseMap(map);
         }
 
-        void ZDungeon::ParseMap(const ZMapCell* map) {
+        void ZDungeonLevel::ParseMap(const ZMapCell* map) {
             mTerrain = new EDungeonCell::Type[mWidth * mHeight];
 
             for (int y = 0; y < mHeight; ++y) {
@@ -85,7 +85,7 @@ namespace prz {
             }
         }
 
-        ZDungeon::~ZDungeon() {
+        ZDungeonLevel::~ZDungeonLevel() {
             using namespace utl;
 
             IUniqueIdRegistry* registry = GET_SERVICE(prz::utl::IUniqueIdRegistry);
@@ -103,15 +103,15 @@ namespace prz {
             delete mTerrain;
         }
 
-        int ZDungeon::GetWidth() const {
+        int ZDungeonLevel::GetWidth() const {
             return mWidth;
         }
 
-        int ZDungeon::GetHeight() const {
+        int ZDungeonLevel::GetHeight() const {
             return mHeight;
         }
 
-        bool ZDungeon::CellIsEmpty(int x, int y) const {
+        bool ZDungeonLevel::CellIsEmpty(int x, int y) const {
             if (CellIndicesAreValid(x, y)) {
                 return CellIsEmptyImpl(x, y);
             }
@@ -120,11 +120,11 @@ namespace prz {
             return false;
         }
 
-        bool ZDungeon::CellIsEmpty(const ZPosition& pos) const {
+        bool ZDungeonLevel::CellIsEmpty(const ZPosition& pos) const {
             return CellIsEmpty(pos.GetX(), pos.GetY());
         }
 
-        bool ZDungeon::CellIsSolid(int x, int y) const {
+        bool ZDungeonLevel::CellIsSolid(int x, int y) const {
             if (CellIndicesAreValid(x, y)) {
                 return CellIsSolidImpl(x, y);
             }
@@ -133,19 +133,19 @@ namespace prz {
             return true;
         }
 
-        bool ZDungeon::CellIsSolid(const ZPosition& pos) const {
+        bool ZDungeonLevel::CellIsSolid(const ZPosition& pos) const {
             return CellIsSolid(pos.GetX(), pos.GetY());
         }
 
-        const ZDungeon::StaircaseList& ZDungeon::GetUpStaircases() const {
+        const ZDungeonLevel::StaircaseList& ZDungeonLevel::GetUpStaircases() const {
             return mUpStaircases;
         }
 
-        const ZDungeon::StaircaseList& ZDungeon::GetDownStaircases() const {
+        const ZDungeonLevel::StaircaseList& ZDungeonLevel::GetDownStaircases() const {
             return mDownStaircases;
         }
 
-        bool ZDungeon::PlaceMonster(const ZMonster& monster, const ZPosition& position) {
+        bool ZDungeonLevel::PlaceMonster(const ZMonster& monster, const ZPosition& position) {
             if (!monster.IsRegistered()) {
                 LOGE("Can't place non-registered monster");
                 return false;
@@ -175,7 +175,7 @@ namespace prz {
             return true;
         }
 
-        const ZPosition* ZDungeon::GetMonsterPosition(utl::ZIdType monsterId) const {
+        const ZPosition* ZDungeonLevel::GetMonsterPosition(utl::ZIdType monsterId) const {
             auto pos = mMonsterList.find(monsterId);
             if (pos == mMonsterList.end()) {
                 LOGE("Can't return position of not-placed monster with id = %d", monsterId);
@@ -185,7 +185,7 @@ namespace prz {
             return &pos->second->position;
         }
 
-        ZMonster* ZDungeon::GetMonster(utl::ZIdType monsterId) {
+        ZMonster* ZDungeonLevel::GetMonster(utl::ZIdType monsterId) {
             ZPlacedMonster* placedMonster = GetPlacedMonster(monsterId);
             if (placedMonster == nullptr) {
                 LOGE("Can't return not-placed monster with id = %d", monsterId);
@@ -195,7 +195,7 @@ namespace prz {
             return &placedMonster->monster;
         }
 
-        ZDungeon::ZPlacedMonster* ZDungeon::GetPlacedMonster(utl::ZIdType monsterId) {
+        ZDungeonLevel::ZPlacedMonster* ZDungeonLevel::GetPlacedMonster(utl::ZIdType monsterId) {
             auto pos = mMonsterList.find(monsterId);
             if (pos == mMonsterList.end()) {
                 LOGE("Can't return not-placed monster with id = %d", monsterId);
@@ -205,7 +205,7 @@ namespace prz {
             return pos->second;
         }
 
-        bool ZDungeon::MovementIsDiagonalAroundTheCorner(const ZPosition& origin, const ZPositionDiff& diff) const {
+        bool ZDungeonLevel::MovementIsDiagonalAroundTheCorner(const ZPosition& origin, const ZPositionDiff& diff) const {
             int sum = abs(diff.GetdX()) + abs(diff.GetdY());
             if (sum <= 1) {
                 return false;
@@ -215,7 +215,7 @@ namespace prz {
                 CellIsSolidImpl(origin.GetX() + diff.GetdX(), origin.GetY());
         }
 
-        bool ZDungeon::TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff) {
+        bool ZDungeonLevel::TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff) {
             ZPlacedMonster* placedMonster = GetPlacedMonster(monsterId);
             if (placedMonster == nullptr) {
                 LOGE("Can't move not-placed monster with id = %d", monsterId);
@@ -254,19 +254,19 @@ namespace prz {
             return movementIsPossible;
         }
 
-        bool ZDungeon::CellIndicesAreValid(int x, int y) const {
+        bool ZDungeonLevel::CellIndicesAreValid(int x, int y) const {
             return (x >= 0 && x < mWidth && y >= 0 && y < mHeight);
         }
 
-        int ZDungeon::CalcCellLinearIndex(int x, int y) const {
+        int ZDungeonLevel::CalcCellLinearIndex(int x, int y) const {
             return (y * mWidth + x);
         }
 
-        int ZDungeon::CalcCellLinearIndex(const ZPosition& position) const {
+        int ZDungeonLevel::CalcCellLinearIndex(const ZPosition& position) const {
             return CalcCellLinearIndex(position.GetX(), position.GetY());
         }
 
-        bool ZDungeon::CellIsSolidImpl(int x, int y) const {
+        bool ZDungeonLevel::CellIsSolidImpl(int x, int y) const {
             bool solid = true;
             int index = CalcCellLinearIndex(x, y);
             switch (mTerrain[index]) {
@@ -285,7 +285,7 @@ namespace prz {
             return solid;
         }
 
-        bool ZDungeon::CellIsEmptyImpl(int x, int y) const {
+        bool ZDungeonLevel::CellIsEmptyImpl(int x, int y) const {
             bool empty = !CellIsSolidImpl(x, y);
 
             if (empty) {

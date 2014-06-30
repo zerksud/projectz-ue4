@@ -25,13 +25,13 @@ namespace prz {
             };
         }
 
-        class ZDungeon {
+        class ZDungeonLevel {
         public:
             typedef char ZMapCell;
             typedef std::vector<ZPosition> StaircaseList;
 
-            ZDungeon(int width, int height, const ZMapCell* map);
-            virtual ~ZDungeon();
+            ZDungeonLevel(int width, int height, const ZMapCell* map);
+            virtual ~ZDungeonLevel();
 
             int GetWidth() const;
             int GetHeight() const;
@@ -51,8 +51,8 @@ namespace prz {
             bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
 
         private:
-            ZDungeon(const ZDungeon& other);
-            ZDungeon& operator=(const ZDungeon& other);
+            ZDungeonLevel(const ZDungeonLevel& other);
+            ZDungeonLevel& operator=(const ZDungeonLevel& other);
 
             static const ZMapCell kSolidCell;
             static const ZMapCell kHollowCell;
