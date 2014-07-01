@@ -83,8 +83,6 @@ namespace prz {
             bool CellIsSolidImpl(int x, int y) const;
             bool CellIsEmptyImpl(int x, int y) const;
 
-            bool MovementIsDiagonalAroundTheCorner(const ZPosition& origin, const ZPositionDiff& diff) const;
-
             struct ZPlacedMonster {
                 ZMonster monster;
                 ZPosition position;
@@ -93,6 +91,13 @@ namespace prz {
                     monster(pMonster), position(pPosition) {
                 }
             };
+
+            static bool MoveDirectionIsVertical(EMoveDirection::Type direction);
+            bool TryToMoveMonsterVertically(const ZPosition& position, EMoveDirection::Type direction);
+            bool TryToMoveMonsterHorizontally(ZPlacedMonster* placedMonster, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff);
+
+            bool MovementIsDiagonalAroundTheCorner(const ZPosition& origin, const ZPositionDiff& diff) const;
+
             typedef std::unordered_map<int, utl::ZIdType> ZMonsterIdByPositionMap;
             typedef std::unordered_map<utl::ZIdType, ZPlacedMonster*> ZMonsterList;
 

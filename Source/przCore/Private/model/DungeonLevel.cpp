@@ -216,13 +216,11 @@ namespace prz {
                 CellIsSolidImpl(origin.GetX() + diff.GetdX(), origin.GetY());
         }
 
-        bool ZDungeonLevel::TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff) {
-            ZPlacedMonster* placedMonster = GetPlacedMonster(monsterId);
-            if (placedMonster == nullptr) {
-                LOGE("Can't move not-placed monster with id = %d", monsterId);
-                return false;
-            }
+        bool ZDungeonLevel::MoveDirectionIsVertical(EMoveDirection::Type direction) {
+            return (direction == EMoveDirection::Up || direction == EMoveDirection::Down);
+        }
 
+        bool ZDungeonLevel::TryToMoveMonsterVertically(const ZPosition& position, EMoveDirection::Type direction) {
             const StaircaseList* staircasesForMoveDirection = nullptr;
             if (direction == EMoveDirection::Up) {
                 staircasesForMoveDirection = &mUpStaircases;
@@ -230,12 +228,12 @@ namespace prz {
                 staircasesForMoveDirection = &mDownStaircases;
             }
 
-            if (staircasesForMoveDirection != nullptr) {
-                bool moveToChangeLevelIsSuccessfull = utl::VectorContains<ZPosition>(*staircasesForMoveDirection, placedMonster->position);
+            bool movementIsPossible = utl::VectorContains<ZPosition>(*staircasesForMoveDirection, position);
 
-                return moveToChangeLevelIsSuccessfull;
-            }
+            return movementIsPossible;
+        }
 
+        bool ZDungeonLevel::TryToMoveMonsterHorizontally(ZPlacedMonster* placedMonster, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff) {
             auto pos = kMoveToTurnDirectionMap.find(direction);
             if (pos == kMoveToTurnDirectionMap.end()) {
                 LOGE("Got unsupported move direction %d", direction);
@@ -258,11 +256,28 @@ namespace prz {
                 placedMonster->position = expectedPosition;
 
                 int newLinearIndex = CalcCellLinearIndex(expectedPosition);
-                mMonsterIdByPosition[newLinearIndex] = monsterId;
+                mMonsterIdByPosition[newLinearIndex] = placedMonster->monster.GetId();
             }
 
             if (OutExpectedMoveDiff != nullptr) {
                 *OutExpectedMoveDiff = expectedDiff;
+            }
+
+            return movementIsPossible;
+        }
+
+        bool ZDungeonLevel::TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff) {
+            ZPlacedMonster* placedMonster = GetPlacedMonster(monsterId);
+            if (placedMonster == nullptr) {
+                LOGE("Can't move not-placed monster with id = %d", monsterId);
+                return false;
+            }
+
+            bool movementIsPossible = false;
+            if (MoveDirectionIsVertical(direction)) {
+                movementIsPossible = TryToMoveMonsterVertically(placedMonster->position, direction);
+            } else {
+                movementIsPossible = TryToMoveMonsterHorizontally(placedMonster, direction, OutExpectedMoveDiff);
             }
 
             return movementIsPossible;
