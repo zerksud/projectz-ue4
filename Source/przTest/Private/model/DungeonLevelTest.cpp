@@ -520,7 +520,7 @@ namespace prz {
             ASSERT_FALSE(mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
         }
 
-        TEST_F(DungeonLevelMoveMonsterTest, TryToMoveMonster_ReturnFalseForMoveIntoOccupiedCell) {
+        TEST_F(DungeonLevelMoveMonsterTest, TryToMoveMonster_ReturnsFalseForMoveIntoOccupiedCell) {
             mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward);
 
             ASSERT_FALSE(mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
