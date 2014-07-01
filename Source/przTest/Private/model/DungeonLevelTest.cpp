@@ -255,7 +255,7 @@ namespace prz {
             ASSERT_CONTAINS(stairs, kDownStaircasePosition2nd);
         }
 
-        class DungeonMonsterTest : public DungeonLevelWithSomeMapTest {
+        class DungeonLevelMonsterTest : public DungeonLevelWithSomeMapTest {
         protected:
             void SetUp() {
                 using namespace utl;
@@ -274,7 +274,7 @@ namespace prz {
             }
         };
 
-        TEST_F(DungeonMonsterTest, PlaceMonster_MonsterCanBePlacedInEmptyCell) {
+        TEST_F(DungeonLevelMonsterTest, PlaceMonster_MonsterCanBePlacedInEmptyCell) {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
@@ -283,7 +283,7 @@ namespace prz {
             ASSERT_TRUE(mDungeonLevel->PlaceMonster(monster, validPosition));
         }
 
-        TEST_F(DungeonMonsterTest, PlaceMonster_MonsterCanBePlacedInStaircaseCell) {
+        TEST_F(DungeonLevelMonsterTest, PlaceMonster_MonsterCanBePlacedInStaircaseCell) {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
@@ -292,7 +292,7 @@ namespace prz {
             ASSERT_TRUE(mDungeonLevel->PlaceMonster(monster, validPosition));
         }
 
-        TEST_F(DungeonMonsterTest, PlaceMonster_NonRegisteredMonstersAreNotPermitted) {
+        TEST_F(DungeonLevelMonsterTest, PlaceMonster_NonRegisteredMonstersAreNotPermitted) {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
@@ -302,7 +302,7 @@ namespace prz {
             ASSERT_FALSE(mDungeonLevel->PlaceMonster(monster, validPosition));
         }
 
-        TEST_F(DungeonMonsterTest, PlaceMonster_MonsterCantBePlacedInSolidCell) {
+        TEST_F(DungeonLevelMonsterTest, PlaceMonster_MonsterCantBePlacedInSolidCell) {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
@@ -311,7 +311,7 @@ namespace prz {
             ASSERT_FALSE(mDungeonLevel->PlaceMonster(monster, validPosition));
         }
 
-        TEST_F(DungeonMonsterTest, PlaceMonster_SameMonsterCantBePlacedTwice) {
+        TEST_F(DungeonLevelMonsterTest, PlaceMonster_SameMonsterCantBePlacedTwice) {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
@@ -322,7 +322,7 @@ namespace prz {
             ASSERT_FALSE(mDungeonLevel->PlaceMonster(monster, anotherValidPosition));
         }
 
-        TEST_F(DungeonMonsterTest, PlaceMonster_MonsterCantBePlacedInCellWhichIsOccupiedByAnotherMonster) {
+        TEST_F(DungeonLevelMonsterTest, PlaceMonster_MonsterCantBePlacedInCellWhichIsOccupiedByAnotherMonster) {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
@@ -334,12 +334,12 @@ namespace prz {
             ASSERT_FALSE(mDungeonLevel->PlaceMonster(anotherMonster, validPosition));
         }
 
-        TEST_F(DungeonMonsterTest, CellIsEmpty_OccupiedCellsAreNotEmpty) {
+        TEST_F(DungeonLevelMonsterTest, CellIsEmpty_OccupiedCellsAreNotEmpty) {
             mDungeonLevel->PlaceMonster(mdl::ZMonster::CreateMonster(), kSomeHollowCell);
             ASSERT_FALSE(mDungeonLevel->CellIsEmpty(kSomeHollowCell));
         }
 
-        TEST_F(DungeonMonsterTest, GetMonsterPosition_ReturnsPositionOfPlacedMonster) {
+        TEST_F(DungeonLevelMonsterTest, GetMonsterPosition_ReturnsPositionOfPlacedMonster) {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
@@ -352,7 +352,7 @@ namespace prz {
             ASSERT_POSITION_EQ(validPosition, returnedMonsterPosition);
         }
 
-        TEST_F(DungeonMonsterTest, GetMonsterPosition_ReturnsExactMonsterPositionInsteadOfSomeMonsterPosition) {
+        TEST_F(DungeonLevelMonsterTest, GetMonsterPosition_ReturnsExactMonsterPositionInsteadOfSomeMonsterPosition) {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
@@ -369,7 +369,7 @@ namespace prz {
             ASSERT_POSITION_EQ(anotherValidPosition, returnedMonsterPosition);
         }
 
-        TEST_F(DungeonMonsterTest, GetMonsterPosition_ReturnsNullptrForNotPlacedMonster) {
+        TEST_F(DungeonLevelMonsterTest, GetMonsterPosition_ReturnsNullptrForNotPlacedMonster) {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
@@ -377,7 +377,7 @@ namespace prz {
             ASSERT_EQ(nullptr, mDungeonLevel->GetMonsterPosition(monster.GetId()));
         }
 
-        TEST_F(DungeonMonsterTest, GetMonster_ReturnsPlacedMonster) {
+        TEST_F(DungeonLevelMonsterTest, GetMonster_ReturnsPlacedMonster) {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
@@ -393,7 +393,7 @@ namespace prz {
             ASSERT_POSITION_DIFF_EQ(monsterPredictedMove, returnedMonsterPredictedMove);
         }
 
-        TEST_F(DungeonMonsterTest, GetMonster_ReturnsExactlyPlacedMonsterInsteadOfSomeOtherMonster) {
+        TEST_F(DungeonLevelMonsterTest, GetMonster_ReturnsExactlyPlacedMonsterInsteadOfSomeOtherMonster) {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
@@ -412,7 +412,7 @@ namespace prz {
             ASSERT_POSITION_DIFF_EQ(monsterPredictedMove, returnedMonsterPredictedMove);
         }
 
-        TEST_F(DungeonMonsterTest, GetMonsterPosition_ReturnsNullptrForNotPlacedMonsterId) {
+        TEST_F(DungeonLevelMonsterTest, GetMonsterPosition_ReturnsNullptrForNotPlacedMonsterId) {
             using namespace mdl;
 
             ZMonster monster = ZMonster::CreateMonster();
@@ -440,7 +440,7 @@ namespace prz {
             ASSERT_EQ(monsterId, anotherMonster.GetId());
         }
 
-        class DungeonMoveMonsterTest : public ::testing::Test {
+        class DungeonLevelMoveMonsterTest : public ::testing::Test {
         protected:
             static const int kMapWidth = 5;
             static const int kMapHeight = 5;
@@ -481,46 +481,46 @@ namespace prz {
             utl::ZIdType mAnotherMonsterId;
         };
 
-        const char* DungeonMoveMonsterTest::kMap = ""
+        const char* DungeonLevelMoveMonsterTest::kMap = ""
             "#####"
             "#...#"
             "#...#"
             "##.##"
             "#####";
-        const mdl::ZPosition DungeonMoveMonsterTest::kDeadEndPosition = mdl::ZPosition(2, 3);
-        const mdl::ZPositionDiff DungeonMoveMonsterTest::kExpectedForwardMoveDiff = mdl::ZPositionDiff(0, -1);
-        const mdl::ZPositionDiff DungeonMoveMonsterTest::kExpectedRightMoveDiff = mdl::ZPositionDiff(1, 0);
-        const mdl::ZPosition DungeonMoveMonsterTest::kAnotherMonsterPosition = mdl::ZPosition(2, 1);
+        const mdl::ZPosition DungeonLevelMoveMonsterTest::kDeadEndPosition = mdl::ZPosition(2, 3);
+        const mdl::ZPositionDiff DungeonLevelMoveMonsterTest::kExpectedForwardMoveDiff = mdl::ZPositionDiff(0, -1);
+        const mdl::ZPositionDiff DungeonLevelMoveMonsterTest::kExpectedRightMoveDiff = mdl::ZPositionDiff(1, 0);
+        const mdl::ZPosition DungeonLevelMoveMonsterTest::kAnotherMonsterPosition = mdl::ZPosition(2, 1);
 
-        TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnsTrueForMoveIntoEmptyCell) {
+        TEST_F(DungeonLevelMoveMonsterTest, TryToMoveMonster_ReturnsTrueForMoveIntoEmptyCell) {
             ASSERT_TRUE(mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
         }
 
-        TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnsCorrectExpectedMoveDiffForMoveIntoEmptyCell) {
+        TEST_F(DungeonLevelMoveMonsterTest, TryToMoveMonster_ReturnsCorrectExpectedMoveDiffForMoveIntoEmptyCell) {
             mdl::ZPositionDiff expectedMoveDiff;
             mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward, &expectedMoveDiff);
 
             ASSERT_POSITION_DIFF_EQ(kExpectedForwardMoveDiff, expectedMoveDiff);
         }
 
-        TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnsFalseForMoveIntoSolidCell) {
+        TEST_F(DungeonLevelMoveMonsterTest, TryToMoveMonster_ReturnsFalseForMoveIntoSolidCell) {
             ASSERT_FALSE(mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Right));
         }
 
-        TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnsCorrectExpectedMoveDiffForMoveIntoSolidCell) {
+        TEST_F(DungeonLevelMoveMonsterTest, TryToMoveMonster_ReturnsCorrectExpectedMoveDiffForMoveIntoSolidCell) {
             mdl::ZPositionDiff expectedMoveDiff;
             mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Right, &expectedMoveDiff);
 
             ASSERT_POSITION_DIFF_EQ(kExpectedRightMoveDiff, expectedMoveDiff);
         }
 
-        TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_DiagonalMovesAroundCornerAreNotPermitted) {
+        TEST_F(DungeonLevelMoveMonsterTest, TryToMoveMonster_DiagonalMovesAroundCornerAreNotPermitted) {
             mDungeonLevel->GetMonster(mMonsterId)->GetDirection().Turn(mdl::ETurnDirection::ForwardRight);
 
             ASSERT_FALSE(mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
         }
 
-        TEST_F(DungeonMoveMonsterTest, TryToMoveMonster_ReturnFalseForMoveIntoOccupiedCell) {
+        TEST_F(DungeonLevelMoveMonsterTest, TryToMoveMonster_ReturnFalseForMoveIntoOccupiedCell) {
             mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward);
 
             ASSERT_FALSE(mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
