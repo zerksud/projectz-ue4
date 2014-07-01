@@ -21,7 +21,9 @@ namespace prz {
                 Forward,
                 Backward,
                 Left,
-                Right
+                Right,
+                Up,
+                Down
             };
         }
 

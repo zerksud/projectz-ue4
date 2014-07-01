@@ -483,9 +483,9 @@ namespace prz {
 
         const char* DungeonLevelMoveMonsterTest::kMap = ""
             "#####"
+            "#.<.#"
             "#...#"
-            "#...#"
-            "##.##"
+            "##>##"
             "#####";
         const mdl::ZPosition DungeonLevelMoveMonsterTest::kDeadEndPosition = mdl::ZPosition(2, 3);
         const mdl::ZPositionDiff DungeonLevelMoveMonsterTest::kExpectedForwardMoveDiff = mdl::ZPositionDiff(0, -1);
@@ -524,6 +524,22 @@ namespace prz {
             mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward);
 
             ASSERT_FALSE(mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Forward));
+        }
+
+        TEST_F(DungeonLevelMoveMonsterTest, TryToMoveMonster_ReturnsTrueForMoveDownFromCellWithDownStaircase) {
+            ASSERT_TRUE(mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Down));
+        }
+
+        TEST_F(DungeonLevelMoveMonsterTest, TryToMoveMonster_ReturnsFalseForMoveDownFromCellWithoutDownStaircase) {
+            ASSERT_FALSE(mDungeonLevel->TryToMoveMonster(mAnotherMonsterId, mdl::EMoveDirection::Down));
+        }
+
+        TEST_F(DungeonLevelMoveMonsterTest, TryToMoveMonster_ReturnsTrueForMoveUpFromCellWithUpStaircase) {
+            ASSERT_TRUE(mDungeonLevel->TryToMoveMonster(mAnotherMonsterId, mdl::EMoveDirection::Up));
+        }
+
+        TEST_F(DungeonLevelMoveMonsterTest, TryToMoveMonster_ReturnsFalseForMoveUpFromCellWithoutUpStaircase) {
+            ASSERT_FALSE(mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Up));
         }
 
     }

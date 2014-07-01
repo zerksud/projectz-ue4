@@ -6,6 +6,7 @@
 #include "utils/IUniqueIdRegistry.h"
 #include "utils/Services.h"
 #include "utils/LOG_ANSI.h"
+#include "utils/Helpers.h"
 
 namespace prz {
     namespace mdl {
@@ -220,6 +221,19 @@ namespace prz {
             if (placedMonster == nullptr) {
                 LOGE("Can't move not-placed monster with id = %d", monsterId);
                 return false;
+            }
+
+            const StaircaseList* staircasesForMoveDirection = nullptr;
+            if (direction == EMoveDirection::Up) {
+                staircasesForMoveDirection = &mUpStaircases;
+            } else if (direction == EMoveDirection::Down) {
+                staircasesForMoveDirection = &mDownStaircases;
+            }
+
+            if (staircasesForMoveDirection != nullptr) {
+                bool moveToChangeLevelIsSuccessfull = utl::VectorContains<ZPosition>(*staircasesForMoveDirection, placedMonster->position);
+
+                return moveToChangeLevelIsSuccessfull;
             }
 
             auto pos = kMoveToTurnDirectionMap.find(direction);
