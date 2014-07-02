@@ -48,6 +48,7 @@ namespace prz {
             const StaircaseList& GetDownStaircases() const;
 
             bool PlaceMonster(const ZMonster& monster, const ZPosition& position);
+            ZMonster* RemoveMonster(utl::ZIdType monsterId);
 
             // returns monster's position by it's id or nullptr if this level has no monster with such id
             const ZPosition* GetMonsterPosition(utl::ZIdType monsterId) const;

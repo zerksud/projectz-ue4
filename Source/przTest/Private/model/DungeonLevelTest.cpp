@@ -334,6 +334,18 @@ namespace prz {
             ASSERT_FALSE(mDungeonLevel->PlaceMonster(anotherMonster, validPosition));
         }
 
+        TEST_F(DungeonLevelMonsterTest, RemoveMonster_NotAddedMonsterCantBeRemoved) {
+            utl::ZIdType someId = 42;
+            ASSERT_EQ(nullptr, mDungeonLevel->RemoveMonster(someId));
+        }
+
+        TEST_F(DungeonLevelMonsterTest, RemoveMonster_AddedMonsterCanBeRemoved) {
+            mdl::ZMonster monster = mdl::ZMonster::CreateMonster();
+            mDungeonLevel->PlaceMonster(monster, kSomeHollowCell);
+
+            ASSERT_TRUE(mDungeonLevel->RemoveMonster(monster.GetId()) != nullptr);
+        }
+
         TEST_F(DungeonLevelMonsterTest, CellIsEmpty_OccupiedCellsAreNotEmpty) {
             mDungeonLevel->PlaceMonster(mdl::ZMonster::CreateMonster(), kSomeHollowCell);
             ASSERT_FALSE(mDungeonLevel->CellIsEmpty(kSomeHollowCell));

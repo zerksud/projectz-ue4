@@ -176,6 +176,23 @@ namespace prz {
             return true;
         }
 
+        ZMonster* ZDungeonLevel::RemoveMonster(utl::ZIdType monsterId) {
+            auto pos = mMonsterList.find(monsterId);
+            if (pos == mMonsterList.end()) {
+                LOGE("Can't remove not added monster with id = %d", monsterId);
+                return nullptr;
+            }
+
+            ZPlacedMonster* placedMonster = pos->second;
+            ZMonster* monster = new ZMonster(placedMonster->monster);
+            int linearPositionIndex = CalcCellLinearIndex(placedMonster->position);
+            mMonsterIdByPosition.erase(linearPositionIndex);
+            mMonsterList.erase(pos);
+            delete placedMonster;
+            
+            return monster;
+        }
+
         const ZPosition* ZDungeonLevel::GetMonsterPosition(utl::ZIdType monsterId) const {
             auto pos = mMonsterList.find(monsterId);
             if (pos == mMonsterList.end()) {
