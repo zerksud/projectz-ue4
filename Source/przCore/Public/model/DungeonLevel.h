@@ -47,7 +47,7 @@ namespace prz {
             const StaircaseList& GetUpStaircases() const;
             const StaircaseList& GetDownStaircases() const;
 
-            bool PlaceMonster(const ZMonster& monster, const ZPosition& position);
+            bool PlaceMonster(ZMonster* monster, const ZPosition& position);
             ZMonster* RemoveMonster(utl::ZIdType monsterId);
 
             // returns monster's position by it's id or nullptr if this level has no monster with such id
@@ -85,11 +85,15 @@ namespace prz {
             bool CellIsEmptyImpl(int x, int y) const;
 
             struct ZPlacedMonster {
-                ZMonster monster;
+                ZMonster* monster;
                 ZPosition position;
 
-                ZPlacedMonster(const ZMonster& pMonster, const ZPosition& pPosition) :
+                ZPlacedMonster(ZMonster* pMonster, const ZPosition& pPosition) :
                     monster(pMonster), position(pPosition) {
+                }
+
+                ~ZPlacedMonster() {
+                    delete monster;
                 }
             };
 

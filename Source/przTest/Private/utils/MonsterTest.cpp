@@ -15,7 +15,7 @@ namespace prz {
             static const mdl::ZPositionDiff kBackwardPositionDiff;
 
             void SetUp() {
-                mMonster = new mdl::ZMonster(mdl::ZMonster::CreateMonster());
+                mMonster = mdl::ZMonster::CreateMonster();
             }
 
             void TearDown() {
@@ -60,7 +60,7 @@ namespace prz {
             using namespace mdl;
 
             UNREGISTER_SERVICE(prz::utl::IUniqueIdRegistry);
-            ZMonster* monster = new ZMonster(ZMonster::CreateMonster());
+            ZMonster* monster = ZMonster::CreateMonster();
             ZIdType monsterId = monster->GetId();
             delete monster;
 
@@ -72,7 +72,7 @@ namespace prz {
             using namespace mdl;
 
             REGISTER_SERVICE(prz::utl::IUniqueIdRegistry, new UniqueIdRegistryMonsterTestMock());
-            ZMonster* monster = new ZMonster(ZMonster::CreateMonster());
+            ZMonster* monster = ZMonster::CreateMonster();
             ZIdType monsterId = monster->GetId();
             delete monster;
 

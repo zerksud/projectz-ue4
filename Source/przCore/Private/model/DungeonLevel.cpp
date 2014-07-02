@@ -92,9 +92,9 @@ namespace prz {
             IUniqueIdRegistry* registry = GET_SERVICE(prz::utl::IUniqueIdRegistry);
             if (registry) {
                 for (auto& pair : mMonsterList) {
-                    ZMonster& monster = pair.second->monster;
-                    if (monster.IsRegistered()) {
-                        registry->ReleaseUniqueId(&monster);
+                    ZMonster* monster = pair.second->monster;
+                    if (monster->IsRegistered()) {
+                        registry->ReleaseUniqueId(monster);
                     }
 
                     delete pair.second;
@@ -146,8 +146,8 @@ namespace prz {
             return mDownStaircases;
         }
 
-        bool ZDungeonLevel::PlaceMonster(const ZMonster& monster, const ZPosition& position) {
-            if (!monster.IsRegistered()) {
+        bool ZDungeonLevel::PlaceMonster(ZMonster* monster, const ZPosition& position) {
+            if (!monster->IsRegistered()) {
                 LOGE("Can't place non-registered monster");
                 return false;
             }
@@ -157,9 +157,9 @@ namespace prz {
                 return false;
             }
 
-            auto pos = mMonsterList.find(monster.GetId());
+            auto pos = mMonsterList.find(monster->GetId());
             if (pos != mMonsterList.end()) {
-                LOGE("Can't place already placed monster with id = %d", monster.GetId());
+                LOGE("Can't place already placed monster with id = %d", monster->GetId());
                 return false;
             }
 
@@ -170,8 +170,8 @@ namespace prz {
                 return false;
             }
 
-            mMonsterList[monster.GetId()] = new ZPlacedMonster(monster, position);
-            mMonsterIdByPosition[linearPositionIndex] = monster.GetId();
+            mMonsterList[monster->GetId()] = new ZPlacedMonster(monster, position);
+            mMonsterIdByPosition[linearPositionIndex] = monster->GetId();
 
             return true;
         }
@@ -184,10 +184,13 @@ namespace prz {
             }
 
             ZPlacedMonster* placedMonster = pos->second;
-            ZMonster* monster = new ZMonster(placedMonster->monster);
+            ZMonster* monster = placedMonster->monster;
+            placedMonster->monster = nullptr;
+
             int linearPositionIndex = CalcCellLinearIndex(placedMonster->position);
             mMonsterIdByPosition.erase(linearPositionIndex);
             mMonsterList.erase(pos);
+            
             delete placedMonster;
             
             return monster;
@@ -210,7 +213,7 @@ namespace prz {
                 return nullptr;
             }
 
-            return &placedMonster->monster;
+            return placedMonster->monster;
         }
 
         ZDungeonLevel::ZPlacedMonster* ZDungeonLevel::GetPlacedMonster(utl::ZIdType monsterId) {
@@ -257,7 +260,7 @@ namespace prz {
                 return false;
             }
 
-            ZDirection alignedDirection = placedMonster->monster.GetDirection();
+            ZDirection alignedDirection = placedMonster->monster->GetDirection();
             alignedDirection.Turn(pos->second);
 
             ZPositionDiff expectedDiff = alignedDirection.PredictMove();
@@ -273,7 +276,7 @@ namespace prz {
                 placedMonster->position = expectedPosition;
 
                 int newLinearIndex = CalcCellLinearIndex(expectedPosition);
-                mMonsterIdByPosition[newLinearIndex] = placedMonster->monster.GetId();
+                mMonsterIdByPosition[newLinearIndex] = placedMonster->monster->GetId();
             }
 
             if (OutExpectedMoveDiff != nullptr) {

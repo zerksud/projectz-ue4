@@ -8,10 +8,10 @@ namespace prz {
 
         class ZMonster : public utl::ZRegistrable {
         public:
-            static ZMonster CreateMonster();
+            static ZMonster* CreateMonster();
 
-            ZMonster(const ZMonster& other) = default;
-            ZMonster& operator=(const ZMonster& other) = default;
+            ZMonster(const ZMonster& other) = delete;
+            ZMonster& operator=(const ZMonster& other) = delete;
             virtual ~ZMonster() = default;
 
             ZDirection& GetDirection();
