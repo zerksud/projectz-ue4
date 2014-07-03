@@ -50,6 +50,7 @@ namespace prz {
                 object->SetId(kSomeId);
                 return true;
             }
+
             virtual bool ReleaseUniqueId(utl::ZRegistrable* object) override {
                 return true;
             }
