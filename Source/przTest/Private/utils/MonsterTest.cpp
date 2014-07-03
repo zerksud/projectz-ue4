@@ -29,7 +29,7 @@ namespace prz {
         const mdl::ZPositionDiff MonsterWithInstanceTest::kBackwardPositionDiff = mdl::ZPositionDiff(-1, 0);
 
 
-        TEST_F(MonsterWithInstanceTest, Conctructor_DefaultMonsterDiretionIsForward) {
+        TEST_F(MonsterWithInstanceTest, Constructor_DefaultMonsterDirectionIsForward) {
             mdl::ZPositionDiff expectedMove = mMonster->GetDirection().PredictMove();
             ASSERT_POSITION_DIFF_EQ(kForwardPositionDiff, expectedMove);
         }
