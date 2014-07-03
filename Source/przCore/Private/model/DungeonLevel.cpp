@@ -89,16 +89,8 @@ namespace prz {
         ZDungeonLevel::~ZDungeonLevel() {
             using namespace utl;
 
-            IUniqueIdRegistry* registry = GET_SERVICE(prz::utl::IUniqueIdRegistry);
-            if (registry) {
-                for (auto& pair : mMonsterList) {
-                    ZMonster* monster = pair.second->monster;
-                    if (monster->IsRegistered()) {
-                        registry->ReleaseUniqueId(monster);
-                    }
-
-                    delete pair.second;
-                }
+            for (auto& pair : mMonsterList) {
+                delete pair.second;
             }
 
             delete mTerrain;
@@ -190,9 +182,9 @@ namespace prz {
             int linearPositionIndex = CalcCellLinearIndex(placedMonster->position);
             mMonsterIdByPosition.erase(linearPositionIndex);
             mMonsterList.erase(pos);
-            
+
             delete placedMonster;
-            
+
             return monster;
         }
 
