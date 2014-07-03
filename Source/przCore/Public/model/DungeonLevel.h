@@ -33,6 +33,8 @@ namespace prz {
             typedef std::vector<ZPosition> StaircaseList;
 
             ZDungeonLevel(int width, int height, const ZMapCell* map);
+            ZDungeonLevel(const ZDungeonLevel& other) = delete;
+            ZDungeonLevel& operator=(const ZDungeonLevel& other) = delete;
             virtual ~ZDungeonLevel();
 
             int GetWidth() const;
@@ -59,9 +61,6 @@ namespace prz {
             bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
 
         private:
-            ZDungeonLevel(const ZDungeonLevel& other);
-            ZDungeonLevel& operator=(const ZDungeonLevel& other);
-
             static const ZMapCell kSolidCell;
             static const ZMapCell kHollowCell;
             static const ZMapCell kUpStaircaseCell;
