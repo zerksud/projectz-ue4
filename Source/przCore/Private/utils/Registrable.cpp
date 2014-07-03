@@ -12,6 +12,14 @@ namespace prz {
         }
 
         ZRegistrable::~ZRegistrable() {
+            if (IsRegistered()) {
+                IUniqueIdRegistry* registry = GET_SERVICE(prz::utl::IUniqueIdRegistry);
+                if (registry) {
+                    registry->ReleaseUniqueId(this);
+                } else {
+                    LOGE("Can't release id = %d cause there is no IUniqueIdRegistry service", mId);
+                }
+            }
         }
 
         ZIdType ZRegistrable::GetId() const {
