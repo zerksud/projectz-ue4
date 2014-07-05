@@ -58,7 +58,7 @@ namespace prz {
             // returns monster by it's id or nullptr if this level has no monster with such id
             ZMonster* GetMonster(utl::ZIdType monsterId);
 
-            bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
+            bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff);
 
         private:
             static const ZMapCell kSolidCell;
