@@ -3,16 +3,16 @@
 #include <memory>
 #include <vector>
 
-#include "model/DungeonLevel.h"
+#include "model/IDungeonLevelGenerator.h"
 
 namespace prz {
     namespace mdl {
-        class ZDungeonLevelGenerator {
+        class ZDungeonLevelGenerator : public IDungeonLevelGenerator {
         public:
-            ZDungeonLevelGenerator() = delete;
-            virtual ~ZDungeonLevelGenerator() = delete;
+            ZDungeonLevelGenerator() = default;
+            virtual ~ZDungeonLevelGenerator() = default;
 
-            static ZDungeonLevel* GenerateLevel(const ZDungeonLevel::StaircaseList& upStaircases = ZDungeonLevel::StaircaseList());
+            virtual ZDungeonLevel* GenerateLevel(const ZDungeonLevel::StaircaseList& upStaircases = ZDungeonLevel::StaircaseList()) override;
 
         private:
             static ZDungeonLevel::ZMapCell* kDefaultLevelMap;

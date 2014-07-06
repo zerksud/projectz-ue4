@@ -4,14 +4,16 @@
 #include <unordered_map>
 #include <vector>
 
-#include "model/DungeonLevel.h"
+#include "model/IDungeonLevelGenerator.h"
+#include "model/DungeonLevelGenerator.h"
 
 namespace prz {
     namespace mdl {
         class ZDungeon {
         public:
-            ZDungeon() = default;
-            virtual ~ZDungeon() = default;
+            // ZDungeon owns its instance of IDungeonLevelGenerator
+            ZDungeon(IDungeonLevelGenerator* levelGenerator = new ZDungeonLevelGenerator());
+            virtual ~ZDungeon();
 
             bool PlaceMonster(ZMonster* monster, unsigned int levelIndex, const ZPosition& position);
             ZMonster* RemoveMonster(utl::ZIdType monsterId);
@@ -30,6 +32,7 @@ namespace prz {
 
             ZDungeonLevelList mLevels;
             ZMonsterLevelMap mMonsterLevelMap;
+            IDungeonLevelGenerator* mLevelGenerator;
         };
     }
 }

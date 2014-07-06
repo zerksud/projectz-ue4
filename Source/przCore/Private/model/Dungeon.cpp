@@ -7,6 +7,19 @@
 namespace prz {
     namespace mdl {
 
+        ZDungeon::ZDungeon(IDungeonLevelGenerator* levelGenerator) {
+            if (levelGenerator) {
+                mLevelGenerator = levelGenerator;
+            } else {
+                LOGE("Can't use nullptr as levelGenerator. Creating default one.");
+                mLevelGenerator = new ZDungeonLevelGenerator();
+            }
+        }
+
+        ZDungeon::~ZDungeon() {
+            delete mLevelGenerator;
+        }
+
         bool ZDungeon::PlaceMonster(ZMonster* monster, unsigned int levelIndex, const ZPosition& position) {
             if (!monster->IsRegistered()) {
                 LOGE("Can't place non-registered monster");
@@ -106,14 +119,14 @@ namespace prz {
 
         void ZDungeon::GenerateAbsentLevels(unsigned int maxLevelIndex) {
             if (mLevels.empty()) {
-                ZDungeonLevel* level = ZDungeonLevelGenerator::GenerateLevel();
+                ZDungeonLevel* level = mLevelGenerator->GenerateLevel();
                 mLevels.push_back(std::unique_ptr<ZDungeonLevel>(level));
             }
 
             mLevels.reserve(maxLevelIndex + 1);
             for (unsigned int newLevelIndex = mLevels.size(); newLevelIndex <= maxLevelIndex; ++newLevelIndex) {
                 const ZDungeonLevel::StaircaseList& aboveLevelDownStaircases = mLevels[newLevelIndex - 1]->GetDownStaircases();
-                ZDungeonLevel* level = ZDungeonLevelGenerator::GenerateLevel(aboveLevelDownStaircases);
+                ZDungeonLevel* level = mLevelGenerator->GenerateLevel(aboveLevelDownStaircases);
                 mLevels.push_back(std::unique_ptr<ZDungeonLevel>(level));
             }
         }
