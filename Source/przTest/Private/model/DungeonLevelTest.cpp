@@ -283,6 +283,12 @@ namespace prz {
             ASSERT_TRUE(mDungeonLevel->PlaceMonster(monster, validPosition));
         }
 
+        TEST_F(DungeonLevelMonsterTest, PlaceMonster_PlacedMonsterCantBeNullptr) {
+            mdl::ZPosition validPosition = kSomeHollowCell;
+
+            ASSERT_FALSE(mDungeonLevel->PlaceMonster(nullptr, validPosition));
+        }
+
         TEST_F(DungeonLevelMonsterTest, PlaceMonster_MonsterCanBePlacedInStaircaseCell) {
             using namespace mdl;
 

@@ -139,6 +139,11 @@ namespace prz {
         }
 
         bool ZDungeonLevel::PlaceMonster(ZMonster* monster, const ZPosition& position) {
+            if (!monster) {
+                LOGE("Placed monster can't be nullptr");
+                return false;
+            }
+
             if (!monster->IsRegistered()) {
                 LOGE("Can't place non-registered monster");
                 return false;
