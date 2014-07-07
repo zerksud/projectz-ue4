@@ -15,6 +15,8 @@ namespace prz {
             ZDungeon(IDungeonLevelGenerator* levelGenerator = new ZDungeonLevelGenerator());
             virtual ~ZDungeon();
 
+            const ZDungeonLevel* GetLevel(unsigned int levelIndex);
+
             bool PlaceMonster(ZMonster* monster, unsigned int levelIndex, const ZPosition& position);
             ZMonster* RemoveMonster(utl::ZIdType monsterId);
 
@@ -27,7 +29,7 @@ namespace prz {
             typedef std::vector<std::unique_ptr<ZDungeonLevel> > ZDungeonLevelList;
             typedef std::unordered_map<utl::ZIdType, unsigned int> ZMonsterLevelMap;
 
-            ZDungeonLevel* GetLevel(unsigned int level);
+            ZDungeonLevel* GetExistingLevelOrGenerateNew(unsigned int level);
             void GenerateAbsentLevels(unsigned int maxLevelIndex);
 
             ZDungeonLevelList mLevels;

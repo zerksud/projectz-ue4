@@ -20,6 +20,10 @@ namespace prz {
             delete mLevelGenerator;
         }
 
+        const ZDungeonLevel* ZDungeon::GetLevel(unsigned int levelIndex) {
+            return GetExistingLevelOrGenerateNew(levelIndex);
+        }
+
         bool ZDungeon::PlaceMonster(ZMonster* monster, unsigned int levelIndex, const ZPosition& position) {
             if (!monster->IsRegistered()) {
                 LOGE("Can't place non-registered monster");
@@ -32,7 +36,7 @@ namespace prz {
                 return false;
             }
 
-            ZDungeonLevel* level = GetLevel(levelIndex);
+            ZDungeonLevel* level = GetExistingLevelOrGenerateNew(levelIndex);
             bool success = level->PlaceMonster(monster, position);
             if (success) {
                 mMonsterLevelMap[monster->GetId()] = levelIndex;
@@ -81,7 +85,7 @@ namespace prz {
                 unsigned int nextLevelIndex = 0;
                 if (direction == EMoveDirection::Down) {
                     nextLevelIndex = monsterLevelIndex + 1;
-                    nextLevel = GetLevel(nextLevelIndex);
+                    nextLevel = GetExistingLevelOrGenerateNew(nextLevelIndex);
                 } else if (direction == EMoveDirection::Up) {
                     if (monsterLevelIndex > 0) {
                         nextLevelIndex = monsterLevelIndex - 1;
@@ -109,7 +113,7 @@ namespace prz {
             return moveIsSuccessful;
         }
 
-        ZDungeonLevel* ZDungeon::GetLevel(unsigned int needLevelIndex) {
+        ZDungeonLevel* ZDungeon::GetExistingLevelOrGenerateNew(unsigned int needLevelIndex) {
             if (needLevelIndex >= mLevels.size()) {
                 GenerateAbsentLevels(needLevelIndex);
             }
