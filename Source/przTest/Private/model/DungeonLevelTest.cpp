@@ -426,7 +426,7 @@ namespace prz {
             ASSERT_EQ(anotherMonster, mDungeonLevel->GetMonster(anotherMonster->GetId()));
         }
 
-        TEST_F(DungeonLevelMonsterTest, GetMonsterPosition_ReturnsNullptrForNotPlacedMonsterId) {
+        TEST_F(DungeonLevelMonsterTest, GetMonster_ReturnsNullptrForNotPlacedMonsterId) {
             using namespace mdl;
 
             ZMonster* monster = ZMonster::CreateMonster();
