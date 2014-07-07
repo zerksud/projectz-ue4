@@ -404,16 +404,11 @@ namespace prz {
             using namespace mdl;
 
             ZMonster* monster = ZMonster::CreateMonster();
-            monster->GetDirection().Turn(ETurnDirection::Back);
-            ZPositionDiff monsterPredictedMove = monster->GetDirection().PredictMove();
-
             ZPosition validPosition = kSomeHollowCell;
 
             mDungeonLevel->PlaceMonster(monster, validPosition);
 
-            ZPositionDiff returnedMonsterPredictedMove = mDungeonLevel->GetMonster(monster->GetId())->GetDirection().PredictMove();
-
-            ASSERT_POSITION_DIFF_EQ(monsterPredictedMove, returnedMonsterPredictedMove);
+            ASSERT_EQ(monster, mDungeonLevel->GetMonster(monster->GetId()));
         }
 
         TEST_F(DungeonLevelMonsterTest, GetMonster_ReturnsExactlyPlacedMonsterInsteadOfSomeOtherMonster) {
@@ -423,16 +418,12 @@ namespace prz {
             ZPosition validPosition = kSomeHollowCell;
 
             ZMonster* anotherMonster = ZMonster::CreateMonster();
-            anotherMonster->GetDirection().Turn(ETurnDirection::Back);
-            ZPositionDiff monsterPredictedMove = anotherMonster->GetDirection().PredictMove();
             ZPosition anotherValidPosition = kUpStaircaseCell;
 
             mDungeonLevel->PlaceMonster(monster, validPosition);
             mDungeonLevel->PlaceMonster(anotherMonster, anotherValidPosition);
 
-            ZPositionDiff returnedMonsterPredictedMove = mDungeonLevel->GetMonster(anotherMonster->GetId())->GetDirection().PredictMove();
-
-            ASSERT_POSITION_DIFF_EQ(monsterPredictedMove, returnedMonsterPredictedMove);
+            ASSERT_EQ(anotherMonster, mDungeonLevel->GetMonster(anotherMonster->GetId()));
         }
 
         TEST_F(DungeonLevelMonsterTest, GetMonsterPosition_ReturnsNullptrForNotPlacedMonsterId) {
