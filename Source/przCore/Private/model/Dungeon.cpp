@@ -25,22 +25,6 @@ namespace prz {
         }
 
         bool ZDungeon::PlaceMonster(ZMonster* monster, unsigned int levelIndex, const ZPosition& position) {
-            if (!monster) {
-                LOGE("Placed monster can't be nullptr");
-                return false;
-            }
-
-            if (!monster->IsRegistered()) {
-                LOGE("Can't place non-registered monster");
-                return false;
-            }
-
-            auto pos = mMonsterLevelMap.find(monster->GetId());
-            if (pos != mMonsterLevelMap.end()) {
-                LOGE("Can't place already placed monster with id = %d", monster->GetId());
-                return false;
-            }
-
             ZDungeonLevel* level = GetExistingLevelOrGenerateNew(levelIndex);
             bool success = level->PlaceMonster(monster, position);
             if (success) {
