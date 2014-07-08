@@ -17,10 +17,10 @@ namespace prz {
         const ZDungeonLevel::ZMapCell ZDungeonLevel::kDownStaircaseCell = '>';
 
         const ZDungeonLevel::ZMapToTerrainCellMap ZDungeonLevel::kMapToTerrainCellMap = {
-            {kSolidCell, EDungeonCell::Solid},
-            {kHollowCell, EDungeonCell::Hollow},
-            {kUpStaircaseCell, EDungeonCell::Hollow},
-            {kDownStaircaseCell, EDungeonCell::Hollow}
+            {kSolidCell, EDungeonCell::SolidRock},
+            {kHollowCell, EDungeonCell::Emptiness},
+            {kUpStaircaseCell, EDungeonCell::UpStaircase},
+            {kDownStaircaseCell, EDungeonCell::DownStaircase}
         };
 
         const ZDungeonLevel::ZMoveToTurnDirectionMap ZDungeonLevel::kMoveToTurnDirectionMap = {
@@ -62,7 +62,7 @@ namespace prz {
 
             for (int y = 0; y < mHeight; ++y) {
                 for (int x = 0; x < mWidth; ++x) {
-                    EDungeonCell::Type cell = EDungeonCell::Solid;
+                    EDungeonCell::Type cell = EDungeonCell::SolidRock;
 
                     int index = CalcCellLinearIndex(x, y);
                     const ZMapCell mapCell = map[index];
@@ -136,6 +136,25 @@ namespace prz {
 
         const ZDungeonLevel::StaircaseList& ZDungeonLevel::GetDownStaircases() const {
             return mDownStaircases;
+        }
+
+        EDungeonCell::Type ZDungeonLevel::GetCellType(int x, int y) const {
+            if (CellIndicesAreValid(x, y)) {
+                return GetCellTypeImpl(x, y);
+            }
+
+            LOGE("Cell at [%d; %d] is out of bounds", x, y);
+            return EDungeonCell::SolidRock;
+        }
+
+        EDungeonCell::Type ZDungeonLevel::GetCellType(const ZPosition& pos) const {
+            return GetCellType(pos.GetX(), pos.GetY());
+        }
+
+        EDungeonCell::Type ZDungeonLevel::GetCellTypeImpl(int x, int y) const {
+            EDungeonCell::Type cellType = mTerrain[CalcCellLinearIndex(x, y)];
+
+            return cellType;
         }
 
         bool ZDungeonLevel::PlaceMonster(ZMonster* monster, const ZPosition& position) {
@@ -313,21 +332,9 @@ namespace prz {
         }
 
         bool ZDungeonLevel::CellIsSolidImpl(int x, int y) const {
-            bool solid = true;
             int index = CalcCellLinearIndex(x, y);
-            switch (mTerrain[index]) {
-            case EDungeonCell::Solid:
-                solid = true;
-                break;
-            case EDungeonCell::Hollow:
-                solid = false;
-                break;
-            default:
-                LOGE("Unknown terrain type %d", mTerrain[index]);
-                solid = true;
-                break;
-            }
-
+            bool solid = mTerrain[index] == EDungeonCell::SolidRock;
+            
             return solid;
         }
 

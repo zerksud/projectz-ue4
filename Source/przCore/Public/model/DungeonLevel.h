@@ -11,8 +11,10 @@ namespace prz {
 
         namespace EDungeonCell {
             enum Type {
-                Solid,
-                Hollow
+                SolidRock,
+                Emptiness,
+                DownStaircase,
+                UpStaircase
             };
         }
 
@@ -49,6 +51,9 @@ namespace prz {
             const StaircaseList& GetUpStaircases() const;
             const StaircaseList& GetDownStaircases() const;
 
+            EDungeonCell::Type GetCellType(int x, int y) const;
+            EDungeonCell::Type GetCellType(const ZPosition& pos) const;
+
             bool PlaceMonster(ZMonster* monster, const ZPosition& position);
             ZMonster* RemoveMonster(utl::ZIdType monsterId);
 
@@ -82,6 +87,8 @@ namespace prz {
 
             bool CellIsSolidImpl(int x, int y) const;
             bool CellIsEmptyImpl(int x, int y) const;
+
+            EDungeonCell::Type GetCellTypeImpl(int x, int y) const;
 
             struct ZPlacedMonster {
                 ZMonster* monster;

@@ -558,5 +558,20 @@ namespace prz {
             ASSERT_FALSE(mDungeonLevel->TryToMoveMonster(mMonsterId, mdl::EMoveDirection::Up));
         }
 
+        class DungeonLevelCellContentTest : public DungeonLevelMoveMonsterTest {
+        };
+
+        TEST_F(DungeonLevelCellContentTest, GetCellType_ReturnsSolidRockForIncorrectCell) {
+            ASSERT_EQ(mdl::EDungeonCell::SolidRock, mDungeonLevel->GetCellType(kMapWidth + 1, kMapHeight + 1));
+        }
+
+        TEST_F(DungeonLevelCellContentTest, GetCellType_ReturnsUpStaircaseForUpStaircasePosition) {
+            ASSERT_EQ(mdl::EDungeonCell::UpStaircase, mDungeonLevel->GetCellType(kDeadEndPosition));
+        }
+
+        TEST_F(DungeonLevelCellContentTest, GetCellType_CoordinatesWorkJustLikePosition) {
+            ASSERT_EQ(mdl::EDungeonCell::UpStaircase, mDungeonLevel->GetCellType(kDeadEndPosition.GetX(), kDeadEndPosition.GetY()));
+        }
+
     }
 }
