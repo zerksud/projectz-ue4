@@ -435,6 +435,24 @@ namespace prz {
             delete monster;
         }
 
+        TEST_F(DungeonLevelMonsterTest, GetMonster_ReturnsNullptrForCellWithoutAnyMonster) {
+            EXPECT_EQ(nullptr, mDungeonLevel->GetMonster(kSomeHollowCell));
+        }
+
+        TEST_F(DungeonLevelMonsterTest, GetMonster_ReturnsNullptrForInvalidCoordinates) {
+            EXPECT_EQ(nullptr, mDungeonLevel->GetMonster(kSomeMapWidth + 1, kSomeMapHeight + 1));
+        }
+
+        TEST_F(DungeonLevelMonsterTest, GetMonster_ReturnsMonsterByItsPosition) {
+            using namespace mdl;
+
+            ZMonster* monster = ZMonster::CreateMonster();
+            ZPosition validPosition = kSomeHollowCell;
+            mDungeonLevel->PlaceMonster(monster, validPosition);
+
+            EXPECT_EQ(monster, mDungeonLevel->GetMonster(validPosition));
+        }
+
         TEST_F(DungeonLevelTest, Destructor_ReleasesMonsterIds) {
             using namespace mdl;
             using namespace utl;

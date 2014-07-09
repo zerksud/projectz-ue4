@@ -63,6 +63,9 @@ namespace prz {
             // returns monster by it's id or nullptr if this level has no monster with such id
             ZMonster* GetMonster(utl::ZIdType monsterId);
 
+            ZMonster* GetMonster(const ZPosition& position);
+            ZMonster* GetMonster(int x, int y);
+
             bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
 
         private:
@@ -113,6 +116,7 @@ namespace prz {
             typedef std::unordered_map<utl::ZIdType, ZPlacedMonster*> ZMonsterList;
 
             ZPlacedMonster* GetPlacedMonster(utl::ZIdType monsterId);
+            ZPlacedMonster* GetPlacedMonster(int x, int y);
 
             int mWidth;
             int mHeight;

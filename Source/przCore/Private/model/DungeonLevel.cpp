@@ -232,6 +232,21 @@ namespace prz {
             return placedMonster->monster;
         }
 
+        ZMonster* ZDungeonLevel::GetMonster(const ZPosition& position) {
+            return GetMonster(position.GetX(), position.GetY());
+        }
+
+        ZMonster* ZDungeonLevel::GetMonster(int x, int y) {
+            if (CellIndicesAreValid(x, y)) {
+                ZPlacedMonster* placedMonster = GetPlacedMonster(x, y);
+                if (placedMonster) {
+                    return placedMonster->monster;
+                }
+            }
+
+            return nullptr;
+        }
+
         ZDungeonLevel::ZPlacedMonster* ZDungeonLevel::GetPlacedMonster(utl::ZIdType monsterId) {
             auto pos = mMonsterList.find(monsterId);
             if (pos == mMonsterList.end()) {
@@ -240,6 +255,16 @@ namespace prz {
             }
 
             return pos->second;
+        }
+
+        ZDungeonLevel::ZPlacedMonster* ZDungeonLevel::GetPlacedMonster(int x, int y) {
+            int linearIndex = CalcCellLinearIndex(x, y);
+            auto pos = mMonsterIdByPosition.find(linearIndex);
+            if (pos != mMonsterIdByPosition.end()) {
+                return GetPlacedMonster(pos->second);
+            } else {
+                return nullptr;
+            }
         }
 
         bool ZDungeonLevel::MovementIsDiagonalAroundTheCorner(const ZPosition& origin, const ZPositionDiff& diff) const {
@@ -334,7 +359,7 @@ namespace prz {
         bool ZDungeonLevel::CellIsSolidImpl(int x, int y) const {
             int index = CalcCellLinearIndex(x, y);
             bool solid = mTerrain[index] == EDungeonCell::SolidRock;
-            
+
             return solid;
         }
 
@@ -351,5 +376,6 @@ namespace prz {
 
             return empty;
         }
+
     }
 }
