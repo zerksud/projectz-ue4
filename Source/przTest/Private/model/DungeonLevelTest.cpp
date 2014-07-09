@@ -583,12 +583,12 @@ namespace prz {
             ASSERT_EQ(mdl::EDungeonCell::SolidRock, mDungeonLevel->GetCellType(kMapWidth + 1, kMapHeight + 1));
         }
 
-        TEST_F(DungeonLevelCellContentTest, GetCellType_ReturnsUpStaircaseForUpStaircasePosition) {
-            ASSERT_EQ(mdl::EDungeonCell::UpStaircase, mDungeonLevel->GetCellType(kDeadEndPosition));
+        TEST_F(DungeonLevelCellContentTest, GetCellType_ReturnsDownStaircaseForDownStaircasePosition) {
+            ASSERT_EQ(mdl::EDungeonCell::DownStaircase, mDungeonLevel->GetCellType(kDeadEndPosition));
         }
 
         TEST_F(DungeonLevelCellContentTest, GetCellType_CoordinatesWorkJustLikePosition) {
-            ASSERT_EQ(mdl::EDungeonCell::UpStaircase, mDungeonLevel->GetCellType(kDeadEndPosition.GetX(), kDeadEndPosition.GetY()));
+            ASSERT_EQ(mdl::EDungeonCell::DownStaircase, mDungeonLevel->GetCellType(kDeadEndPosition.GetX(), kDeadEndPosition.GetY()));
         }
 
     }
