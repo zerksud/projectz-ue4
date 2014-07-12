@@ -34,6 +34,25 @@ namespace prz {
             return success;
         }
 
+        unsigned int ZDungeon::GetMonsterLevelIndex(utl::ZIdType monsterId, bool* successFlag) const {
+            bool success = false;
+            unsigned int index = 0;
+
+            auto pos = mMonsterLevelMap.find(monsterId);
+            if (pos != mMonsterLevelMap.end()) {
+                success = true;
+                index = pos->second;
+            } else {
+                LOGE("Can't get level index for not-placed monster with id = %d", monsterId);
+            }
+
+            if (successFlag) {
+                *successFlag = success;
+            }
+
+            return index;
+        }
+
         ZMonster* ZDungeon::RemoveMonster(utl::ZIdType monsterId) {
             auto pos = mMonsterLevelMap.find(monsterId);
             if (pos == mMonsterLevelMap.end()) {

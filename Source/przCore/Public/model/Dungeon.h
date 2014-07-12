@@ -18,6 +18,7 @@ namespace prz {
             const ZDungeonLevel* GetLevel(unsigned int levelIndex);
 
             bool PlaceMonster(ZMonster* monster, unsigned int levelIndex, const ZPosition& position);
+            unsigned int GetMonsterLevelIndex(utl::ZIdType monsterId, bool* successFlag = nullptr) const;
             ZMonster* RemoveMonster(utl::ZIdType monsterId);
 
             // returns monster by it's id or nullptr if dungeon has no monster with such id

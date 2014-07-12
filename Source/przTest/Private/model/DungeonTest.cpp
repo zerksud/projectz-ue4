@@ -117,6 +117,32 @@ namespace prz {
             ASSERT_TRUE(mDungeon->GetLevel(levelIndex)->GetMonsterPosition(monster->GetId()) != nullptr);
         }
 
+        TEST_F(DungeonTest, GetMonsterLevelIndex_ReturnsCorrectIndex) {
+            mdl::ZMonster* monster = mdl::ZMonster::CreateMonster();
+            const int levelIndex = 5;
+            mDungeon->PlaceMonster(monster, levelIndex, kDownStaircasePosition);
+
+            ASSERT_EQ(levelIndex, mDungeon->GetMonsterLevelIndex(monster->GetId()));
+        }
+
+        TEST_F(DungeonTest, GetMonsterLevelIndex_SetSuccessFlagToFalseOnFailure) {
+            mdl::ZMonster* monster = mdl::ZMonster::CreateMonster();
+            const int levelIndex = 5;
+            bool successFlag = true;
+            mDungeon->GetMonsterLevelIndex(monster->GetId(), &successFlag);
+
+            ASSERT_FALSE(successFlag);
+        }
+        TEST_F(DungeonTest, GetMonsterLevelIndex_SetSuccessFlagToTrueOnActualSuccess) {
+            mdl::ZMonster* monster = mdl::ZMonster::CreateMonster();
+            const int levelIndex = 5;
+            bool successFlag = false;
+            mDungeon->PlaceMonster(monster, levelIndex, kDownStaircasePosition);
+            mDungeon->GetMonsterLevelIndex(monster->GetId(), &successFlag);
+
+            ASSERT_TRUE(successFlag);
+        }
+
         TEST_F(DungeonTest, RemoveMonster_DoesntAllowRemovingOfNotPlacedMonsters) {
             mdl::ZMonster* monster = mdl::ZMonster::CreateMonster();
 
