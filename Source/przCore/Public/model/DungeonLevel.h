@@ -102,7 +102,7 @@ namespace prz {
                 }
 
                 ~ZPlacedMonster() {
-                    delete monster;
+                    ZMonster::DestroyMonster(&monster);
                 }
             };
 

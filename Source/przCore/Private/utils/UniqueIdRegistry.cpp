@@ -59,5 +59,9 @@ namespace prz {
             return true;
         }
 
+        unsigned int ZUniqueIdRegistry::GetAssignedUniqueIdCount() const {
+            return mNextFreeId - ZRegistrable::kNoId - 1 - mReleasedIds.size();
+        }
+
     }
 }

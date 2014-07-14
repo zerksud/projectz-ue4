@@ -9,15 +9,16 @@ namespace prz {
         class ZMonster : public utl::ZRegistrable {
         public:
             static ZMonster* CreateMonster();
+            static void DestroyMonster(ZMonster** monster);
 
             ZMonster(const ZMonster& other) = delete;
             ZMonster& operator=(const ZMonster& other) = delete;
-            virtual ~ZMonster() = default;
 
             ZDirection& GetDirection();
 
         private:
             ZMonster() = default;
+            virtual ~ZMonster() = default;
             ZDirection mDirection;
         };
 

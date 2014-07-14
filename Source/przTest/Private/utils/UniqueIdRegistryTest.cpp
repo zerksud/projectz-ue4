@@ -102,5 +102,26 @@ namespace prz {
             ASSERT_FALSE(mRegistry.ReleaseUniqueId(&mRegistrable));
         }
 
+        TEST_F(UniqueIdRegistryWithInstanceTest, GetAssignedUniqueIdCount_ReturnsZeroInitially) {
+            ASSERT_EQ(0, mRegistry.GetAssignedUniqueIdCount());
+        }
+
+        TEST_F(UniqueIdRegistryWithInstanceTest, GetAssignedUniqueIdCount_ReturnsExactNumberOfRegisteredIds) {
+            mRegistry.AssignUniqueId(&mRegistrable);
+            EXPECT_EQ(1, mRegistry.GetAssignedUniqueIdCount());
+            mRegistry.ReleaseUniqueId(&mRegistrable);
+        }
+
+        TEST_F(UniqueIdRegistryWithInstanceTest, GetAssignedUniqueIdCount_ReturnsExactNumberOfRegisteredIdsWhenSomeWereAlreadyReleased) {
+            utl::ZRegistrable anotherRegistrable;
+            mRegistry.AssignUniqueId(&mRegistrable);
+            mRegistry.AssignUniqueId(&anotherRegistrable);
+
+            mRegistry.ReleaseUniqueId(&mRegistrable);
+
+            EXPECT_EQ(1, mRegistry.GetAssignedUniqueIdCount());
+            mRegistry.ReleaseUniqueId(&anotherRegistrable);
+        }
+
     }
 }

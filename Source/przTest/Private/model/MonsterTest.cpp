@@ -19,7 +19,7 @@ namespace prz {
             }
 
             void TearDown() {
-                delete mMonster;
+                mdl::ZMonster::DestroyMonster(&mMonster);
             }
 
             mdl::ZMonster* mMonster;
@@ -45,6 +45,7 @@ namespace prz {
         class UniqueIdRegistryMonsterTestMock : public utl::IUniqueIdRegistry {
         public:
             static const int kSomeId = 42;
+            utl::ZIdType mLastReleasedId = 0;
 
             virtual bool AssignUniqueId(utl::ZRegistrable* object) override {
                 object->SetId(kSomeId);
@@ -52,7 +53,12 @@ namespace prz {
             }
 
             virtual bool ReleaseUniqueId(utl::ZRegistrable* object) override {
+                mLastReleasedId = object->GetId();
                 return true;
+            }
+
+            virtual unsigned int GetAssignedUniqueIdCount() const override {
+                return 0;
             }
         };
 
@@ -63,7 +69,7 @@ namespace prz {
             UNREGISTER_SERVICE(prz::utl::IUniqueIdRegistry);
             ZMonster* monster = ZMonster::CreateMonster();
             ZIdType monsterId = monster->GetId();
-            delete monster;
+            ZMonster::DestroyMonster(&monster);
 
             ASSERT_EQ(ZRegistrable::kNoId, monsterId);
         }
@@ -75,11 +81,37 @@ namespace prz {
             REGISTER_SERVICE(prz::utl::IUniqueIdRegistry, new UniqueIdRegistryMonsterTestMock());
             ZMonster* monster = ZMonster::CreateMonster();
             ZIdType monsterId = monster->GetId();
-            delete monster;
+            ZMonster::DestroyMonster(&monster);
 
             UNREGISTER_SERVICE(prz::utl::IUniqueIdRegistry);
 
             ASSERT_EQ(UniqueIdRegistryMonsterTestMock::kSomeId, monsterId);
+        }
+
+        TEST(MonsterTest, DestroyMonster_SetsDestroyedMonsterPointerToNullptr) {
+            using namespace utl;
+            using namespace mdl;
+
+            ZMonster* monster = ZMonster::CreateMonster();
+            ZMonster::DestroyMonster(&monster);
+
+            ASSERT_EQ(nullptr, monster);
+        }
+
+        TEST(MonsterTest, DestroyMonster_ReleasesDestroyedMonsterId) {
+            using namespace utl;
+            using namespace mdl;
+
+            UniqueIdRegistryMonsterTestMock* registry = new UniqueIdRegistryMonsterTestMock();
+            REGISTER_SERVICE(prz::utl::IUniqueIdRegistry, registry);
+            ZMonster* monster = ZMonster::CreateMonster();
+            ZIdType monsterId = monster->GetId();
+            ZMonster::DestroyMonster(&monster);
+
+            ZIdType lastReleasedId = registry->mLastReleasedId;
+            UNREGISTER_SERVICE(prz::utl::IUniqueIdRegistry);
+
+            ASSERT_EQ(lastReleasedId, monsterId);
         }
     }
 }

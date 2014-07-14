@@ -306,7 +306,7 @@ namespace prz {
             ZPosition validPosition = kSomeHollowCell;
 
             EXPECT_FALSE(mDungeonLevel->PlaceMonster(monster, validPosition));
-            delete monster;
+            ZMonster::DestroyMonster(&monster);
         }
 
         TEST_F(DungeonLevelMonsterTest, PlaceMonster_MonsterCantBePlacedInSolidCell) {
@@ -316,7 +316,7 @@ namespace prz {
             ZPosition validPosition = kSomeSolidCell;
 
             EXPECT_FALSE(mDungeonLevel->PlaceMonster(monster, validPosition));
-            delete monster;
+            ZMonster::DestroyMonster(&monster);
         }
 
         TEST_F(DungeonLevelMonsterTest, PlaceMonster_SameMonsterCantBePlacedTwice) {
@@ -340,21 +340,25 @@ namespace prz {
 
             ZMonster* anotherMonster = ZMonster::CreateMonster();
             EXPECT_FALSE(mDungeonLevel->PlaceMonster(anotherMonster, validPosition));
-            delete anotherMonster;
+            ZMonster::DestroyMonster(&anotherMonster);
         }
 
         TEST_F(DungeonLevelMonsterTest, RemoveMonster_NotAddedMonsterCantBeRemoved) {
-            mdl::ZMonster* monster = mdl::ZMonster::CreateMonster();
+            using namespace mdl;
+
+            ZMonster* monster = ZMonster::CreateMonster();
             EXPECT_EQ(nullptr, mDungeonLevel->RemoveMonster(monster->GetId()));
-            delete monster;
+            ZMonster::DestroyMonster(&monster);
         }
 
         TEST_F(DungeonLevelMonsterTest, RemoveMonster_AddedMonsterCanBeRemoved) {
-            mdl::ZMonster* monster = mdl::ZMonster::CreateMonster();
+            using namespace mdl;
+
+            ZMonster* monster = ZMonster::CreateMonster();
             mDungeonLevel->PlaceMonster(monster, kSomeHollowCell);
 
             EXPECT_TRUE(mDungeonLevel->RemoveMonster(monster->GetId()) != nullptr);
-            delete monster;
+            ZMonster::DestroyMonster(&monster);
         }
 
         TEST_F(DungeonLevelMonsterTest, CellIsEmpty_OccupiedCellsAreNotEmpty) {
@@ -432,7 +436,7 @@ namespace prz {
             ZMonster* monster = ZMonster::CreateMonster();
 
             EXPECT_EQ(nullptr, mDungeonLevel->GetMonster(monster->GetId()));
-            delete monster;
+            ZMonster::DestroyMonster(&monster);
         }
 
         TEST_F(DungeonLevelMonsterTest, GetMonster_ReturnsNullptrForCellWithoutAnyMonster) {
@@ -459,19 +463,17 @@ namespace prz {
 
             ZDungeonLevel* dungeonLevel = new ZDungeonLevel(kSomeMapWidth, kSomeMapHeight, kSomeMap);
 
-            REGISTER_SERVICE(prz::utl::IUniqueIdRegistry, new ZUniqueIdRegistry());
+            IUniqueIdRegistry* registry = new ZUniqueIdRegistry();
+            REGISTER_SERVICE(prz::utl::IUniqueIdRegistry, registry);
             ZMonster* monster = ZMonster::CreateMonster();
             ZIdType monsterId = monster->GetId();
 
             dungeonLevel->PlaceMonster(monster, kSomeHollowCell);
             delete dungeonLevel;
 
-            ZMonster* anotherMonster = ZMonster::CreateMonster();
+            EXPECT_EQ(0, registry->GetAssignedUniqueIdCount());
 
             UNREGISTER_SERVICE(prz::utl::IUniqueIdRegistry);
-
-            EXPECT_EQ(monsterId, anotherMonster->GetId());
-            delete anotherMonster;
         }
 
         class DungeonLevelMoveMonsterTest : public ::testing::Test {

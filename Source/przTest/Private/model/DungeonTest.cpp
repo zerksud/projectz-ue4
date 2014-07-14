@@ -156,7 +156,7 @@ namespace prz {
             mDungeon->RemoveMonster(monster->GetId());
 
             EXPECT_TRUE(mDungeon->GetLevel(levelIndex)->GetMonsterPosition(monster->GetId()) == nullptr);
-            delete monster;
+            mdl::ZMonster::DestroyMonster(&monster);
         }
 
         TEST_F(DungeonTest, TryToMoveMonster_ActuallyMovesMonsterInAppropriateLevel) {
