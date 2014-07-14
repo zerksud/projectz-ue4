@@ -26,6 +26,10 @@ struct FNavigationStyle : public FSlateWidgetStyle {
     }
 
     UPROPERTY(EditAnywhere, Category = Appearance)
+    FSlateBrush BackgroundImage;
+    DECLARE_STYLE_FIELD_SETTER(FNavigationStyle, FSlateBrush, BackgroundImage)
+
+    UPROPERTY(EditAnywhere, Category = Appearance)
     FButtonStyle ButtonStyle;
     DECLARE_STYLE_FIELD_SETTER(FNavigationStyle, FButtonStyle, ButtonStyle)
 

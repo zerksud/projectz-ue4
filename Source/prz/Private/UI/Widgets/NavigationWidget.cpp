@@ -27,7 +27,21 @@ void SNavigationWidget::Construct(const FArguments& InArgs) {
 
     ChildSlot
     [
-        SAssignNew(gridPanel, SUniformGridPanel)
+        SNew(SOverlay)
+        + SOverlay::Slot()
+        .VAlign(VAlign_Fill)
+        .HAlign(HAlign_Fill)
+        [
+            SNew(SImage)
+            .Image(&style->BackgroundImage)
+        ]
+        + SOverlay::Slot()
+        .VAlign(VAlign_Fill)
+        .HAlign(HAlign_Fill)
+        [
+            SAssignNew(gridPanel, SUniformGridPanel)
+        ]
+
     ];
 
     const FSlateBrush* icons[] = {
