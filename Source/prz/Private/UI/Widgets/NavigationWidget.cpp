@@ -60,6 +60,7 @@ void SNavigationWidget::Construct(const FArguments& InArgs) {
             [
                 SNew(SButton)
                 .ButtonStyle(&style->ButtonStyle)
+                .ContentPadding(0)
                 .OnClicked(this, &SNavigationWidget::OnButtonClicked, linearIndex)
                 [
                     SNew(SImage)
