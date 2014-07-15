@@ -4,7 +4,7 @@
 namespace prz {
     namespace mdl {
 
-        ZDungeonLevel::ZMapCell* ZDungeonLevelGenerator::kDefaultLevelMap = static_cast<ZDungeonLevel::ZMapCell*>(
+        const ZDungeonLevel::ZMapCell* ZDungeonLevelGenerator::kDefaultLevelMap = static_cast<const ZDungeonLevel::ZMapCell*>(
             "############################################################################################################################"
             "############################################################.......#########################################################"
             "############################################################..<>...#########################################################"
