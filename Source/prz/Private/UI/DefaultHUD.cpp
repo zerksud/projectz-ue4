@@ -5,6 +5,7 @@
 
 #include "UI/Widgets/RootWidget.h"
 #include "UI/Widgets/NavigationWidget.h"
+#include "UI/Widgets/MiniMapWidget.h"
 
 ADefaultHUD::ADefaultHUD(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP) {
@@ -12,12 +13,24 @@ ADefaultHUD::ADefaultHUD(const class FPostConstructInitializeProperties& PCIP)
 
 void ADefaultHUD::BeginPlay() {
     SAssignNew(mRootWidget, SRootWidget).OwnerHUD(this);
-    
+
     mRootWidget->AddSlot()
         .VAlign(VAlign_Bottom)
         .HAlign(HAlign_Left)
         [
             SNew(SNavigationWidget).OwnerHUD(this)
+        ];
+
+    mRootWidget->AddSlot()
+        .VAlign(VAlign_Bottom)
+        .HAlign(HAlign_Right)
+        [
+            SNew(SBox)
+            .WidthOverride(30)
+            .HeightOverride(30)
+            [
+                SNew(SMiniMapWidget).OwnerHUD(this)
+            ]
         ];
 
     if (GEngine->IsValidLowLevel()) {
