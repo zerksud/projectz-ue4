@@ -27,7 +27,7 @@ namespace prz {
             bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
 
         private:
-            typedef std::vector<std::unique_ptr<ZDungeonLevel> > ZDungeonLevelList;
+            typedef std::vector<ZDungeonLevel*> ZDungeonLevelList;
             typedef std::unordered_map<utl::ZIdType, unsigned int> ZMonsterLevelMap;
 
             ZDungeonLevel* GetExistingLevelOrGenerateNew(unsigned int level);

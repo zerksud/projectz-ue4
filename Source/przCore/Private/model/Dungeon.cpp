@@ -17,6 +17,9 @@ namespace prz {
         }
 
         ZDungeon::~ZDungeon() {
+            for (ZDungeonLevel* level : mLevels) {
+                delete level;
+            }
             delete mLevelGenerator;
         }
 
@@ -97,7 +100,7 @@ namespace prz {
                 } else if (direction == EMoveDirection::Up) {
                     if (monsterLevelIndex > 0) {
                         nextLevelIndex = monsterLevelIndex - 1;
-                        nextLevel = mLevels[nextLevelIndex].get();
+                        nextLevel = mLevels[nextLevelIndex];
                     } else {
                         return false;   // monster can't leave dungeon
                     }
@@ -126,20 +129,20 @@ namespace prz {
                 GenerateAbsentLevels(needLevelIndex);
             }
 
-            return mLevels[needLevelIndex].get();
+            return mLevels[needLevelIndex];
         }
 
         void ZDungeon::GenerateAbsentLevels(unsigned int maxLevelIndex) {
             if (mLevels.empty()) {
                 ZDungeonLevel* level = mLevelGenerator->GenerateLevel();
-                mLevels.push_back(std::unique_ptr<ZDungeonLevel>(level));
+                mLevels.push_back(level);
             }
 
             mLevels.reserve(maxLevelIndex + 1);
             for (unsigned int newLevelIndex = mLevels.size(); newLevelIndex <= maxLevelIndex; ++newLevelIndex) {
                 const ZDungeonLevel::StaircaseList& aboveLevelDownStaircases = mLevels[newLevelIndex - 1]->GetDownStaircases();
                 ZDungeonLevel* level = mLevelGenerator->GenerateLevel(aboveLevelDownStaircases);
-                mLevels.push_back(std::unique_ptr<ZDungeonLevel>(level));
+                mLevels.push_back(level);
             }
         }
 
