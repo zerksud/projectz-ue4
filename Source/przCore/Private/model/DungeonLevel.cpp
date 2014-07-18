@@ -46,8 +46,9 @@ namespace prz {
                 return;
             }
 
-            if (strlen(map) != width * height) {
-                LOGE("Can't create dungeon with size %dx%d from %s", width, height, map);
+            size_t len = strlen(map);
+            if (len != width * height) {
+                LOGE("Can't create dungeon with size %dx%d from array with size %d", width, height, len);
                 CreateFailSafeDungeon();
                 return;
             }
