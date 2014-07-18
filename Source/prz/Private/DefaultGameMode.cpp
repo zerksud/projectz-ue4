@@ -8,6 +8,9 @@
 #include "utils/Services.h"
 #include "utils/Logger.h"
 #include "utils/NotificationCenter.h"
+#include "utils/UniqueIdRegistry.h"
+
+#include "model/Game.h"
 
 void initializeServices() {
     using namespace prz::utl;
@@ -22,6 +25,8 @@ void initializeServices() {
 
     REGISTER_SERVICE(prz::utl::ILogger, loggerService);
     REGISTER_SERVICE(prz::utl::INotificationCenter, new prz::utl::ZNotificationCenter());
+    REGISTER_SERVICE(prz::utl::IUniqueIdRegistry, new prz::utl::ZUniqueIdRegistry());
+    REGISTER_SERVICE(prz::mdl::IGame, new prz::mdl::ZGame());
 }
 
 ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializeProperties& PCIP)
