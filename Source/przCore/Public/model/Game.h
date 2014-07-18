@@ -1,17 +1,17 @@
 #pragma once
 
-#include "model/Dungeon.h"
+#include "model/IGame.h"
 
 namespace prz {
     namespace mdl {
-        class ZGame {
+        class ZGame : public IGame {
         public:
             ZGame();
             virtual ~ZGame() = default;
 
-            ZDungeon& GetDungeon();
+            virtual ZDungeon& GetDungeon() override;
 
-            utl::ZIdType GetPlayerId() const;
+            virtual utl::ZIdType GetPlayerId() const override;
 
         private:
             ZDungeon mDungeon;

@@ -16,5 +16,9 @@ namespace prz {
             return mDungeon;
         }
 
+        utl::ZIdType ZGame::GetPlayerId() const {
+            return mPlayerId;
+        }
+
     }
 }
