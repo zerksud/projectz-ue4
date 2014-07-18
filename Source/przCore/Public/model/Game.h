@@ -4,7 +4,7 @@
 
 namespace prz {
     namespace mdl {
-        class ZGame : public IGame {
+        class PRZCORE_API ZGame : public IGame {
         public:
             ZGame();
             virtual ~ZGame() = default;
