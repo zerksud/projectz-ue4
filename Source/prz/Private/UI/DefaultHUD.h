@@ -9,6 +9,6 @@ class ADefaultHUD : public AHUD {
 public:
     TSharedPtr<class SRootWidget> mRootWidget;
 
-    virtual void BeginPlay() OVERRIDE;
-    virtual void DrawHUD() OVERRIDE;
+    virtual void BeginPlay() override;
+    virtual void DrawHUD() override;
 };

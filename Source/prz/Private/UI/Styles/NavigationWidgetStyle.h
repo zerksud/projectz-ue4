@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Slate.h"
 #include "SlateWidgetStyleContainerBase.h"
 #include "NavigationWidgetStyle.generated.h"
 
@@ -17,7 +18,7 @@ struct FNavigationStyle : public FSlateWidgetStyle {
     virtual ~FNavigationStyle() = default;
 
     static const FName TypeName;
-    virtual const FName GetTypeName() const OVERRIDE{
+    virtual const FName GetTypeName() const override {
         return TypeName;
     }
     static const FNavigationStyle& GetDefault() {
@@ -65,7 +66,7 @@ public:
     UPROPERTY(EditAnywhere, Category = Appearance, meta = (ShowOnlyInnerProperties))
     FNavigationStyle NavigationStyleField;
 
-    virtual const struct FSlateWidgetStyle* const GetStyle() const OVERRIDE{
+    virtual const struct FSlateWidgetStyle* const GetStyle() const override {
         return static_cast<const struct FSlateWidgetStyle*>(&NavigationStyleField);
     }
 };

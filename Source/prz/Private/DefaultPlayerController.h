@@ -35,7 +35,7 @@ public:
     void DebugPrintCurrentLocation();
 
 protected:
-    virtual void SetupInputComponent() OVERRIDE;
+    virtual void SetupInputComponent() override;
 
 private:
     void SetupObservers();

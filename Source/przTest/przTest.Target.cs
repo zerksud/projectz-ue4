@@ -35,7 +35,6 @@ public class przTestTarget : TargetRules {
         ref LinkEnvironmentConfiguration OutLinkEnvironmentConfiguration,
         ref CPPEnvironmentConfiguration OutCPPEnvironmentConfiguration) {
 
-        UEBuildConfiguration.bCompileNetworkProfiler = false;
         UEBuildConfiguration.bCompileLeanAndMeanUE = true;
         UEBuildConfiguration.bBuildEditor = false;
         UEBuildConfiguration.bCompileAgainstEngine = false;

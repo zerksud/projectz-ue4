@@ -3,6 +3,9 @@
 
 #include <map>
 
+#include "Runtime/AIModule/Classes/Navigation/NavigationComponent.h"
+#include "Runtime/AIModule/Classes/Navigation/PathFollowingComponent.h"
+
 #include "utils/Services.h"
 #include "utils/INotificationCenter.h"
 #include "utils/LOG.h"
