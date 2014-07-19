@@ -1,6 +1,7 @@
 #pragma once
 
 #include "model/IGame.h"
+#include "model/Dungeon.h"
 
 namespace prz {
     namespace mdl {
@@ -9,9 +10,9 @@ namespace prz {
             ZGame();
             virtual ~ZGame() = default;
 
-            virtual ZDungeon& GetDungeon() override;
+            ZDungeon& GetDungeon();
 
-            virtual utl::ZIdType GetPlayerId() const override;
+            utl::ZIdType GetPlayerId() const;
 
         private:
             ZDungeon mDungeon;
