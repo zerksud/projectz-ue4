@@ -2,8 +2,10 @@
 
 #include "Slate.h"
 
-class SMiniMapWidget : public SCompoundWidget {
-    SLATE_BEGIN_ARGS(SMiniMapWidget) {
+#include "model/Minimap.h"
+
+class SMinimapWidget : public SCompoundWidget {
+    SLATE_BEGIN_ARGS(SMinimapWidget) {
     }
     SLATE_ARGUMENT(TWeakObjectPtr<class ADefaultHUD>, OwnerHUD)
     SLATE_END_ARGS()
@@ -13,6 +15,9 @@ class SMiniMapWidget : public SCompoundWidget {
 public:
     void Construct(const FArguments& InArgs);
 
+    void SetMinimap(const prz::mdl::ZMinimap& minimap);
+
 private:
     TWeakObjectPtr<class ADefaultHUD> OwnerHUD;
+    TSharedPtr<prz::mdl::ZMinimap> mMinimap;
 };

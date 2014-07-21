@@ -11,10 +11,12 @@ namespace prz {
 
         namespace EDungeonCell {
             enum Type {
+                Unknown,
                 SolidRock,
                 Emptiness,
                 DownStaircase,
-                UpStaircase
+                UpStaircase,
+                Monster
             };
         }
 
@@ -117,6 +119,7 @@ namespace prz {
 
             ZPlacedMonster* GetPlacedMonster(utl::ZIdType monsterId);
             ZPlacedMonster* GetPlacedMonster(int x, int y);
+            const ZPlacedMonster* GetPlacedMonster(int x, int y) const;
 
             int mWidth;
             int mHeight;

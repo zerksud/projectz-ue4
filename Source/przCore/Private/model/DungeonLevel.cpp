@@ -110,7 +110,6 @@ namespace prz {
                 return CellIsEmptyImpl(x, y);
             }
 
-            LOGE("Cell at [%d; %d] is out of bounds", x, y);
             return false;
         }
 
@@ -123,7 +122,6 @@ namespace prz {
                 return CellIsSolidImpl(x, y);
             }
 
-            LOGE("Cell at [%d; %d] is out of bounds", x, y);
             return true;
         }
 
@@ -144,7 +142,6 @@ namespace prz {
                 return GetCellTypeImpl(x, y);
             }
 
-            LOGE("Cell at [%d; %d] is out of bounds", x, y);
             return EDungeonCell::SolidRock;
         }
 
@@ -153,6 +150,10 @@ namespace prz {
         }
 
         EDungeonCell::Type ZDungeonLevel::GetCellTypeImpl(int x, int y) const {
+            if (GetPlacedMonster(x, y) != nullptr) {
+                return EDungeonCell::Monster;
+            }
+
             EDungeonCell::Type cellType = mTerrain[CalcCellLinearIndex(x, y)];
 
             return cellType;
@@ -259,13 +260,17 @@ namespace prz {
         }
 
         ZDungeonLevel::ZPlacedMonster* ZDungeonLevel::GetPlacedMonster(int x, int y) {
+            return const_cast<ZPlacedMonster*>(static_cast<const ZDungeonLevel*>(this)->GetPlacedMonster(x, y));
+        }
+
+        const ZDungeonLevel::ZPlacedMonster* ZDungeonLevel::GetPlacedMonster(int x, int y) const {
             int linearIndex = CalcCellLinearIndex(x, y);
             auto pos = mMonsterIdByPosition.find(linearIndex);
             if (pos != mMonsterIdByPosition.end()) {
-                return GetPlacedMonster(pos->second);
-            } else {
-                return nullptr;
+                return mMonsterList.find(pos->second)->second;
             }
+
+            return nullptr;
         }
 
         bool ZDungeonLevel::MovementIsDiagonalAroundTheCorner(const ZPosition& origin, const ZPositionDiff& diff) const {

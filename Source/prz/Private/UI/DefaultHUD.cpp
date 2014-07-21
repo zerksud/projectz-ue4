@@ -5,7 +5,10 @@
 
 #include "UI/Widgets/RootWidget.h"
 #include "UI/Widgets/NavigationWidget.h"
-#include "UI/Widgets/MiniMapWidget.h"
+#include "UI/Widgets/MinimapWidget.h"
+
+#include "utils/Services.h"
+#include "model/IGame.h"
 
 ADefaultHUD::ADefaultHUD(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP) {
@@ -29,7 +32,7 @@ void ADefaultHUD::BeginPlay() {
             .WidthOverride(30)
             .HeightOverride(30)
             [
-                SNew(SMiniMapWidget).OwnerHUD(this)
+                SAssignNew(mMinimapWidget, SMinimapWidget).OwnerHUD(this)
             ]
         ];
 
@@ -52,6 +55,9 @@ void ADefaultHUD::DrawHUD() {
 
     int32 scale = std::floor(std::min(scaleX, scaleY));
     mRootWidget->SetDPIScale(scale);
+
+    prz::mdl::IGame* game = GET_SERVICE(prz::mdl::IGame);
+    mMinimapWidget->SetMinimap(game->GetMinimap());
 
     Super::DrawHUD();
 }

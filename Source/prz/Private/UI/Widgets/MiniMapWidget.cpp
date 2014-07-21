@@ -1,59 +1,53 @@
 #include "prz.h"
-#include "UI/Widgets/MiniMapWidget.h"
+#include "UI/Widgets/MinimapWidget.h"
 
 #include <map>
 
-static const int32 FAKE_MAP_SIZE = 15;
-static const char* FAKE_MAP = 
-    ".#####...#     "
-    ".........#     "
-    "..#.....##     "
-    "  #.....###    "
-    "####......###  "
-    "............#  "
-    "#######...#...."
-    "      #@### ..."
-    "#######.#   ..."
-    "#.......###.#  "
-    "#.##........#  "
-    "..##........#  "
-    "..######....#  "
-    "..#    #....#  "
-    "..#    #....#  "
-    ;
+FLinearColor CellToColor(prz::mdl::EDungeonCell::Type cell) {
+    using namespace prz::mdl;
 
-FLinearColor CharToColor(const char ch) {
-    std::map<char, FLinearColor> charToColor = {
-        {' ', FLinearColor(0.0f, 0.0f, 0.0f)},
-        {'#', FLinearColor(42 / 255.0f, 47 / 255.0f, 51 / 255.0f)},
-        {'.', FLinearColor(129 / 255.0f, 150 / 255.0f, 154 / 255.0f)},
-        {'@', FLinearColor(236 / 255.0f, 118 / 255.0f, 0.0f)},
+    static std::map<char, FLinearColor> cellToColor = {
+        {EDungeonCell::Unknown, FLinearColor(0.0f, 0.0f, 0.0f)},
+        {EDungeonCell::SolidRock, FLinearColor(42 / 255.0f, 47 / 255.0f, 51 / 255.0f)},
+        {EDungeonCell::Emptiness, FLinearColor(129 / 255.0f, 150 / 255.0f, 154 / 255.0f)},
+        {EDungeonCell::DownStaircase, FLinearColor(170 / 255.0f, 198 / 255.0f, 203 / 255.0f)},
+        {EDungeonCell::UpStaircase, FLinearColor(86 / 255.0f, 100 / 255.0f, 103 / 255.0f)},
+        {EDungeonCell::Monster, FLinearColor(236 / 255.0f, 118 / 255.0f, 0.0f)},
     };
 
-    auto pos = charToColor.find(ch);
-    if (pos != charToColor.end()) {
+    auto pos = cellToColor.find(cell);
+    if (pos != cellToColor.end()) {
         return pos->second;
     }
 
     return FLinearColor::Red;
 }
 
-void SMiniMapWidget::Construct(const FArguments& InArgs) {
+void SMinimapWidget::Construct(const FArguments& InArgs) {
     OwnerHUD = InArgs._OwnerHUD;
 }
 
-int32 SMiniMapWidget::OnPaint(const FGeometry& AllottedGeometry, const FSlateRect& MyClippingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const {
-    if (OwnerHUD.IsValid()) {
+int32 SMinimapWidget::OnPaint(const FGeometry& AllottedGeometry, const FSlateRect& MyClippingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const {
+    if (OwnerHUD.IsValid() && mMinimap.IsValid()) {
         const FSlateBrush* brush = new FSlateBrush();
         const FVector2D cellSize = FVector2D(2, 2);
-        for (int32 x = 0; x < FAKE_MAP_SIZE; ++x) {
-            for (int32 y = 0; y < FAKE_MAP_SIZE; ++y) {
-                const int32 linearIndex = x + y * FAKE_MAP_SIZE;
-                const FLinearColor color = CharToColor(FAKE_MAP[linearIndex]);
+
+        int mapSize = mMinimap->GetSize();
+
+        for (int32 x = 0; x < mapSize; ++x) {
+            for (int32 y = 0; y < mapSize; ++y) {
+                const FLinearColor color = CellToColor(mMinimap->GetCell(x, y));
                 FSlateDrawElement::MakeBox(OutDrawElements, LayerId, AllottedGeometry.ToPaintGeometry(FVector2D(x * 2, y * 2), cellSize), brush, MyClippingRect, ESlateDrawEffect::None, color);
             }
         }
 
     }
+
     return SCompoundWidget::OnPaint(AllottedGeometry, MyClippingRect, OutDrawElements, LayerId, InWidgetStyle, bParentEnabled);
+}
+
+void SMinimapWidget::SetMinimap(const prz::mdl::ZMinimap& minimap) {
+    using namespace prz::mdl;
+
+    mMinimap = TSharedPtr<ZMinimap>(new ZMinimap(minimap));
 }

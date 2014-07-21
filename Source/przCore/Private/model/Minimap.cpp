@@ -6,13 +6,33 @@
 namespace prz {
     namespace mdl {
 
-        ZMinimap::ZMinimap(unsigned int sideSize, const EMinimapCell::Type* cells) {
+        ZMinimap::ZMinimap(unsigned int sideSize, const EDungeonCell::Type* cells) {
             mSize = sideSize;
 
-            mCells = new EMinimapCell::Type[mSize];
+            mCells = new EDungeonCell::Type[mSize * mSize];
             for (unsigned int i = 0; i < mSize * mSize; ++i) {
                 mCells[i] = cells[i];
             }
+        }
+
+        ZMinimap::ZMinimap(const ZMinimap& other) {
+            mSize = other.mSize;
+            mCells = new EDungeonCell::Type[mSize * mSize];
+            for (unsigned int i = 0; i < mSize * mSize; ++i) {
+                mCells[i] = other.mCells[i];
+            }
+        }
+
+        ZMinimap::ZMinimap(ZMinimap&& other) {
+            mSize = 0;
+            mCells = nullptr;
+
+            swap(*this, other);
+        }
+
+        ZMinimap& ZMinimap::operator=(ZMinimap other) {
+            swap(*this, other);
+            return *this;
         }
 
         ZMinimap::~ZMinimap() {
@@ -31,10 +51,10 @@ namespace prz {
             return (x + y * mSize);
         }
 
-        EMinimapCell::Type ZMinimap::GetCell(unsigned int x, unsigned int y) const {
+        EDungeonCell::Type ZMinimap::GetCell(unsigned int x, unsigned int y) const {
             if (!IndicesAreValid(x, y)) {
                 LOGE("Can't get cell %dx%d from minimap of size %d", x, y, mSize);
-                return EMinimapCell::Unknown;
+                return EDungeonCell::Unknown;
             }
 
             return mCells[CalcLinearIndex(x, y)];
