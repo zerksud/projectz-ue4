@@ -1,6 +1,9 @@
 #pragma once
 
 #include "GameFramework/PlayerController.h"
+
+#include "model/IGame.h"
+
 #include "DefaultPlayerController.generated.h"
 
 /**
@@ -32,7 +35,7 @@ public:
     void Quit();
 
     UFUNCTION()
-    void DebugPrintCurrentLocation();
+    void DebugAction();
 
 protected:
     virtual void SetupInputComponent() override;
@@ -40,9 +43,6 @@ protected:
 private:
     void SetupObservers();
 
-    void Move(EAxis::Type axis, bool reverse = false);
-    void Turn(bool reversed = false);
-
-    FVector mPlayerLocation;
-    bool mPlayerLocationInitialized = false;
+    void Move(prz::mdl::EMoveDirection::Type direction);
+    void Turn(prz::mdl::ETurnDirection::Type direction);
 };

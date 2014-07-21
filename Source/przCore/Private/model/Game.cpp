@@ -18,7 +18,11 @@ namespace prz {
         }
 
         bool ZGame::TryToMovePlayer(EMoveDirection::Type direction) {
-            return false;
+            return mDungeon.TryToMoveMonster(mPlayerId, direction);
+        }
+
+        void ZGame::TurnPlayer(ETurnDirection::Type direction) {
+            mDungeon.GetMonster(mPlayerId)->GetDirection().Turn(direction);
         }
 
         const ZMinimap ZGame::GetMinimap() {

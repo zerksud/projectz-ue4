@@ -11,6 +11,7 @@ namespace prz {
             virtual ~ZGame() = default;
 
             virtual bool TryToMovePlayer(EMoveDirection::Type direction) override;
+            virtual void TurnPlayer(ETurnDirection::Type direction) override;
             virtual const ZMinimap GetMinimap() override;
 
         private:

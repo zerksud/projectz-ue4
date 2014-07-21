@@ -3,11 +3,9 @@
 
 #include <map>
 
-#include "Runtime/AIModule/Classes/Navigation/NavigationComponent.h"
-#include "Runtime/AIModule/Classes/Navigation/PathFollowingComponent.h"
-
 #include "utils/Services.h"
 #include "utils/INotificationCenter.h"
+#include "model/IGame.h"
 #include "utils/LOG.h"
 
 #include "model/PlayerNavigation.h"
@@ -28,7 +26,7 @@ void ADefaultPlayerController::SetupInputComponent() {
     InputComponent->BindAction("TurnRight", IE_Pressed, this, &ADefaultPlayerController::TurnRight);
     InputComponent->BindAction("TurnLeft", IE_Pressed, this, &ADefaultPlayerController::TurnLeft);
     InputComponent->BindAction("Quit", IE_Pressed, this, &ADefaultPlayerController::Quit);
-    InputComponent->BindAction("DebugPrintCurrentLocation", IE_Pressed, this, &ADefaultPlayerController::DebugPrintCurrentLocation);
+    InputComponent->BindAction("DebugPrintCurrentLocation", IE_Pressed, this, &ADefaultPlayerController::DebugAction);
 
     SetupObservers();
 }
@@ -59,67 +57,44 @@ void ADefaultPlayerController::SetupObservers() {
     }
 }
 
-void ADefaultPlayerController::Move(EAxis::Type axis, bool reverse) {
-    APawn* pawn = GetPawn();
-    if (pawn) {
-        if (!mPlayerLocationInitialized) {
-            mPlayerLocation = pawn->GetActorLocation();
-            mPlayerLocationInitialized = true;
-        }
-
-        FVector moveDistance = 500.0f * (reverse ? -1.0f : 1.0f) * FRotationMatrix(GetControlRotation()).GetScaledAxis(axis);
-
-        FVector destination = mPlayerLocation + moveDistance;
-        LOGD("destination: %s", *destination.ToString());
-
-        UNavigationComponent* navComp = nullptr;
-        UPathFollowingComponent* pathComp = nullptr;
-
-        InitNavigationControl(navComp, pathComp);
-        if (navComp && pathComp && navComp->FindPathToLocation(destination)) {
-            mPlayerLocation += moveDistance;
-            pathComp->RequestMove(navComp->GetPath(), nullptr, 0.0f, false);
-        }
-    }
+void ADefaultPlayerController::Move(prz::mdl::EMoveDirection::Type direction) {
+    prz::mdl::IGame* game = GET_SERVICE(prz::mdl::IGame);
+    game->TryToMovePlayer(direction);
 }
 
-void ADefaultPlayerController::Turn(bool reverse) {
-    FRotator rotation = GetControlRotation();
-    rotation.Yaw += (reverse ? -1.0f : 1.0f) * 90.0f;
-    SetControlRotation(rotation);
+void ADefaultPlayerController::Turn(prz::mdl::ETurnDirection::Type direction) {
+    prz::mdl::IGame* game = GET_SERVICE(prz::mdl::IGame);
+    game->TurnPlayer(direction);
 }
 
 void ADefaultPlayerController::MoveForwardAction() {
-    Move(EAxis::X);
+    Move(prz::mdl::EMoveDirection::Forward);
 }
 
 void ADefaultPlayerController::MoveBackwardAction() {
-    Move(EAxis::X, true);
+    Move(prz::mdl::EMoveDirection::Backward);
 }
 
 void ADefaultPlayerController::StrafeRightAction() {
-    Move(EAxis::Y);
+    Move(prz::mdl::EMoveDirection::Right);
 }
 
 void ADefaultPlayerController::StrafeLeftAction() {
-    Move(EAxis::Y, true);
+    Move(prz::mdl::EMoveDirection::Left);
 }
 
 void ADefaultPlayerController::TurnRight() {
-    Turn();
+    Turn(prz::mdl::ETurnDirection::Right);
 }
 
 void ADefaultPlayerController::TurnLeft() {
-    Turn(true);
+    Turn(prz::mdl::ETurnDirection::Left);
 }
 
 void ADefaultPlayerController::Quit() {
     ConsoleCommand("quit");
 }
 
-void ADefaultPlayerController::DebugPrintCurrentLocation() {
-    APawn* pawn = GetPawn();
-    if (pawn) {
-        LOGD("current location: %s", *pawn->GetActorLocation().ToString());
-    }
+void ADefaultPlayerController::DebugAction() {
+    LOGD("Debug action");
 }
