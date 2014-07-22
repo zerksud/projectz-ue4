@@ -1,16 +1,8 @@
 {
 	"FileVersion": 3,
-	"Version": 0,
-	"VersionName": "0.0",
-	"EngineVersion": "4.1.0-2053896+++depot+UE4-Releases+4.1",
-	"PackageFileUE4Version": 352,
-	"PackageFileLicenseeUE4Version": 0,
 	"EngineAssociation": "4.3",
-	"FriendlyName": "",
-	"Description": "",
 	"Category": "",
-	"CreatedBy": "",
-	"CreatedByURL": "",
+	"Description": "",
 	"Modules": [
 		{
 			"Name": "prz",
@@ -18,5 +10,8 @@
 			"LoadingPhase": "Default"
 		}
 	],
-	"EpicSampleNameHash": "0"
+	"TargetPlatforms": [
+		"WindowsNoEditor",
+		"Android"
+	]
 }
