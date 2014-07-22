@@ -52,8 +52,8 @@ void ADefaultHUD::DrawHUD() {
     GetOwningPlayerController()->GetViewportSize(sizeX, sizeY);
     static IConsoleVariable* CVar = IConsoleManager::Get().FindConsoleVariable(TEXT("r.MobileContentScaleFactor"));
     float RequestedContentScaleFactor = CVar->GetFloat();
-    float scaleX = sizeX / 160.0f / RequestedContentScaleFactor;
-    float scaleY = sizeY / 120.0f / RequestedContentScaleFactor;
+    float scaleX = sizeX / 120.0f / RequestedContentScaleFactor;
+    float scaleY = sizeY / 90.0f / RequestedContentScaleFactor;
 
     int32 scale = std::floor(std::min(scaleX, scaleY));
     mRootWidget->SetDPIScale(scale);
