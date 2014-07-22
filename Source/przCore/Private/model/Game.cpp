@@ -25,6 +25,16 @@ namespace prz {
             mDungeon.GetMonster(mPlayerId)->GetDirection().Turn(direction);
         }
 
+        ZPosition GetRotatedPosition(const ZPositionDiff& sinCosOfReversedAngle, int x, int y) {
+            int cos = sinCosOfReversedAngle.GetdX();
+            int sin = -sinCosOfReversedAngle.GetdY();
+
+            int rotatedX = cos * x - sin * y;
+            int rotatedY = sin * x + cos * y;
+
+            return ZPosition(rotatedX, rotatedY);
+        }
+
         const ZMinimap ZGame::GetMinimap() {
             EDungeonCell::Type* cells = new EDungeonCell::Type[kMinimapSize * kMinimapSize];
 
@@ -35,11 +45,16 @@ namespace prz {
             int baseX = playerPosition->GetX();
             int baseY = playerPosition->GetY();
 
+            ZDirection minimapDirection = mDungeon.GetMonster(mPlayerId)->GetDirection();
+            minimapDirection.Turn(ETurnDirection::Right);
+            const ZPositionDiff minimapDirectionSinCos = minimapDirection.PredictMove();
+
             for (int dx = -kMinimapRadius; dx <= kMinimapRadius; ++dx) {
                 for (int dy = -kMinimapRadius; dy <= kMinimapRadius; ++dy) {
                     EDungeonCell::Type minimapCell = level->GetCellType(baseX + dx, baseY + dy);
 
-                    int linearIndex = kMinimapRadius + dx + kMinimapSize * (kMinimapRadius + dy);
+                    ZPosition rotatedCell = GetRotatedPosition(minimapDirectionSinCos, dx, dy);
+                    int linearIndex = kMinimapRadius + rotatedCell.GetX() + kMinimapSize * (kMinimapRadius + rotatedCell.GetY());
                     cells[linearIndex] = minimapCell;
                 }
             }
