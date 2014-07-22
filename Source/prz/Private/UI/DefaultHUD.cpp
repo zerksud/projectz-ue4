@@ -29,8 +29,8 @@ void ADefaultHUD::BeginPlay() {
         .HAlign(HAlign_Right)
         [
             SNew(SBox)
-            .WidthOverride(30)
-            .HeightOverride(30)
+            .WidthOverride(29)
+            .HeightOverride(29)
             [
                 SAssignNew(mMinimapWidget, SMinimapWidget).OwnerHUD(this)
             ]

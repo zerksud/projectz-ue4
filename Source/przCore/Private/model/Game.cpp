@@ -6,7 +6,7 @@
 namespace prz {
     namespace mdl {
 
-        const int ZGame::kMinimapRadius = 7;
+        const int ZGame::kMinimapRadius = 14;
         const int ZGame::kMinimapSize = 1 + kMinimapRadius * 2;
 
         ZGame::ZGame() {

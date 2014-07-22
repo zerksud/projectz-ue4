@@ -30,14 +30,14 @@ void SMinimapWidget::Construct(const FArguments& InArgs) {
 int32 SMinimapWidget::OnPaint(const FGeometry& AllottedGeometry, const FSlateRect& MyClippingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const {
     if (OwnerHUD.IsValid() && mMinimap.IsValid()) {
         const FSlateBrush* brush = new FSlateBrush();
-        const FVector2D cellSize = FVector2D(2, 2);
+        const FVector2D cellSize = FVector2D(1, 1);
 
         int mapSize = mMinimap->GetSize();
 
         for (int32 x = 0; x < mapSize; ++x) {
             for (int32 y = 0; y < mapSize; ++y) {
                 const FLinearColor color = CellToColor(mMinimap->GetCell(x, y));
-                FSlateDrawElement::MakeBox(OutDrawElements, LayerId, AllottedGeometry.ToPaintGeometry(FVector2D(x * 2, y * 2), cellSize), brush, MyClippingRect, ESlateDrawEffect::None, color);
+                FSlateDrawElement::MakeBox(OutDrawElements, LayerId, AllottedGeometry.ToPaintGeometry(FVector2D(x, y), cellSize), brush, MyClippingRect, ESlateDrawEffect::None, color);
             }
         }
 
