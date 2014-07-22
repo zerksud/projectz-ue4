@@ -8,6 +8,8 @@ namespace prz {
 
         class IGame {
         public:
+            virtual ~IGame() = default;
+
             virtual bool TryToMovePlayer(EMoveDirection::Type direction) = 0;
             virtual void TurnPlayer(ETurnDirection::Type direction) = 0;
             virtual const ZMinimap GetMinimap() = 0;
