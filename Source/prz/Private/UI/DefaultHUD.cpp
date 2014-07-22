@@ -24,13 +24,15 @@ void ADefaultHUD::BeginPlay() {
             SNew(SNavigationWidget).OwnerHUD(this)
         ];
 
+    prz::mdl::IGame* game = GET_SERVICE(prz::mdl::IGame);
+    unsigned int minimapSize = game->GetMinimapSize();
     mRootWidget->AddSlot()
         .VAlign(VAlign_Bottom)
         .HAlign(HAlign_Right)
         [
             SNew(SBox)
-            .WidthOverride(29)
-            .HeightOverride(29)
+            .WidthOverride(minimapSize)
+            .HeightOverride(minimapSize)
             [
                 SAssignNew(mMinimapWidget, SMinimapWidget).OwnerHUD(this)
             ]

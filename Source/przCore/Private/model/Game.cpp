@@ -50,5 +50,9 @@ namespace prz {
             return minimap;
         }
 
+        unsigned int ZGame::GetMinimapSize() const {
+            return kMinimapSize;
+        }
+
     }
 }

@@ -13,6 +13,7 @@ namespace prz {
             virtual bool TryToMovePlayer(EMoveDirection::Type direction) override;
             virtual void TurnPlayer(ETurnDirection::Type direction) override;
             virtual const ZMinimap GetMinimap() override;
+            virtual unsigned int GetMinimapSize() const override;
 
         private:
             static const int kMinimapRadius;
