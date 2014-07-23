@@ -2,25 +2,20 @@
 #include "model/Minimap.h"
 
 #include "utils/LOG_ANSI.h"
+#include "utils/MatrixHelpers.h"
 
 namespace prz {
     namespace mdl {
 
-        ZMinimap::ZMinimap(unsigned int sideSize, const EDungeonCell::Type* cells) {
+        ZMinimap::ZMinimap(unsigned int sideSize, EDungeonCell::Type*** cells) {
             mSize = sideSize;
-
-            mCells = new EDungeonCell::Type[mSize * mSize];
-            for (unsigned int i = 0; i < mSize * mSize; ++i) {
-                mCells[i] = cells[i];
-            }
+            mCells = *cells;
+            *cells = nullptr;
         }
 
         ZMinimap::ZMinimap(const ZMinimap& other) {
             mSize = other.mSize;
-            mCells = new EDungeonCell::Type[mSize * mSize];
-            for (unsigned int i = 0; i < mSize * mSize; ++i) {
-                mCells[i] = other.mCells[i];
-            }
+            utl::ZMatrix::AllocateAndCopy<EDungeonCell::Type>(&mCells, other.mCells, mSize);
         }
 
         ZMinimap::ZMinimap(ZMinimap&& other) {
@@ -36,7 +31,7 @@ namespace prz {
         }
 
         ZMinimap::~ZMinimap() {
-            delete[] mCells;
+            utl::ZMatrix::Deallocate(&mCells, mSize);
         }
 
         unsigned int ZMinimap::GetSize() const {
@@ -47,17 +42,13 @@ namespace prz {
             return (x < mSize && y < mSize);
         }
 
-        unsigned int ZMinimap::CalcLinearIndex(unsigned int x, unsigned int y) const {
-            return (x + y * mSize);
-        }
-
         EDungeonCell::Type ZMinimap::GetCell(unsigned int x, unsigned int y) const {
             if (!IndicesAreValid(x, y)) {
                 LOGE("Can't get cell %dx%d from minimap of size %d", x, y, mSize);
                 return EDungeonCell::Unknown;
             }
 
-            return mCells[CalcLinearIndex(x, y)];
+            return mCells[x][y];
         }
     }
 }

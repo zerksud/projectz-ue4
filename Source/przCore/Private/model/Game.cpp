@@ -2,6 +2,7 @@
 #include "model/Game.h"
 
 #include "utils/LOG_ANSI.h"
+#include "utils/MatrixHelpers.h"
 
 namespace prz {
     namespace mdl {
@@ -36,7 +37,8 @@ namespace prz {
         }
 
         const ZMinimap ZGame::GetMinimap() {
-            EDungeonCell::Type* cells = new EDungeonCell::Type[kMinimapSize * kMinimapSize];
+            EDungeonCell::Type** cells;
+            utl::ZMatrix::Allocate(&cells, kMinimapSize);
 
             unsigned int currentLevel = mDungeon.GetMonsterLevelIndex(mPlayerId);
             const ZDungeonLevel* level = mDungeon.GetLevel(currentLevel);
@@ -54,13 +56,13 @@ namespace prz {
                     EDungeonCell::Type minimapCell = level->GetCellType(baseX + dx, baseY + dy);
 
                     ZPosition rotatedCell = GetRotatedPosition(minimapDirectionSinCos, dx, dy);
-                    int linearIndex = kMinimapRadius + rotatedCell.GetX() + kMinimapSize * (kMinimapRadius + rotatedCell.GetY());
-                    cells[linearIndex] = minimapCell;
+                    int x = kMinimapRadius + rotatedCell.GetX();
+                    int y = kMinimapRadius + rotatedCell.GetY();
+                    cells[x][y] = minimapCell;
                 }
             }
 
-            ZMinimap minimap(kMinimapSize, cells);
-            delete cells;
+            ZMinimap minimap(kMinimapSize, &cells);
 
             return minimap;
         }
