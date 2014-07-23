@@ -2,13 +2,10 @@
 
 #include "Slate.h"
 #include "SlateWidgetStyleContainerBase.h"
-#include "NavigationWidgetStyle.generated.h"
 
-#define DECLARE_STYLE_FIELD_SETTER(styleType, fieldType, fieldName) \
-    styleType& Set##fieldName(const fieldType& value) { \
-    fieldName = value; \
-    return *this; \
-    }
+#include "UI/Styles/StyleHelpers.h"
+
+#include "NavigationWidgetStyle.generated.h"
 
 USTRUCT()
 struct FNavigationStyle : public FSlateWidgetStyle {
