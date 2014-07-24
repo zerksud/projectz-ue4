@@ -26,6 +26,30 @@ struct FMinimapStyle : public FSlateWidgetStyle {
     UPROPERTY(EditAnywhere, Category = Appearance)
     FSlateBrush BackgroundImage;
     DECLARE_STYLE_FIELD_SETTER(FMinimapStyle, FSlateBrush, BackgroundImage)
+
+    UPROPERTY(EditAnywhere, Category = Appearance)
+    FColor UnknownCellColor;
+    DECLARE_STYLE_FIELD_SETTER(FMinimapStyle, FColor, UnknownCellColor)
+
+    UPROPERTY(EditAnywhere, Category = Appearance)
+    FColor SolidRockCellColor;
+    DECLARE_STYLE_FIELD_SETTER(FMinimapStyle, FColor, SolidRockCellColor)
+
+    UPROPERTY(EditAnywhere, Category = Appearance)
+    FColor EmptyCellColor;
+    DECLARE_STYLE_FIELD_SETTER(FMinimapStyle, FColor, EmptyCellColor)
+
+    UPROPERTY(EditAnywhere, Category = Appearance)
+    FColor DownStaircaseCellColor;
+    DECLARE_STYLE_FIELD_SETTER(FMinimapStyle, FColor, DownStaircaseCellColor)
+
+    UPROPERTY(EditAnywhere, Category = Appearance)
+    FColor UpStaircaseCellColor;
+    DECLARE_STYLE_FIELD_SETTER(FMinimapStyle, FColor, UpStaircaseCellColor)
+
+    UPROPERTY(EditAnywhere, Category = Appearance)
+    FColor MonsterCellColor;
+    DECLARE_STYLE_FIELD_SETTER(FMinimapStyle, FColor, MonsterCellColor)
 };
 
 UCLASS(hidecategories = Object, MinimalAPI)

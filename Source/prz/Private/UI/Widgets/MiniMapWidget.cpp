@@ -6,20 +6,27 @@
 #include "UI/Styles/PrzStyleManager.h"
 #include "UI/Styles/MinimapWidgetStyle.h"
 
-FColor CellToColor(prz::mdl::EDungeonCell::Type cell) {
+typedef std::map<prz::mdl::EDungeonCell::Type, FColor> DungeonCellColorMap;
+
+DungeonCellColorMap GetDungeonCellColorMap() {
     using namespace prz::mdl;
 
-    static std::map<char, FColor> cellToColor = {
-        {EDungeonCell::Unknown, FColor(0, 0, 0)},
-        {EDungeonCell::SolidRock, FColor(42, 47, 51)},
-        {EDungeonCell::Emptiness, FColor(129, 150, 154)},
-        {EDungeonCell::DownStaircase, FColor(170, 198, 203)},
-        {EDungeonCell::UpStaircase, FColor(86, 100, 103)},
-        {EDungeonCell::Monster, FColor(236, 118, 0)},
+    const FMinimapStyle* style = &FPrzStyleManager::Get().GetWidgetStyle<FMinimapStyle>("MinimapWidgetStyle");
+    DungeonCellColorMap cellToColorMap = {
+        {EDungeonCell::Unknown, style->UnknownCellColor},
+        {EDungeonCell::SolidRock, style->SolidRockCellColor},
+        {EDungeonCell::Emptiness, style->EmptyCellColor},
+        {EDungeonCell::DownStaircase, style->DownStaircaseCellColor},
+        {EDungeonCell::UpStaircase, style->UpStaircaseCellColor},
+        {EDungeonCell::Monster, style->MonsterCellColor},
     };
 
-    auto pos = cellToColor.find(cell);
-    if (pos != cellToColor.end()) {
+    return cellToColorMap;
+}
+
+FColor CellToColor(const DungeonCellColorMap& cellToColorMap, prz::mdl::EDungeonCell::Type cell) {
+    auto pos = cellToColorMap.find(cell);
+    if (pos != cellToColorMap.end()) {
         return pos->second;
     }
 
@@ -36,16 +43,17 @@ int32 SMinimapWidget::OnPaint(const FGeometry& AllottedGeometry, const FSlateRec
         const FMinimapStyle* style = &FPrzStyleManager::Get().GetWidgetStyle<FMinimapStyle>("MinimapWidgetStyle");
         FPaintGeometry paintGeometry = AllottedGeometry.ToPaintGeometry(FVector2D(0, 0), FVector2D(32, 32));
         FSlateDrawElement::MakeBox(OutDrawElements, LayerId, paintGeometry, &style->BackgroundImage, MyClippingRect);
-        
+
+        DungeonCellColorMap cellToColorMap = GetDungeonCellColorMap();
         const FSlateBrush* brush = new FSlateBrush();
         const FVector2D cellSize = FVector2D(1, 1);
         int mapSize = mMinimap->GetSize();
         int dx = 2;
         int dy = 2;
-        
+
         for (int32 x = 0; x < mapSize; ++x) {
             for (int32 y = 0; y < mapSize; ++y) {
-                const FColor color = CellToColor(mMinimap->GetCell(x, y));
+                const FColor color = CellToColor(cellToColorMap, mMinimap->GetCell(x, y));
                 FSlateDrawElement::MakeBox(OutDrawElements, LayerId, AllottedGeometry.ToPaintGeometry(FVector2D(x + dx, y + dy), cellSize), brush, MyClippingRect, ESlateDrawEffect::None, color);
             }
         }
