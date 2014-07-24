@@ -13,7 +13,7 @@ namespace prz {
             }
 
             template<typename T>
-            void AllocateAndCopy(T*** dst, T** const src, unsigned int size) {
+            void AllocateAndCopy(T*** dst, T const * const * src, unsigned int size) {
                 *dst = new T*[size];
                 for (unsigned int i = 0; i < size; ++i) {
                     (*dst)[i] = new T[size];
