@@ -23,6 +23,7 @@ namespace prz {
 
             // returns monster by it's id or nullptr if dungeon has no monster with such id
             ZMonster* GetMonster(utl::ZIdType monsterId);
+            const ZPosition* GetMonsterPosition(utl::ZIdType monsterId) const;
 
             bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
 

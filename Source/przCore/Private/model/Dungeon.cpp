@@ -81,6 +81,18 @@ namespace prz {
             return monster;
         }
 
+        const ZPosition* ZDungeon::GetMonsterPosition(utl::ZIdType monsterId) const {
+            auto pos = mMonsterLevelMap.find(monsterId);
+            if (pos == mMonsterLevelMap.end()) {
+                LOGE("Can't get position of not-placed monster with id = %d", monsterId);
+                return nullptr;
+            }
+
+            const ZPosition* position = mLevels[pos->second]->GetMonsterPosition(monsterId);
+
+            return position;
+        }
+
         bool ZDungeon::TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff) {
             auto monsterLevelIterator = mMonsterLevelMap.find(monsterId);
             if (monsterLevelIterator == mMonsterLevelMap.end()) {
