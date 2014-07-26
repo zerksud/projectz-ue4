@@ -3,12 +3,14 @@
 
 #include "utils/LOG_ANSI.h"
 #include "utils/MatrixHelpers.h"
+#include "utils/StringHelpers.h"
 
 namespace prz {
     namespace mdl {
 
         const int ZGame::kMinimapRadius = 14;
         const int ZGame::kMinimapSize = 1 + kMinimapRadius * 2;
+        const int ZGame::kLogHistoryMaxSize = 4;
 
         ZGame::ZGame() {
             const ZDungeonLevel* level = mDungeon.GetLevel(0);
@@ -19,7 +21,13 @@ namespace prz {
         }
 
         bool ZGame::TryToMovePlayer(EMoveDirection::Type direction) {
-            return mDungeon.TryToMoveMonster(mPlayerId, direction);
+            bool success = mDungeon.TryToMoveMonster(mPlayerId, direction);
+            if (success) {
+                const ZPosition* playerPosition = mDungeon.GetLevel(0)->GetMonsterPosition(mPlayerId);
+                AddLogMessage(utl::ZString::Format("Player moved to [%d;%d].", playerPosition->GetX(), playerPosition->GetY()));
+            }
+
+            return success;
         }
 
         void ZGame::TurnPlayer(ETurnDirection::Type direction) {
@@ -69,6 +77,18 @@ namespace prz {
 
         unsigned int ZGame::GetMinimapSize() const {
             return kMinimapSize;
+        }
+
+        void ZGame::AddLogMessage(const std::string& message) {
+            if (mLogHistory.size() >= kLogHistoryMaxSize) {
+                mLogHistory.pop_back();
+            }
+
+            mLogHistory.push_front(message);
+        }
+
+        const IGame::LogMessages& ZGame::GetLogHistory() const {
+            return mLogHistory;
         }
 
     }
