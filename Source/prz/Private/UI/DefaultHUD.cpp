@@ -6,8 +6,10 @@
 #include "UI/Widgets/RootWidget.h"
 #include "UI/Widgets/NavigationWidget.h"
 #include "UI/Widgets/MinimapWidget.h"
+#include "UI/Widgets/LogWidget.h"
 
 #include "utils/Services.h"
+#include "utils/StringHelpers.h"
 #include "model/IGame.h"
 
 ADefaultHUD::ADefaultHUD(const class FPostConstructInitializeProperties& PCIP)
@@ -15,7 +17,17 @@ ADefaultHUD::ADefaultHUD(const class FPostConstructInitializeProperties& PCIP)
 }
 
 void ADefaultHUD::BeginPlay() {
-    SAssignNew(mRootWidget, SRootWidget).OwnerHUD(this);
+    SAssignNew(mRootOverlay, SOverlay)
+    + SOverlay::Slot()
+    [
+        SAssignNew(mRootWidget, SRootWidget).OwnerHUD(this)
+    ]
+    + SOverlay::Slot()
+    .VAlign(VAlign_Top)
+    .HAlign(HAlign_Left)
+    [
+        SAssignNew(mLogWidget, SLogWidget).OwnerHUD(this)
+    ];
 
     mRootWidget->AddSlot()
         .VAlign(VAlign_Bottom)
@@ -39,11 +51,11 @@ void ADefaultHUD::BeginPlay() {
         ];
 
     if (GEngine->IsValidLowLevel()) {
-        GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(mRootWidget.ToSharedRef()));
+        GEngine->GameViewport->AddViewportWidgetContent(SNew(SWeakWidget).PossiblyNullContent(mRootOverlay.ToSharedRef()));
     }
 
-    if (mRootWidget.IsValid()) {
-        mRootWidget->SetVisibility(EVisibility::Visible);
+    if (mRootOverlay.IsValid()) {
+        mRootOverlay->SetVisibility(EVisibility::Visible);
     }
 }
 
@@ -60,6 +72,9 @@ void ADefaultHUD::DrawHUD() {
 
     prz::mdl::IGame* game = GET_SERVICE(prz::mdl::IGame);
     mMinimapWidget->SetMinimap(game->GetMinimap());
+
+    std::string joinedLog = prz::utl::ZString::Join(game->GetLogHistory());
+    mLogWidget->UpdateLogHistory(FText::FromString(joinedLog.c_str()));
 
     Super::DrawHUD();
 }

@@ -14,6 +14,8 @@ public:
     virtual void DrawHUD() override;
 
 protected:
+    TSharedPtr<SOverlay> mRootOverlay;
     TSharedPtr<class SRootWidget> mRootWidget;
     TSharedPtr<class SMinimapWidget> mMinimapWidget;
+    TSharedPtr<class SLogWidget> mLogWidget;
 };
