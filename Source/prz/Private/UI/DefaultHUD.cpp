@@ -3,7 +3,7 @@
 
 #include <algorithm>
 
-#include "UI/Widgets/RootWidget.h"
+#include "UI/Widgets/DPIScaledWidget.h"
 #include "UI/Widgets/NavigationWidget.h"
 #include "UI/Widgets/MinimapWidget.h"
 #include "UI/Widgets/LogWidget.h"
@@ -20,7 +20,7 @@ void ADefaultHUD::BeginPlay() {
     SAssignNew(mRootOverlay, SOverlay)
     + SOverlay::Slot()
     [
-        SAssignNew(mRootWidget, SRootWidget).OwnerHUD(this)
+        SAssignNew(mDPIScaledWidget, SDPIScaledWidget).OwnerHUD(this)
     ]
     + SOverlay::Slot()
     .VAlign(VAlign_Top)
@@ -29,7 +29,7 @@ void ADefaultHUD::BeginPlay() {
         SAssignNew(mLogWidget, SLogWidget).OwnerHUD(this)
     ];
 
-    mRootWidget->AddSlot()
+    mDPIScaledWidget->AddSlot()
         .VAlign(VAlign_Bottom)
         .HAlign(HAlign_Left)
         [
@@ -38,7 +38,7 @@ void ADefaultHUD::BeginPlay() {
 
     prz::mdl::IGame* game = GET_SERVICE(prz::mdl::IGame);
     unsigned int minimapSize = game->GetMinimapSize();
-    mRootWidget->AddSlot()
+    mDPIScaledWidget->AddSlot()
         .VAlign(VAlign_Bottom)
         .HAlign(HAlign_Right)
         [
@@ -68,7 +68,7 @@ void ADefaultHUD::DrawHUD() {
     float scaleY = sizeY / 90.0f / RequestedContentScaleFactor;
 
     int32 scale = std::floor(std::min(scaleX, scaleY));
-    mRootWidget->SetDPIScale(scale);
+    mDPIScaledWidget->SetDPIScale(scale);
 
     prz::mdl::IGame* game = GET_SERVICE(prz::mdl::IGame);
     mMinimapWidget->SetMinimap(game->GetMinimap());

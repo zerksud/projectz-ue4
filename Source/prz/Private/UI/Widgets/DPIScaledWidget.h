@@ -2,8 +2,8 @@
 
 #include "Slate.h"
 
-class SRootWidget : public SCompoundWidget {
-    SLATE_BEGIN_ARGS(SRootWidget) {
+class SDPIScaledWidget : public SCompoundWidget {
+    SLATE_BEGIN_ARGS(SDPIScaledWidget) {
     }
     SLATE_ARGUMENT(TWeakObjectPtr<class ADefaultHUD>, OwnerHUD)
     SLATE_END_ARGS()

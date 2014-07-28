@@ -15,7 +15,7 @@ public:
 
 protected:
     TSharedPtr<SOverlay> mRootOverlay;
-    TSharedPtr<class SRootWidget> mRootWidget;
+    TSharedPtr<class SDPIScaledWidget> mDPIScaledWidget;
     TSharedPtr<class SMinimapWidget> mMinimapWidget;
     TSharedPtr<class SLogWidget> mLogWidget;
 };

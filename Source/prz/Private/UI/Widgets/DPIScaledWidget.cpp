@@ -1,15 +1,15 @@
 #include "prz.h"
-#include "UI/Widgets/RootWidget.h"
+#include "UI/Widgets/DPIScaledWidget.h"
 
 #include "utils/LOG_ANSI.h"
 
-void SRootWidget::Construct(const FArguments& InArgs) {
+void SDPIScaledWidget::Construct(const FArguments& InArgs) {
     OwnerHUD = InArgs._OwnerHUD;
 
     ChildSlot
     [
         SNew(SDPIScaler)
-        .DPIScale(this, &SRootWidget::GetDPIScale)
+        .DPIScale(this, &SDPIScaledWidget::GetDPIScale)
         [
             SAssignNew(mDPIScaledOverlay, SOverlay)
         ]
@@ -17,11 +17,11 @@ void SRootWidget::Construct(const FArguments& InArgs) {
     
 }
 
-float SRootWidget::GetDPIScale() const {
+float SDPIScaledWidget::GetDPIScale() const {
     return mScale;
 }
 
-void SRootWidget::SetDPIScale(int32 scale) {
+void SDPIScaledWidget::SetDPIScale(int32 scale) {
     if (scale <= 0) {
         LOGE("Can't set non-positive scale = %d", scale);
         return;
@@ -30,6 +30,6 @@ void SRootWidget::SetDPIScale(int32 scale) {
     mScale = scale;
 }
 
-SOverlay::FOverlaySlot& SRootWidget::AddSlot(int32 zorder) {
+SOverlay::FOverlaySlot& SDPIScaledWidget::AddSlot(int32 zorder) {
     return mDPIScaledOverlay->AddSlot(zorder);
 }
