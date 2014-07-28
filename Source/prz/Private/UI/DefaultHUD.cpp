@@ -73,8 +73,7 @@ void ADefaultHUD::DrawHUD() {
     prz::mdl::IGame* game = GET_SERVICE(prz::mdl::IGame);
     mMinimapWidget->SetMinimap(game->GetMinimap());
 
-    std::string joinedLog = prz::utl::ZString::Join(game->GetLogHistory());
-    mLogWidget->UpdateLogHistory(FText::FromString(joinedLog.c_str()));
+    mLogWidget->UpdateLogHistory(FText::FromString(game->GetLogHistory().c_str()));
 
     Super::DrawHUD();
 }

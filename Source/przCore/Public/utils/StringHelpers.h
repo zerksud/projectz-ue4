@@ -3,16 +3,18 @@
 #include <list>
 #include <string>
 
-#include "Core.h"
-
 namespace prz {
     namespace utl {
-        class PRZCORE_API ZString {
+
+        class ZString {
         public:
+            ZString() = delete;
+
             static std::string Format(const char* format, ...);
 
-            static std::string Join(const std::list<std::string>& stringList, std::string delimeter = "\n");
+            static std::string Join(const std::list<std::string>& stringList, const std::string& delimeter = "\n");
 
         };
+
     }
 }

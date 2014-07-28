@@ -31,7 +31,7 @@ namespace prz {
             return result;
         }
 
-        std::string ZString::Join(const std::list<std::string> & stringList, std::string delimeter) {
+        std::string ZString::Join(const std::list<std::string> & stringList, const std::string& delimeter) {
             std::stringstream ss;
             if (stringList.size() > 0) {
                 ss << stringList.front();

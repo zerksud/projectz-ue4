@@ -1,6 +1,7 @@
 #pragma once
 
 #include "model/IGame.h"
+#include "model/GameLog.h"
 
 namespace prz {
     namespace mdl {
@@ -16,7 +17,7 @@ namespace prz {
             virtual const ZMinimap GetMinimap() override;
             virtual unsigned int GetMinimapSize() const override;
 
-            virtual const LogMessages& GetLogHistory() const override;
+            virtual const std::string& GetLogHistory() override;
 
         private:
             static const int kMinimapRadius;
@@ -24,12 +25,10 @@ namespace prz {
 
             static const int kLogHistoryMaxSize;
 
-            void AddLogMessage(const std::string& message);
-
             ZDungeon mDungeon;
             utl::ZIdType mPlayerId;
 
-            LogMessages mLogHistory;
+            ZGameLog mLogHistory;
         };
 
     }

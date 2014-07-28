@@ -16,8 +16,7 @@ namespace prz {
             virtual const ZMinimap GetMinimap() = 0;
             virtual unsigned int GetMinimapSize() const = 0;
 
-            typedef std::list<std::string> LogMessages;
-            virtual const LogMessages& GetLogHistory() const = 0;
+            virtual const std::string& GetLogHistory() = 0;
         };
 
     }

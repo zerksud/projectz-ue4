@@ -24,7 +24,7 @@ namespace prz {
             bool success = mDungeon.TryToMoveMonster(mPlayerId, direction);
             if (success) {
                 const ZPosition* playerPosition = mDungeon.GetLevel(0)->GetMonsterPosition(mPlayerId);
-                AddLogMessage(utl::ZString::Format("Player moved to [%d;%d].", playerPosition->GetX(), playerPosition->GetY()));
+                mLogHistory.Log("You moved to [%d;%d].", playerPosition->GetX(), playerPosition->GetY());
             }
 
             return success;
@@ -79,16 +79,8 @@ namespace prz {
             return kMinimapSize;
         }
 
-        void ZGame::AddLogMessage(const std::string& message) {
-            if (mLogHistory.size() >= kLogHistoryMaxSize) {
-                mLogHistory.pop_back();
-            }
-
-            mLogHistory.push_front(message);
-        }
-
-        const IGame::LogMessages& ZGame::GetLogHistory() const {
-            return mLogHistory;
+        const std::string& ZGame::GetLogHistory() {
+            return mLogHistory.GetHistory();
         }
 
     }
