@@ -25,6 +25,8 @@ namespace prz {
             if (success) {
                 const ZPosition* playerPosition = mDungeon.GetLevel(0)->GetMonsterPosition(mPlayerId);
                 mLogHistory.Log("You moved to [%d;%d].", playerPosition->GetX(), playerPosition->GetY());
+            } else {
+                mLogHistory.Log("You can't move there.");
             }
 
             return success;
