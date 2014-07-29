@@ -23,7 +23,8 @@ namespace prz {
         bool ZGame::TryToMovePlayer(EMoveDirection::Type direction) {
             bool success = mDungeon.TryToMoveMonster(mPlayerId, direction);
             if (success) {
-                const ZPosition* playerPosition = mDungeon.GetLevel(0)->GetMonsterPosition(mPlayerId);
+                unsigned int currentLevel = mDungeon.GetMonsterLevelIndex(mPlayerId);
+                const ZPosition* playerPosition = mDungeon.GetLevel(currentLevel)->GetMonsterPosition(mPlayerId);
                 mLogHistory.Log("You moved to [%d;%d].", playerPosition->GetX(), playerPosition->GetY());
             } else {
                 mLogHistory.Log("You can't move there.");
