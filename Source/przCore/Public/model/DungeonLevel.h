@@ -33,10 +33,10 @@ namespace prz {
 
         class ZDungeonLevel {
         public:
-            typedef char ZMapCell;
             typedef std::vector<ZPosition> StaircaseList;
 
-            ZDungeonLevel(int width, int height, const ZMapCell* map);
+            // holds map matrix
+            ZDungeonLevel(int width, int height, EDungeonCell::Type*** map);
             ZDungeonLevel(const ZDungeonLevel& other) = delete;
             ZDungeonLevel& operator=(const ZDungeonLevel& other) = delete;
             virtual ~ZDungeonLevel();
@@ -71,20 +71,12 @@ namespace prz {
             bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
 
         private:
-            static const ZMapCell kSolidCell;
-            static const ZMapCell kHollowCell;
-            static const ZMapCell kUpStaircaseCell;
-            static const ZMapCell kDownStaircaseCell;
-
-            typedef std::unordered_map<ZMapCell, EDungeonCell::Type> ZMapToTerrainCellMap;
-            static const ZMapToTerrainCellMap kMapToTerrainCellMap;
-
             typedef std::map<EMoveDirection::Type, ETurnDirection::Type> ZMoveToTurnDirectionMap;
             static const ZMoveToTurnDirectionMap kMoveToTurnDirectionMap;
 
             void CreateFailSafeDungeon();
 
-            void ParseMap(const ZMapCell* terrain);
+            void ParseMap(EDungeonCell::Type*** map);
             bool CellIndicesAreValid(int x, int y) const;
 
             int CalcCellLinearIndex(int x, int y) const;
@@ -123,7 +115,7 @@ namespace prz {
 
             int mWidth;
             int mHeight;
-            EDungeonCell::Type* mTerrain;
+            EDungeonCell::Type** mTerrain;
 
             StaircaseList mUpStaircases;
             StaircaseList mDownStaircases;

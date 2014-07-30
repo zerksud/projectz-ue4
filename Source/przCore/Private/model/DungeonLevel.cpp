@@ -1,27 +1,12 @@
 #include "przCorePrivatePCH.h"
-
-#include <cstring>
-
 #include "model/DungeonLevel.h"
-#include "utils/IUniqueIdRegistry.h"
-#include "utils/Services.h"
+
 #include "utils/LOG_ANSI.h"
-#include "utils/Helpers.h"
+#include "utils/VectorHelpers.h"
+#include "utils/MatrixHelpers.h"
 
 namespace prz {
     namespace mdl {
-
-        const ZDungeonLevel::ZMapCell ZDungeonLevel::kSolidCell = '#';
-        const ZDungeonLevel::ZMapCell ZDungeonLevel::kHollowCell = '.';
-        const ZDungeonLevel::ZMapCell ZDungeonLevel::kUpStaircaseCell = '<';
-        const ZDungeonLevel::ZMapCell ZDungeonLevel::kDownStaircaseCell = '>';
-
-        const ZDungeonLevel::ZMapToTerrainCellMap ZDungeonLevel::kMapToTerrainCellMap = {
-            {kSolidCell, EDungeonCell::SolidRock},
-            {kHollowCell, EDungeonCell::Emptiness},
-            {kUpStaircaseCell, EDungeonCell::UpStaircase},
-            {kDownStaircaseCell, EDungeonCell::DownStaircase}
-        };
 
         const ZDungeonLevel::ZMoveToTurnDirectionMap ZDungeonLevel::kMoveToTurnDirectionMap = {
             {EMoveDirection::Forward, ETurnDirection::Forward},
@@ -31,24 +16,19 @@ namespace prz {
         };
 
         void ZDungeonLevel::CreateFailSafeDungeon() {
-            mWidth = 3;
-            mHeight = 3;
-            ParseMap(""
-            "###"
-            "#.#"
-            "###");
+            mWidth = 1;
+            mHeight = 1;
+
+            EDungeonCell::Type** map;
+            utl::ZMatrix::Allocate(&map, 1);
+            map[0][0] = EDungeonCell::DownStaircase;
+
+            ParseMap(&map);
         }
 
-        ZDungeonLevel::ZDungeonLevel(int width, int height, const ZMapCell* map) {
+        ZDungeonLevel::ZDungeonLevel(int width, int height, EDungeonCell::Type*** map) {
             if (width <= 0 || height <= 0) {
                 LOGE("Can't create dungeon with size %dx%d", width, height);
-                CreateFailSafeDungeon();
-                return;
-            }
-
-            size_t len = strlen(map);
-            if (len != width * height) {
-                LOGE("Can't create dungeon with size %dx%d from array with size %d", width, height, len);
                 CreateFailSafeDungeon();
                 return;
             }
@@ -58,31 +38,18 @@ namespace prz {
             ParseMap(map);
         }
 
-        void ZDungeonLevel::ParseMap(const ZMapCell* map) {
-            mTerrain = new EDungeonCell::Type[mWidth * mHeight];
+        void ZDungeonLevel::ParseMap(EDungeonCell::Type*** map) {
+            mTerrain = *map;
 
-            for (int y = 0; y < mHeight; ++y) {
-                for (int x = 0; x < mWidth; ++x) {
-                    EDungeonCell::Type cell = EDungeonCell::SolidRock;
+            for (int x = 0; x < mWidth; ++x) {
+                for (int y = 0; y < mHeight; ++y) {
+                    EDungeonCell::Type mapCell = mTerrain[x][y];
 
-                    int index = CalcCellLinearIndex(x, y);
-                    const ZMapCell mapCell = map[index];
-
-                    if (mapCell == kUpStaircaseCell) {
+                    if (mapCell == EDungeonCell::UpStaircase) {
                         mUpStaircases.push_back(ZPosition(x, y));
-                    } else if (mapCell == kDownStaircaseCell) {
+                    } else if (mapCell == EDungeonCell::DownStaircase) {
                         mDownStaircases.push_back(ZPosition(x, y));
                     }
-
-                    auto mapCellReplacement = kMapToTerrainCellMap.find(mapCell);
-
-                    if (mapCellReplacement != kMapToTerrainCellMap.end()) {
-                        cell = mapCellReplacement->second;
-                    } else {
-                        LOGE("Got unknown map cell type '%c'", mapCell);
-                    }
-
-                    mTerrain[index] = cell;
                 }
             }
         }
@@ -94,7 +61,7 @@ namespace prz {
                 delete pair.second;
             }
 
-            delete mTerrain;
+            utl::ZMatrix::Deallocate<EDungeonCell::Type>(&mTerrain, mHeight);
         }
 
         int ZDungeonLevel::GetWidth() const {
@@ -154,7 +121,7 @@ namespace prz {
                 return EDungeonCell::Monster;
             }
 
-            EDungeonCell::Type cellType = mTerrain[CalcCellLinearIndex(x, y)];
+            EDungeonCell::Type cellType = mTerrain[x][y];
 
             return cellType;
         }
@@ -363,8 +330,7 @@ namespace prz {
         }
 
         bool ZDungeonLevel::CellIsSolidImpl(int x, int y) const {
-            int index = CalcCellLinearIndex(x, y);
-            bool solid = mTerrain[index] == EDungeonCell::SolidRock;
+            bool solid = mTerrain[x][y] == EDungeonCell::SolidRock;
 
             return solid;
         }
