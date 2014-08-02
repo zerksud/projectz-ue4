@@ -7,8 +7,8 @@
 namespace prz {
     namespace mdl {
 
-        const int ZDungeonLevelGenerator::kDungeonLevelWidth = 256;
-        const int ZDungeonLevelGenerator::kDungeonLevelHeight = 256;
+        const int ZDungeonLevelGenerator::kDungeonLevelWidth = 128;
+        const int ZDungeonLevelGenerator::kDungeonLevelHeight = 128;
 
         const int ZDungeonLevelGenerator::kSubDungeonMinSize = 10;
         const int ZDungeonLevelGenerator::kRoomMinSize = 5;
