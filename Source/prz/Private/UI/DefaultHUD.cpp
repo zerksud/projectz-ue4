@@ -9,7 +9,6 @@
 #include "UI/Widgets/LogWidget.h"
 
 #include "utils/Services.h"
-#include "utils/StringHelpers.h"
 #include "model/IGame.h"
 
 ADefaultHUD::ADefaultHUD(const class FPostConstructInitializeProperties& PCIP)
