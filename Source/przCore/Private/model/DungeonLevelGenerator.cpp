@@ -1,10 +1,8 @@
 #include "przCorePrivatePCH.h"
 #include "model/DungeonLevelGenerator.h"
 
-#include <cstdlib>
-#include <ctime>
-
 #include "utils/MatrixHelpers.h"
+#include "utils/RandomHelpers.h"
 
 namespace prz {
     namespace mdl {
@@ -47,7 +45,7 @@ namespace prz {
             int height = rootNode->dungeon.height;
 
             if (width > 2 * kSubDungeonMinSize && height > 2 * kSubDungeonMinSize) {
-                if (std::rand() % 2 == 0) {
+                if (utl::ZRandomHelpers::FlipCoin()) {
                     SplitSubDungeonVertically(rootNode, leafs);
                 } else {
                     SplitSubDungeonHorizontally(rootNode, leafs);
@@ -68,7 +66,7 @@ namespace prz {
             int height = rootNode->dungeon.height;
 
             int maxSubDungeonsWidthDiff = width - 2 * kSubDungeonMinSize;
-            int lowerSubDungeonWidth = kSubDungeonMinSize + std::rand() % (maxSubDungeonsWidthDiff + 1);
+            int lowerSubDungeonWidth = kSubDungeonMinSize + utl::ZRandomHelpers::GetRandomValue(maxSubDungeonsWidthDiff);
 
             rootNode->lowerSubDungeon = new BSPTreeNode(SubDungeon(x, y, lowerSubDungeonWidth, height));
             rootNode->higherSubDungeon = new BSPTreeNode(SubDungeon(x + lowerSubDungeonWidth, y, width - lowerSubDungeonWidth, height));
@@ -84,7 +82,7 @@ namespace prz {
             int height = rootNode->dungeon.height;
 
             int maxSubDungeonsHeightDiff = height - 2 * kSubDungeonMinSize;
-            int lowerSubDungeonHeight = kSubDungeonMinSize + std::rand() % (maxSubDungeonsHeightDiff + 1);
+            int lowerSubDungeonHeight = kSubDungeonMinSize + utl::ZRandomHelpers::GetRandomValue(maxSubDungeonsHeightDiff);
 
             rootNode->lowerSubDungeon = new BSPTreeNode(SubDungeon(x, y, width, lowerSubDungeonHeight));
             rootNode->higherSubDungeon = new BSPTreeNode(SubDungeon(x, y + lowerSubDungeonHeight, width, height - lowerSubDungeonHeight));
@@ -113,14 +111,14 @@ namespace prz {
 
             BSPTreeNode subDungeonsTreeRoot(SubDungeon(0, 0, kDungeonLevelWidth, kDungeonLevelHeight));
             BSPTreeNodes leafs;
-            std::srand(std::time(0));
+            utl::ZRandomHelpers::Initialize();
             GenerateBSPTree(&subDungeonsTreeRoot, &leafs);
 
             for (auto& item : leafs) {
                 CreateRoomInsideSubDungeon(&map, &item->dungeon);
             }
 
-            int startLeafIndex = std::rand() % leafs.size();
+            int startLeafIndex = utl::ZRandomHelpers::GetRandomValue(leafs.size() - 1);
             const SubDungeon& startSubDungeon = leafs[startLeafIndex]->dungeon;
 
             map[startSubDungeon.x + 2][startSubDungeon.y + 2] = EDungeonCell::UpStaircase;
