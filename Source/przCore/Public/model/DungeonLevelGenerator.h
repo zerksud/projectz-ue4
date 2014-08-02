@@ -20,6 +20,7 @@ namespace prz {
             static const int kDungeonLevelHeight;
 
             static const int kSubDungeonMinSize;
+            static const int kRoomMinSize;
 
             static void GenerateBSPTree(BSPTreeNode* rootNode, BSPTreeNodes* leafs);
             static void SplitSubDungeonVertically(BSPTreeNode* rootNode, BSPTreeNodes* leafs);

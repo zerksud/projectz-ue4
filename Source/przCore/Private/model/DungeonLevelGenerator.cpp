@@ -11,6 +11,7 @@ namespace prz {
         const int ZDungeonLevelGenerator::kDungeonLevelHeight = 256;
 
         const int ZDungeonLevelGenerator::kSubDungeonMinSize = 10;
+        const int ZDungeonLevelGenerator::kRoomMinSize = 5;
 
         struct SubDungeon {
             int x;
@@ -91,10 +92,18 @@ namespace prz {
             GenerateBSPTree(rootNode->higherSubDungeon, leafs);
         }
 
-        void ZDungeonLevelGenerator::CreateRoomInsideSubDungeon(EDungeonCell::Type*** map, SubDungeon* dungeon) {
-            for (int dx = 1; dx < dungeon->width - 1; ++dx) {
-                for (int dy = 1; dy < dungeon->height - 1; ++dy) {
-                    (*map)[dungeon->x + dx][dungeon->y + dy] = EDungeonCell::Emptiness;
+        void ZDungeonLevelGenerator::CreateRoomInsideSubDungeon(EDungeonCell::Type*** map, SubDungeon* subDungeon) {
+            int roomWidth = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, subDungeon->width - 2);
+            int roomX = subDungeon->x + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->width - 1 - roomWidth);
+
+            int roomHeight = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, subDungeon->height - 2);
+            int roomY = subDungeon->y + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->height - 1 - roomHeight);
+
+            *subDungeon = SubDungeon(roomX, roomY, roomWidth, roomHeight);
+
+            for (int dx = 0; dx < roomWidth - 1; ++dx) {
+                for (int dy = 0; dy < roomHeight - 1; ++dy) {
+                    (*map)[roomX + dx][roomY + dy] = EDungeonCell::Emptiness;
                 }
             }
         }
@@ -121,7 +130,7 @@ namespace prz {
             int startLeafIndex = utl::ZRandomHelpers::GetRandomValue(leafs.size() - 1);
             const SubDungeon& startSubDungeon = leafs[startLeafIndex]->dungeon;
 
-            map[startSubDungeon.x + 2][startSubDungeon.y + 2] = EDungeonCell::UpStaircase;
+            map[startSubDungeon.x + 1][startSubDungeon.y + 1] = EDungeonCell::UpStaircase;
 
             ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &map);
 
