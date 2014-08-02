@@ -93,6 +93,14 @@ namespace prz {
             GenerateBSPTree(rootNode->higherSubDungeon, leafs);
         }
 
+        void ZDungeonLevelGenerator::CreateRoomInsideSubDungeon(EDungeonCell::Type*** map, SubDungeon* dungeon) {
+            for (int dx = 1; dx < dungeon->width - 1; ++dx) {
+                for (int dy = 1; dy < dungeon->height - 1; ++dy) {
+                    (*map)[dungeon->x + dx][dungeon->y + dy] = EDungeonCell::Emptiness;
+                }
+            }
+        }
+
         ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel::StaircaseList& upStaircases) {
             EDungeonCell::Type** map;
             utl::ZMatrix::Allocate(&map, kDungeonLevelWidth, kDungeonLevelHeight);
@@ -109,13 +117,7 @@ namespace prz {
             GenerateBSPTree(&subDungeonsTreeRoot, &leafs);
 
             for (auto& item : leafs) {
-                int x = item->dungeon.x;
-                int y = item->dungeon.y;
-                for (int dx = 1; dx < item->dungeon.width - 1; ++dx) {
-                    for (int dy = 1; dy < item->dungeon.height - 1; ++dy) {
-                        map[x + dx][y + dy] = EDungeonCell::Emptiness;
-                    }
-                }
+                CreateRoomInsideSubDungeon(&map, &item->dungeon);
             }
 
             int startLeafIndex = std::rand() % leafs.size();

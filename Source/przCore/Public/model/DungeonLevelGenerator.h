@@ -24,6 +24,7 @@ namespace prz {
             static void GenerateBSPTree(BSPTreeNode* rootNode, BSPTreeNodes* leafs);
             static void SplitSubDungeonVertically(BSPTreeNode* rootNode, BSPTreeNodes* leafs);
             static void SplitSubDungeonHorizontally(BSPTreeNode* rootNode, BSPTreeNodes* leafs);
+            static void CreateRoomInsideSubDungeon(EDungeonCell::Type*** map, struct SubDungeon* dungeon);
         };
     }
 }
