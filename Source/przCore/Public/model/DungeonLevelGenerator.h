@@ -6,7 +6,8 @@ namespace prz {
     namespace mdl {
 
         struct BSPTreeNode;
-        typedef std::vector<BSPTreeNode*> BSPTreeNodes;
+        struct SubDungeon;
+        typedef std::vector<SubDungeon*> DungeonRooms;
 
         class ZDungeonLevelGenerator : public IDungeonLevelGenerator {
         public:
@@ -22,10 +23,10 @@ namespace prz {
             static const int kSubDungeonMinSize;
             static const int kRoomMinSize;
 
-            static void GenerateBSPTree(BSPTreeNode* rootNode, BSPTreeNodes* leafs);
-            static void SplitSubDungeonVertically(BSPTreeNode* rootNode, BSPTreeNodes* leafs);
-            static void SplitSubDungeonHorizontally(BSPTreeNode* rootNode, BSPTreeNodes* leafs);
-            static void CreateRoomInsideSubDungeon(EDungeonCell::Type*** map, struct SubDungeon* dungeon);
+            static void GenerateBSPTree(BSPTreeNode* rootNode, DungeonRooms* rooms);
+            static void SplitSubDungeonVertically(BSPTreeNode* rootNode, DungeonRooms* rooms);
+            static void SplitSubDungeonHorizontally(BSPTreeNode* rootNode, DungeonRooms* rooms);
+            static void CreateRoomInsideSubDungeon(EDungeonCell::Type*** map, SubDungeon* dungeon);
         };
     }
 }
