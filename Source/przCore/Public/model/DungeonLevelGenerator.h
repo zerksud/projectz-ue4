@@ -23,7 +23,7 @@ namespace prz {
             static const int kSubDungeonMinSize;
             static const int kRoomMinSize;
 
-            static void GenerateBSPTree(BSPTreeNode* rootNode, DungeonRooms* rooms);
+            static void GenerateBSPTree(BSPTreeNode* rootNode, EDungeonCell::Type*** map, DungeonRooms* rooms);
             static void SplitSubDungeonVertically(BSPTreeNode* rootNode, DungeonRooms* rooms);
             static void SplitSubDungeonHorizontally(BSPTreeNode* rootNode, DungeonRooms* rooms);
             static void CreateRoomInsideSubDungeon(EDungeonCell::Type*** map, SubDungeon* dungeon);

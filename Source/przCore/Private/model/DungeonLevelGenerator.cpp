@@ -41,7 +41,7 @@ namespace prz {
         };
 
 
-        void ZDungeonLevelGenerator::GenerateBSPTree(BSPTreeNode* rootNode, DungeonRooms* rooms) {
+        void ZDungeonLevelGenerator::GenerateBSPTree(BSPTreeNode* rootNode, EDungeonCell::Type*** map, DungeonRooms* rooms) {
             int width = rootNode->dungeon.width;
             int height = rootNode->dungeon.height;
 
@@ -57,7 +57,12 @@ namespace prz {
                 SplitSubDungeonHorizontally(rootNode, rooms);
             } else {
                 rooms->push_back(&rootNode->dungeon);
+                CreateRoomInsideSubDungeon(map, &rootNode->dungeon);
+                return;
             }
+
+            GenerateBSPTree(rootNode->lowerSubDungeon, map, rooms);
+            GenerateBSPTree(rootNode->higherSubDungeon, map, rooms);
         }
 
         void ZDungeonLevelGenerator::SplitSubDungeonVertically(BSPTreeNode* rootNode, DungeonRooms* rooms) {
@@ -71,9 +76,6 @@ namespace prz {
 
             rootNode->lowerSubDungeon = new BSPTreeNode(SubDungeon(x, y, lowerSubDungeonWidth, height));
             rootNode->higherSubDungeon = new BSPTreeNode(SubDungeon(x + lowerSubDungeonWidth, y, width - lowerSubDungeonWidth, height));
-
-            GenerateBSPTree(rootNode->lowerSubDungeon, rooms);
-            GenerateBSPTree(rootNode->higherSubDungeon, rooms);
         }
 
         void ZDungeonLevelGenerator::SplitSubDungeonHorizontally(BSPTreeNode* rootNode, DungeonRooms* rooms) {
@@ -87,9 +89,6 @@ namespace prz {
 
             rootNode->lowerSubDungeon = new BSPTreeNode(SubDungeon(x, y, width, lowerSubDungeonHeight));
             rootNode->higherSubDungeon = new BSPTreeNode(SubDungeon(x, y + lowerSubDungeonHeight, width, height - lowerSubDungeonHeight));
-
-            GenerateBSPTree(rootNode->lowerSubDungeon, rooms);
-            GenerateBSPTree(rootNode->higherSubDungeon, rooms);
         }
 
         void ZDungeonLevelGenerator::CreateRoomInsideSubDungeon(EDungeonCell::Type*** map, SubDungeon* subDungeon) {
@@ -121,11 +120,7 @@ namespace prz {
             BSPTreeNode subDungeonsTreeRoot(SubDungeon(0, 0, kDungeonLevelWidth, kDungeonLevelHeight));
             DungeonRooms rooms;
             utl::ZRandomHelpers::Initialize();
-            GenerateBSPTree(&subDungeonsTreeRoot, &rooms);
-
-            for (auto subDungeonPtr : rooms) {
-                CreateRoomInsideSubDungeon(&map, subDungeonPtr);
-            }
+            GenerateBSPTree(&subDungeonsTreeRoot, &map, &rooms);
 
             int startLeafIndex = utl::ZRandomHelpers::GetRandomValue(rooms.size() - 1);
             const SubDungeon* startSubDungeon = rooms[startLeafIndex];
