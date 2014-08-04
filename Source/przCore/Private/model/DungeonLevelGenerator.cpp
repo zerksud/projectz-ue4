@@ -21,8 +21,10 @@ namespace prz {
             int x2;
             int y2;
 
+            ZPosition someValidCell;
+
             SubDungeon(int pX1, int pY1, int pX2, int pY2)
-                : x1(pX1), y1(pY1), x2(pX2), y2(pY2) {
+                : x1(pX1), y1(pY1), x2(pX2), y2(pY2), someValidCell(-1, -1) {
             }
 
             int GetWidth() {
@@ -51,12 +53,10 @@ namespace prz {
         };
 
         void ShrinkSubDungeon(SubDungeon* outerSubDungeon, const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon) {
-            int x1 = std::min(lowerSubDungeon.x1, higherSubDungeon.x1);
-            int y1 = std::min(lowerSubDungeon.y1, higherSubDungeon.y1);
-            int x2 = std::max(lowerSubDungeon.x2, higherSubDungeon.x2);
-            int y2 = std::max(lowerSubDungeon.y2, higherSubDungeon.y2);
-
-            *outerSubDungeon = SubDungeon(x1, y1, x2, y2);
+            outerSubDungeon->x1 = std::min(lowerSubDungeon.x1, higherSubDungeon.x1);
+            outerSubDungeon->y1 = std::min(lowerSubDungeon.y1, higherSubDungeon.y1);
+            outerSubDungeon->x2 = std::max(lowerSubDungeon.x2, higherSubDungeon.x2);
+            outerSubDungeon->y2 = std::max(lowerSubDungeon.y2, higherSubDungeon.y2);
         }
 
         void ZDungeonLevelGenerator::GenerateBSPTree(BSPTreeNode* rootNode, EDungeonCell::Type*** map, DungeonRooms* rooms) {
@@ -76,12 +76,14 @@ namespace prz {
             } else {
                 rooms->push_back(&rootNode->dungeon);
                 CreateRoomInsideSubDungeon(map, &rootNode->dungeon);
+                rootNode->dungeon.someValidCell = ZPosition(rootNode->dungeon.x1, rootNode->dungeon.y1);
                 return;
             }
 
             GenerateBSPTree(rootNode->lowerSubDungeon, map, rooms);
             GenerateBSPTree(rootNode->higherSubDungeon, map, rooms);
             ShrinkSubDungeon(&rootNode->dungeon, rootNode->lowerSubDungeon->dungeon, rootNode->higherSubDungeon->dungeon);
+            rootNode->dungeon.someValidCell = rootNode->lowerSubDungeon->dungeon.someValidCell;
         }
 
         void ZDungeonLevelGenerator::SplitSubDungeonVertically(BSPTreeNode* rootNode, DungeonRooms* rooms) {
