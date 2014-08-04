@@ -1,6 +1,8 @@
 #include "przCorePrivatePCH.h"
 #include "model/DungeonLevelGenerator.h"
 
+#include <algorithm>
+
 #include "utils/MatrixHelpers.h"
 #include "utils/RandomHelpers.h"
 
@@ -40,6 +42,14 @@ namespace prz {
             }
         };
 
+        void ShrinkSubDungeon(SubDungeon* outerSubDungeon, const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon) {
+            int x = std::min(lowerSubDungeon.x, higherSubDungeon.x);
+            int y = std::min(lowerSubDungeon.y, higherSubDungeon.y);
+            int width = std::max(lowerSubDungeon.x + lowerSubDungeon.width, higherSubDungeon.x + lowerSubDungeon.width) - x;
+            int height = std::max(lowerSubDungeon.y + lowerSubDungeon.height, higherSubDungeon.y + lowerSubDungeon.height) - y;
+
+            *outerSubDungeon = SubDungeon(x, y, width, height);
+        }
 
         void ZDungeonLevelGenerator::GenerateBSPTree(BSPTreeNode* rootNode, EDungeonCell::Type*** map, DungeonRooms* rooms) {
             int width = rootNode->dungeon.width;
@@ -63,6 +73,7 @@ namespace prz {
 
             GenerateBSPTree(rootNode->lowerSubDungeon, map, rooms);
             GenerateBSPTree(rootNode->higherSubDungeon, map, rooms);
+            ShrinkSubDungeon(&rootNode->dungeon, rootNode->lowerSubDungeon->dungeon, rootNode->higherSubDungeon->dungeon);
         }
 
         void ZDungeonLevelGenerator::SplitSubDungeonVertically(BSPTreeNode* rootNode, DungeonRooms* rooms) {
