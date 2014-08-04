@@ -24,7 +24,6 @@ namespace prz {
             return value;
         }
 
-
         int ZRandomHelpers::GetRandomValue(int minValue, int maxValue) {
             int value = minValue + std::rand() % (maxValue - minValue + 1);
             return value;
