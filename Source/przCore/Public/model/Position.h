@@ -35,6 +35,7 @@ namespace prz {
             const ZPosition operator+(const ZPositionDiff& diff) const;
             const ZPositionDiff operator-(const ZPosition& other) const;
             bool operator==(const ZPosition& other) const;
+            bool operator!=(const ZPosition& other) const;
             ZPosition& operator=(const ZPosition& other);
 
             std::string ToString() const;

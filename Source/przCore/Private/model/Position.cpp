@@ -70,8 +70,12 @@ namespace prz {
             return ZPositionDiff(dx, dy);
         }
 
-        bool ZPosition::operator ==(const ZPosition& other) const {
+        bool ZPosition::operator==(const ZPosition& other) const {
             return (mX == other.mX && mY == other.mY);
+        }
+
+        bool ZPosition::operator!=(const ZPosition& other) const {
+            return !(*this == other);
         }
 
         ZPosition& ZPosition::operator=(const ZPosition& other) {
