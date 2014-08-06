@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+
 namespace prz {
     namespace utl {
         namespace ZMatrix {
@@ -9,6 +11,15 @@ namespace prz {
                 *matrix = new T*[height];
                 for (unsigned int i = 0; i < height; ++i) {
                     (*matrix)[i] = new T[width];
+                }
+            }
+
+            template<typename T>
+            void Allocate(T*** matrix, unsigned int width, unsigned int height, T defaultValue) {
+                *matrix = new T*[height];
+                for (unsigned int i = 0; i < height; ++i) {
+                    (*matrix)[i] = new T[width];
+                    std::fill_n((*matrix)[i], width, defaultValue);
                 }
             }
 
