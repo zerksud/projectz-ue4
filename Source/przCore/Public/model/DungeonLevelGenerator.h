@@ -23,10 +23,19 @@ namespace prz {
             static const int kSubDungeonMinSize;
             static const int kRoomMinSize;
 
-            static void GenerateBSPTree(BSPTreeNode* rootNode, EDungeonCell::Type*** map, DungeonRooms* rooms);
-            static void SplitSubDungeonVertically(BSPTreeNode* rootNode, DungeonRooms* rooms);
-            static void SplitSubDungeonHorizontally(BSPTreeNode* rootNode, DungeonRooms* rooms);
-            static void CreateRoomInsideSubDungeon(EDungeonCell::Type*** map, SubDungeon* dungeon);
+            static const int kSolidRockCellWeight;
+            static const int kEmptyCellWeight;
+            static const int kForbiddenCellWeight;
+
+            void GenerateBSPTree(BSPTreeNode* rootNode);
+            void SplitSubDungeonVertically(BSPTreeNode* rootNode);
+            void SplitSubDungeonHorizontally(BSPTreeNode* rootNode);
+            void CreateRoomInsideSubDungeon(SubDungeon* dungeon);
+            void ConnectDirectSubDungeons(const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon);
+
+            EDungeonCell::Type** mMap;
+            int** mMapCellWeight;
+            DungeonRooms mRooms;
         };
     }
 }

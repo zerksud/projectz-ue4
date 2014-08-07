@@ -2,6 +2,8 @@
 #include "model/DungeonLevelGenerator.h"
 
 #include <algorithm>
+#include <limits>
+#include <queue>
 
 #include "utils/MatrixHelpers.h"
 #include "utils/RandomHelpers.h"
@@ -9,11 +11,50 @@
 namespace prz {
     namespace mdl {
 
-        const int ZDungeonLevelGenerator::kDungeonLevelWidth = 128;
-        const int ZDungeonLevelGenerator::kDungeonLevelHeight = 128;
+        struct WeightedCell {
+            static const int kInfiniteWeight;
+
+            static int SumWeights(int leftWeight, int rightWeight) {
+                if (leftWeight == kInfiniteWeight || rightWeight == kInfiniteWeight) {
+                    return kInfiniteWeight;
+                }
+
+                return leftWeight + rightWeight;
+            }
+
+            ZPosition position;
+
+            int pathToCellWeight;
+            int pathFromCellEstimatedWeight;
+
+            WeightedCell()
+                : position(ZPosition(0, 0)), pathToCellWeight(kInfiniteWeight), pathFromCellEstimatedWeight(kInfiniteWeight) {
+            }
+
+            WeightedCell(const ZPosition& pPosition, int pPathToCellWeight, int pPathFromCellEstimatedWeight)
+                : position(pPosition), pathToCellWeight(pPathToCellWeight), pathFromCellEstimatedWeight(pPathFromCellEstimatedWeight) {
+            }
+
+            int GetTotalPathWeight() const {
+                if (pathToCellWeight == kInfiniteWeight || pathFromCellEstimatedWeight == kInfiniteWeight) {
+                    return kInfiniteWeight;
+                }
+
+                return pathToCellWeight + pathFromCellEstimatedWeight;
+            }
+        };
+
+        const int WeightedCell::kInfiniteWeight = std::numeric_limits<int>::max();
+
+        const int ZDungeonLevelGenerator::kDungeonLevelWidth = 32;
+        const int ZDungeonLevelGenerator::kDungeonLevelHeight = 32;
 
         const int ZDungeonLevelGenerator::kSubDungeonMinSize = 10;
         const int ZDungeonLevelGenerator::kRoomMinSize = 5;
+
+        const int ZDungeonLevelGenerator::kSolidRockCellWeight = 100;
+        const int ZDungeonLevelGenerator::kEmptyCellWeight = 0;
+        const int ZDungeonLevelGenerator::kForbiddenCellWeight = WeightedCell::kInfiniteWeight;
 
         struct SubDungeon {
             int x1;
@@ -52,6 +93,96 @@ namespace prz {
             }
         };
 
+        class WeightedCellAscendingOrder {
+        public:
+            bool operator() (const WeightedCell& left, const WeightedCell& right) {
+                return left.GetTotalPathWeight() > right.GetTotalPathWeight();
+            }
+        };
+
+        int CalcCellsDistance(const ZPosition& left, const ZPosition& right) {
+            ZPositionDiff diff = right - left;
+            int distance = std::abs(diff.GetdX()) + std::abs(diff.GetdY());
+
+            return distance;
+        }
+
+        struct PathCellConnection {
+            int pathToCellWeight;
+            ZPosition previousPathCell;
+
+            PathCellConnection() = default;
+
+            PathCellConnection(int pPathToCellWeight, const ZPosition& pPreviousPathCell)
+                : pathToCellWeight(pPathToCellWeight), previousPathCell(pPreviousPathCell) {
+            }
+        };
+
+        // returns true if path from cell to neighbor is shorter than previous path to that cell
+        bool CreateNeighborCell(const WeightedCell& cell, int dx, int dy, const ZPosition& finishCellPosition, int** mapCellWeight, PathCellConnection** pathConnections, WeightedCell* createdCell) {
+            ZPosition cellPosition = cell.position + ZPositionDiff(dx, dy);
+            int pathToCellWeight = WeightedCell::SumWeights(cell.pathToCellWeight, mapCellWeight[cellPosition.GetX()][cellPosition.GetY()]);
+
+            PathCellConnection* connection = &pathConnections[cellPosition.GetX()][cellPosition.GetY()];
+            if (connection->pathToCellWeight > pathToCellWeight) {
+                int pathFromCellEstimatedWeight = CalcCellsDistance(cellPosition, finishCellPosition) * 99;
+                *createdCell = WeightedCell(cellPosition, pathToCellWeight, pathFromCellEstimatedWeight);
+                *connection = PathCellConnection(pathToCellWeight, cell.position);
+                return true;
+            }
+
+            return false;
+        }
+
+        void ZDungeonLevelGenerator::ConnectDirectSubDungeons(const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon) {
+            PathCellConnection defaultPathCellConnection = PathCellConnection(WeightedCell::kInfiniteWeight, ZPosition(0, 0));
+            PathCellConnection** pathConnections;
+            utl::ZMatrix::Allocate(&pathConnections, kDungeonLevelWidth, kDungeonLevelHeight, defaultPathCellConnection);
+
+            std::priority_queue<WeightedCell, std::vector<WeightedCell>, WeightedCellAscendingOrder> queue;
+            ZPosition startCellPosition = lowerSubDungeon.someValidCell;
+            ZPosition finishCellPosition = higherSubDungeon.someValidCell;
+
+            queue.emplace(startCellPosition, 0, CalcCellsDistance(startCellPosition, finishCellPosition));
+
+            while (!queue.empty() && queue.top().position != finishCellPosition) {
+                WeightedCell currentCell = queue.top();
+                queue.pop();
+
+                WeightedCell cell = WeightedCell(currentCell);
+                if (currentCell.position.GetX() > 0
+                    && CreateNeighborCell(currentCell, -1, 0, finishCellPosition, mMapCellWeight, pathConnections, &cell)) {
+                    queue.push(cell);
+                }
+
+                if (currentCell.position.GetX() < kDungeonLevelWidth - 1
+                    && CreateNeighborCell(currentCell, 1, 0, finishCellPosition, mMapCellWeight, pathConnections, &cell)) {
+                    queue.push(cell);
+                }
+
+                if (currentCell.position.GetY() > 0
+                    && CreateNeighborCell(currentCell, 0, -1, finishCellPosition, mMapCellWeight, pathConnections, &cell)) {
+                    queue.push(cell);
+                }
+
+                if (currentCell.position.GetY() < kDungeonLevelHeight - 1
+                    && CreateNeighborCell(currentCell, 0, 1, finishCellPosition, mMapCellWeight, pathConnections, &cell)) {
+                    queue.push(cell);
+                }
+            }
+
+            if (queue.top().position == finishCellPosition) {
+                ZPosition& previousPathCell = pathConnections[finishCellPosition.GetX()][finishCellPosition.GetY()].previousPathCell;
+                while (previousPathCell != startCellPosition) {
+                    mMap[previousPathCell.GetX()][previousPathCell.GetY()] = EDungeonCell::Emptiness;
+                    mMapCellWeight[previousPathCell.GetX()][previousPathCell.GetY()] = kEmptyCellWeight;
+                    previousPathCell = pathConnections[previousPathCell.GetX()][previousPathCell.GetY()].previousPathCell;
+                }
+            }
+
+            utl::ZMatrix::Deallocate(&pathConnections, kDungeonLevelHeight);
+        }
+
         void ShrinkSubDungeon(SubDungeon* outerSubDungeon, const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon) {
             outerSubDungeon->x1 = std::min(lowerSubDungeon.x1, higherSubDungeon.x1);
             outerSubDungeon->y1 = std::min(lowerSubDungeon.y1, higherSubDungeon.y1);
@@ -59,34 +190,35 @@ namespace prz {
             outerSubDungeon->y2 = std::max(lowerSubDungeon.y2, higherSubDungeon.y2);
         }
 
-        void ZDungeonLevelGenerator::GenerateBSPTree(BSPTreeNode* rootNode, EDungeonCell::Type*** map, DungeonRooms* rooms) {
+        void ZDungeonLevelGenerator::GenerateBSPTree(BSPTreeNode* rootNode) {
             int width = rootNode->dungeon.GetWidth();
             int height = rootNode->dungeon.GetHeight();
 
             if (width > 2 * kSubDungeonMinSize && height > 2 * kSubDungeonMinSize) {
                 if (utl::ZRandomHelpers::FlipCoin()) {
-                    SplitSubDungeonVertically(rootNode, rooms);
+                    SplitSubDungeonVertically(rootNode);
                 } else {
-                    SplitSubDungeonHorizontally(rootNode, rooms);
+                    SplitSubDungeonHorizontally(rootNode);
                 }
             } else if (width > 2 * kSubDungeonMinSize) {
-                SplitSubDungeonVertically(rootNode, rooms);
+                SplitSubDungeonVertically(rootNode);
             } else if (height > 2 * kSubDungeonMinSize) {
-                SplitSubDungeonHorizontally(rootNode, rooms);
+                SplitSubDungeonHorizontally(rootNode);
             } else {
-                rooms->push_back(&rootNode->dungeon);
-                CreateRoomInsideSubDungeon(map, &rootNode->dungeon);
+                mRooms.push_back(&rootNode->dungeon);
+                CreateRoomInsideSubDungeon(&rootNode->dungeon);
                 rootNode->dungeon.someValidCell = ZPosition(rootNode->dungeon.x1, rootNode->dungeon.y1);
                 return;
             }
 
-            GenerateBSPTree(rootNode->lowerSubDungeon, map, rooms);
-            GenerateBSPTree(rootNode->higherSubDungeon, map, rooms);
+            GenerateBSPTree(rootNode->lowerSubDungeon);
+            GenerateBSPTree(rootNode->higherSubDungeon);
             ShrinkSubDungeon(&rootNode->dungeon, rootNode->lowerSubDungeon->dungeon, rootNode->higherSubDungeon->dungeon);
             rootNode->dungeon.someValidCell = rootNode->lowerSubDungeon->dungeon.someValidCell;
+            ConnectDirectSubDungeons(rootNode->lowerSubDungeon->dungeon, rootNode->higherSubDungeon->dungeon);
         }
 
-        void ZDungeonLevelGenerator::SplitSubDungeonVertically(BSPTreeNode* rootNode, DungeonRooms* rooms) {
+        void ZDungeonLevelGenerator::SplitSubDungeonVertically(BSPTreeNode* rootNode) {
             SubDungeon& dungeon = rootNode->dungeon;
 
             int maxSubDungeonsWidthDiff = rootNode->dungeon.GetWidth() - 2 * kSubDungeonMinSize;
@@ -97,7 +229,7 @@ namespace prz {
             rootNode->higherSubDungeon = new BSPTreeNode(SubDungeon(lowerSubDungeonX2 + 1, dungeon.y1, dungeon.x2, dungeon.y2));
         }
 
-        void ZDungeonLevelGenerator::SplitSubDungeonHorizontally(BSPTreeNode* rootNode, DungeonRooms* rooms) {
+        void ZDungeonLevelGenerator::SplitSubDungeonHorizontally(BSPTreeNode* rootNode) {
             SubDungeon& dungeon = rootNode->dungeon;
 
             int maxSubDungeonsHeightDiff = dungeon.GetHeight() - 2 * kSubDungeonMinSize;
@@ -108,45 +240,57 @@ namespace prz {
             rootNode->higherSubDungeon = new BSPTreeNode(SubDungeon(dungeon.x1, lowerSubDungeonY2 + 1, dungeon.x2, dungeon.y2));
         }
 
-        void ZDungeonLevelGenerator::CreateRoomInsideSubDungeon(EDungeonCell::Type*** map, SubDungeon* subDungeon) {
-            int roomWidth = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, subDungeon->GetWidth() - 2);
-            int roomX1 = subDungeon->x1 + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->GetWidth() - 1 - roomWidth);
+        void ZDungeonLevelGenerator::CreateRoomInsideSubDungeon(SubDungeon* subDungeon) {
+            int roomWidth = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, subDungeon->GetWidth() - 1 - 2);
+            int roomX1 = subDungeon->x1 + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->GetWidth() - 2 - roomWidth);
             int roomX2 = roomX1 + roomWidth - 1;
 
-            int roomHeight = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, subDungeon->GetHeight() - 2);
-            int roomY1 = subDungeon->y1 + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->GetHeight() - 1 - roomHeight);
+            int roomHeight = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, subDungeon->GetHeight() - 1 - 2);
+            int roomY1 = subDungeon->y1 + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->GetHeight() - 2 - roomHeight);
             int roomY2 = roomY1 + roomHeight - 1;
 
             *subDungeon = SubDungeon(roomX1, roomY1, roomX2, roomY2);
 
             for (int x = roomX1; x <= roomX2; ++x) {
                 for (int y = roomY1; y < roomY2; ++y) {
-                    (*map)[x][y] = EDungeonCell::Emptiness;
+                    mMap[x][y] = EDungeonCell::Emptiness;
+                    mMapCellWeight[x][y] = kEmptyCellWeight;
                 }
             }
+
+            // tunnels should not start at room's corner or touch room's edge, so cells adjacent to corners have infinite weights:
+            // #+##+#
+            // +    +
+            // #    #
+            // +    +
+            // #+##+#
+            mMapCellWeight[roomX1 - 1][roomY1] = kForbiddenCellWeight;
+            mMapCellWeight[roomX2 + 1][roomY1] = kForbiddenCellWeight;
+            mMapCellWeight[roomX1 - 1][roomY2] = kForbiddenCellWeight;
+            mMapCellWeight[roomX2 + 1][roomY2] = kForbiddenCellWeight;
+
+            mMapCellWeight[roomX1][roomY1 - 1] = kForbiddenCellWeight;
+            mMapCellWeight[roomX2][roomY1 - 1] = kForbiddenCellWeight;
+            mMapCellWeight[roomX1][roomY2 + 1] = kForbiddenCellWeight;
+            mMapCellWeight[roomX2][roomY2 + 1] = kForbiddenCellWeight;
         }
 
         ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel::StaircaseList& upStaircases) {
-            EDungeonCell::Type** map;
-            utl::ZMatrix::Allocate(&map, kDungeonLevelWidth, kDungeonLevelHeight);
-
-            for (int x = 0; x < kDungeonLevelWidth; ++x) {
-                for (int y = 0; y < kDungeonLevelHeight; ++y) {
-                    map[x][y] = EDungeonCell::SolidRock;
-                }
-            }
+            utl::ZMatrix::Allocate(&mMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
+            utl::ZMatrix::Allocate(&mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, kSolidRockCellWeight);
 
             BSPTreeNode subDungeonsTreeRoot(SubDungeon(0, 0, kDungeonLevelWidth, kDungeonLevelHeight));
-            DungeonRooms rooms;
             utl::ZRandomHelpers::Initialize();
-            GenerateBSPTree(&subDungeonsTreeRoot, &map, &rooms);
+            GenerateBSPTree(&subDungeonsTreeRoot);
 
-            int startLeafIndex = utl::ZRandomHelpers::GetRandomValue(rooms.size() - 1);
-            const SubDungeon* startSubDungeon = rooms[startLeafIndex];
+            int startLeafIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
+            const SubDungeon* startSubDungeon = mRooms[startLeafIndex];
 
-            map[startSubDungeon->x1 + 1][startSubDungeon->y1 + 1] = EDungeonCell::UpStaircase;
+            mMap[startSubDungeon->x1 + 1][startSubDungeon->y1 + 1] = EDungeonCell::UpStaircase;
 
-            ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &map);
+            ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap);
+
+            utl::ZMatrix::Deallocate(&mMapCellWeight, kDungeonLevelHeight);
 
             return level;
         }
