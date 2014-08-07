@@ -7,8 +7,8 @@ namespace prz {
         }
 
         ZServiceManager::~ZServiceManager() {
-            for (auto& kv : mServiceMap) {
-                delete kv.second;
+            for (auto i = mServiceRegisterOrder.rbegin(); i != mServiceRegisterOrder.rend(); ++i) {
+                delete *i;
             }
         }
     }

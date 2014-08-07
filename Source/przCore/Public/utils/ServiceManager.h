@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <list>
 #include <string>
 #include <unordered_map>
 
@@ -39,18 +40,20 @@ namespace prz {
                     delete instance;
                 };
 
-                ZServiceMap::iterator pos = mServiceMap.find(typeName);
+                auto pos = mServiceMap.find(typeName);
                 if (pos != mServiceMap.end()) {
+                    mServiceRegisterOrder.remove(pos->second);
                     delete pos->second;
                 }
 
+                mServiceRegisterOrder.push_back(box);
                 mServiceMap[typeName] = box;
 
                 return true;
             }
 
             template<typename TServiceType> TServiceType* Get(std::string typeName) {
-                ZServiceMap::iterator pos = mServiceMap.find(typeName);
+                auto pos = mServiceMap.find(typeName);
                 if (pos != mServiceMap.end()) {
                     return static_cast<TServiceType*>(pos->second->instance);
                 }
@@ -59,8 +62,9 @@ namespace prz {
             }
 
             template<typename TServiceType> bool Unregister(std::string typeName) {
-                ZServiceMap::iterator pos = mServiceMap.find(typeName);
+                auto pos = mServiceMap.find(typeName);
                 if (pos != mServiceMap.end()) {
+                    mServiceRegisterOrder.remove(pos->second);
                     delete pos->second;
                     mServiceMap.erase(pos);
 
@@ -83,8 +87,10 @@ namespace prz {
                 }
             };
             typedef std::unordered_map<std::string, ZServiceBox*> ZServiceMap;
+            typedef std::list<ZServiceBox*> ZServiceRegisterOrder;
 
             ZServiceMap mServiceMap;
+            ZServiceRegisterOrder mServiceRegisterOrder;
         };
     }
 }
