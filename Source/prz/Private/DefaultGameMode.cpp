@@ -12,6 +12,13 @@
 
 #include "model/Game.h"
 
+ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializeProperties& PCIP)
+: Super(PCIP) {
+    DefaultPawnClass = ADefaultPlayerCharacter::StaticClass();
+    PlayerControllerClass = ADefaultPlayerController::StaticClass();
+    HUDClass = ADefaultHUD::StaticClass();
+}
+
 void initializeServices() {
     using namespace prz::utl;
 
@@ -29,11 +36,8 @@ void initializeServices() {
     REGISTER_SERVICE(prz::mdl::IGame, new prz::mdl::ZGame());
 }
 
-ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializeProperties& PCIP)
-: Super(PCIP) {
+void ADefaultGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) {
+    Super::InitGame(MapName, Options, ErrorMessage);
     initializeServices();
-
-    DefaultPawnClass = ADefaultPlayerCharacter::StaticClass();
-    PlayerControllerClass = ADefaultPlayerController::StaticClass();
-    HUDClass = ADefaultHUD::StaticClass();
 }
+
