@@ -122,7 +122,7 @@ namespace prz {
 
             PathCellConnection* connection = &pathConnections[cellPosition.GetX()][cellPosition.GetY()];
             if (connection->pathToCellWeight > pathToCellWeight) {
-                int pathFromCellEstimatedWeight = CalcCellsDistance(cellPosition, finishCellPosition) * 99;
+                int pathFromCellEstimatedWeight = CalcCellsDistance(cellPosition, finishCellPosition);
                 *createdCell = WeightedCell(cellPosition, pathToCellWeight, pathFromCellEstimatedWeight);
                 *connection = PathCellConnection(pathToCellWeight, cell.position);
                 return true;
