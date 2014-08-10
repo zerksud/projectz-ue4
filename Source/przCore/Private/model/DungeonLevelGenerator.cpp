@@ -15,11 +15,12 @@ namespace prz {
             static const int kInfiniteWeight;
 
             static int SumWeights(int leftWeight, int rightWeight) {
-                if (leftWeight == kInfiniteWeight || rightWeight == kInfiniteWeight) {
+                int sum = leftWeight + rightWeight;
+                if (sum >= kInfiniteWeight) {
                     return kInfiniteWeight;
                 }
 
-                return leftWeight + rightWeight;
+                return sum;
             }
 
             ZPosition position;
@@ -40,7 +41,7 @@ namespace prz {
             }
         };
 
-        const int WeightedCell::kInfiniteWeight = std::numeric_limits<int>::max();
+        const int WeightedCell::kInfiniteWeight = std::numeric_limits<int>::max() / 2;
 
         const int ZDungeonLevelGenerator::kDungeonLevelWidth = 32;
         const int ZDungeonLevelGenerator::kDungeonLevelHeight = 32;
