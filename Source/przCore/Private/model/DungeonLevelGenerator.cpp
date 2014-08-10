@@ -36,11 +36,7 @@ namespace prz {
             }
 
             int GetTotalPathWeight() const {
-                if (pathToCellWeight == kInfiniteWeight || pathFromCellEstimatedWeight == kInfiniteWeight) {
-                    return kInfiniteWeight;
-                }
-
-                return pathToCellWeight + pathFromCellEstimatedWeight;
+                return SumWeights(pathToCellWeight, pathFromCellEstimatedWeight);
             }
         };
 
