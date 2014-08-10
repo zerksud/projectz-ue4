@@ -13,18 +13,29 @@ namespace prz {
         const int ZGame::kLogHistoryMaxSize = 4;
 
         ZGame::ZGame() {
-            const ZDungeonLevel* level = mDungeon.GetLevel(0);
+            StartNewGame();
+        }
+
+        ZGame::~ZGame() {
+            delete mDungeon;
+        }
+
+        void ZGame::StartNewGame() {
+            mDungeon = new ZDungeon();
+            const ZDungeonLevel* level = mDungeon->GetLevel(0);
             const ZPosition& startPosition = level->GetUpStaircases().front();
             ZMonster* player = ZMonster::CreateMonster();
             mPlayerId = player->GetId();
-            mDungeon.PlaceMonster(player, 0, startPosition);
+            mDungeon->PlaceMonster(player, 0, startPosition);
+            mLogHistory.Clear();
+            mLogHistory.Log("It's dark in here.");
         }
 
         bool ZGame::TryToMovePlayer(EMoveDirection::Type direction) {
-            bool success = mDungeon.TryToMoveMonster(mPlayerId, direction);
+            bool success = mDungeon->TryToMoveMonster(mPlayerId, direction);
             if (success) {
-                unsigned int currentLevel = mDungeon.GetMonsterLevelIndex(mPlayerId);
-                const ZPosition* playerPosition = mDungeon.GetLevel(currentLevel)->GetMonsterPosition(mPlayerId);
+                unsigned int currentLevel = mDungeon->GetMonsterLevelIndex(mPlayerId);
+                const ZPosition* playerPosition = mDungeon->GetLevel(currentLevel)->GetMonsterPosition(mPlayerId);
                 mLogHistory.Log("You moved to [%d;%d].", playerPosition->GetX(), playerPosition->GetY());
             } else {
                 mLogHistory.Log("You can't move there.");
@@ -34,7 +45,7 @@ namespace prz {
         }
 
         void ZGame::TurnPlayer(ETurnDirection::Type direction) {
-            mDungeon.GetMonster(mPlayerId)->GetDirection().Turn(direction);
+            mDungeon->GetMonster(mPlayerId)->GetDirection().Turn(direction);
         }
 
         ZPosition GetRotatedPosition(const ZPositionDiff& sinCosOfReversedAngle, int x, int y) {
@@ -51,14 +62,14 @@ namespace prz {
             EDungeonCell::Type** cells;
             utl::ZMatrix::Allocate(&cells, kMinimapSize);
 
-            unsigned int currentLevel = mDungeon.GetMonsterLevelIndex(mPlayerId);
-            const ZDungeonLevel* level = mDungeon.GetLevel(currentLevel);
+            unsigned int currentLevel = mDungeon->GetMonsterLevelIndex(mPlayerId);
+            const ZDungeonLevel* level = mDungeon->GetLevel(currentLevel);
 
             const ZPosition* playerPosition = level->GetMonsterPosition(mPlayerId);
             int baseX = playerPosition->GetX();
             int baseY = playerPosition->GetY();
 
-            ZDirection minimapDirection = mDungeon.GetMonster(mPlayerId)->GetDirection();
+            ZDirection minimapDirection = mDungeon->GetMonster(mPlayerId)->GetDirection();
             minimapDirection.Turn(ETurnDirection::Right);
             const ZPositionDiff minimapDirectionSinCos = minimapDirection.PredictMove();
 

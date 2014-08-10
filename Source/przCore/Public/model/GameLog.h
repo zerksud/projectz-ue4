@@ -11,6 +11,7 @@ namespace prz {
             ZGameLog();
             virtual ~ZGameLog() = default;
 
+            void Clear();
             void Log(const char* format, ...);
             void SetHistoryMaxSize(unsigned int size);
 

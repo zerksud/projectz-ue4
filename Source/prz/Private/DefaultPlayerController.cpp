@@ -96,5 +96,6 @@ void ADefaultPlayerController::Quit() {
 }
 
 void ADefaultPlayerController::DebugAction() {
-    LOGD("Debug action");
+    prz::mdl::IGame* game = GET_SERVICE(prz::mdl::IGame);
+    game->StartNewGame();
 }

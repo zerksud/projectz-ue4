@@ -9,7 +9,9 @@ namespace prz {
         class PRZCORE_API ZGame : public IGame {
         public:
             ZGame();
-            virtual ~ZGame() = default;
+            virtual ~ZGame();
+
+            virtual void StartNewGame() override;
 
             virtual bool TryToMovePlayer(EMoveDirection::Type direction) override;
             virtual void TurnPlayer(ETurnDirection::Type direction) override;
@@ -25,7 +27,7 @@ namespace prz {
 
             static const int kLogHistoryMaxSize;
 
-            ZDungeon mDungeon;
+            ZDungeon* mDungeon;
             utl::ZIdType mPlayerId;
 
             ZGameLog mLogHistory;

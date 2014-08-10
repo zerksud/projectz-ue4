@@ -12,6 +12,11 @@ namespace prz {
             mCachedHistoryIsValid(false) {
         }
 
+        void ZGameLog::Clear() {
+            mHistory.clear();
+            mCachedHistoryIsValid = false;
+        }
+
         void ZGameLog::Log(const char* format, ...) {
             va_list args;
             va_start(args, format);

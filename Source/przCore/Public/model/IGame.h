@@ -10,6 +10,8 @@ namespace prz {
         public:
             virtual ~IGame() = default;
 
+            virtual void StartNewGame() = 0;
+
             virtual bool TryToMovePlayer(EMoveDirection::Type direction) = 0;
             virtual void TurnPlayer(ETurnDirection::Type direction) = 0;
 
