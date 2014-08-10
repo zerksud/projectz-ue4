@@ -43,8 +43,8 @@ namespace prz {
 
         const int WeightedCell::kInfiniteWeight = std::numeric_limits<int>::max() / 2;
 
-        const int ZDungeonLevelGenerator::kDungeonLevelWidth = 16;
-        const int ZDungeonLevelGenerator::kDungeonLevelHeight = 16;
+        const int ZDungeonLevelGenerator::kDungeonLevelWidth = 64;
+        const int ZDungeonLevelGenerator::kDungeonLevelHeight = 64;
 
         const int ZDungeonLevelGenerator::kSubDungeonMinSize = 8;
         const int ZDungeonLevelGenerator::kRoomMinSize = 5;
