@@ -249,7 +249,7 @@ namespace prz {
             *subDungeon = SubDungeon(roomX1, roomY1, roomX2, roomY2);
 
             for (int x = roomX1; x <= roomX2; ++x) {
-                for (int y = roomY1; y < roomY2; ++y) {
+                for (int y = roomY1; y <= roomY2; ++y) {
                     mMap[x][y] = EDungeonCell::Emptiness;
                     mMapCellWeight[x][y] = kEmptyCellWeight;
                 }
