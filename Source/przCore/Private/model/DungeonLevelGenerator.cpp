@@ -47,6 +47,7 @@ namespace prz {
         const int ZDungeonLevelGenerator::kDungeonLevelHeight = 64;
 
         const int ZDungeonLevelGenerator::kSubDungeonMinSize = 8;
+        const int ZDungeonLevelGenerator::kRoomMaxSize = 10;
         const int ZDungeonLevelGenerator::kRoomMinSize = 5;
 
         const int ZDungeonLevelGenerator::kSolidRockCellWeight = 100;
@@ -239,11 +240,11 @@ namespace prz {
         }
 
         void ZDungeonLevelGenerator::CreateRoomInsideSubDungeon(SubDungeon* subDungeon) {
-            int roomWidth = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, subDungeon->GetWidth() - 1 - 2);
+            int roomWidth = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, std::min(kRoomMaxSize, subDungeon->GetWidth() - 1 - 2));
             int roomX1 = subDungeon->x1 + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->GetWidth() - 2 - roomWidth);
             int roomX2 = roomX1 + roomWidth - 1;
 
-            int roomHeight = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, subDungeon->GetHeight() - 1 - 2);
+            int roomHeight = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, std::min(kRoomMaxSize, subDungeon->GetHeight() - 1 - 2));
             int roomY1 = subDungeon->y1 + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->GetHeight() - 2 - roomHeight);
             int roomY2 = roomY1 + roomHeight - 1;
 

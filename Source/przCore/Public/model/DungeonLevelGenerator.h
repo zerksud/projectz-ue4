@@ -21,6 +21,7 @@ namespace prz {
             static const int kDungeonLevelHeight;
 
             static const int kSubDungeonMinSize;
+            static const int kRoomMaxSize;
             static const int kRoomMinSize;
 
             static const int kSolidRockCellWeight;
