@@ -188,8 +188,9 @@ namespace prz {
         }
 
         void ZDungeonLevelGenerator::GenerateBSPTree(BSPTreeNode* rootNode) {
-            int width = rootNode->dungeon.GetWidth();
-            int height = rootNode->dungeon.GetHeight();
+            SubDungeon& rootSubDungeon = rootNode->dungeon;
+            int width = rootSubDungeon.GetWidth();
+            int height = rootSubDungeon.GetHeight();
 
             if (width > 2 * kSubDungeonMinSize && height > 2 * kSubDungeonMinSize) {
                 if (utl::ZRandomHelpers::FlipCoin()) {
@@ -202,17 +203,23 @@ namespace prz {
             } else if (height > 2 * kSubDungeonMinSize) {
                 SplitSubDungeonHorizontally(rootNode);
             } else {
-                mRooms.push_back(&rootNode->dungeon);
-                CreateRoomInsideSubDungeon(&rootNode->dungeon);
-                rootNode->dungeon.someValidCell = ZPosition(rootNode->dungeon.x1, rootNode->dungeon.y1);
+                CreateRoomInsideSubDungeon(&rootSubDungeon);
+                mRooms.push_back(&rootSubDungeon);
+
+                int someValidCellX = utl::ZRandomHelpers::GetRandomValue(rootSubDungeon.x1, rootSubDungeon.x2);
+                int someValidCellY = utl::ZRandomHelpers::GetRandomValue(rootSubDungeon.y1, rootSubDungeon.y2);
+                rootSubDungeon.someValidCell = ZPosition(someValidCellX, someValidCellY);
+                
                 return;
             }
 
             GenerateBSPTree(rootNode->lowerSubDungeon);
             GenerateBSPTree(rootNode->higherSubDungeon);
-            ShrinkSubDungeon(&rootNode->dungeon, rootNode->lowerSubDungeon->dungeon, rootNode->higherSubDungeon->dungeon);
-            rootNode->dungeon.someValidCell = rootNode->lowerSubDungeon->dungeon.someValidCell;
-            ConnectDirectSubDungeons(rootNode->lowerSubDungeon->dungeon, rootNode->higherSubDungeon->dungeon);
+            SubDungeon& lowerSubDungeon = rootNode->lowerSubDungeon->dungeon;
+            SubDungeon& higherSubDungeon = rootNode->higherSubDungeon->dungeon;
+            ShrinkSubDungeon(&rootSubDungeon, lowerSubDungeon, higherSubDungeon);
+            rootSubDungeon.someValidCell = lowerSubDungeon.someValidCell;
+            ConnectDirectSubDungeons(lowerSubDungeon, higherSubDungeon);
         }
 
         void ZDungeonLevelGenerator::SplitSubDungeonVertically(BSPTreeNode* rootNode) {
