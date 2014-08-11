@@ -33,6 +33,7 @@ namespace prz {
             void SplitSubDungeonHorizontally(BSPTreeNode* rootNode);
             void CreateRoomInsideSubDungeon(SubDungeon* dungeon);
             void ConnectDirectSubDungeons(const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon);
+            void DigRandomTunnels();
 
             EDungeonCell::Type** mMap;
             int** mMapCellWeight;

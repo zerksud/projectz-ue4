@@ -123,7 +123,7 @@ namespace prz {
 
             PathCellConnection* connection = &pathConnections[cellPosition.GetX()][cellPosition.GetY()];
             if (connection->pathToCellWeight > pathToCellWeight) {
-                int pathFromCellEstimatedWeight = CalcCellsDistance(cellPosition, finishCellPosition);
+                int pathFromCellEstimatedWeight = CalcCellsDistance(cellPosition, finishCellPosition) * 25;
                 *createdCell = WeightedCell(cellPosition, pathToCellWeight, pathFromCellEstimatedWeight);
                 *connection = PathCellConnection(pathToCellWeight, cell.position);
                 return true;
@@ -170,7 +170,7 @@ namespace prz {
             }
 
             if (queue.top().position == finishCellPosition) {
-                ZPosition& previousPathCell = pathConnections[finishCellPosition.GetX()][finishCellPosition.GetY()].previousPathCell;
+                ZPosition& previousPathCell = finishCellPosition;
                 while (previousPathCell != startCellPosition) {
                     mMap[previousPathCell.GetX()][previousPathCell.GetY()] = EDungeonCell::Emptiness;
                     mMapCellWeight[previousPathCell.GetX()][previousPathCell.GetY()] = kEmptyCellWeight;
@@ -274,6 +274,15 @@ namespace prz {
             mMapCellWeight[roomX2][roomY2 + 1] = kForbiddenCellWeight;
         }
 
+        void ZDungeonLevelGenerator::DigRandomTunnels() {
+            int tryCount = mRooms.size() * 0.25;
+            for (int i = 0; i < tryCount; ++i) {
+                int fromRoomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
+                int toRoomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
+                ConnectDirectSubDungeons(*mRooms[fromRoomIndex], *mRooms[toRoomIndex]);
+            }
+        }
+
         ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel::StaircaseList& upStaircases) {
             utl::ZMatrix::Allocate(&mMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
             utl::ZMatrix::Allocate(&mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, kSolidRockCellWeight);
@@ -282,9 +291,10 @@ namespace prz {
             utl::ZRandomHelpers::Initialize();
             GenerateBSPTree(&subDungeonsTreeRoot);
 
+            DigRandomTunnels();
+
             int startLeafIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
             const SubDungeon* startSubDungeon = mRooms[startLeafIndex];
-
             mMap[startSubDungeon->x1 + 1][startSubDungeon->y1 + 1] = EDungeonCell::UpStaircase;
 
             ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap);
