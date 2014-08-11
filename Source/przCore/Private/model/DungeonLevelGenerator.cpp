@@ -187,20 +187,14 @@ namespace prz {
             outerSubDungeon->y2 = std::max(lowerSubDungeon.y2, higherSubDungeon.y2);
         }
 
-        void ZDungeonLevelGenerator::GenerateBSPTree(BSPTreeNode* rootNode) {
+        void ZDungeonLevelGenerator::GenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically) {
             SubDungeon& rootSubDungeon = rootNode->dungeon;
             int width = rootSubDungeon.GetWidth();
             int height = rootSubDungeon.GetHeight();
 
-            if (width > 2 * kSubDungeonMinSize && height > 2 * kSubDungeonMinSize) {
-                if (utl::ZRandomHelpers::FlipCoin()) {
-                    SplitSubDungeonVertically(rootNode);
-                } else {
-                    SplitSubDungeonHorizontally(rootNode);
-                }
-            } else if (width > 2 * kSubDungeonMinSize) {
+            if (tryToSplitVertically && width > 2 * kSubDungeonMinSize) {
                 SplitSubDungeonVertically(rootNode);
-            } else if (height > 2 * kSubDungeonMinSize) {
+            } else if (!tryToSplitVertically && height > 2 * kSubDungeonMinSize) {
                 SplitSubDungeonHorizontally(rootNode);
             } else {
                 CreateRoomInsideSubDungeon(&rootSubDungeon);
@@ -209,12 +203,12 @@ namespace prz {
                 int someValidCellX = utl::ZRandomHelpers::GetRandomValue(rootSubDungeon.x1, rootSubDungeon.x2);
                 int someValidCellY = utl::ZRandomHelpers::GetRandomValue(rootSubDungeon.y1, rootSubDungeon.y2);
                 rootSubDungeon.someValidCell = ZPosition(someValidCellX, someValidCellY);
-                
+
                 return;
             }
 
-            GenerateBSPTree(rootNode->lowerSubDungeon);
-            GenerateBSPTree(rootNode->higherSubDungeon);
+            GenerateBSPTree(rootNode->lowerSubDungeon, !tryToSplitVertically);
+            GenerateBSPTree(rootNode->higherSubDungeon, !tryToSplitVertically);
             SubDungeon& lowerSubDungeon = rootNode->lowerSubDungeon->dungeon;
             SubDungeon& higherSubDungeon = rootNode->higherSubDungeon->dungeon;
             ShrinkSubDungeon(&rootSubDungeon, lowerSubDungeon, higherSubDungeon);

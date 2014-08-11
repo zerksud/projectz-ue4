@@ -27,7 +27,7 @@ namespace prz {
             static const int kEmptyCellWeight;
             static const int kForbiddenCellWeight;
 
-            void GenerateBSPTree(BSPTreeNode* rootNode);
+            void GenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically = true);
             void SplitSubDungeonVertically(BSPTreeNode* rootNode);
             void SplitSubDungeonHorizontally(BSPTreeNode* rootNode);
             void CreateRoomInsideSubDungeon(SubDungeon* dungeon);
