@@ -118,8 +118,16 @@ namespace prz {
 
         // returns true if path from cell to neighbor is shorter than previous path to that cell
         bool CreateNeighborCell(const WeightedCell& cell, int dx, int dy, const ZPosition& finishCellPosition, int** mapCellWeight, PathCellConnection** pathConnections, WeightedCell* createdCell) {
-            ZPosition cellPosition = cell.position + ZPositionDiff(dx, dy);
+            ZPositionDiff currentMoveDiff = ZPositionDiff(dx, dy);
+            ZPosition cellPosition = cell.position + currentMoveDiff;
             int pathToCellWeight = WeightedCell::SumWeights(cell.pathToCellWeight, mapCellWeight[cellPosition.GetX()][cellPosition.GetY()]);
+
+            ZPosition previousCellPosition = pathConnections[cell.position.GetX()][cellPosition.GetY()].previousPathCell;
+            if (mapCellWeight[cell.position.GetX()][cellPosition.GetY()] != 0
+                && mapCellWeight[cellPosition.GetX()][cellPosition.GetY()] != 0
+                && previousCellPosition != ZPosition(0, 0) && currentMoveDiff != cell.position - previousCellPosition) {
+                pathToCellWeight = WeightedCell::SumWeights(pathToCellWeight, 1000);
+            }            
 
             PathCellConnection* connection = &pathConnections[cellPosition.GetX()][cellPosition.GetY()];
             if (connection->pathToCellWeight > pathToCellWeight) {

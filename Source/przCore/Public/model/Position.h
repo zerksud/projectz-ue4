@@ -15,6 +15,9 @@ namespace prz {
             int GetdX() const;
             int GetdY() const;
 
+            bool operator==(const ZPositionDiff& other) const;
+            bool operator!=(const ZPositionDiff& other) const;
+
             std::string ToString() const;
 
         private:

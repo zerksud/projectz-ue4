@@ -26,6 +26,14 @@ namespace prz {
             return mdY;
         }
 
+        bool ZPositionDiff::operator==(const ZPositionDiff& other) const {
+            return (mdX == other.mdX && mdY == other.mdY);
+        }
+
+        bool ZPositionDiff::operator!=(const ZPositionDiff& other) const {
+            return !(*this == other);
+        }
+
         std::string ZPositionDiff::ToString() const {
             return utl::ZString::Format("[%d;%d]", mdX, mdY);
         }
