@@ -16,9 +16,8 @@ namespace prz {
 
             template<typename T>
             void Allocate(T*** matrix, unsigned int width, unsigned int height, T defaultValue) {
-                *matrix = new T*[height];
+                Allocate(matrix, width, height);
                 for (unsigned int i = 0; i < height; ++i) {
-                    (*matrix)[i] = new T[width];
                     std::fill_n((*matrix)[i], width, defaultValue);
                 }
             }
@@ -30,9 +29,8 @@ namespace prz {
 
             template<typename T>
             void AllocateAndCopy(T*** dst, T const * const * src, unsigned int width, unsigned int height) {
-                *dst = new T*[height];
+                Allocate(dst, width, height);
                 for (unsigned int i = 0; i < height; ++i) {
-                    (*dst)[i] = new T[width];
                     for (unsigned int j = 0; j < width; ++j) {
                         (*dst)[i][j] = src[i][j];
                     }
