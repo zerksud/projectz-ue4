@@ -5,20 +5,34 @@
 namespace prz {
     namespace mdl {
 
-        struct ZWeightedCell {
+        class ZWeight {
+        public:
+            static const ZWeight kInfinity;
+
+            ZWeight();
+            ZWeight(int value);
+
+            bool operator==(const ZWeight& other) const;
+            bool operator!=(const ZWeight& other) const;
+            bool operator>(const ZWeight& other) const;
+            const ZWeight operator+(const ZWeight& other) const;
+
+        private:
             static const int kInfiniteWeight;
 
-            static int SumWeights(int leftWeight, int rightWeight);
+            int mValue;
+        };
 
+        struct ZWeightedCell {
             ZWeightedCell();
-            ZWeightedCell(const ZPosition& pPosition, int pPathToCellWeight, int pPathFromCellEstimatedWeight);
+            ZWeightedCell(const ZPosition& pPosition, const ZWeight& pPathToCellWeight, const ZWeight& pPathFromCellEstimatedWeight);
 
-            int GetTotalPathWeight() const;
+            ZWeight GetTotalPathWeight() const;
 
             ZPosition position;
 
-            int pathToCellWeight;
-            int pathFromCellEstimatedWeight;
+            ZWeight pathToCellWeight;
+            ZWeight pathFromCellEstimatedWeight;
 
         };
 

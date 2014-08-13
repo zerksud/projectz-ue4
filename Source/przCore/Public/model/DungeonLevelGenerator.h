@@ -2,6 +2,8 @@
 
 #include "model/IDungeonLevelGenerator.h"
 
+#include "model/WeightedCell.h"
+
 namespace prz {
     namespace mdl {
 
@@ -24,9 +26,8 @@ namespace prz {
             static const int kRoomMaxSize;
             static const int kRoomMinSize;
 
-            static const int kSolidRockCellWeight;
-            static const int kEmptyCellWeight;
-            static const int kForbiddenCellWeight;
+            static const ZWeight kSolidRockCellWeight;
+            static const ZWeight kEmptyCellWeight;
 
             void GenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically = true);
             void SplitSubDungeonVertically(BSPTreeNode* rootNode);
@@ -36,7 +37,7 @@ namespace prz {
             void DigRandomTunnels();
 
             EDungeonCell::Type** mMap;
-            int** mMapCellWeight;
+            ZWeight** mMapCellWeight;
             DungeonRooms mRooms;
         };
     }

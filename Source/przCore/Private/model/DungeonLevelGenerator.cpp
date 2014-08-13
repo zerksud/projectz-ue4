@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <queue>
 
-#include "model/WeightedCell.h"
 #include "utils/MatrixHelpers.h"
 #include "utils/RandomHelpers.h"
 
@@ -18,8 +17,8 @@ namespace prz {
         const int ZDungeonLevelGenerator::kRoomMaxSize = 10;
         const int ZDungeonLevelGenerator::kRoomMinSize = 5;
 
-        const int ZDungeonLevelGenerator::kSolidRockCellWeight = 100;
-        const int ZDungeonLevelGenerator::kEmptyCellWeight = 0;
+        const ZWeight ZDungeonLevelGenerator::kSolidRockCellWeight = 100;
+        const ZWeight ZDungeonLevelGenerator::kEmptyCellWeight = 0;
 
         struct SubDungeon {
             int x1;
@@ -73,27 +72,27 @@ namespace prz {
         }
 
         struct PathCellConnection {
-            int pathToCellWeight;
+            ZWeight pathToCellWeight;
             ZPosition previousPathCell;
 
             PathCellConnection() = default;
 
-            PathCellConnection(int pPathToCellWeight, const ZPosition& pPreviousPathCell)
+            PathCellConnection(ZWeight pPathToCellWeight, const ZPosition& pPreviousPathCell)
                 : pathToCellWeight(pPathToCellWeight), previousPathCell(pPreviousPathCell) {
             }
         };
 
         // returns true if path from cell to neighbor is shorter than previous path to that cell
-        bool CreateNeighborCell(const ZWeightedCell& cell, int dx, int dy, const ZPosition& finishCellPosition, int** mapCellWeight, PathCellConnection** pathConnections, ZWeightedCell* createdCell) {
+        bool CreateNeighborCell(const ZWeightedCell& cell, int dx, int dy, const ZPosition& finishCellPosition, ZWeight** mapCellWeight, PathCellConnection** pathConnections, ZWeightedCell* createdCell) {
             ZPositionDiff currentMoveDiff = ZPositionDiff(dx, dy);
             ZPosition cellPosition = cell.position + currentMoveDiff;
-            int pathToCellWeight = ZWeightedCell::SumWeights(cell.pathToCellWeight, mapCellWeight[cellPosition.GetX()][cellPosition.GetY()]);
+            ZWeight pathToCellWeight = cell.pathToCellWeight + mapCellWeight[cellPosition.GetX()][cellPosition.GetY()];
 
             ZPosition previousCellPosition = pathConnections[cell.position.GetX()][cellPosition.GetY()].previousPathCell;
             if (mapCellWeight[cell.position.GetX()][cellPosition.GetY()] != 0
                 && mapCellWeight[cellPosition.GetX()][cellPosition.GetY()] != 0
                 && previousCellPosition != ZPosition(0, 0) && currentMoveDiff != cell.position - previousCellPosition) {
-                pathToCellWeight = ZWeightedCell::SumWeights(pathToCellWeight, 1000);
+                pathToCellWeight = pathToCellWeight + 1000;
             }
 
             PathCellConnection* connection = &pathConnections[cellPosition.GetX()][cellPosition.GetY()];
@@ -108,7 +107,7 @@ namespace prz {
         }
 
         void ZDungeonLevelGenerator::ConnectDirectSubDungeons(const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon) {
-            PathCellConnection defaultPathCellConnection = PathCellConnection(ZWeightedCell::kInfiniteWeight, ZPosition(0, 0));
+            PathCellConnection defaultPathCellConnection = PathCellConnection(ZWeight::kInfinity, ZPosition(0, 0));
             PathCellConnection** pathConnections;
             utl::ZMatrix::Allocate(&pathConnections, kDungeonLevelWidth, kDungeonLevelHeight, defaultPathCellConnection);
 
@@ -238,7 +237,7 @@ namespace prz {
             // #    #
             // +    +
             // #+##+#
-            int forbiddenCellWeight = ZWeightedCell::kInfiniteWeight;
+            const ZWeight& forbiddenCellWeight = ZWeight::kInfinity;
             mMapCellWeight[roomX1 - 1][roomY1] = forbiddenCellWeight;
             mMapCellWeight[roomX2 + 1][roomY1] = forbiddenCellWeight;
             mMapCellWeight[roomX1 - 1][roomY2] = forbiddenCellWeight;

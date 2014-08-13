@@ -1,32 +1,62 @@
 #include "przCorePrivatePCH.h"
 #include "model/WeightedCell.h"
 
-#include <limits>
-
 namespace prz {
     namespace mdl {
 
-        const int ZWeightedCell::kInfiniteWeight = std::numeric_limits<int>::max() / 2;
+        const int ZWeight::kInfiniteWeight = -1;
+        const ZWeight ZWeight::kInfinity = ZWeight(ZWeight::kInfiniteWeight);
 
-        int ZWeightedCell::SumWeights(int leftWeight, int rightWeight) {
-            int sum = leftWeight + rightWeight;
-            if (sum >= kInfiniteWeight) {
-                return kInfiniteWeight;
+        ZWeight::ZWeight()
+            : mValue(kInfiniteWeight) {
+        }
+
+        ZWeight::ZWeight(int value) {
+            if (value >= 0) {
+                mValue = value;
+            } else {
+                mValue = kInfiniteWeight;
+            }
+        }
+
+        bool ZWeight::operator==(const ZWeight& other) const {
+            return this->mValue == other.mValue;
+        }
+
+        bool ZWeight::operator!=(const ZWeight& other) const {
+            return !(*this == other);
+        }
+
+        bool ZWeight::operator>(const ZWeight& other) const {
+            if (other.mValue == kInfiniteWeight) {
+                return false;
             }
 
-            return sum;
+            if (this->mValue == kInfiniteWeight) {
+                return true;
+            }
+
+            return this->mValue > other.mValue;
+        }
+
+        const ZWeight ZWeight::operator+(const ZWeight& other) const {
+            if (this->mValue == kInfiniteWeight || other.mValue == kInfiniteWeight) {
+                return kInfinity;
+            } else {
+                return this->mValue + other.mValue;
+            }
         }
 
         ZWeightedCell::ZWeightedCell()
-            : position(ZPosition(0, 0)), pathToCellWeight(kInfiniteWeight), pathFromCellEstimatedWeight(kInfiniteWeight) {
+            : position(ZPosition(0, 0)), pathToCellWeight(ZWeight::kInfinity), pathFromCellEstimatedWeight(ZWeight::kInfinity) {
         }
 
-        ZWeightedCell::ZWeightedCell(const ZPosition& pPosition, int pPathToCellWeight, int pPathFromCellEstimatedWeight)
+        ZWeightedCell::ZWeightedCell(const ZPosition& pPosition, const ZWeight& pPathToCellWeight, const ZWeight& pPathFromCellEstimatedWeight)
             : position(pPosition), pathToCellWeight(pPathToCellWeight), pathFromCellEstimatedWeight(pPathFromCellEstimatedWeight) {
         }
 
-        int ZWeightedCell::GetTotalPathWeight() const {
-            return SumWeights(pathToCellWeight, pathFromCellEstimatedWeight);
+        ZWeight ZWeightedCell::GetTotalPathWeight() const {
+            return pathToCellWeight + pathFromCellEstimatedWeight;
         }
 
     }
