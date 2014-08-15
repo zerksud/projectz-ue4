@@ -83,23 +83,23 @@ namespace prz {
         };
 
         // returns true if path from cell to neighbor is shorter than previous path to that cell
-        bool CreateNeighborCell(const ZWeightedCell& cell, int dx, int dy, const ZPosition& finishCellPosition, ZWeight** mapCellWeight, PathCellConnection** pathConnections, ZWeightedCell* createdCell) {
+        bool CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, ZWeight** mapCellWeight, PathCellConnection** pathConnections, ZWeightedCell* createdCell) {
             ZPositionDiff currentMoveDiff = ZPositionDiff(dx, dy);
-            ZPosition cellPosition = cell.position + currentMoveDiff;
-            ZWeight pathToCellWeight = cell.pathToCellWeight + mapCellWeight[cellPosition.GetX()][cellPosition.GetY()];
+            ZPosition nextCellPosition = currentCell.position + currentMoveDiff;
+            ZWeight pathToNextCellWeight = currentCell.pathToCellWeight + mapCellWeight[nextCellPosition.GetX()][nextCellPosition.GetY()];
 
-            ZPosition previousCellPosition = pathConnections[cell.position.GetX()][cellPosition.GetY()].previousPathCell;
-            if (mapCellWeight[cell.position.GetX()][cellPosition.GetY()] != 0
-                && mapCellWeight[cellPosition.GetX()][cellPosition.GetY()] != 0
-                && previousCellPosition != ZPosition(0, 0) && currentMoveDiff != cell.position - previousCellPosition) {
-                pathToCellWeight = pathToCellWeight + 1000;
+            ZPosition previousCellPosition = pathConnections[currentCell.position.GetX()][currentCell.position.GetY()].previousPathCell;
+            if (mapCellWeight[currentCell.position.GetX()][currentCell.position.GetY()] != 0
+                && mapCellWeight[nextCellPosition.GetX()][nextCellPosition.GetY()] != 0
+                && previousCellPosition != ZPosition(0, 0) && currentMoveDiff != currentCell.position - previousCellPosition) {
+                pathToNextCellWeight = pathToNextCellWeight + 1000;
             }
 
-            PathCellConnection* connection = &pathConnections[cellPosition.GetX()][cellPosition.GetY()];
-            if (connection->pathToCellWeight > pathToCellWeight) {
-                int pathFromCellEstimatedWeight = CalcCellsDistance(cellPosition, finishCellPosition) * 25;
-                *createdCell = ZWeightedCell(cellPosition, pathToCellWeight, pathFromCellEstimatedWeight);
-                *connection = PathCellConnection(pathToCellWeight, cell.position);
+            PathCellConnection* nextCellConnection = &pathConnections[nextCellPosition.GetX()][nextCellPosition.GetY()];
+            if (nextCellConnection->pathToCellWeight > pathToNextCellWeight) {
+                int pathFromCellEstimatedWeight = CalcCellsDistance(nextCellPosition, finishCellPosition) * 25;
+                *createdCell = ZWeightedCell(nextCellPosition, pathToNextCellWeight, pathFromCellEstimatedWeight);
+                *nextCellConnection = PathCellConnection(pathToNextCellWeight, currentCell.position);
                 return true;
             }
 
@@ -123,22 +123,22 @@ namespace prz {
 
                 ZWeightedCell cell = ZWeightedCell(currentCell);
                 if (currentCell.position.GetX() > 0
-                    && CreateNeighborCell(currentCell, -1, 0, finishCellPosition, mMapCellWeight, pathConnections, &cell)) {
+                    && CreateNextPathCell(currentCell, -1, 0, finishCellPosition, mMapCellWeight, pathConnections, &cell)) {
                     queue.push(cell);
                 }
 
                 if (currentCell.position.GetX() < kDungeonLevelWidth - 1
-                    && CreateNeighborCell(currentCell, 1, 0, finishCellPosition, mMapCellWeight, pathConnections, &cell)) {
+                    && CreateNextPathCell(currentCell, 1, 0, finishCellPosition, mMapCellWeight, pathConnections, &cell)) {
                     queue.push(cell);
                 }
 
                 if (currentCell.position.GetY() > 0
-                    && CreateNeighborCell(currentCell, 0, -1, finishCellPosition, mMapCellWeight, pathConnections, &cell)) {
+                    && CreateNextPathCell(currentCell, 0, -1, finishCellPosition, mMapCellWeight, pathConnections, &cell)) {
                     queue.push(cell);
                 }
 
                 if (currentCell.position.GetY() < kDungeonLevelHeight - 1
-                    && CreateNeighborCell(currentCell, 0, 1, finishCellPosition, mMapCellWeight, pathConnections, &cell)) {
+                    && CreateNextPathCell(currentCell, 0, 1, finishCellPosition, mMapCellWeight, pathConnections, &cell)) {
                     queue.push(cell);
                 }
             }
