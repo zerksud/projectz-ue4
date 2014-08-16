@@ -10,6 +10,7 @@ namespace prz {
         struct BSPTreeNode;
         struct SubDungeon;
         typedef std::vector<SubDungeon*> DungeonRooms;
+        struct PathCellConnection;
 
         class ZDungeonLevelGenerator : public IDungeonLevelGenerator {
         public:
@@ -28,12 +29,17 @@ namespace prz {
 
             static const ZWeight kSolidRockCellWeight;
             static const ZWeight kEmptyCellWeight;
+            static const ZWeight kTunnelTurnPenalty;
+            static const int kEstimatedPathWeightFactor;
+            static const float kRoomCountFractionToDigRandomTunnelsFrom;
 
             void GenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically = true);
             void SplitSubDungeonVertically(BSPTreeNode* rootNode);
             void SplitSubDungeonHorizontally(BSPTreeNode* rootNode);
             void CreateRoomInsideSubDungeon(SubDungeon* dungeon);
             void ConnectDirectSubDungeons(const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon);
+            // returns true if path from cell to neighbor is shorter than previous path to that cell
+            bool CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections, ZWeightedCell* createdCell);
             void DigRandomTunnels();
 
             EDungeonCell::Type** mMap;
