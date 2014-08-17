@@ -147,7 +147,7 @@ namespace prz {
             }
 
             if (queue.top().position == finishCellPosition) {
-                ZPosition& previousPathCell = finishCellPosition;
+                ZPosition previousPathCell = finishCellPosition;
                 while (previousPathCell != startCellPosition) {
                     mMap[previousPathCell.GetX()][previousPathCell.GetY()] = EDungeonCell::Emptiness;
                     mMapCellWeight[previousPathCell.GetX()][previousPathCell.GetY()] = kEmptyCellWeight;
