@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <queue>
+#include <utility>
 
 #include "utils/MatrixHelpers.h"
 #include "utils/RandomHelpers.h"
@@ -77,12 +78,43 @@ namespace prz {
 
         struct PathCellConnection {
             ZWeight pathToCellWeight;
-            ZPosition previousPathCell;
+            ZPosition* previousPathCell;
 
-            PathCellConnection() = default;
+            PathCellConnection()
+             : pathToCellWeight(ZWeight::kInfinity), previousPathCell(nullptr) {
+            };
+
+            PathCellConnection(const PathCellConnection& other) {
+                pathToCellWeight = other.pathToCellWeight;
+                if (other.previousPathCell) {
+                    previousPathCell = new ZPosition(*other.previousPathCell);
+                } else {
+                    previousPathCell = nullptr;
+                }
+            }
+
+            friend void swap(PathCellConnection& left, PathCellConnection& right) {
+                using std::swap;
+
+                swap(left.pathToCellWeight, right.pathToCellWeight);
+                swap(left.previousPathCell, right.previousPathCell);
+            }
+
+            PathCellConnection(PathCellConnection&& other) {
+                swap(*this, other);
+            }
 
             PathCellConnection(ZWeight pPathToCellWeight, const ZPosition& pPreviousPathCell)
-                : pathToCellWeight(pPathToCellWeight), previousPathCell(pPreviousPathCell) {
+                : pathToCellWeight(pPathToCellWeight), previousPathCell(new ZPosition(pPreviousPathCell)) {
+            }
+
+            ~PathCellConnection() {
+                delete previousPathCell;
+            }
+
+            PathCellConnection& operator=(PathCellConnection other) {
+                swap(*this, other);
+                return *this;
             }
         };
 
@@ -91,10 +123,11 @@ namespace prz {
             ZPosition nextCellPosition = currentCell.position + currentMoveDiff;
             ZWeight pathToNextCellWeight = currentCell.pathToCellWeight + mMapCellWeight[nextCellPosition.GetX()][nextCellPosition.GetY()];
 
-            ZPosition previousCellPosition = pathConnections[currentCell.position.GetX()][currentCell.position.GetY()].previousPathCell;
+            ZPosition* previousCellPosition = pathConnections[currentCell.position.GetX()][currentCell.position.GetY()].previousPathCell;
             if (mMapCellWeight[currentCell.position.GetX()][currentCell.position.GetY()] != 0
                 && mMapCellWeight[nextCellPosition.GetX()][nextCellPosition.GetY()] != 0
-                && previousCellPosition != ZPosition(0, 0) && currentMoveDiff != currentCell.position - previousCellPosition) {
+                && previousCellPosition
+                && currentMoveDiff != currentCell.position - *previousCellPosition) {
                 pathToNextCellWeight = pathToNextCellWeight + kTunnelTurnPenalty;
             }
 
@@ -110,9 +143,8 @@ namespace prz {
         }
 
         void ZDungeonLevelGenerator::ConnectDirectSubDungeons(const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon) {
-            PathCellConnection defaultPathCellConnection = PathCellConnection(ZWeight::kInfinity, ZPosition(0, 0));
             PathCellConnection** pathConnections;
-            utl::ZMatrix::Allocate(&pathConnections, kDungeonLevelWidth, kDungeonLevelHeight, defaultPathCellConnection);
+            utl::ZMatrix::Allocate(&pathConnections, kDungeonLevelWidth, kDungeonLevelHeight);
 
             std::priority_queue<ZWeightedCell, std::vector<ZWeightedCell>, ZWeightedCellAscendingOrder> queue;
             ZPosition startCellPosition = lowerSubDungeon.someValidCell;
@@ -151,7 +183,7 @@ namespace prz {
                 while (previousPathCell != startCellPosition) {
                     mMap[previousPathCell.GetX()][previousPathCell.GetY()] = EDungeonCell::Emptiness;
                     mMapCellWeight[previousPathCell.GetX()][previousPathCell.GetY()] = kEmptyCellWeight;
-                    previousPathCell = pathConnections[previousPathCell.GetX()][previousPathCell.GetY()].previousPathCell;
+                    previousPathCell = *pathConnections[previousPathCell.GetX()][previousPathCell.GetY()].previousPathCell;
                 }
             }
 
