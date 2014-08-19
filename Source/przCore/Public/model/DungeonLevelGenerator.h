@@ -39,7 +39,7 @@ namespace prz {
             void CreateRoomInsideSubDungeon(SubDungeon* dungeon);
             void ConnectDirectSubDungeons(const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon);
             // returns true if path from cell to neighbor is shorter than previous path to that cell
-            bool CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections, ZWeightedCell* createdCell);
+            ZWeightedCell* CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections);
             void DigRandomTunnels();
 
             EDungeonCell::Type** mMap;
