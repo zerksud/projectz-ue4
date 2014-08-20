@@ -118,16 +118,20 @@ namespace prz {
             }
         };
 
+        bool ZDungeonLevelGenerator::CellMustBeDigged(const ZPosition& position) const {
+            return mMapCellWeight[position.GetX()][position.GetY()] != kEmptyCellWeight;
+        }
+
         ZWeightedCell* ZDungeonLevelGenerator::CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections) {
             ZPositionDiff currentMoveDiff = ZPositionDiff(dx, dy);
             ZPosition nextCellPosition = currentCell.position + currentMoveDiff;
             ZWeight pathToNextCellWeight = currentCell.pathToCellWeight + mMapCellWeight[nextCellPosition.GetX()][nextCellPosition.GetY()];
 
-            ZPosition* previousCellPosition = pathConnections[currentCell.position.GetX()][currentCell.position.GetY()].previousPathCell;
-            if (mMapCellWeight[currentCell.position.GetX()][currentCell.position.GetY()] != 0
-                && mMapCellWeight[nextCellPosition.GetX()][nextCellPosition.GetY()] != 0
-                && previousCellPosition
-                && currentMoveDiff != currentCell.position - *previousCellPosition) {
+            ZPosition* previousCellPositionPtr = pathConnections[currentCell.position.GetX()][currentCell.position.GetY()].previousPathCell;
+            if (CellMustBeDigged(currentCell.position)
+                && CellMustBeDigged(nextCellPosition)
+                && previousCellPositionPtr
+                && currentMoveDiff != currentCell.position - *previousCellPositionPtr) {
                 pathToNextCellWeight = pathToNextCellWeight + kTunnelTurnPenalty;
             }
 
