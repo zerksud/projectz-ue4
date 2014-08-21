@@ -15,7 +15,8 @@ namespace prz {
             bool operator==(const ZWeight& other) const;
             bool operator!=(const ZWeight& other) const;
             bool operator>(const ZWeight& other) const;
-            const ZWeight operator+(const ZWeight& other) const;
+            ZWeight operator+(const ZWeight& other) const;
+            ZWeight& operator+=(const ZWeight& other);
 
         private:
             static const int kInfiniteWeight;

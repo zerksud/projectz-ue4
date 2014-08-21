@@ -39,12 +39,17 @@ namespace prz {
             return this->mValue > other.mValue;
         }
 
-        const ZWeight ZWeight::operator+(const ZWeight& other) const {
+        ZWeight ZWeight::operator+(const ZWeight& other) const {
             if (this->mValue == kInfiniteWeight || other.mValue == kInfiniteWeight) {
                 return kInfinity;
             } else {
                 return this->mValue + other.mValue;
             }
+        }
+
+        ZWeight& ZWeight::operator+=(const ZWeight& other) {
+            *this = *this + other;
+            return *this;
         }
 
         ZWeightedCell::ZWeightedCell()

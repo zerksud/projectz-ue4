@@ -132,7 +132,7 @@ namespace prz {
                 && CellMustBeDigged(nextCellPosition)
                 && previousCellPositionPtr
                 && currentMoveDiff != currentCell.position - *previousCellPositionPtr) {
-                pathToNextCellWeight = pathToNextCellWeight + kTunnelTurnPenalty;
+                pathToNextCellWeight += kTunnelTurnPenalty;
             }
 
             PathCellConnection* nextCellConnection = &pathConnections[nextCellPosition.GetX()][nextCellPosition.GetY()];
