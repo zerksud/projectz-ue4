@@ -145,7 +145,7 @@ namespace prz {
             return nullptr;
         }
 
-        void ZDungeonLevelGenerator::ConnectDirectSubDungeons(const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon) {
+        void ZDungeonLevelGenerator::ConnectSubDungeons(const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon) {
             PathCellConnection** pathConnections;
             utl::ZMatrix::Allocate(&pathConnections, kDungeonLevelWidth, kDungeonLevelHeight);
 
@@ -244,7 +244,7 @@ namespace prz {
             SubDungeon& higherSubDungeon = rootNode->higherSubDungeon->dungeon;
             ShrinkSubDungeon(&rootSubDungeon, lowerSubDungeon, higherSubDungeon);
             rootSubDungeon.someValidCell = lowerSubDungeon.someValidCell;
-            ConnectDirectSubDungeons(lowerSubDungeon, higherSubDungeon);
+            ConnectSubDungeons(lowerSubDungeon, higherSubDungeon);
         }
 
         void ZDungeonLevelGenerator::SplitSubDungeonVertically(BSPTreeNode* rootNode) {
@@ -310,7 +310,7 @@ namespace prz {
             for (int i = 0; i < tryCount; ++i) {
                 int fromRoomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
                 int toRoomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
-                ConnectDirectSubDungeons(*mRooms[fromRoomIndex], *mRooms[toRoomIndex]);
+                ConnectSubDungeons(*mRooms[fromRoomIndex], *mRooms[toRoomIndex]);
             }
         }
 
