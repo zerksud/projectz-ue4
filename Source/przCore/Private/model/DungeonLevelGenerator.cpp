@@ -128,11 +128,12 @@ namespace prz {
             ZWeight pathToNextCellWeight = currentCell.pathToCellWeight + mMapCellWeight[nextCellPosition.GetX()][nextCellPosition.GetY()];
 
             ZPosition* previousCellPositionPtr = pathConnections[currentCell.position.GetX()][currentCell.position.GetY()].previousPathCell;
-            if (CellMustBeDigged(currentCell.position)
-                && CellMustBeDigged(nextCellPosition)
-                && previousCellPositionPtr
-                && currentMoveDiff != currentCell.position - *previousCellPositionPtr) {
-                pathToNextCellWeight += kTunnelTurnPenalty;
+            if (previousCellPositionPtr) {
+                bool currentMoveIsTurning = currentMoveDiff != currentCell.position - *previousCellPositionPtr;
+                bool currentMoveIsInsideRock = CellMustBeDigged(currentCell.position) && CellMustBeDigged(nextCellPosition);
+                if (currentMoveIsTurning && currentMoveIsInsideRock) {
+                    pathToNextCellWeight += kTunnelTurnPenalty;
+                }
             }
 
             PathCellConnection* nextCellConnection = &pathConnections[nextCellPosition.GetX()][nextCellPosition.GetY()];
