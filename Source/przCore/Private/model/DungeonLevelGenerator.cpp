@@ -34,7 +34,7 @@ namespace prz {
             ZPosition someValidCell;
 
             SubDungeon(int pX1, int pY1, int pX2, int pY2)
-                : x1(pX1), y1(pY1), x2(pX2), y2(pY2), someValidCell(-1, -1) {
+                : x1(pX1), y1(pY1), x2(pX2), y2(pY2), someValidCell(pX1, pY1) {
             }
 
             int GetWidth() {
