@@ -34,7 +34,11 @@ namespace prz {
             ZPosition someValidCell;
 
             SubDungeon(int pX1, int pY1, int pX2, int pY2)
-                : x1(pX1), y1(pY1), x2(pX2), y2(pY2), someValidCell(pX1, pY1) {
+                : x1(pX1), y1(pY1), x2(pX2), y2(pY2), someValidCell(-1, -1) {
+            }
+
+            SubDungeon(int pX1, int pY1, int pX2, int pY2, const ZPosition& pSomeValidCell)
+                : x1(pX1), y1(pY1), x2(pX2), y2(pY2), someValidCell(pSomeValidCell) {
             }
 
             int GetWidth() {
@@ -232,10 +236,6 @@ namespace prz {
                 CreateRoomInsideSubDungeon(&rootSubDungeon);
                 mRooms.push_back(&rootSubDungeon);
 
-                int someValidCellX = utl::ZRandomHelpers::GetRandomValue(rootSubDungeon.x1, rootSubDungeon.x2);
-                int someValidCellY = utl::ZRandomHelpers::GetRandomValue(rootSubDungeon.y1, rootSubDungeon.y2);
-                rootSubDungeon.someValidCell = ZPosition(someValidCellX, someValidCellY);
-
                 return;
             }
 
@@ -279,7 +279,11 @@ namespace prz {
             int roomY1 = subDungeon->y1 + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->GetHeight() - 2 - roomHeight);
             int roomY2 = roomY1 + roomHeight - 1;
 
-            *subDungeon = SubDungeon(roomX1, roomY1, roomX2, roomY2);
+            int someValidCellX = utl::ZRandomHelpers::GetRandomValue(roomX1, roomX2);
+            int someValidCellY = utl::ZRandomHelpers::GetRandomValue(roomY1, roomY2);
+            ZPosition someValidCell = ZPosition(someValidCellX, someValidCellY);
+
+            *subDungeon = SubDungeon(roomX1, roomY1, roomX2, roomY2, someValidCell);
 
             for (int x = roomX1; x <= roomX2; ++x) {
                 for (int y = roomY1; y <= roomY2; ++y) {
