@@ -37,7 +37,7 @@ void SMinimapWidget::Construct(const FArguments& InArgs) {
     OwnerHUD = InArgs._OwnerHUD;
 }
 
-int32 SMinimapWidget::OnPaint(const FGeometry& AllottedGeometry, const FSlateRect& MyClippingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const {
+int32 SMinimapWidget::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyClippingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const {
     if (OwnerHUD.IsValid() && mMinimap.IsValid()) {
         const FVector2D backgroundSize = FVector2D(1, 1);
         const FMinimapStyle* style = &FPrzStyleManager::Get().GetWidgetStyle<FMinimapStyle>("MinimapWidgetStyle");
@@ -60,7 +60,7 @@ int32 SMinimapWidget::OnPaint(const FGeometry& AllottedGeometry, const FSlateRec
 
     }
 
-    return SCompoundWidget::OnPaint(AllottedGeometry, MyClippingRect, OutDrawElements, LayerId, InWidgetStyle, bParentEnabled);
+    return SCompoundWidget::OnPaint(Args, AllottedGeometry, MyClippingRect, OutDrawElements, LayerId, InWidgetStyle, bParentEnabled);
 }
 
 void SMinimapWidget::SetMinimap(const prz::mdl::ZMinimap& minimap) {
