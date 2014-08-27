@@ -150,13 +150,13 @@ namespace prz {
             return nullptr;
         }
 
-        void ZDungeonLevelGenerator::ConnectSubDungeons(const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon) {
+        void ZDungeonLevelGenerator::ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell) {
             PathCellConnection** pathConnections;
             utl::ZMatrix::Allocate(&pathConnections, kDungeonLevelWidth, kDungeonLevelHeight);
 
             std::priority_queue<ZWeightedCell*, std::vector<ZWeightedCell*>, ZWeightedCellPtrAscendingOrder> queue;
-            ZPosition startCellPosition = lowerSubDungeon.someValidCell;
-            ZPosition finishCellPosition = higherSubDungeon.someValidCell;
+            ZPosition startCellPosition = someCell;
+            ZPosition finishCellPosition = anotherCell;
 
             ZWeight pathFromStartCellEstimatedWeight = CalcCellsDistance(startCellPosition, finishCellPosition);
             ZWeightedCell* startCell = new ZWeightedCell(startCellPosition, 0, pathFromStartCellEstimatedWeight);
@@ -245,7 +245,7 @@ namespace prz {
             SubDungeon& higherSubDungeon = rootNode->higherSubDungeon->dungeon;
             ShrinkSubDungeon(&rootSubDungeon, lowerSubDungeon, higherSubDungeon);
             rootSubDungeon.someValidCell = lowerSubDungeon.someValidCell;
-            ConnectSubDungeons(lowerSubDungeon, higherSubDungeon);
+            ConnectCells(lowerSubDungeon.someValidCell, higherSubDungeon.someValidCell);
         }
 
         void ZDungeonLevelGenerator::SplitSubDungeonVertically(BSPTreeNode* rootNode) {
@@ -315,7 +315,7 @@ namespace prz {
             for (int i = 0; i < tryCount; ++i) {
                 int fromRoomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
                 int toRoomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
-                ConnectSubDungeons(*mRooms[fromRoomIndex], *mRooms[toRoomIndex]);
+                ConnectCells(mRooms[fromRoomIndex]->someValidCell, mRooms[toRoomIndex]->someValidCell);
             }
         }
 

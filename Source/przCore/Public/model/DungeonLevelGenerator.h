@@ -37,7 +37,7 @@ namespace prz {
             void SplitSubDungeonVertically(BSPTreeNode* rootNode);
             void SplitSubDungeonHorizontally(BSPTreeNode* rootNode);
             void CreateRoomInsideSubDungeon(SubDungeon* dungeon);
-            void ConnectSubDungeons(const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon);
+            void ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell);
             bool CellMustBeDigged(const ZPosition& position) const;
             // returns true if path from cell to neighbor is shorter than previous path to that cell
             ZWeightedCell* CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections);
