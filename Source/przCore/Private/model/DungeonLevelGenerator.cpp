@@ -150,6 +150,15 @@ namespace prz {
             return nullptr;
         }
 
+        void ZDungeonLevelGenerator::DiggCell(const ZPosition& position) {
+            DiggCell(position.GetX(), position.GetY());
+        }
+
+        void ZDungeonLevelGenerator::DiggCell(int x, int y) {
+            mMap[x][y] = EDungeonCell::Emptiness;
+            mMapCellWeight[x][y] = kEmptyCellWeight;
+        }
+
         void ZDungeonLevelGenerator::ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell) {
             PathCellConnection** pathConnections;
             utl::ZMatrix::Allocate(&pathConnections, kDungeonLevelWidth, kDungeonLevelHeight);
@@ -201,8 +210,7 @@ namespace prz {
             if (queue.top()->position == finishCellPosition) {
                 ZPosition previousPathCell = finishCellPosition;
                 while (previousPathCell != startCellPosition) {
-                    mMap[previousPathCell.GetX()][previousPathCell.GetY()] = EDungeonCell::Emptiness;
-                    mMapCellWeight[previousPathCell.GetX()][previousPathCell.GetY()] = kEmptyCellWeight;
+                    DiggCell(previousPathCell);
                     previousPathCell = *pathConnections[previousPathCell.GetX()][previousPathCell.GetY()].previousPathCell;
                 }
             }
@@ -287,8 +295,7 @@ namespace prz {
 
             for (int x = roomX1; x <= roomX2; ++x) {
                 for (int y = roomY1; y <= roomY2; ++y) {
-                    mMap[x][y] = EDungeonCell::Emptiness;
-                    mMapCellWeight[x][y] = kEmptyCellWeight;
+                    DiggCell(x, y);
                 }
             }
 

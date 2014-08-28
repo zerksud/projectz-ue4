@@ -36,6 +36,8 @@ namespace prz {
             void GenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically = true);
             void SplitSubDungeonVertically(BSPTreeNode* rootNode);
             void SplitSubDungeonHorizontally(BSPTreeNode* rootNode);
+            void ZDungeonLevelGenerator::DiggCell(const ZPosition& position);
+            void ZDungeonLevelGenerator::DiggCell(int x, int y);
             void CreateRoomInsideSubDungeon(SubDungeon* dungeon);
             void ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell);
             bool CellMustBeDigged(const ZPosition& position) const;
