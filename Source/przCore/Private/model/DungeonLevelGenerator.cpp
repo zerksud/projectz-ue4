@@ -329,8 +329,8 @@ namespace prz {
 
             DigRandomTunnels();
 
-            int startLeafIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
-            const SubDungeon* startSubDungeon = mRooms[startLeafIndex];
+            int startRoomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
+            const SubDungeon* startSubDungeon = mRooms[startRoomIndex];
             mMap[startSubDungeon->x1 + 1][startSubDungeon->y1 + 1] = EDungeonCell::UpStaircase;
 
             ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap);
