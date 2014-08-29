@@ -25,9 +25,7 @@ namespace prz {
                 Forward,
                 Backward,
                 Left,
-                Right,
-                Up,
-                Down
+                Right
             };
         }
 
@@ -99,10 +97,6 @@ namespace prz {
                     ZMonster::DestroyMonster(&monster);
                 }
             };
-
-            static bool MoveDirectionIsVertical(EMoveDirection::Type direction);
-            bool TryToMoveMonsterVertically(const ZPosition& position, EMoveDirection::Type direction);
-            bool TryToMoveMonsterHorizontally(ZPlacedMonster* placedMonster, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff);
 
             bool MovementIsDiagonalAroundTheCorner(const ZPosition& origin, const ZPositionDiff& diff) const;
 

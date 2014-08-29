@@ -364,6 +364,7 @@ namespace prz {
             ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap);
 
             utl::ZMatrix::Deallocate(&mMapCellWeight, kDungeonLevelHeight);
+            mRooms.clear();
 
             return level;
         }

@@ -2,6 +2,7 @@
 #include "model/Dungeon.h"
 
 #include "model/DungeonLevelGenerator.h"
+#include "utils/VectorHelpers.h"
 #include "utils/LOG_ANSI.h"
 
 namespace prz {
@@ -105,11 +106,12 @@ namespace prz {
             bool moveIsSuccessful = mLevels[monsterLevelIndex]->TryToMoveMonster(monsterId, direction, OutExpectedMoveDiff);
             if (moveIsSuccessful) {
                 ZDungeonLevel* nextLevel = nullptr;
+                const ZPosition* monsterPosition = mLevels[monsterLevelIndex]->GetMonsterPosition(monsterId);
                 unsigned int nextLevelIndex = 0;
-                if (direction == EMoveDirection::Down) {
+                if (utl::VectorContains(mLevels[monsterLevelIndex]->GetDownStaircases(), *monsterPosition)) {
                     nextLevelIndex = monsterLevelIndex + 1;
                     nextLevel = GetExistingLevelOrGenerateNew(nextLevelIndex);
-                } else if (direction == EMoveDirection::Up) {
+                } else if (utl::VectorContains(mLevels[monsterLevelIndex]->GetUpStaircases(), *monsterPosition)) {
                     if (monsterLevelIndex > 0) {
                         nextLevelIndex = monsterLevelIndex - 1;
                         nextLevel = mLevels[nextLevelIndex];
@@ -119,7 +121,6 @@ namespace prz {
                 }
 
                 if (nextLevel) {
-                    const ZPosition* monsterPosition = mLevels[monsterLevelIndex]->GetMonsterPosition(monsterId);
                     bool targetCellIsEmpty = nextLevel->CellIsEmpty(*monsterPosition);
 
                     if (targetCellIsEmpty) {
