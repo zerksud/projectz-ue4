@@ -2,7 +2,9 @@
 #include "model/DungeonLevelGenerator.h"
 
 #include <algorithm>
+#include <numeric>
 #include <queue>
+#include <random>
 #include <utility>
 
 #include "utils/MatrixHelpers.h"
@@ -330,8 +332,13 @@ namespace prz {
 
         void ZDungeonLevelGenerator::AddRandomDownStaircases() {
             int downStaircasesToBeGeneratedCount = std::min(kStaircaseCount, (int)mRooms.size());
+
+            std::vector<int> roomIndices(mRooms.size());
+            std::iota(std::begin(roomIndices), std::end(roomIndices), 0);
+            std::shuffle(roomIndices.begin(), roomIndices.end(), std::default_random_engine());
+
             for (int i = 0; i < downStaircasesToBeGeneratedCount; ++i) {
-                int roomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
+                int roomIndex = roomIndices[i];
                 const SubDungeon* subDungeon = mRooms[roomIndex];
                 int staircaseX = utl::ZRandomHelpers::GetRandomValue(subDungeon->x1, subDungeon->x2);
                 int staircaseY = utl::ZRandomHelpers::GetRandomValue(subDungeon->y1, subDungeon->y2);
@@ -362,6 +369,8 @@ namespace prz {
                 const SubDungeon* startSubDungeon = mRooms[startRoomIndex];
                 mMap[startSubDungeon->x1 + 1][startSubDungeon->y1 + 1] = EDungeonCell::UpStaircase;
             }
+
+            AddRandomDownStaircases();
 
             ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap);
 
