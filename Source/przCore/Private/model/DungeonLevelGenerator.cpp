@@ -328,6 +328,19 @@ namespace prz {
             }
         }
 
+        void ZDungeonLevelGenerator::AddRandomDownStaircases() {
+            int downStaircasesToBeGeneratedCount = std::min(kStaircaseCount, (int)mRooms.size());
+            for (int i = 0; i < downStaircasesToBeGeneratedCount; ++i) {
+                int roomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
+                const SubDungeon* subDungeon = mRooms[roomIndex];
+                int staircaseX = utl::ZRandomHelpers::GetRandomValue(subDungeon->x1, subDungeon->x2);
+                int staircaseY = utl::ZRandomHelpers::GetRandomValue(subDungeon->y1, subDungeon->y2);
+                if (mMap[staircaseX][staircaseY] == EDungeonCell::Emptiness) {
+                    mMap[staircaseX][staircaseY] = EDungeonCell::DownStaircase;
+                }
+            }
+        }
+
         ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel::StaircaseList& upStaircases) {
             utl::ZMatrix::Allocate(&mMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
             utl::ZMatrix::Allocate(&mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, kSolidRockCellWeight);
@@ -348,17 +361,6 @@ namespace prz {
                 int startRoomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
                 const SubDungeon* startSubDungeon = mRooms[startRoomIndex];
                 mMap[startSubDungeon->x1 + 1][startSubDungeon->y1 + 1] = EDungeonCell::UpStaircase;
-            }
-
-            int downStaircasesToBeGeneratedCount = std::min(kStaircaseCount, (int)mRooms.size());
-            for (int i = 0; i < downStaircasesToBeGeneratedCount; ++i) {
-                int roomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
-                const SubDungeon* subDungeon = mRooms[roomIndex];
-                int staircaseX = utl::ZRandomHelpers::GetRandomValue(subDungeon->x1, subDungeon->x2);
-                int staircaseY = utl::ZRandomHelpers::GetRandomValue(subDungeon->y1, subDungeon->y2);
-                if (mMap[staircaseX][staircaseY] == EDungeonCell::Emptiness) {
-                    mMap[staircaseX][staircaseY] = EDungeonCell::DownStaircase;
-                }
             }
 
             ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap);

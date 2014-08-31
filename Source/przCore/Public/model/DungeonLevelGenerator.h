@@ -46,6 +46,7 @@ namespace prz {
             // returns true if path from cell to neighbor is shorter than previous path to that cell
             ZWeightedCell* CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections);
             void DigRandomTunnels();
+            void AddRandomDownStaircases();
 
             EDungeonCell::Type** mMap;
             ZWeight** mMapCellWeight;
