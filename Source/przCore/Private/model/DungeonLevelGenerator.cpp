@@ -127,7 +127,11 @@ namespace prz {
         };
 
         bool ZDungeonLevelGenerator::CellMustBeDigged(const ZPosition& position) const {
-            return mMapCellWeight[position.GetX()][position.GetY()] != kEmptyCellWeight;
+            return CellMustBeDigged(position.GetX(), position.GetY());
+        }
+
+        bool ZDungeonLevelGenerator::CellMustBeDigged(int x, int y) const {
+            return mMapCellWeight[x][y] != kEmptyCellWeight;
         }
 
         ZWeightedCell* ZDungeonLevelGenerator::CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections) {
@@ -330,21 +334,60 @@ namespace prz {
             }
         }
 
+        int ZDungeonLevelGenerator::CountCellSolidNeighbours(const ZPosition& cell) const {
+            int count = 0;
+            const int x = cell.GetX();
+            const int y = cell.GetY();
+
+            if (x == 0 || x > 0 && CellMustBeDigged(x - 1, y)) {
+                ++count;
+            }
+
+            if (x == kDungeonLevelWidth || x < kDungeonLevelWidth && CellMustBeDigged(x + 1, y)) {
+                ++count;
+            }
+
+            if (y == 0 || y > 0 && CellMustBeDigged(x, y - 1)) {
+                ++count;
+            }
+
+            if (y == kDungeonLevelHeight || y < kDungeonLevelHeight && CellMustBeDigged(x, y + 1)) {
+                ++count;
+            }
+
+            return count;
+        }
+
         void ZDungeonLevelGenerator::AddRandomDownStaircases() {
-            int downStaircasesToBeGeneratedCount = std::min(kStaircaseCount, (int)mRooms.size());
+            const int staircasesToBeGeneratedCount = std::min(kStaircaseCount, (int)mRooms.size());
+            int staircasesGeneratedCount = 0;
 
             std::vector<int> roomIndices(mRooms.size());
             std::iota(std::begin(roomIndices), std::end(roomIndices), 0);
             std::shuffle(roomIndices.begin(), roomIndices.end(), std::default_random_engine());
 
-            for (int i = 0; i < downStaircasesToBeGeneratedCount; ++i) {
-                int roomIndex = roomIndices[i];
+            int attemptIndex = 0;
+            while (attemptIndex < mRooms.size() && staircasesGeneratedCount < staircasesToBeGeneratedCount) {
+                int roomIndex = roomIndices[attemptIndex];
                 const SubDungeon* subDungeon = mRooms[roomIndex];
-                int staircaseX = utl::ZRandomHelpers::GetRandomValue(subDungeon->x1, subDungeon->x2);
-                int staircaseY = utl::ZRandomHelpers::GetRandomValue(subDungeon->y1, subDungeon->y2);
-                if (mMap[staircaseX][staircaseY] == EDungeonCell::Emptiness) {
-                    mMap[staircaseX][staircaseY] = EDungeonCell::DownStaircase;
+
+                std::vector<ZPosition> staircasePositionVariants(4);
+                staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(subDungeon->x1, subDungeon->x2), subDungeon->y1 - 1);
+                staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(subDungeon->x1, subDungeon->x2), subDungeon->y2 + 1);
+                staircasePositionVariants.emplace_back(subDungeon->x1 - 1, utl::ZRandomHelpers::GetRandomValue(subDungeon->y1, subDungeon->y2));
+                staircasePositionVariants.emplace_back(subDungeon->x2 + 1, utl::ZRandomHelpers::GetRandomValue(subDungeon->y1, subDungeon->y2));
+                std::shuffle(staircasePositionVariants.begin(), staircasePositionVariants.end(), std::default_random_engine());
+
+                for (int j = 0; j < staircasePositionVariants.size(); ++j) {
+                    const ZPosition& cellPosition = staircasePositionVariants[j];
+                    if (CellMustBeDigged(cellPosition) && CountCellSolidNeighbours(cellPosition) == 3) {
+                        mMap[cellPosition.GetX()][cellPosition.GetY()] = EDungeonCell::DownStaircase;
+                        ++staircasesGeneratedCount;
+                        break;
+                    }
                 }
+
+                ++attemptIndex;
             }
         }
 
