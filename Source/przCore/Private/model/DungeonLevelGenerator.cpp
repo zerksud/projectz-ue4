@@ -286,6 +286,11 @@ namespace prz {
             rootNode->higherSubDungeon = new BSPTreeNode(dungeon.x1, lowerSubDungeonY2 + 1, dungeon.x2, dungeon.y2);
         }
 
+        void ZDungeonLevelGenerator::BlockCell(int x, int y) {
+            static const ZWeight forbiddenCellWeight = ZWeight::kInfinity;
+            mMapCellWeight[x][y] = forbiddenCellWeight;
+        }
+
         void ZDungeonLevelGenerator::CreateRoomInsideSubDungeon(SubDungeon* subDungeon) {
             int roomWidth = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, std::min(kRoomMaxSize, subDungeon->GetWidth() - 1 - 2));
             int roomX1 = subDungeon->x1 + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->GetWidth() - 2 - roomWidth);
@@ -307,22 +312,21 @@ namespace prz {
                 }
             }
 
-            // tunnels should not start at room's corner or touch room's edge, so cells adjacent to corners have infinite weights:
+            // tunnels should not start at room's corner or touch room's edge, so cells adjacent to corners should be blocked:
             // #+##+#
             // +    +
             // #    #
             // +    +
             // #+##+#
-            const ZWeight& forbiddenCellWeight = ZWeight::kInfinity;
-            mMapCellWeight[roomX1 - 1][roomY1] = forbiddenCellWeight;
-            mMapCellWeight[roomX2 + 1][roomY1] = forbiddenCellWeight;
-            mMapCellWeight[roomX1 - 1][roomY2] = forbiddenCellWeight;
-            mMapCellWeight[roomX2 + 1][roomY2] = forbiddenCellWeight;
+            BlockCell(roomX1 - 1, roomY1);
+            BlockCell(roomX2 + 1, roomY1);
+            BlockCell(roomX1 - 1, roomY2);
+            BlockCell(roomX2 + 1, roomY2);
 
-            mMapCellWeight[roomX1][roomY1 - 1] = forbiddenCellWeight;
-            mMapCellWeight[roomX2][roomY1 - 1] = forbiddenCellWeight;
-            mMapCellWeight[roomX1][roomY2 + 1] = forbiddenCellWeight;
-            mMapCellWeight[roomX2][roomY2 + 1] = forbiddenCellWeight;
+            BlockCell(roomX1, roomY1 - 1);
+            BlockCell(roomX2, roomY1 - 1);
+            BlockCell(roomX1, roomY2 + 1);
+            BlockCell(roomX2, roomY2 + 1);
         }
 
         void ZDungeonLevelGenerator::DigRandomTunnels() {

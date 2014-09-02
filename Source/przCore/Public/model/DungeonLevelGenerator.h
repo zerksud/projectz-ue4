@@ -40,6 +40,8 @@ namespace prz {
             void SplitSubDungeonHorizontally(BSPTreeNode* rootNode);
             void DiggCell(const ZPosition& position, EDungeonCell::Type cellType = EDungeonCell::Emptiness);
             void DiggCell(int x, int y, EDungeonCell::Type cellType = EDungeonCell::Emptiness);
+            // assignes infinite weight to cell [x, y]
+            void BlockCell(int x, int y);
             void CreateRoomInsideSubDungeon(SubDungeon* dungeon);
             void ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell);
             bool CellMustBeDigged(const ZPosition& position) const;
