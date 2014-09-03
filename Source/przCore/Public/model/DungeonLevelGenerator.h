@@ -38,11 +38,16 @@ namespace prz {
             void GenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically = true);
             void SplitSubDungeonVertically(BSPTreeNode* rootNode);
             void SplitSubDungeonHorizontally(BSPTreeNode* rootNode);
-            void DiggCell(const ZPosition& position, EDungeonCell::Type cellType = EDungeonCell::Emptiness);
-            void DiggCell(int x, int y, EDungeonCell::Type cellType = EDungeonCell::Emptiness);
+            void DiggCellIfSolid(const ZPosition& position, EDungeonCell::Type cellType = EDungeonCell::Emptiness);
+            void DiggCellIfSolid(int x, int y, EDungeonCell::Type cellType = EDungeonCell::Emptiness);
             // assignes infinite weight to cell [x, y]
             void BlockCell(int x, int y);
             void CreateRoomInsideSubDungeon(SubDungeon* dungeon);
+
+            typedef std::vector<ZPosition> PathCells;
+            //returns list of path cells starting from finishCell if path between cells exists, or empty list otherwise
+            PathCells FindPathBetweenCells(const ZPosition& startCellPosition, const ZPosition& finishCellPosition);
+
             void ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell);
             bool CellMustBeDigged(const ZPosition& position) const;
             bool CellMustBeDigged(int x, int y) const;
