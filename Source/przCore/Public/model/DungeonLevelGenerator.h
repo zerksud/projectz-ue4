@@ -55,7 +55,7 @@ namespace prz {
             ZWeightedCell* CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections, int estimadetPathWeightFactor);
             void DigRandomTunnels();
             int CountCellSolidNeighbours(const ZPosition& cell) const;
-            void AddRandomDownStaircases();
+            void AddRandomDownStaircases(const ZDungeonLevel::StaircaseList& existingtaircases);
 
             EDungeonCell::Type** mMap;
             ZWeight** mMapCellWeight;

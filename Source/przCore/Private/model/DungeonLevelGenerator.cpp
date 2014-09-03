@@ -2,6 +2,7 @@
 #include "model/DungeonLevelGenerator.h"
 
 #include <algorithm>
+#include <limits>
 #include <numeric>
 #include <queue>
 #include <random>
@@ -377,20 +378,41 @@ namespace prz {
             return count;
         }
 
-        void ZDungeonLevelGenerator::AddRandomDownStaircases() {
+        struct Room {
+            int index;
+            ZPosition someValidCell;
+            int distanceToClosestStaircase;
+        };
+
+        void ZDungeonLevelGenerator::AddRandomDownStaircases(const ZDungeonLevel::StaircaseList& upStaircases) {
             const int staircasesToBeGeneratedCount = std::min(kStaircaseCount, (int)mRooms.size());
             int staircasesGeneratedCount = 0;
 
-            std::vector<int> roomIndices(mRooms.size());
-            std::iota(std::begin(roomIndices), std::end(roomIndices), 0);
-            std::shuffle(roomIndices.begin(), roomIndices.end(), std::default_random_engine());
+            std::vector<Room> rooms;
+            for (int i = 0; i < mRooms.size(); ++i) {
+                Room room;
+                room.index = i;
+                room.someValidCell = mRooms[i]->someValidCell;
+                room.distanceToClosestStaircase = std::numeric_limits<int>::max();
+                for (auto& staircasePosition : upStaircases) {
+                    int pathSize = FindPathBetweenCells(room.someValidCell, staircasePosition).size();
+                    if (pathSize > 0 && pathSize < room.distanceToClosestStaircase) {
+                        room.distanceToClosestStaircase = pathSize;
+                    }
+                }
 
-            int attemptIndex = 0;
-            while (attemptIndex < mRooms.size() && staircasesGeneratedCount < staircasesToBeGeneratedCount) {
-                int roomIndex = roomIndices[attemptIndex];
-                const SubDungeon* subDungeon = mRooms[roomIndex];
+                rooms.push_back(room);
+            }
 
-                std::vector<ZPosition> staircasePositionVariants(4);
+            while (rooms.size() > 0 && staircasesGeneratedCount < staircasesToBeGeneratedCount) {
+                std::sort(rooms.begin(), rooms.end(), [](Room left, Room right) {
+                    return left.distanceToClosestStaircase < right.distanceToClosestStaircase;
+                });
+
+                const Room& currentRoom = rooms[rooms.size() - 1];
+                const SubDungeon* subDungeon = mRooms[currentRoom.index];
+
+                std::vector<ZPosition> staircasePositionVariants;
                 staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(subDungeon->x1, subDungeon->x2), subDungeon->y1 - 1);
                 staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(subDungeon->x1, subDungeon->x2), subDungeon->y2 + 1);
                 staircasePositionVariants.emplace_back(subDungeon->x1 - 1, utl::ZRandomHelpers::GetRandomValue(subDungeon->y1, subDungeon->y2));
@@ -399,14 +421,22 @@ namespace prz {
 
                 for (int j = 0; j < staircasePositionVariants.size(); ++j) {
                     const ZPosition& cellPosition = staircasePositionVariants[j];
+
                     if (CellMustBeDigged(cellPosition) && CountCellSolidNeighbours(cellPosition) == 3) {
                         mMap[cellPosition.GetX()][cellPosition.GetY()] = EDungeonCell::DownStaircase;
                         ++staircasesGeneratedCount;
+
+                        rooms.pop_back();
+                        for (auto& room : rooms) {
+                            int pathSize = FindPathBetweenCells(currentRoom.someValidCell, room.someValidCell).size();
+                            if (pathSize > 0 && pathSize < room.distanceToClosestStaircase) {
+                                room.distanceToClosestStaircase = pathSize;
+                            }
+                        }
+
                         break;
                     }
                 }
-
-                ++attemptIndex;
             }
         }
 
@@ -422,7 +452,7 @@ namespace prz {
 
             if (upStaircases.size() > 0) {
                 const ZPosition someAlreadyDiggedCell = subDungeonsTreeRoot.dungeon.someValidCell;
-                for (auto upStaircasePosition : upStaircases) {
+                for (auto& upStaircasePosition : upStaircases) {
                     DiggCellIfSolid(upStaircasePosition, EDungeonCell::UpStaircase);
                     ConnectCells(upStaircasePosition, someAlreadyDiggedCell);
                 }
@@ -432,7 +462,7 @@ namespace prz {
                 mMap[startSubDungeon->x1 + 1][startSubDungeon->y1 + 1] = EDungeonCell::UpStaircase;
             }
 
-            AddRandomDownStaircases();
+            AddRandomDownStaircases(upStaircases);
 
             ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap);
 
