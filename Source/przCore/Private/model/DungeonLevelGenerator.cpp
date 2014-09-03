@@ -24,7 +24,7 @@ namespace prz {
         const ZWeight ZDungeonLevelGenerator::kEmptyCellWeight = 0;
 
         const ZWeight ZDungeonLevelGenerator::kTunnelTurnPenalty = 1000;
-        const int ZDungeonLevelGenerator::kEstimatedPathWeightFactor = 25;
+        const int ZDungeonLevelGenerator::kEstimatedPathWeightFactorIfDigging = 25;
         const float ZDungeonLevelGenerator::kRoomCountFractionToDigRandomTunnelsFrom = 0.25f;
 
         const int ZDungeonLevelGenerator::kStaircaseCount = 3;
@@ -134,7 +134,7 @@ namespace prz {
             return mMapCellWeight[x][y] != kEmptyCellWeight;
         }
 
-        ZWeightedCell* ZDungeonLevelGenerator::CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections) {
+        ZWeightedCell* ZDungeonLevelGenerator::CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections, int estimadetPathWeightFactor) {
             ZPositionDiff currentMoveDiff = ZPositionDiff(dx, dy);
             ZPosition nextCellPosition = currentCell.position + currentMoveDiff;
             ZWeight pathToNextCellWeight = currentCell.pathToCellWeight + mMapCellWeight[nextCellPosition.GetX()][nextCellPosition.GetY()];
@@ -150,7 +150,7 @@ namespace prz {
 
             PathCellConnection* nextCellConnection = &pathConnections[nextCellPosition.GetX()][nextCellPosition.GetY()];
             if (nextCellConnection->pathToCellWeight > pathToNextCellWeight) {
-                int pathFromCellEstimatedWeight = CalcCellsDistance(nextCellPosition, finishCellPosition) * kEstimatedPathWeightFactor;
+                int pathFromCellEstimatedWeight = CalcCellsDistance(nextCellPosition, finishCellPosition) * kEstimatedPathWeightFactorIfDigging;
                 *nextCellConnection = PathCellConnection(pathToNextCellWeight, currentCell.position);
                 return new ZWeightedCell(nextCellPosition, pathToNextCellWeight, pathFromCellEstimatedWeight);
             }
@@ -169,7 +169,11 @@ namespace prz {
             }
         }
 
-        ZDungeonLevelGenerator::PathCells ZDungeonLevelGenerator::FindPathBetweenCells(const ZPosition& startCellPosition, const ZPosition& finishCellPosition) {
+        ZDungeonLevelGenerator::PathCells ZDungeonLevelGenerator::FindPathBetweenCells(const ZPosition& startCellPosition, const ZPosition& finishCellPosition, bool diggingIsAllowed) {
+            int estimadetPathWeightFactor = 0;
+            if (diggingIsAllowed) {
+                estimadetPathWeightFactor = kEstimatedPathWeightFactorIfDigging;
+            }
             PathCellConnection** pathConnections;
             utl::ZMatrix::Allocate(&pathConnections, kDungeonLevelWidth, kDungeonLevelHeight);
 
@@ -185,28 +189,28 @@ namespace prz {
 
                 ZWeightedCell* cell;
                 if (currentCell->position.GetX() > 0) {
-                    cell = CreateNextPathCell(*currentCell, -1, 0, finishCellPosition, pathConnections);
+                    cell = CreateNextPathCell(*currentCell, -1, 0, finishCellPosition, pathConnections, estimadetPathWeightFactor);
                     if (cell) {
                         queue.push(cell);
                     }
                 }
 
                 if (currentCell->position.GetX() < kDungeonLevelWidth - 1) {
-                    cell = CreateNextPathCell(*currentCell, 1, 0, finishCellPosition, pathConnections);
+                    cell = CreateNextPathCell(*currentCell, 1, 0, finishCellPosition, pathConnections, estimadetPathWeightFactor);
                     if (cell) {
                         queue.push(cell);
                     }
                 }
 
                 if (currentCell->position.GetY() > 0) {
-                    cell = CreateNextPathCell(*currentCell, 0, -1, finishCellPosition, pathConnections);
+                    cell = CreateNextPathCell(*currentCell, 0, -1, finishCellPosition, pathConnections, estimadetPathWeightFactor);
                     if (cell) {
                         queue.push(cell);
                     }
                 }
 
                 if (currentCell->position.GetY() < kDungeonLevelHeight - 1) {
-                    cell = CreateNextPathCell(*currentCell, 0, 1, finishCellPosition, pathConnections);
+                    cell = CreateNextPathCell(*currentCell, 0, 1, finishCellPosition, pathConnections, estimadetPathWeightFactor);
                     if (cell) {
                         queue.push(cell);
                     }
@@ -237,7 +241,7 @@ namespace prz {
         }
 
         void ZDungeonLevelGenerator::ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell) {
-            PathCells path = FindPathBetweenCells(someCell, anotherCell);
+            PathCells path = FindPathBetweenCells(someCell, anotherCell, true);
             for (auto cell : path) {
                 DiggCellIfSolid(cell);
             }

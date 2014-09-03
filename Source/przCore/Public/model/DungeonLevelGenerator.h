@@ -30,7 +30,7 @@ namespace prz {
             static const ZWeight kSolidRockCellWeight;
             static const ZWeight kEmptyCellWeight;
             static const ZWeight kTunnelTurnPenalty;
-            static const int kEstimatedPathWeightFactor;
+            static const int kEstimatedPathWeightFactorIfDigging;
             static const float kRoomCountFractionToDigRandomTunnelsFrom;
 
             static const int kStaircaseCount;
@@ -46,13 +46,13 @@ namespace prz {
 
             typedef std::vector<ZPosition> PathCells;
             //returns list of path cells starting from finishCell if path between cells exists, or empty list otherwise
-            PathCells FindPathBetweenCells(const ZPosition& startCellPosition, const ZPosition& finishCellPosition);
+            PathCells FindPathBetweenCells(const ZPosition& startCellPosition, const ZPosition& finishCellPosition, bool diggingIsAllowed = false);
 
             void ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell);
             bool CellMustBeDigged(const ZPosition& position) const;
             bool CellMustBeDigged(int x, int y) const;
             // returns true if path from cell to neighbor is shorter than previous path to that cell
-            ZWeightedCell* CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections);
+            ZWeightedCell* CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections, int estimadetPathWeightFactor);
             void DigRandomTunnels();
             int CountCellSolidNeighbours(const ZPosition& cell) const;
             void AddRandomDownStaircases();
