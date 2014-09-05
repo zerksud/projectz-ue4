@@ -104,6 +104,20 @@ namespace prz {
             return mDownStaircases;
         }
 
+        ZDirection ZDungeonLevel::GetStaircaseDirection(const ZPosition& position) const {
+            ZDirection direction;
+
+            if (!CellIsSolid(position.GetX() - 1, position.GetY())) {
+                direction.Turn(ETurnDirection::Back);
+            } else if (!CellIsSolid(position.GetX(), position.GetY() - 1)) {
+                direction.Turn(ETurnDirection::Left);
+            } else if (!CellIsSolid(position.GetX(), position.GetY() + 1)) {
+                direction.Turn(ETurnDirection::Right);
+            }
+
+            return direction;
+        }
+
         EDungeonCell::Type ZDungeonLevel::GetCellType(int x, int y) const {
             if (CellIndicesAreValid(x, y)) {
                 return GetCellTypeImpl(x, y);
