@@ -17,7 +17,7 @@ namespace prz {
             ZDungeonLevelGenerator() = default;
             virtual ~ZDungeonLevelGenerator() = default;
 
-            virtual ZDungeonLevel* GenerateLevel(const ZDungeonLevel::StaircaseList& upStaircases = ZDungeonLevel::StaircaseList()) override;
+            virtual ZDungeonLevel* GenerateLevel(const ZDungeonLevel* previousLevel = nullptr) override;
 
         private:
             static const int kDungeonLevelWidth;

@@ -121,11 +121,12 @@ namespace prz {
                 }
 
                 if (nextLevel) {
-                    bool targetCellIsEmpty = nextLevel->CellIsEmpty(*monsterPosition);
+                    ZPosition nextLevelCellPosition = *monsterPosition + mLevels[monsterLevelIndex]->GetStaircaseDirection(*monsterPosition).PredictMove();
+                    bool targetCellIsEmpty = nextLevel->CellIsEmpty(nextLevelCellPosition);
 
                     if (targetCellIsEmpty) {
                         ZMonster* monster = mLevels[monsterLevelIndex]->RemoveMonster(monsterId);
-                        nextLevel->PlaceMonster(monster, *monsterPosition);
+                        nextLevel->PlaceMonster(monster, nextLevelCellPosition);
 
                         monsterLevelIterator->second = nextLevelIndex;
                     } else {
@@ -154,7 +155,7 @@ namespace prz {
             mLevels.reserve(maxLevelIndex + 1);
             for (unsigned int newLevelIndex = mLevels.size(); newLevelIndex <= maxLevelIndex; ++newLevelIndex) {
                 const ZDungeonLevel::StaircaseList& aboveLevelDownStaircases = mLevels[newLevelIndex - 1]->GetDownStaircases();
-                ZDungeonLevel* level = mLevelGenerator->GenerateLevel(aboveLevelDownStaircases);
+                ZDungeonLevel* level = mLevelGenerator->GenerateLevel(mLevels[newLevelIndex - 1]);
                 mLevels.push_back(level);
             }
         }

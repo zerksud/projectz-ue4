@@ -448,7 +448,7 @@ namespace prz {
             }
         }
 
-        ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel::StaircaseList& upStaircases) {
+        ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previousLevel) {
             utl::ZMatrix::Allocate(&mMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
             utl::ZMatrix::Allocate(&mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, kSolidRockCellWeight);
 
@@ -458,16 +458,21 @@ namespace prz {
 
             DigRandomTunnels();
 
-            if (upStaircases.size() > 0) {
+            ZDungeonLevel::StaircaseList upStaircases;
+            if (previousLevel) {
                 const ZPosition someAlreadyDiggedCell = subDungeonsTreeRoot.dungeon.someValidCell;
-                for (auto& upStaircasePosition : upStaircases) {
+                for (auto& previousLevelStaircasePosition : previousLevel->GetDownStaircases()) {
+                    ZDirection staircaseDirection = previousLevel->GetStaircaseDirection(previousLevelStaircasePosition);
+                    ZPosition upStaircasePosition = previousLevelStaircasePosition + staircaseDirection.PredictMove();
                     DiggCellIfSolid(upStaircasePosition, EDungeonCell::UpStaircase);
                     ConnectCells(upStaircasePosition, someAlreadyDiggedCell);
+                    upStaircases.emplace_back(upStaircasePosition);
                 }
             } else {
                 int startRoomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
                 const SubDungeon* startSubDungeon = mRooms[startRoomIndex];
                 mMap[startSubDungeon->x1 + 1][startSubDungeon->y1 + 1] = EDungeonCell::UpStaircase;
+                upStaircases.push_back(ZPosition(startSubDungeon->x1 + 1, startSubDungeon->y1 + 1));
             }
 
             AddRandomDownStaircases(upStaircases);

@@ -7,7 +7,7 @@ namespace prz {
         class IDungeonLevelGenerator {
         public:
             virtual ~IDungeonLevelGenerator() = default;
-            virtual ZDungeonLevel* GenerateLevel(const ZDungeonLevel::StaircaseList& upStaircases = ZDungeonLevel::StaircaseList()) = 0;
+            virtual ZDungeonLevel* GenerateLevel(const ZDungeonLevel* previousLevel = nullptr) = 0;
         };
     }
 }
