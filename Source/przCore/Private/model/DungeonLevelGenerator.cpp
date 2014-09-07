@@ -159,13 +159,13 @@ namespace prz {
             return nullptr;
         }
 
-        void ZDungeonLevelGenerator::DiggCellIfSolid(const ZPosition& position, EDungeonCell::Type cellType) {
-            DiggCellIfSolid(position.GetX(), position.GetY(), cellType);
+        void ZDungeonLevelGenerator::DiggCellIfSolid(const ZPosition& position) {
+            DiggCellIfSolid(position.GetX(), position.GetY());
         }
 
-        void ZDungeonLevelGenerator::DiggCellIfSolid(int x, int y, EDungeonCell::Type cellType) {
+        void ZDungeonLevelGenerator::DiggCellIfSolid(int x, int y) {
             if (mMap[x][y] == EDungeonCell::SolidRock) {
-                mMap[x][y] = cellType;
+                mMap[x][y] = EDungeonCell::Emptiness;
                 mMapCellWeight[x][y] = kEmptyCellWeight;
             }
         }
@@ -464,8 +464,8 @@ namespace prz {
                 for (auto& previousLevelStaircasePosition : previousLevel->GetDownStaircases()) {
                     ZDirection staircaseDirection = previousLevel->GetStaircaseDirection(previousLevelStaircasePosition);
                     ZPosition upStaircasePosition = previousLevelStaircasePosition + staircaseDirection.PredictMove();
-                    DiggCellIfSolid(upStaircasePosition, EDungeonCell::UpStaircase);
                     ConnectCells(upStaircasePosition, someAlreadyDiggedCell);
+                    mMap[upStaircasePosition.GetX()][upStaircasePosition.GetY()] = EDungeonCell::UpStaircase;
                     upStaircases.emplace_back(upStaircasePosition);
                 }
             } else {
