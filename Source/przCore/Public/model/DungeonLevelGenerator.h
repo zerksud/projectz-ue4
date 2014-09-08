@@ -35,6 +35,16 @@ namespace prz {
 
             static const int kStaircaseCount;
 
+            struct ZDirectionalStaircase {
+                ZPosition position;
+                ZDirection direction;
+
+                ZDirectionalStaircase(const ZPosition& pPosition, const ZDirection& pDirection)
+                    : position(pPosition), direction(pDirection) {
+                }
+            };
+            typedef std::vector<ZDirectionalStaircase> ZDirectionalStaircaseList;
+
             void GenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically = true);
             void SplitSubDungeonVertically(BSPTreeNode* rootNode);
             void SplitSubDungeonHorizontally(BSPTreeNode* rootNode);
@@ -55,11 +65,12 @@ namespace prz {
             ZWeightedCell* CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections, int estimadetPathWeightFactor);
             void DigRandomTunnels();
             int CountCellSolidNeighbours(const ZPosition& cell) const;
-            void AddRandomDownStaircases(const ZDungeonLevel::StaircaseList& existingtaircases);
+            void AddRandomDownStaircases();
 
             EDungeonCell::Type** mMap;
             ZWeight** mMapCellWeight;
             DungeonRooms mRooms;
+            ZDirectionalStaircaseList mUpStaircases;
         };
     }
 }
