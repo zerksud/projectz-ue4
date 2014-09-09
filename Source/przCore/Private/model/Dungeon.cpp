@@ -121,7 +121,8 @@ namespace prz {
                 }
 
                 if (nextLevel) {
-                    ZPosition nextLevelCellPosition = *monsterPosition + mLevels[monsterLevelIndex]->GetStaircaseDirection(*monsterPosition).PredictMove();
+                    ZPositionDiff staircaseDirectionMove = mLevels[monsterLevelIndex]->GetStaircaseDirection(*monsterPosition).PredictMove();
+                    ZPosition nextLevelCellPosition = *monsterPosition + staircaseDirectionMove + staircaseDirectionMove;
                     bool targetCellIsEmpty = nextLevel->CellIsEmpty(nextLevelCellPosition);
 
                     if (targetCellIsEmpty) {
