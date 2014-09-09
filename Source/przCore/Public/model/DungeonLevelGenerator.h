@@ -48,8 +48,10 @@ namespace prz {
             void GenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically = true);
             void SplitSubDungeonVertically(BSPTreeNode* rootNode);
             void SplitSubDungeonHorizontally(BSPTreeNode* rootNode);
-            void DiggCellIfSolid(const ZPosition& position);
-            void DiggCellIfSolid(int x, int y);
+            void DiggCellIfSolidAndNotBlocked(const ZPosition& position);
+            void DiggCellIfSolidAndNotBlocked(int x, int y);
+            // assignes infinite weight to cell with position
+            void BlockCell(const ZPosition& position);
             // assignes infinite weight to cell [x, y]
             void BlockCell(int x, int y);
             void CreateRoomInsideSubDungeon(SubDungeon* dungeon);

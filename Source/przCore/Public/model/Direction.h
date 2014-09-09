@@ -24,6 +24,7 @@ namespace prz {
             virtual ~ZDirection();
 
             void Turn(ETurnDirection::Type direction);
+            ZDirection TurnCopy(ETurnDirection::Type direction);
 
             ZPositionDiff PredictMove() const;
             void Align(const ZPositionDiff& diff);

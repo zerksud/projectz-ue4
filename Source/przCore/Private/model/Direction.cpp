@@ -45,6 +45,13 @@ namespace prz {
             }
         }
 
+        ZDirection ZDirection::TurnCopy(ETurnDirection::Type direction) {
+            ZDirection directionCopy(*this);
+            directionCopy.Turn(direction);
+
+            return directionCopy;
+        }
+
         float ZDirection::GetAngleFromDiff(const ZPositionDiff& diff) {
             int dx = diff.GetdX();
             int dy = -diff.GetdY();
