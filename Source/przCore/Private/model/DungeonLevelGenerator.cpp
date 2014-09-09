@@ -456,23 +456,22 @@ namespace prz {
             utl::ZMatrix::Allocate(&mMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
             utl::ZMatrix::Allocate(&mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, kSolidRockCellWeight);
 
-            ZDirectionalStaircaseList upStaircases;
             if (previousLevel) {
                 for (auto& previousLevelStaircasePosition : previousLevel->GetDownStaircases()) {
                     ZDirection downStaircaseDirection = previousLevel->GetStaircaseDirection(previousLevelStaircasePosition);
                     ZPosition upStaircasePosition = previousLevelStaircasePosition + downStaircaseDirection.PredictMove();
                     ZDirection upStaircaseDirection = downStaircaseDirection.TurnCopy(ETurnDirection::Back);
 
-                    upStaircases.emplace_back(upStaircasePosition, upStaircaseDirection);
+                    mUpStaircases.emplace_back(upStaircasePosition, upStaircaseDirection);
                 }
             } else {
                 int startPositionX = utl::ZRandomHelpers::GetRandomValue(5, kDungeonLevelWidth - 5);
                 int startPositionY = utl::ZRandomHelpers::GetRandomValue(5, kDungeonLevelHeight - 5);
                 mMap[startPositionX][startPositionX] = EDungeonCell::UpStaircase;
-                upStaircases.emplace_back(ZPosition(startPositionX, startPositionX), ZDirection());
+                mUpStaircases.emplace_back(ZPosition(startPositionX, startPositionX), ZDirection());
             }
 
-            for (auto& staircase : upStaircases) {
+            for (auto& staircase : mUpStaircases) {
                 int x = staircase.position.GetX();
                 int y = staircase.position.GetY();
 
@@ -503,7 +502,7 @@ namespace prz {
             DigRandomTunnels();
 
             const ZPosition someAlreadyDiggedCell = subDungeonsTreeRoot.dungeon.someValidCell;
-            for (auto& staircase : upStaircases) {
+            for (auto& staircase : mUpStaircases) {
                 int x = staircase.position.GetX();
                 int y = staircase.position.GetY();
 
