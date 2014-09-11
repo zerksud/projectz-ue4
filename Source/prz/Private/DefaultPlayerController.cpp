@@ -16,13 +16,23 @@ ADefaultPlayerController::ADefaultPlayerController(const class FPostConstructIni
     bEnableClickEvents = 1;
 }
 
+typedef void (ADefaultPlayerController::*FMethodNoParamsPtr)();
+
 void ADefaultPlayerController::SetupInputComponent() {
     Super::SetupInputComponent();
 
-    InputComponent->BindAction("MoveForward", IE_Pressed, this, &ADefaultPlayerController::MoveForwardAction);
-    InputComponent->BindAction("MoveBackward", IE_Pressed, this, &ADefaultPlayerController::MoveBackwardAction);
-    InputComponent->BindAction("StrafeLeft", IE_Pressed, this, &ADefaultPlayerController::StrafeLeftAction);
-    InputComponent->BindAction("StrafeRight", IE_Pressed, this, &ADefaultPlayerController::StrafeRightAction);
+    std::map<std::string, FMethodNoParamsPtr> actionMap = {
+        {"MoveForward", &ADefaultPlayerController::MoveForward},
+        {"MoveBackward", &ADefaultPlayerController::MoveBackward},
+        {"StrafeLeft", &ADefaultPlayerController::StrafeLeft},
+        {"StrafeRight", &ADefaultPlayerController::StrafeRight},
+    };
+
+    for (auto& action : actionMap) {
+        InputComponent->BindAction(action.first.c_str(), IE_Pressed, this, action.second);
+        InputComponent->BindAction(action.first.c_str(), IE_Repeat, this, action.second);
+    }
+
     InputComponent->BindAction("TurnRight", IE_Pressed, this, &ADefaultPlayerController::TurnRight);
     InputComponent->BindAction("TurnLeft", IE_Pressed, this, &ADefaultPlayerController::TurnLeft);
     InputComponent->BindAction("Quit", IE_Pressed, this, &ADefaultPlayerController::Quit);
@@ -37,15 +47,13 @@ void ADefaultPlayerController::SetupObservers() {
 
     INotificationCenter* nc = GET_SERVICE(prz::utl::INotificationCenter);
     if (nc) {
-        typedef void (ADefaultPlayerController::*FMethodNoParamsPtr)();
-
         std::map<std::string, FMethodNoParamsPtr> notificationMethodMap = {
             {ZPlayerNavigation::kTurnLeftNotification, &ADefaultPlayerController::TurnLeft},
-            {ZPlayerNavigation::kMoveForwardNotification, &ADefaultPlayerController::MoveForwardAction},
+            {ZPlayerNavigation::kMoveForwardNotification, &ADefaultPlayerController::MoveForward},
             {ZPlayerNavigation::kTurnRightNotification, &ADefaultPlayerController::TurnRight},
-            {ZPlayerNavigation::kStrafeLeftNotification, &ADefaultPlayerController::StrafeLeftAction},
-            {ZPlayerNavigation::kMoveBackwardNotification, &ADefaultPlayerController::MoveBackwardAction},
-            {ZPlayerNavigation::kStrafeRightNotification, &ADefaultPlayerController::StrafeRightAction}
+            {ZPlayerNavigation::kStrafeLeftNotification, &ADefaultPlayerController::StrafeLeft},
+            {ZPlayerNavigation::kMoveBackwardNotification, &ADefaultPlayerController::MoveBackward},
+            {ZPlayerNavigation::kStrafeRightNotification, &ADefaultPlayerController::StrafeRight}
         };
 
         for (auto& pair : notificationMethodMap) {
@@ -67,19 +75,19 @@ void ADefaultPlayerController::Turn(prz::mdl::ETurnDirection::Type direction) {
     game->TurnPlayer(direction);
 }
 
-void ADefaultPlayerController::MoveForwardAction() {
+void ADefaultPlayerController::MoveForward() {
     Move(prz::mdl::EMoveDirection::Forward);
 }
 
-void ADefaultPlayerController::MoveBackwardAction() {
+void ADefaultPlayerController::MoveBackward() {
     Move(prz::mdl::EMoveDirection::Backward);
 }
 
-void ADefaultPlayerController::StrafeRightAction() {
+void ADefaultPlayerController::StrafeRight() {
     Move(prz::mdl::EMoveDirection::Right);
 }
 
-void ADefaultPlayerController::StrafeLeftAction() {
+void ADefaultPlayerController::StrafeLeft() {
     Move(prz::mdl::EMoveDirection::Left);
 }
 

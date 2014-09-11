@@ -14,16 +14,16 @@ class ADefaultPlayerController : public APlayerController {
     GENERATED_UCLASS_BODY()
 public:
     UFUNCTION()
-    void MoveForwardAction();
+    void MoveForward();
 
     UFUNCTION()
-    void MoveBackwardAction();
+    void MoveBackward();
 
     UFUNCTION()
-    void StrafeLeftAction();
+    void StrafeLeft();
 
     UFUNCTION()
-    void StrafeRightAction();
+    void StrafeRight();
 
     UFUNCTION()
     void TurnRight();
