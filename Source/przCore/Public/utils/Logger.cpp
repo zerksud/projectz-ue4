@@ -1,4 +1,4 @@
-#include "przCorePrivatePCH.h"
+#include "przCorePCH.h"
 #include "Logger.h"
 
 DEFINE_LOG_CATEGORY_STATIC(ProjectZ, All, All)

@@ -1,4 +1,4 @@
-#include "przCorePrivatePCH.h"
+#include "przCorePCH.h"
 #include "model/Minimap.h"
 
 #include "utils/LOG_ANSI.h"

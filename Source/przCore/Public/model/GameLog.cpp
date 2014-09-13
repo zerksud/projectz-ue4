@@ -1,4 +1,4 @@
-#include "przCorePrivatePCH.h"
+#include "przCorePCH.h"
 #include "model/GameLog.h"
 
 #include "utils/LOG_ANSI.h"

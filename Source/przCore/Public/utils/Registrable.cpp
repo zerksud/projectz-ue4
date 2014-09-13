@@ -1,4 +1,4 @@
-#include "przCorePrivatePCH.h"
+#include "przCorePCH.h"
 #include "utils/Registrable.h"
 
 #include "utils/Services.h"

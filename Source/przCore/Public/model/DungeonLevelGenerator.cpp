@@ -1,4 +1,4 @@
-#include "przCorePrivatePCH.h"
+#include "przCorePCH.h"
 #include "model/DungeonLevelGenerator.h"
 
 #include <algorithm>
