@@ -452,10 +452,7 @@ namespace prz {
             }
         }
 
-        ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previousLevel) {
-            utl::ZMatrix::Allocate(&mMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
-            utl::ZMatrix::Allocate(&mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, kSolidRockCellWeight);
-
+        void ZDungeonLevelGenerator::PlaceUpStaircases(const ZDungeonLevel* previousLevel) {
             if (previousLevel) {
                 for (auto& previousLevelStaircasePosition : previousLevel->GetDownStaircases()) {
                     ZDirection downStaircaseDirection = previousLevel->GetStaircaseDirection(previousLevelStaircasePosition);
@@ -494,15 +491,10 @@ namespace prz {
                 DiggCellIfSolidAndNotBlocked(staircase.position);
                 mMap[x][y] = EDungeonCell::UpStaircase;
             }
+        }
 
-            BSPTreeNode subDungeonsTreeRoot(0, 0, kDungeonLevelWidth, kDungeonLevelHeight);
-            utl::ZRandomHelpers::Initialize();
-            GenerateBSPTree(&subDungeonsTreeRoot);
-
-            DigRandomTunnels();
-
-            const ZPosition someAlreadyDiggedCell = subDungeonsTreeRoot.dungeon.someValidCell;
-            for (auto& staircase : mUpStaircases) {
+        void ZDungeonLevelGenerator::ConnectUpStaircasesWithSomeValidCell(const ZPosition& someValidCell) {
+             for (auto& staircase : mUpStaircases) {
                 int x = staircase.position.GetX();
                 int y = staircase.position.GetY();
 
@@ -517,9 +509,22 @@ namespace prz {
                     BlockCell(staircaseConnectedCellPosition + staircase.direction.TurnCopy(ETurnDirection::Right).PredictMove());
                 }
 
-                ConnectCells(staircase.position, someAlreadyDiggedCell);
+                ConnectCells(staircase.position, someValidCell);
             }
+        }
 
+        ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previousLevel) {
+            utl::ZMatrix::Allocate(&mMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
+            utl::ZMatrix::Allocate(&mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, kSolidRockCellWeight);
+
+            PlaceUpStaircases(previousLevel);
+
+            BSPTreeNode subDungeonsTreeRoot(0, 0, kDungeonLevelWidth, kDungeonLevelHeight);
+            utl::ZRandomHelpers::Initialize();
+            GenerateBSPTree(&subDungeonsTreeRoot);
+
+            DigRandomTunnels();
+            ConnectUpStaircasesWithSomeValidCell(subDungeonsTreeRoot.dungeon.someValidCell);
             AddRandomDownStaircases();
 
             ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap);
