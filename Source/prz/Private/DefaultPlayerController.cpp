@@ -36,7 +36,7 @@ void ADefaultPlayerController::SetupInputComponent() {
     InputComponent->BindAction("TurnRight", IE_Pressed, this, &ADefaultPlayerController::TurnRight);
     InputComponent->BindAction("TurnLeft", IE_Pressed, this, &ADefaultPlayerController::TurnLeft);
     InputComponent->BindAction("Quit", IE_Pressed, this, &ADefaultPlayerController::Quit);
-    InputComponent->BindAction("DebugPrintCurrentLocation", IE_Pressed, this, &ADefaultPlayerController::DebugAction);
+    InputComponent->BindAction("DebugAction", IE_Pressed, this, &ADefaultPlayerController::DebugAction);
 
     SetupObservers();
 }
