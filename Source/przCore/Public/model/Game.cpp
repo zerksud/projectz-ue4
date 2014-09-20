@@ -32,11 +32,16 @@ namespace prz {
         }
 
         bool ZGame::TryToMovePlayer(EMoveDirection::Type direction) {
+            unsigned int levelIndexBeforeMove = mDungeon->GetMonsterLevelIndex(mPlayerId);
             bool success = mDungeon->TryToMoveMonster(mPlayerId, direction);
             if (success) {
-                unsigned int currentLevel = mDungeon->GetMonsterLevelIndex(mPlayerId);
-                const ZPosition* playerPosition = mDungeon->GetLevel(currentLevel)->GetMonsterPosition(mPlayerId);
+                unsigned int levelIndexAfterMove = mDungeon->GetMonsterLevelIndex(mPlayerId);
+                const ZPosition* playerPosition = mDungeon->GetLevel(levelIndexAfterMove)->GetMonsterPosition(mPlayerId);
                 mLogHistory.Log("You moved to [%d;%d].", playerPosition->GetX(), playerPosition->GetY());
+
+                if (levelIndexBeforeMove != levelIndexAfterMove) {
+                    mLogHistory.Log("You are now at level %d", levelIndexAfterMove);
+                }
             } else {
                 mLogHistory.Log("You can't move there.");
             }
