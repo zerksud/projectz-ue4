@@ -64,7 +64,7 @@ namespace prz {
             bool CellMustBeDigged(const ZPosition& position) const;
             bool CellMustBeDigged(int x, int y) const;
             // returns true if path from cell to neighbor is shorter than previous path to that cell
-            ZWeightedCell* CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections, int estimadetPathWeightFactor);
+            ZWeightedCell* CreateNextPathCellIfMorePromising(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections, int estimadetPathWeightFactor);
             void DigRandomTunnels();
             int CountCellSolidNeighbours(const ZPosition& cell) const;
             void PlaceUpStaircases(const ZDungeonLevel* previousLevel = nullptr);

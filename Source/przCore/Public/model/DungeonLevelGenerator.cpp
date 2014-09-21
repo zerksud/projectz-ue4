@@ -135,7 +135,7 @@ namespace prz {
             return mMapCellWeight[x][y] != kEmptyCellWeight;
         }
 
-        ZWeightedCell* ZDungeonLevelGenerator::CreateNextPathCell(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections, int estimadetPathWeightFactor) {
+        ZWeightedCell* ZDungeonLevelGenerator::CreateNextPathCellIfMorePromising(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections, int estimadetPathWeightFactor) {
             ZPositionDiff currentMoveDiff = ZPositionDiff(dx, dy);
             ZPosition nextCellPosition = currentCell.position + currentMoveDiff;
             ZWeight pathToNextCellWeight = currentCell.pathToCellWeight + mMapCellWeight[nextCellPosition.GetX()][nextCellPosition.GetY()];
@@ -190,28 +190,28 @@ namespace prz {
 
                 ZWeightedCell* cell;
                 if (currentCell->position.GetX() > 0) {
-                    cell = CreateNextPathCell(*currentCell, -1, 0, finishCellPosition, pathConnections, estimadetPathWeightFactor);
+                    cell = CreateNextPathCellIfMorePromising(*currentCell, -1, 0, finishCellPosition, pathConnections, estimadetPathWeightFactor);
                     if (cell) {
                         queue.push(cell);
                     }
                 }
 
                 if (currentCell->position.GetX() < kDungeonLevelWidth - 1) {
-                    cell = CreateNextPathCell(*currentCell, 1, 0, finishCellPosition, pathConnections, estimadetPathWeightFactor);
+                    cell = CreateNextPathCellIfMorePromising(*currentCell, 1, 0, finishCellPosition, pathConnections, estimadetPathWeightFactor);
                     if (cell) {
                         queue.push(cell);
                     }
                 }
 
                 if (currentCell->position.GetY() > 0) {
-                    cell = CreateNextPathCell(*currentCell, 0, -1, finishCellPosition, pathConnections, estimadetPathWeightFactor);
+                    cell = CreateNextPathCellIfMorePromising(*currentCell, 0, -1, finishCellPosition, pathConnections, estimadetPathWeightFactor);
                     if (cell) {
                         queue.push(cell);
                     }
                 }
 
                 if (currentCell->position.GetY() < kDungeonLevelHeight - 1) {
-                    cell = CreateNextPathCell(*currentCell, 0, 1, finishCellPosition, pathConnections, estimadetPathWeightFactor);
+                    cell = CreateNextPathCellIfMorePromising(*currentCell, 0, 1, finishCellPosition, pathConnections, estimadetPathWeightFactor);
                     if (cell) {
                         queue.push(cell);
                     }
