@@ -136,8 +136,7 @@ namespace prz {
             return mMapCellWeight[x][y] != kEmptyCellWeight;
         }
 
-        ZWeightedCell* ZDungeonLevelGenerator::CreateNextPathCellIfMorePromising(const ZWeightedCell& currentCell, int dx, int dy, const ZPosition& finishCellPosition, PathCellConnection** pathConnections, int estimatedPathWeightFactor) {
-            ZPositionDiff currentMoveDiff = ZPositionDiff(dx, dy);
+        ZWeightedCell* ZDungeonLevelGenerator::CreateNextPathCellIfMorePromising(const ZWeightedCell& currentCell, const ZPositionDiff& currentMoveDiff, const ZPosition& finishCellPosition, PathCellConnection** pathConnections, int estimatedPathWeightFactor) {
             ZPosition nextCellPosition = currentCell.position + currentMoveDiff;
             ZWeight pathToNextCellWeight = currentCell.pathToCellWeight + mMapCellWeight[nextCellPosition.GetX()][nextCellPosition.GetY()];
 
@@ -187,32 +186,37 @@ namespace prz {
 
             while (!queue.empty() && queue.top()->position != finishCellPosition) {
                 ZWeightedCell* currentCell = queue.top();
+                ZPosition currentCellPosition = currentCell->position;
                 queue.pop();
 
                 ZWeightedCell* cell;
-                if (currentCell->position.GetX() > 0) {
-                    cell = CreateNextPathCellIfMorePromising(*currentCell, -1, 0, finishCellPosition, pathConnections, estimatedPathWeightFactor);
+                ZPositionDiff diff = ZPositionDiff(-1, 0);
+                if (currentCellPosition.GetX() > 0 && (diggingIsAllowed || !CellMustBeDigged(currentCellPosition + diff))) {
+                    cell = CreateNextPathCellIfMorePromising(*currentCell, diff, finishCellPosition, pathConnections, estimatedPathWeightFactor);
                     if (cell) {
                         queue.push(cell);
                     }
                 }
 
-                if (currentCell->position.GetX() < kDungeonLevelWidth - 1) {
-                    cell = CreateNextPathCellIfMorePromising(*currentCell, 1, 0, finishCellPosition, pathConnections, estimatedPathWeightFactor);
+                diff = ZPositionDiff(1, 0);
+                if (currentCellPosition.GetX() < kDungeonLevelWidth - 1 && (diggingIsAllowed || !CellMustBeDigged(currentCellPosition + diff))) {
+                    cell = CreateNextPathCellIfMorePromising(*currentCell, diff, finishCellPosition, pathConnections, estimatedPathWeightFactor);
                     if (cell) {
                         queue.push(cell);
                     }
                 }
 
-                if (currentCell->position.GetY() > 0) {
-                    cell = CreateNextPathCellIfMorePromising(*currentCell, 0, -1, finishCellPosition, pathConnections, estimatedPathWeightFactor);
+                diff = ZPositionDiff(0, -1);
+                if (currentCellPosition.GetY() > 0 && (diggingIsAllowed || !CellMustBeDigged(currentCellPosition + diff))) {
+                    cell = CreateNextPathCellIfMorePromising(*currentCell, diff, finishCellPosition, pathConnections, estimatedPathWeightFactor);
                     if (cell) {
                         queue.push(cell);
                     }
                 }
 
-                if (currentCell->position.GetY() < kDungeonLevelHeight - 1) {
-                    cell = CreateNextPathCellIfMorePromising(*currentCell, 0, 1, finishCellPosition, pathConnections, estimatedPathWeightFactor);
+                diff = ZPositionDiff(0, 1);
+                if (currentCellPosition.GetY() < kDungeonLevelHeight - 1 && (diggingIsAllowed || !CellMustBeDigged(currentCellPosition + diff))) {
+                    cell = CreateNextPathCellIfMorePromising(*currentCell, diff, finishCellPosition, pathConnections, estimatedPathWeightFactor);
                     if (cell) {
                         queue.push(cell);
                     }
