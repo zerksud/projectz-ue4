@@ -31,8 +31,6 @@ namespace prz {
 
         class ZDungeonLevel {
         public:
-            typedef std::vector<ZPosition> StaircaseList;
-
             // holds map matrix
             ZDungeonLevel(int width, int height, EDungeonCell::Type*** map);
             ZDungeonLevel(const ZDungeonLevel& other) = delete;
@@ -48,6 +46,7 @@ namespace prz {
             bool CellIsSolid(int x, int y) const;
             bool CellIsSolid(const ZPosition& pos) const;
 
+            typedef std::vector<ZPosition> StaircaseList;
             const StaircaseList& GetUpStaircases() const;
             const StaircaseList& GetDownStaircases() const;
 
