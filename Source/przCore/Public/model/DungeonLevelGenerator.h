@@ -30,8 +30,7 @@ namespace prz {
             static const ZWeight kSolidRockCellWeight;
             static const ZWeight kEmptyCellWeight;
             static const ZWeight kTunnelTurnPenalty;
-            static const int kEstimatedPathWeightFactorIfDigging;
-            static const int kEstimatedPathWeightFactorWithoutDigging;
+            static const int kEstimatedPathWeightFactor;
             static const float kRoomCountFractionToDigRandomTunnelsFrom;
 
             static const int kStaircaseCount;
@@ -65,7 +64,7 @@ namespace prz {
             bool CellMustBeDigged(const ZPosition& position) const;
             bool CellMustBeDigged(int x, int y) const;
             // returns true if path from cell to neighbor is shorter than previous path to that cell
-            ZWeightedCell* CreateNextPathCellIfMorePromising(const ZWeightedCell& currentCell, const ZPositionDiff& currentMoveDiff, const ZPosition& finishCellPosition, PathCellConnection** pathConnections, int estimatedPathWeightFactor);
+            ZWeightedCell* CreateNextPathCellIfMorePromising(const ZWeightedCell& currentCell, const ZPositionDiff& currentMoveDiff, const ZPosition& finishCellPosition, PathCellConnection** pathConnections);
             void DigRandomTunnels();
             int CountCellSolidNeighbours(const ZPosition& cell) const;
             void PlaceUpStaircases(const ZDungeonLevel* previousLevel = nullptr);
