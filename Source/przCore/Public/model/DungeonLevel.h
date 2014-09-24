@@ -31,8 +31,20 @@ namespace prz {
 
         class ZDungeonLevel {
         public:
+            struct ZRoom {
+                int x1;
+                int y1;
+                int x2;
+                int y2;
+
+                ZRoom(int pX1, int pY1, int pX2, int pY2)
+                    : x1(pX1), y1(pY1), x2(pX1), y2(pY2) {
+                }
+            };
+            typedef std::vector<ZRoom> ZRoomList;
+
             // holds map matrix
-            ZDungeonLevel(int width, int height, EDungeonCell::Type*** map);
+            ZDungeonLevel(int width, int height, EDungeonCell::Type*** map, ZRoomList rooms = ZRoomList());
             ZDungeonLevel(const ZDungeonLevel& other) = delete;
             ZDungeonLevel& operator=(const ZDungeonLevel& other) = delete;
             virtual ~ZDungeonLevel();
@@ -111,6 +123,7 @@ namespace prz {
             int mWidth;
             int mHeight;
             EDungeonCell::Type** mTerrain;
+            ZRoomList mRooms;
 
             StaircaseList mUpStaircases;
             StaircaseList mDownStaircases;

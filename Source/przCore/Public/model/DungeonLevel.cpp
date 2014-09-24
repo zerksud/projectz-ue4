@@ -26,7 +26,7 @@ namespace prz {
             ParseMap(&map);
         }
 
-        ZDungeonLevel::ZDungeonLevel(int width, int height, EDungeonCell::Type*** map) {
+        ZDungeonLevel::ZDungeonLevel(int width, int height, EDungeonCell::Type*** map, ZRoomList rooms) {
             if (width <= 0 || height <= 0) {
                 LOGE("Can't create dungeon with size %dx%d", width, height);
                 CreateFailSafeDungeon();
