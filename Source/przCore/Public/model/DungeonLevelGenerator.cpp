@@ -527,7 +527,12 @@ namespace prz {
             ConnectUpStaircasesWithSomeValidCell(subDungeonsTreeRoot.dungeon.someValidCell);
             AddRandomDownStaircases();
 
-            ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap);
+            ZDungeonLevel::ZRoomList roomList;
+            for (auto room : mRooms) {
+                roomList.emplace_back(room->x1, room->y1, room->x2, room->y2);
+            }
+
+            ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap, roomList);
 
             utl::ZMatrix::Deallocate(&mMapCellWeight, kDungeonLevelHeight);
             mRooms.clear();
