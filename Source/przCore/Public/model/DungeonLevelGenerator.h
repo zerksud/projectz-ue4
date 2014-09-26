@@ -1,7 +1,6 @@
 #pragma once
 
 #include "model/IDungeonLevelGenerator.h"
-
 #include "model/WeightedCell.h"
 
 namespace prz {
@@ -27,10 +26,6 @@ namespace prz {
             static const int kRoomMaxSize;
             static const int kRoomMinSize;
 
-            static const ZWeight kSolidRockCellWeight;
-            static const ZWeight kEmptyCellWeight;
-            static const ZWeight kTunnelTurnPenalty;
-            static const int kEstimatedPathWeightFactor;
             static const float kRoomCountFractionToDigRandomTunnelsFrom;
 
             static const int kStaircaseCount;
@@ -55,16 +50,9 @@ namespace prz {
             // assignes infinite weight to cell [x, y]
             void BlockCell(int x, int y);
             void CreateRoomInsideSubDungeon(SubDungeon* dungeon);
-
-            typedef std::vector<ZPosition> PathCells;
-            //returns list of path cells starting from finishCell if path between cells exists, or empty list otherwise
-            PathCells FindPathBetweenCells(const ZPosition& startCellPosition, const ZPosition& finishCellPosition, bool diggingIsAllowed = false);
-
+            
             void ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell);
-            bool CellMustBeDigged(const ZPosition& position) const;
-            bool CellMustBeDigged(int x, int y) const;
-            // returns true if path from cell to neighbor is shorter than previous path to that cell
-            ZWeightedCell* CreateNextPathCellIfMorePromising(const ZWeightedCell& currentCell, const ZPositionDiff& currentMoveDiff, const ZPosition& finishCellPosition, PathCellConnection** pathConnections);
+            
             void DigRandomTunnels();
             int CountCellSolidNeighbours(const ZPosition& cell) const;
             void PlaceUpStaircases(const ZDungeonLevel* previousLevel = nullptr);
