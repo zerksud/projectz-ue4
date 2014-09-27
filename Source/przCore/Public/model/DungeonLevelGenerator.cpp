@@ -7,8 +7,6 @@
 #include <random>
 #include <utility>
 
-#include "model/PathFinder.h"
-
 #include "utils/MatrixHelpers.h"
 #include "utils/RandomHelpers.h"
 
@@ -72,14 +70,14 @@ namespace prz {
         }
 
         void ZDungeonLevelGenerator::DiggCellIfSolidAndNotBlocked(int x, int y) {
-            if (mMap[x][y] == EDungeonCell::SolidRock && mMapCellWeight[x][y] != ZWeight::kInfinity) {
+            if (mMap[x][y] == EDungeonCell::SolidRock && mWeightedMap->GetCellWeight(x, y) != ZWeight::kInfinity) {
                 mMap[x][y] = EDungeonCell::Emptiness;
-                mMapCellWeight[x][y] = ZPathFinder::kEmptyCellWeight;
+                mWeightedMap->SetCellWeight(x, y, ZPathFinder::kEmptyCellWeight);
             }
         }
 
         void ZDungeonLevelGenerator::ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell) {
-            ZPathFinder::PathCells path = ZPathFinder::FindPathBetweenCells(mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, someCell, anotherCell, true);
+            ZPathFinder::PathCells path = ZPathFinder::FindPathBetweenCells(*mWeightedMap, someCell, anotherCell, true);
             for (auto cell : path) {
                 DiggCellIfSolidAndNotBlocked(cell);
             }
@@ -145,7 +143,7 @@ namespace prz {
 
         void ZDungeonLevelGenerator::BlockCell(int x, int y) {
             static const ZWeight forbiddenCellWeight = ZWeight::kInfinity;
-            mMapCellWeight[x][y] = forbiddenCellWeight;
+            mWeightedMap->SetCellWeight(x, y, forbiddenCellWeight);
         }
 
         void ZDungeonLevelGenerator::CreateRoomInsideSubDungeon(SubDungeon* subDungeon) {
@@ -200,19 +198,19 @@ namespace prz {
             const int x = cell.GetX();
             const int y = cell.GetY();
 
-            if (x == 0 || x > 0 && ZPathFinder::CellMustBeDigged(mMapCellWeight, x - 1, y)) {
+            if (x == 0 || x > 0 && ZPathFinder::CellMustBeDigged(*mWeightedMap, x - 1, y)) {
                 ++count;
             }
 
-            if (x == kDungeonLevelWidth || x < kDungeonLevelWidth && ZPathFinder::CellMustBeDigged(mMapCellWeight, x + 1, y)) {
+            if (x == kDungeonLevelWidth || x < kDungeonLevelWidth && ZPathFinder::CellMustBeDigged(*mWeightedMap, x + 1, y)) {
                 ++count;
             }
 
-            if (y == 0 || y > 0 && ZPathFinder::CellMustBeDigged(mMapCellWeight, x, y - 1)) {
+            if (y == 0 || y > 0 && ZPathFinder::CellMustBeDigged(*mWeightedMap, x, y - 1)) {
                 ++count;
             }
 
-            if (y == kDungeonLevelHeight || y < kDungeonLevelHeight && ZPathFinder::CellMustBeDigged(mMapCellWeight, x, y + 1)) {
+            if (y == kDungeonLevelHeight || y < kDungeonLevelHeight && ZPathFinder::CellMustBeDigged(*mWeightedMap, x, y + 1)) {
                 ++count;
             }
 
@@ -236,7 +234,7 @@ namespace prz {
                 room.someValidCell = mRooms[i]->someValidCell;
                 room.distanceToClosestStaircase = std::numeric_limits<int>::max();
                 for (auto& upStaircase : mUpStaircases) {
-                    int pathSize = ZPathFinder::FindPathBetweenCells(mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, room.someValidCell, upStaircase.position).size();
+                    int pathSize = ZPathFinder::FindPathBetweenCells(*mWeightedMap, room.someValidCell, upStaircase.position).size();
                     if (pathSize > 0 && pathSize < room.distanceToClosestStaircase) {
                         room.distanceToClosestStaircase = pathSize;
                     }
@@ -271,13 +269,13 @@ namespace prz {
                 for (int j = 0; j < staircasePositionVariants.size(); ++j) {
                     const ZPosition& cellPosition = staircasePositionVariants[j];
 
-                    if (ZPathFinder::CellMustBeDigged(mMapCellWeight, cellPosition) && CountCellSolidNeighbours(cellPosition) == 3) {
+                    if (ZPathFinder::CellMustBeDigged(*mWeightedMap, cellPosition) && CountCellSolidNeighbours(cellPosition) == 3) {
                         mMap[cellPosition.GetX()][cellPosition.GetY()] = EDungeonCell::DownStaircase;
                         ++staircasesGeneratedCount;
 
                         rooms.pop_back();
                         for (auto& room : rooms) {
-                            int pathSize = ZPathFinder::FindPathBetweenCells(mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, currentRoom.someValidCell, room.someValidCell).size();
+                            int pathSize = ZPathFinder::FindPathBetweenCells(*mWeightedMap, currentRoom.someValidCell, room.someValidCell).size();
                             if (pathSize > 0 && pathSize < room.distanceToClosestStaircase) {
                                 room.distanceToClosestStaircase = pathSize;
                             }
@@ -322,7 +320,7 @@ namespace prz {
 
                 for (int i = 0; i < blockedCellsDirectionsSize; ++i) {
                     ZPosition pos = staircase.position + blockedDirection.TurnCopy(blockedCellsDirections[i]).PredictMove();
-                    BlockCell(pos.GetX(), pos.GetY());
+                    BlockCell(pos);
                 }
 
                 DiggCellIfSolidAndNotBlocked(staircase.position);
@@ -335,13 +333,13 @@ namespace prz {
                 int x = staircase.position.GetX();
                 int y = staircase.position.GetY();
 
-                if (mMapCellWeight[x][y] == ZWeight::kInfinity) {
-                    mMapCellWeight[x][y] = ZPathFinder::kEmptyCellWeight;
+                if (mWeightedMap->GetCellWeight(x, y) == ZWeight::kInfinity) {
+                    mWeightedMap->SetCellWeight(x, y, ZPathFinder::kEmptyCellWeight);
                 }
 
                 ZPosition staircaseConnectedCellPosition = staircase.position + staircase.direction.TurnCopy(ETurnDirection::Back).PredictMove();
-                if (mMapCellWeight[staircaseConnectedCellPosition.GetX()][staircaseConnectedCellPosition.GetY()] == ZWeight::kInfinity) {
-                    mMapCellWeight[staircaseConnectedCellPosition.GetX()][staircaseConnectedCellPosition.GetY()] = ZPathFinder::kEmptyCellWeight;
+                if (mWeightedMap->GetCellWeight(staircaseConnectedCellPosition) == ZWeight::kInfinity) {
+                    mWeightedMap->GetCellWeight(staircaseConnectedCellPosition) = ZPathFinder::kEmptyCellWeight;
                     BlockCell(staircaseConnectedCellPosition + staircase.direction.TurnCopy(ETurnDirection::Left).PredictMove());
                     BlockCell(staircaseConnectedCellPosition + staircase.direction.TurnCopy(ETurnDirection::Right).PredictMove());
                 }
@@ -352,7 +350,7 @@ namespace prz {
 
         ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previousLevel) {
             utl::ZMatrix::Allocate(&mMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
-            utl::ZMatrix::Allocate(&mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, ZPathFinder::kSolidRockCellWeight);
+            mWeightedMap = new ZWeightedMap(kDungeonLevelWidth, kDungeonLevelHeight, ZPathFinder::kSolidRockCellWeight);
 
             PlaceUpStaircases(previousLevel);
 
@@ -371,7 +369,7 @@ namespace prz {
 
             ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap, roomList);
 
-            utl::ZMatrix::Deallocate(&mMapCellWeight, kDungeonLevelHeight);
+            delete mWeightedMap;
             mRooms.clear();
             mUpStaircases.clear();
 

@@ -2,6 +2,7 @@
 
 #include "model/IDungeonLevelGenerator.h"
 #include "model/WeightedCell.h"
+#include "model/PathFinder.h"
 
 namespace prz {
     namespace mdl {
@@ -60,7 +61,7 @@ namespace prz {
             void AddRandomDownStaircases();
 
             EDungeonCell::Type** mMap;
-            ZWeight** mMapCellWeight;
+            ZWeightedMap* mWeightedMap;
             DungeonRooms mRooms;
             ZDirectionalStaircaseList mUpStaircases;
         };

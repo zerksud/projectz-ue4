@@ -16,8 +16,6 @@ namespace prz {
         const ZWeight ZPathFinder::kTunnelTurnPenalty = 1000;
         const int ZPathFinder::kEstimatedPathWeightFactor = 25;
 
-        ZWeight** ZPathFinder::sMapCellWeight = 0;
-
         class ZWeightedCellPtrAscendingOrder {
         public:
             bool operator() (const ZWeightedCell* left, const ZWeightedCell* right) {
@@ -74,22 +72,22 @@ namespace prz {
             return distance;
         }
 
-        bool ZPathFinder::CellMustBeDigged(ZWeight** mapCellWeight, const ZPosition& position) {
-            return CellMustBeDigged(mapCellWeight, position.GetX(), position.GetY());
+        bool ZPathFinder::CellMustBeDigged(const ZWeightedMap& map, const ZPosition& position) {
+            return CellMustBeDigged(map, position.GetX(), position.GetY());
         }
 
-        bool ZPathFinder::CellMustBeDigged(ZWeight** mapCellWeight, int x, int y) {
-            return mapCellWeight[x][y] != kEmptyCellWeight;
+        bool ZPathFinder::CellMustBeDigged(const ZWeightedMap& map, int x, int y) {
+            return map.GetCellWeight(x, y) != kEmptyCellWeight;
         }
 
-        ZWeightedCell* ZPathFinder::CreateNextPathCellIfMorePromising(const ZWeightedCell& currentCell, const ZPositionDiff& currentMoveDiff, const ZPosition& finishCellPosition, PathCellConnection** pathConnections) {
+        ZWeightedCell* ZPathFinder::CreateNextPathCellIfMorePromising(const ZWeightedMap& map, const ZWeightedCell& currentCell, const ZPositionDiff& currentMoveDiff, const ZPosition& finishCellPosition, PathCellConnection** pathConnections) {
             ZPosition nextCellPosition = currentCell.position + currentMoveDiff;
-            ZWeight pathToNextCellWeight = currentCell.pathToCellWeight + sMapCellWeight[nextCellPosition.GetX()][nextCellPosition.GetY()];
+            ZWeight pathToNextCellWeight = currentCell.pathToCellWeight + map.GetCellWeight(nextCellPosition);
 
             ZPosition* previousCellPositionPtr = pathConnections[currentCell.position.GetX()][currentCell.position.GetY()].previousPathCell;
             if (previousCellPositionPtr) {
                 bool currentMoveIsTurning = currentMoveDiff != currentCell.position - *previousCellPositionPtr;
-                bool currentMoveIsInsideRock = CellMustBeDigged(sMapCellWeight, currentCell.position) && CellMustBeDigged(sMapCellWeight, nextCellPosition);
+                bool currentMoveIsInsideRock = CellMustBeDigged(map, currentCell.position) && CellMustBeDigged(map, nextCellPosition);
                 if (currentMoveIsTurning && currentMoveIsInsideRock) {
                     pathToNextCellWeight += kTunnelTurnPenalty;
                 }
@@ -105,11 +103,9 @@ namespace prz {
             return nullptr;
         }
 
-        ZPathFinder::PathCells ZPathFinder::FindPathBetweenCells(ZWeight** mapCellWeight, int levelWidth, int levelHeight, const ZPosition& startCellPosition, const ZPosition& finishCellPosition, bool diggingIsAllowed) {
-            sMapCellWeight = mapCellWeight;
-
+        ZPathFinder::PathCells ZPathFinder::FindPathBetweenCells(const ZWeightedMap& map, const ZPosition& startCellPosition, const ZPosition& finishCellPosition, bool diggingIsAllowed) {
             PathCellConnection** pathConnections;
-            utl::ZMatrix::Allocate(&pathConnections, levelWidth, levelHeight);
+            utl::ZMatrix::Allocate(&pathConnections, map.GetWidth(), map.GetHeight());
 
             std::priority_queue<ZWeightedCell*, std::vector<ZWeightedCell*>, ZWeightedCellPtrAscendingOrder> queue;
 
@@ -124,32 +120,32 @@ namespace prz {
 
                 ZWeightedCell* cell;
                 ZPositionDiff diff = ZPositionDiff(-1, 0);
-                if (currentCellPosition.GetX() > 0 && (diggingIsAllowed || !CellMustBeDigged(sMapCellWeight, currentCellPosition + diff))) {
-                    cell = CreateNextPathCellIfMorePromising(*currentCell, diff, finishCellPosition, pathConnections);
+                if (currentCellPosition.GetX() > 0 && (diggingIsAllowed || !CellMustBeDigged(map, currentCellPosition + diff))) {
+                    cell = CreateNextPathCellIfMorePromising(map, *currentCell, diff, finishCellPosition, pathConnections);
                     if (cell) {
                         queue.push(cell);
                     }
                 }
 
                 diff = ZPositionDiff(1, 0);
-                if (currentCellPosition.GetX() < levelWidth - 1 && (diggingIsAllowed || !CellMustBeDigged(sMapCellWeight, currentCellPosition + diff))) {
-                    cell = CreateNextPathCellIfMorePromising(*currentCell, diff, finishCellPosition, pathConnections);
+                if (currentCellPosition.GetX() < map.GetWidth() - 1 && (diggingIsAllowed || !CellMustBeDigged(map, currentCellPosition + diff))) {
+                    cell = CreateNextPathCellIfMorePromising(map, *currentCell, diff, finishCellPosition, pathConnections);
                     if (cell) {
                         queue.push(cell);
                     }
                 }
 
                 diff = ZPositionDiff(0, -1);
-                if (currentCellPosition.GetY() > 0 && (diggingIsAllowed || !CellMustBeDigged(sMapCellWeight, currentCellPosition + diff))) {
-                    cell = CreateNextPathCellIfMorePromising(*currentCell, diff, finishCellPosition, pathConnections);
+                if (currentCellPosition.GetY() > 0 && (diggingIsAllowed || !CellMustBeDigged(map, currentCellPosition + diff))) {
+                    cell = CreateNextPathCellIfMorePromising(map, *currentCell, diff, finishCellPosition, pathConnections);
                     if (cell) {
                         queue.push(cell);
                     }
                 }
 
                 diff = ZPositionDiff(0, 1);
-                if (currentCellPosition.GetY() < levelHeight - 1 && (diggingIsAllowed || !CellMustBeDigged(sMapCellWeight, currentCellPosition + diff))) {
-                    cell = CreateNextPathCellIfMorePromising(*currentCell, diff, finishCellPosition, pathConnections);
+                if (currentCellPosition.GetY() < map.GetHeight() - 1 && (diggingIsAllowed || !CellMustBeDigged(map, currentCellPosition + diff))) {
+                    cell = CreateNextPathCellIfMorePromising(map, *currentCell, diff, finishCellPosition, pathConnections);
                     if (cell) {
                         queue.push(cell);
                     }
@@ -174,7 +170,7 @@ namespace prz {
                 delete cell;
             }
 
-            utl::ZMatrix::Deallocate(&pathConnections, levelHeight);
+            utl::ZMatrix::Deallocate(&pathConnections, map.GetHeight());
 
             return path;
         }
