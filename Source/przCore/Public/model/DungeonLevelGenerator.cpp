@@ -79,7 +79,7 @@ namespace prz {
         }
 
         void ZDungeonLevelGenerator::ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell) {
-            ZPathFinder::PathCells path = ZPathFinder::FindPathBetweenCells(mMap, mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, someCell, anotherCell, true);
+            ZPathFinder::PathCells path = ZPathFinder::FindPathBetweenCells(mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, someCell, anotherCell, true);
             for (auto cell : path) {
                 DiggCellIfSolidAndNotBlocked(cell);
             }
@@ -236,7 +236,7 @@ namespace prz {
                 room.someValidCell = mRooms[i]->someValidCell;
                 room.distanceToClosestStaircase = std::numeric_limits<int>::max();
                 for (auto& upStaircase : mUpStaircases) {
-                    int pathSize = ZPathFinder::FindPathBetweenCells(mMap, mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, room.someValidCell, upStaircase.position).size();
+                    int pathSize = ZPathFinder::FindPathBetweenCells(mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, room.someValidCell, upStaircase.position).size();
                     if (pathSize > 0 && pathSize < room.distanceToClosestStaircase) {
                         room.distanceToClosestStaircase = pathSize;
                     }
@@ -277,7 +277,7 @@ namespace prz {
 
                         rooms.pop_back();
                         for (auto& room : rooms) {
-                            int pathSize = ZPathFinder::FindPathBetweenCells(mMap, mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, currentRoom.someValidCell, room.someValidCell).size();
+                            int pathSize = ZPathFinder::FindPathBetweenCells(mMapCellWeight, kDungeonLevelWidth, kDungeonLevelHeight, currentRoom.someValidCell, room.someValidCell).size();
                             if (pathSize > 0 && pathSize < room.distanceToClosestStaircase) {
                                 room.distanceToClosestStaircase = pathSize;
                             }

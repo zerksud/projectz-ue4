@@ -16,7 +16,6 @@ namespace prz {
         const ZWeight ZPathFinder::kTunnelTurnPenalty = 1000;
         const int ZPathFinder::kEstimatedPathWeightFactor = 25;
 
-        EDungeonCell::Type** ZPathFinder::sMap = 0;
         ZWeight** ZPathFinder::sMapCellWeight = 0;
 
         class ZWeightedCellPtrAscendingOrder {
@@ -106,8 +105,7 @@ namespace prz {
             return nullptr;
         }
 
-        ZPathFinder::PathCells ZPathFinder::FindPathBetweenCells(EDungeonCell::Type** map, ZWeight** mapCellWeight, int levelWidth, int levelHeight, const ZPosition& startCellPosition, const ZPosition& finishCellPosition, bool diggingIsAllowed) {
-            sMap = map;
+        ZPathFinder::PathCells ZPathFinder::FindPathBetweenCells(ZWeight** mapCellWeight, int levelWidth, int levelHeight, const ZPosition& startCellPosition, const ZPosition& finishCellPosition, bool diggingIsAllowed) {
             sMapCellWeight = mapCellWeight;
 
             PathCellConnection** pathConnections;
