@@ -2,7 +2,7 @@
 
 #include "GameFramework/HUD.h"
 
-#include "model/Minimap.h"
+#include "Model/Minimap.h"
 
 #include "DefaultHUD.generated.h"
 

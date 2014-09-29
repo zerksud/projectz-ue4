@@ -1,7 +1,7 @@
 #include "prz.h"
 #include "UI/Widgets/DPIScaledWidget.h"
 
-#include "utils/LOG_ANSI.h"
+#include "Utils/LOG_ANSI.h"
 
 void SDPIScaledWidget::Construct(const FArguments& InArgs) {
     OwnerHUD = InArgs._OwnerHUD;

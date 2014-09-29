@@ -3,12 +3,12 @@
 
 #include <map>
 
-#include "utils/Services.h"
-#include "utils/INotificationCenter.h"
-#include "model/IGame.h"
-#include "utils/LOG.h"
+#include "Utils/Services.h"
+#include "Utils/INotificationCenter.h"
+#include "Model/IGame.h"
+#include "Utils/LOG.h"
 
-#include "model/PlayerNavigation.h"
+#include "Model/PlayerNavigation.h"
 
 ADefaultPlayerController::ADefaultPlayerController(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP) {

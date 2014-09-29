@@ -8,8 +8,8 @@
 #include "UI/Widgets/MinimapWidget.h"
 #include "UI/Widgets/LogWidget.h"
 
-#include "utils/Services.h"
-#include "model/IGame.h"
+#include "Utils/Services.h"
+#include "Model/IGame.h"
 
 ADefaultHUD::ADefaultHUD(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP) {

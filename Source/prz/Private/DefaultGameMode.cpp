@@ -5,12 +5,12 @@
 #include "DefaultPlayerController.h"
 #include "UI/DefaultHUD.h"
 
-#include "utils/Services.h"
-#include "utils/Logger.h"
-#include "utils/NotificationCenter.h"
-#include "utils/UniqueIdRegistry.h"
+#include "Utils/Services.h"
+#include "Utils/Logger.h"
+#include "Utils/NotificationCenter.h"
+#include "Utils/UniqueIdRegistry.h"
 
-#include "model/Game.h"
+#include "Model/Game.h"
 
 ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializeProperties& PCIP)
 : Super(PCIP) {

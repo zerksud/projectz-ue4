@@ -2,7 +2,7 @@
 
 #include "GameFramework/PlayerController.h"
 
-#include "model/IGame.h"
+#include "Model/IGame.h"
 
 #include "DefaultPlayerController.generated.h"
 

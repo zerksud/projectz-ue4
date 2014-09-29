@@ -4,10 +4,10 @@
 #include "UI/Styles/PrzStyleManager.h"
 #include "UI/Styles/NavigationWidgetStyle.h"
 
-#include "model/PlayerNavigation.h"
+#include "Model/PlayerNavigation.h"
 
-#include "utils/Services.h"
-#include "utils/INotificationCenter.h"
+#include "Utils/Services.h"
+#include "Utils/INotificationCenter.h"
 
 const char* SNavigationWidget::kNotificationNames[] = {
     prz::mdl::ZPlayerNavigation::kTurnLeftNotification,
