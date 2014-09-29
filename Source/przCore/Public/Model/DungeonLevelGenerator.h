@@ -61,7 +61,7 @@ private:
     void AddRandomDownStaircases();
 
     EDungeonCell::Type** mMap;
-    ZWeightedMap* mWeightedMap;
+    path::ZWeightedMap* mWeightedMap;
     DungeonRooms mRooms;
     ZDirectionalStaircaseList mUpStaircases;
 };

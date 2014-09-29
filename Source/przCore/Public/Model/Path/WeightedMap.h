@@ -5,6 +5,7 @@
 
 namespace prz {
 namespace mdl {
+namespace path {
 
 class ZWeightedMap {
 public:
@@ -26,5 +27,6 @@ private:
     ZWeight** mCellWeights;
 };
 
+}
 }
 }

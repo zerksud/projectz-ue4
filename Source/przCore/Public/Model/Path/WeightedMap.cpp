@@ -5,6 +5,7 @@
 
 namespace prz {
 namespace mdl {
+namespace path {
 
 ZWeightedMap::ZWeightedMap(int width, int height, const ZWeight& defaultCellWeight) {
     mWidth = width;
@@ -40,5 +41,6 @@ ZWeight ZWeightedMap::GetCellWeight(int x, int y) const {
     return mCellWeights[x][y];
 }
 
+}
 }
 }

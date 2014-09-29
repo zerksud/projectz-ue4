@@ -3,6 +3,7 @@
 
 namespace prz {
 namespace mdl {
+namespace path {
 
 const int ZWeight::kInfiniteWeight = -1;
 const ZWeight ZWeight::kInfinity = ZWeight(ZWeight::kInfiniteWeight);
@@ -64,5 +65,6 @@ ZWeight ZWeightedCell::GetTotalPathWeight() const {
     return pathToCellWeight + pathFromCellEstimatedWeight;
 }
 
+}
 }
 }

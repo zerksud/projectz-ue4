@@ -7,6 +7,7 @@
 
 namespace prz {
 namespace mdl {
+namespace path {
 
 struct PathCellConnection;
 
@@ -31,5 +32,7 @@ private:
     // returns true if path from cell to neighbor is shorter than previous path to that cell
     static ZWeightedCell* ZPathFinder::CreateNextPathCellIfMorePromising(const ZWeightedMap& map, const ZWeightedCell& currentCell, const ZPositionDiff& currentMoveDiff, const ZPosition& finishCellPosition, PathCellConnection** pathConnections);
 };
+
+}
 }
 }

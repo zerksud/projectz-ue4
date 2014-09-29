@@ -9,6 +9,7 @@
 
 namespace prz {
 namespace mdl {
+namespace path {
 
 const ZWeight ZPathFinder::kSolidRockCellWeight = 100;
 const ZWeight ZPathFinder::kEmptyCellWeight = 0;
@@ -175,5 +176,6 @@ ZPathFinder::PathCells ZPathFinder::FindPathBetweenCells(const ZWeightedMap& map
     return path;
 }
 
+}
 }
 }

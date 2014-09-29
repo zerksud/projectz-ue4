@@ -4,6 +4,7 @@
 
 namespace prz {
 namespace mdl {
+namespace path {
 
 class ZWeight {
 public:
@@ -37,5 +38,6 @@ struct ZWeightedCell {
 
 };
 
+}
 }
 }
