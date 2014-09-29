@@ -21,7 +21,7 @@ enum Type {
 class ZDirection {
 public:
     ZDirection();
-    virtual ~ZDirection();
+    virtual ~ZDirection() = default;
 
     void Turn(ETurnDirection::Type direction);
     ZDirection TurnCopy(ETurnDirection::Type direction);

@@ -33,9 +33,6 @@ ZDirection::ZDirection() {
     mAngle = 0;
 }
 
-ZDirection::~ZDirection() {
-}
-
 void ZDirection::Turn(ETurnDirection::Type direction) {
     auto pos = kTurnDirectionToAngle.find(direction);
     if (pos != kTurnDirectionToAngle.end()) {

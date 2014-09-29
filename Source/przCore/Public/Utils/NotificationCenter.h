@@ -12,7 +12,7 @@ namespace utl {
 
 class PRZCORE_API ZNotificationCenter : public INotificationCenter {
 public:
-    ZNotificationCenter();
+    ZNotificationCenter() = default;
     ZNotificationCenter(const ZNotificationCenter& other) = delete;
     ZNotificationCenter& operator=(const ZNotificationCenter& other) = delete;
     virtual ~ZNotificationCenter();

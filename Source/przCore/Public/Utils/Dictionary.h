@@ -11,7 +11,7 @@ namespace utl {
 
 class PRZCORE_API ZDictionary {
 public:
-    ZDictionary();
+    ZDictionary() = default;
     ZDictionary(const ZDictionary& other);
     ZDictionary(ZDictionary&& other);
     ZDictionary(const int pInt);

@@ -8,9 +8,6 @@
 namespace prz {
 namespace utl {
 
-ZNotificationCenter::ZNotificationCenter() {
-}
-
 ZNotificationCenter::~ZNotificationCenter() {
     for (const ZObserverListTablePair& e : mObservers) {
         ZObserverList* list = e.second;

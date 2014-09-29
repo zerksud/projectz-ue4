@@ -6,9 +6,6 @@
 namespace prz {
 namespace utl {
 
-ZDictionary::ZDictionary() {
-}
-
 ZDictionary::ZDictionary(const ZDictionary& other) : mValueType(other.mValueType) {
     switch (other.mValueType) {
     case intValue:

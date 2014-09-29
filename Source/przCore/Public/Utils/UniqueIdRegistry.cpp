@@ -12,9 +12,6 @@ mMaxId(maxId),
     mNextFreeId(ZRegistrable::kNoId + 1) {
 }
 
-ZUniqueIdRegistry::~ZUniqueIdRegistry() {
-}
-
 bool ZUniqueIdRegistry::AssignUniqueId(ZRegistrable* object) {
     if (object->GetId() != ZRegistrable::kNoId) {
         LOGE("Can't register object with id = %d twice", object->GetId());

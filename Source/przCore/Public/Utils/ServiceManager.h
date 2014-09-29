@@ -21,7 +21,8 @@ namespace utl {
 
 class PRZCORE_API ZServiceManager {
 public:
-    ZServiceManager();
+    ZServiceManager() = default;
+    ZServiceManager(const ZServiceManager& other) = delete;
     virtual ~ZServiceManager();
 
     template<typename TServiceType> bool Register(TServiceType* instance, std::string typeName) {

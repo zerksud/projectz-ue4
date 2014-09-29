@@ -8,12 +8,6 @@ DEFINE_LOG_CATEGORY_STATIC(ProjectZ, All, All)
 namespace prz {
 namespace utl {
 
-ZLogger::ZLogger() {
-}
-
-ZLogger::~ZLogger() {
-}
-
 const char* ZLogger::kLogFormat =
 #ifdef VERBOSE
 "[%s][%s:%d] "

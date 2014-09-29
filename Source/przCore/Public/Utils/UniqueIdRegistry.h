@@ -15,7 +15,7 @@ public:
     ZUniqueIdRegistry(ZIdType maxId = std::numeric_limits<ZIdType>::max());
     ZUniqueIdRegistry(const ZUniqueIdRegistry& other) = delete;
     ZUniqueIdRegistry& operator=(const ZUniqueIdRegistry& other) = delete;
-    virtual ~ZUniqueIdRegistry();
+    virtual ~ZUniqueIdRegistry() = default;
 
     bool AssignUniqueId(ZRegistrable* object) override;
     bool ReleaseUniqueId(ZRegistrable* object) override;

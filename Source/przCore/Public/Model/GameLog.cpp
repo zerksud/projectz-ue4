@@ -7,8 +7,8 @@
 namespace prz {
 namespace mdl {
 
-ZGameLog::ZGameLog() :
-mHistoryMaxSize(6),
+ZGameLog::ZGameLog()
+    : mHistoryMaxSize(6),
     mCachedHistoryIsValid(false) {
 }
 
