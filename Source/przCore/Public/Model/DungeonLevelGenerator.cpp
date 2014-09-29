@@ -24,31 +24,6 @@ const float ZDungeonLevelGenerator::kRoomCountFractionToDigRandomTunnelsFrom = 0
 
 const int ZDungeonLevelGenerator::kStaircaseCount = 3;
 
-struct SubDungeon {
-    int x1;
-    int y1;
-    int x2;
-    int y2;
-
-    ZPosition someValidCell;
-
-    SubDungeon(int pX1, int pY1, int pX2, int pY2)
-        : x1(pX1), y1(pY1), x2(pX2), y2(pY2), someValidCell(-1, -1) {
-    }
-
-    SubDungeon(int pX1, int pY1, int pX2, int pY2, const ZPosition& pSomeValidCell)
-        : x1(pX1), y1(pY1), x2(pX2), y2(pY2), someValidCell(pSomeValidCell) {
-    }
-
-    int GetWidth() {
-        return (x2 - x1 + 1);
-    }
-
-    int GetHeight() {
-        return (y2 - y1 + 1);
-    }
-};
-
 struct BSPTreeNode {
     SubDungeon dungeon;
 
@@ -90,7 +65,7 @@ void ShrinkSubDungeon(SubDungeon* outerSubDungeon, const SubDungeon& lowerSubDun
     outerSubDungeon->y2 = std::max(lowerSubDungeon.y2, higherSubDungeon.y2);
 }
 
-void ZDungeonLevelGenerator::GenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically) {
+bool ZDungeonLevelGenerator::TryToGenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically) {
     SubDungeon& rootSubDungeon = rootNode->dungeon;
     int width = rootSubDungeon.GetWidth();
     int height = rootSubDungeon.GetHeight();
@@ -100,19 +75,27 @@ void ZDungeonLevelGenerator::GenerateBSPTree(BSPTreeNode* rootNode, bool tryToSp
     } else if (!tryToSplitVertically && height > 2 * kSubDungeonMinSize) {
         SplitSubDungeonHorizontally(rootNode);
     } else {
-        CreateRoomInsideSubDungeon(&rootSubDungeon);
-        mRooms.push_back(&rootSubDungeon);
-
-        return;
+        return TryToCreateRoomInsideSubDungeon(&rootSubDungeon);
     }
 
-    GenerateBSPTree(rootNode->lowerSubDungeon, !tryToSplitVertically);
-    GenerateBSPTree(rootNode->higherSubDungeon, !tryToSplitVertically);
-    SubDungeon& lowerSubDungeon = rootNode->lowerSubDungeon->dungeon;
-    SubDungeon& higherSubDungeon = rootNode->higherSubDungeon->dungeon;
-    ShrinkSubDungeon(&rootSubDungeon, lowerSubDungeon, higherSubDungeon);
-    rootSubDungeon.someValidCell = lowerSubDungeon.someValidCell;
-    ConnectCells(lowerSubDungeon.someValidCell, higherSubDungeon.someValidCell);
+    bool lowerSubDungeonGenerated = TryToGenerateBSPTree(rootNode->lowerSubDungeon, !tryToSplitVertically);
+    bool higherSubDungeonGenerated = TryToGenerateBSPTree(rootNode->higherSubDungeon, !tryToSplitVertically);
+
+    if (lowerSubDungeonGenerated && higherSubDungeonGenerated) {
+        const SubDungeon& lowerSubDungeon = rootNode->lowerSubDungeon->dungeon;
+        const SubDungeon& higherSubDungeon = rootNode->higherSubDungeon->dungeon;
+        ShrinkSubDungeon(&rootSubDungeon, lowerSubDungeon, higherSubDungeon);
+        rootSubDungeon.someValidCell = lowerSubDungeon.someValidCell;
+        ConnectCells(lowerSubDungeon.someValidCell, higherSubDungeon.someValidCell);
+    } else if (lowerSubDungeonGenerated) {
+        rootSubDungeon = rootNode->lowerSubDungeon->dungeon;
+    } else if (higherSubDungeonGenerated) {
+        rootSubDungeon = rootNode->higherSubDungeon->dungeon;
+    } else {
+        return false;
+    }
+
+    return true;
 }
 
 void ZDungeonLevelGenerator::SplitSubDungeonVertically(BSPTreeNode* rootNode) {
@@ -146,7 +129,11 @@ void ZDungeonLevelGenerator::BlockCell(int x, int y) {
     mWeightedMap->SetCellWeight(x, y, forbiddenCellWeight);
 }
 
-void ZDungeonLevelGenerator::CreateRoomInsideSubDungeon(SubDungeon* subDungeon) {
+bool ZDungeonLevelGenerator::CellIsBlocked(int x, int y) const {
+    return (mWeightedMap->GetCellWeight(x, y) == path::ZWeight::kInfinity);
+}
+
+bool ZDungeonLevelGenerator::TryToCreateRoomInsideSubDungeon(SubDungeon* subDungeon) {
     int roomWidth = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, std::min(kRoomMaxSize, subDungeon->GetWidth() - 1 - 2));
     int roomX1 = subDungeon->x1 + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->GetWidth() - 2 - roomWidth);
     int roomX2 = roomX1 + roomWidth - 1;
@@ -155,14 +142,37 @@ void ZDungeonLevelGenerator::CreateRoomInsideSubDungeon(SubDungeon* subDungeon) 
     int roomY1 = subDungeon->y1 + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->GetHeight() - 2 - roomHeight);
     int roomY2 = roomY1 + roomHeight - 1;
 
-    int someValidCellX = utl::ZRandomHelpers::GetRandomValue(roomX1, roomX2);
-    int someValidCellY = utl::ZRandomHelpers::GetRandomValue(roomY1, roomY2);
-    ZPosition someValidCell = ZPosition(someValidCellX, someValidCellY);
+    bool roomDigged = DiggRoomIfAllCellsAreSolidAndNotBlocked(roomX1, roomY1, roomX2, roomY2);
+    if (roomDigged) {
+        int someValidCellX = utl::ZRandomHelpers::GetRandomValue(roomX1, roomX2);
+        int someValidCellY = utl::ZRandomHelpers::GetRandomValue(roomY1, roomY2);
+        ZPosition someValidCell = ZPosition(someValidCellX, someValidCellY);
+        *subDungeon = SubDungeon(roomX1, roomY1, roomX2, roomY2, someValidCell);
+        mRooms.push_back(*subDungeon);
+    }
 
-    *subDungeon = SubDungeon(roomX1, roomY1, roomX2, roomY2, someValidCell);
+    return roomDigged;
+}
 
-    for (int x = roomX1; x <= roomX2; ++x) {
-        for (int y = roomY1; y <= roomY2; ++y) {
+bool ZDungeonLevelGenerator::DiggRoomIfAllCellsAreSolidAndNotBlocked(int minX, int minY, int maxX, int maxY) {
+    for (int x = minX - 1; x <= maxX + 1; ++x) {
+        for (int y = minY - 1; y <= maxY + 1; ++y) {
+            if (!path::ZPathFinder::CellMustBeDigged(*mWeightedMap, x, y)) {
+                return false;
+            }
+        }
+    }
+
+    for (int x = minX; x <= maxX; ++x) {
+        for (int y = minY; y <= maxY; ++y) {
+            if (CellIsBlocked(x, y)) {
+                return false;
+            }
+        }
+    }
+
+    for (int x = minX; x <= maxX; ++x) {
+        for (int y = minY; y <= maxY; ++y) {
             DiggCellIfSolidAndNotBlocked(x, y);
         }
     }
@@ -173,15 +183,17 @@ void ZDungeonLevelGenerator::CreateRoomInsideSubDungeon(SubDungeon* subDungeon) 
     // #    #
     // +    +
     // #+##+#
-    BlockCell(roomX1 - 1, roomY1);
-    BlockCell(roomX2 + 1, roomY1);
-    BlockCell(roomX1 - 1, roomY2);
-    BlockCell(roomX2 + 1, roomY2);
+    BlockCell(minX - 1, minY);
+    BlockCell(maxX + 1, minY);
+    BlockCell(minX - 1, maxY);
+    BlockCell(maxX + 1, maxY);
 
-    BlockCell(roomX1, roomY1 - 1);
-    BlockCell(roomX2, roomY1 - 1);
-    BlockCell(roomX1, roomY2 + 1);
-    BlockCell(roomX2, roomY2 + 1);
+    BlockCell(minX, minY - 1);
+    BlockCell(maxX, minY - 1);
+    BlockCell(minX, maxY + 1);
+    BlockCell(maxX, maxY + 1);
+
+    return true;
 }
 
 void ZDungeonLevelGenerator::DigRandomTunnels() {
@@ -189,7 +201,7 @@ void ZDungeonLevelGenerator::DigRandomTunnels() {
     for (int i = 0; i < tryCount; ++i) {
         int fromRoomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
         int toRoomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
-        ConnectCells(mRooms[fromRoomIndex]->someValidCell, mRooms[toRoomIndex]->someValidCell);
+        ConnectCells(mRooms[fromRoomIndex].someValidCell, mRooms[toRoomIndex].someValidCell);
     }
 }
 
@@ -231,7 +243,7 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
     for (int i = 0; i < mRooms.size(); ++i) {
         Room room;
         room.index = i;
-        room.someValidCell = mRooms[i]->someValidCell;
+        room.someValidCell = mRooms[i].someValidCell;
         room.distanceToClosestStaircase = std::numeric_limits<int>::max();
         for (auto& upStaircase : mUpStaircases) {
             int pathSize = path::ZPathFinder::FindPathBetweenCells(*mWeightedMap, room.someValidCell, upStaircase.position).size();
@@ -249,20 +261,20 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
         });
 
         const Room& currentRoom = rooms[rooms.size() - 1];
-        const SubDungeon* subDungeon = mRooms[currentRoom.index];
+        const SubDungeon& subDungeon = mRooms[currentRoom.index];
 
         std::vector<ZPosition> staircasePositionVariants;
-        if (subDungeon->y1 > kRoomMinSize + 2) {
-            staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(subDungeon->x1, subDungeon->x2), subDungeon->y1 - 1);
+        if (subDungeon.y1 > kRoomMinSize + 2) {
+            staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(subDungeon.x1, subDungeon.x2), subDungeon.y1 - 1);
         }
-        if (subDungeon->y2 < kDungeonLevelHeight - 1 - kRoomMinSize - 2) {
-            staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(subDungeon->x1, subDungeon->x2), subDungeon->y2 + 1);
+        if (subDungeon.y2 < kDungeonLevelHeight - 1 - kRoomMinSize - 2) {
+            staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(subDungeon.x1, subDungeon.x2), subDungeon.y2 + 1);
         }
-        if (subDungeon->x1 > kRoomMinSize + 2) {
-            staircasePositionVariants.emplace_back(subDungeon->x1 - 1, utl::ZRandomHelpers::GetRandomValue(subDungeon->y1, subDungeon->y2));
+        if (subDungeon.x1 > kRoomMinSize + 2) {
+            staircasePositionVariants.emplace_back(subDungeon.x1 - 1, utl::ZRandomHelpers::GetRandomValue(subDungeon.y1, subDungeon.y2));
         }
-        if (subDungeon->x2 < kDungeonLevelWidth - 1 - kRoomMinSize - 2) {
-            staircasePositionVariants.emplace_back(subDungeon->x2 + 1, utl::ZRandomHelpers::GetRandomValue(subDungeon->y1, subDungeon->y2));
+        if (subDungeon.x2 < kDungeonLevelWidth - 1 - kRoomMinSize - 2) {
+            staircasePositionVariants.emplace_back(subDungeon.x2 + 1, utl::ZRandomHelpers::GetRandomValue(subDungeon.y1, subDungeon.y2));
         }
         std::shuffle(staircasePositionVariants.begin(), staircasePositionVariants.end(), std::default_random_engine());
 
@@ -287,7 +299,7 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
     }
 }
 
-void ZDungeonLevelGenerator::PlaceUpStaircases(const ZDungeonLevel* previousLevel) {
+void ZDungeonLevelGenerator::CalcUpStaircases(const ZDungeonLevel* previousLevel) {
     if (previousLevel) {
         for (auto& previousLevelStaircasePosition : previousLevel->GetDownStaircases()) {
             ZDirection downStaircaseDirection = previousLevel->GetStaircaseDirection(previousLevelStaircasePosition);
@@ -302,21 +314,70 @@ void ZDungeonLevelGenerator::PlaceUpStaircases(const ZDungeonLevel* previousLeve
         mMap[startPositionX][startPositionX] = EDungeonCell::UpStaircase;
         mUpStaircases.emplace_back(ZPosition(startPositionX, startPositionX), ZDirection());
     }
+}
 
+ZPosition ZDungeonLevelGenerator::CropPositionInsideLevel(const ZPosition& position) {
+    return ZPosition(
+        std::min(std::max(1, position.GetX()), kDungeonLevelWidth - 1),
+        std::min(std::max(1, position.GetY()), kDungeonLevelHeight - 1)
+    );
+}
+
+void ZDungeonLevelGenerator::DiggRoomsNearUpStaircases() {
+    for (auto& staircase : mUpStaircases) {
+        ZDirection directionInsideRoom = staircase.direction.TurnCopy(ETurnDirection::Back);
+        ZPosition someEdgeCell = staircase.position + directionInsideRoom.PredictMove();
+
+        ZDirection nearWallLeftDirection = directionInsideRoom.TurnCopy(ETurnDirection::Left);
+        int nearWallLeftPartMaxLength = kRoomMaxSize - 1;   // cause staircases shouldn't be adjacent to room's corner
+        int nearWallLeftPartMinLength = 2;
+        int nearWallLeftPartLength = utl::ZRandomHelpers::GetRandomValue(nearWallLeftPartMinLength, nearWallLeftPartMaxLength);
+        ZPosition nearWallLeftEnd = someEdgeCell + nearWallLeftDirection.PredictMove() * (nearWallLeftPartLength - 1);
+        nearWallLeftEnd = CropPositionInsideLevel(nearWallLeftEnd);
+
+        int nearWallLength = utl::ZRandomHelpers::GetRandomValue(std::max(nearWallLeftPartLength, kRoomMinSize), kRoomMaxSize);
+        ZPosition nearWallRightEnd = nearWallLeftEnd + (nearWallLength - 1) * nearWallLeftDirection.TurnCopy(ETurnDirection::Back).PredictMove();
+        nearWallRightEnd = CropPositionInsideLevel(nearWallRightEnd);
+
+        int farWallDistance = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, kRoomMaxSize);
+        ZPosition farWallLeftEnd = CropPositionInsideLevel(nearWallLeftEnd + directionInsideRoom.PredictMove() * (farWallDistance - 1));
+        ZPosition farWallRightEnd = CropPositionInsideLevel(nearWallRightEnd + directionInsideRoom.PredictMove() * (farWallDistance - 1));
+
+        int xValues[] = {farWallLeftEnd.GetX(), farWallRightEnd.GetX(), nearWallLeftEnd.GetX(), nearWallRightEnd.GetX()};
+        int yValues[] = {farWallLeftEnd.GetY(), farWallRightEnd.GetY(), nearWallLeftEnd.GetY(), nearWallRightEnd.GetY()};
+
+        int minX = *std::min_element(xValues, xValues + 4);
+        int minY = *std::min_element(yValues, yValues + 4);
+
+        int maxX = *std::max_element(xValues, xValues + 4);
+        int maxY = *std::max_element(yValues, yValues + 4);
+
+        bool roomDigged = DiggRoomIfAllCellsAreSolidAndNotBlocked(minX, minY, maxX, maxY);
+        if (roomDigged) {
+            int someValidCellX = utl::ZRandomHelpers::GetRandomValue(minX, maxX);
+            int someValidCellY = utl::ZRandomHelpers::GetRandomValue(minY, maxY);
+            ZPosition someValidCell = ZPosition(someValidCellX, someValidCellY);
+
+            mRooms.emplace_back(minX, minY, maxX, maxY, someValidCell);
+        }
+    }
+}
+
+void ZDungeonLevelGenerator::DiggUpStaircases() {
     for (auto& staircase : mUpStaircases) {
         int x = staircase.position.GetX();
         int y = staircase.position.GetY();
 
         ZDirection blockedDirection = staircase.direction;
 
-        ETurnDirection::Type blockedCellsDirections[] = {
+        static ETurnDirection::Type blockedCellsDirections[] = {
             ETurnDirection::Left,
             ETurnDirection::ForwardLeft,
             ETurnDirection::Forward,
             ETurnDirection::ForwardRight,
             ETurnDirection::Right
         };
-        size_t blockedCellsDirectionsSize = sizeof(blockedCellsDirections) / sizeof(*blockedCellsDirections);
+        static size_t blockedCellsDirectionsSize = sizeof(blockedCellsDirections) / sizeof(*blockedCellsDirections);
 
         for (int i = 0; i < blockedCellsDirectionsSize; ++i) {
             ZPosition pos = staircase.position + blockedDirection.TurnCopy(blockedCellsDirections[i]).PredictMove();
@@ -352,11 +413,13 @@ ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previo
     utl::ZMatrix::Allocate(&mMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
     mWeightedMap = new path::ZWeightedMap(kDungeonLevelWidth, kDungeonLevelHeight, path::ZPathFinder::kSolidRockCellWeight);
 
-    PlaceUpStaircases(previousLevel);
+    CalcUpStaircases(previousLevel);
+    DiggRoomsNearUpStaircases();
+    DiggUpStaircases();
 
     BSPTreeNode subDungeonsTreeRoot(0, 0, kDungeonLevelWidth, kDungeonLevelHeight);
     utl::ZRandomHelpers::Initialize();
-    GenerateBSPTree(&subDungeonsTreeRoot);
+    bool success = TryToGenerateBSPTree(&subDungeonsTreeRoot);
 
     DigRandomTunnels();
     ConnectUpStaircasesWithSomeValidCell(subDungeonsTreeRoot.dungeon.someValidCell);
@@ -364,7 +427,7 @@ ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previo
 
     ZDungeonLevel::ZRoomList roomList;
     for (auto room : mRooms) {
-        roomList.emplace_back(room->x1, room->y1, room->x2, room->y2);
+        roomList.emplace_back(room.x1, room.y1, room.x2, room.y2);
     }
 
     ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap, roomList);

@@ -35,8 +35,16 @@ bool ZPositionDiff::operator!=(const ZPositionDiff& other) const {
     return !(*this == other);
 }
 
+const ZPositionDiff ZPositionDiff::operator*(int mult) {
+    return ZPositionDiff(mdX * mult, mdY * mult);
+}
+
 std::string ZPositionDiff::ToString() const {
     return utl::ZString::Format("[%d;%d]", mdX, mdY);
+}
+
+const ZPositionDiff operator*(int mult, const ZPositionDiff& diff) {
+    return ZPositionDiff(diff.GetdX() * mult, diff.GetdY() * mult);
 }
 
 ZPosition::ZPosition() {
@@ -72,7 +80,14 @@ const ZPosition ZPosition::operator+(const ZPositionDiff& diff) const {
     return ZPosition(x, y);
 }
 
-const ZPositionDiff ZPosition::operator -(const ZPosition& other) const {
+const ZPosition ZPosition::operator-(const ZPositionDiff& diff) const {
+    int x = mX - diff.GetdX();
+    int y = mY - diff.GetdY();
+
+    return ZPosition(x, y);
+}
+
+const ZPositionDiff ZPosition::operator-(const ZPosition& other) const {
     int dx = mX - other.mX;
     int dy = mY - other.mY;
 
