@@ -4,98 +4,99 @@
 #include "Utils/StringHelpers.h"
 
 namespace prz {
-    namespace mdl {
-        ZPositionDiff::ZPositionDiff() {
-            mdX = 0;
-            mdY = 0;
-        }
+namespace mdl {
 
-        ZPositionDiff::ZPositionDiff(int dXValue, int dYValue) {
-            mdX = dXValue;
-            mdY = dYValue;
-        }
+ZPositionDiff::ZPositionDiff() {
+    mdX = 0;
+    mdY = 0;
+}
 
-        ZPositionDiff::~ZPositionDiff() {
-        }
+ZPositionDiff::ZPositionDiff(int dXValue, int dYValue) {
+    mdX = dXValue;
+    mdY = dYValue;
+}
 
-        int ZPositionDiff::GetdX() const {
-            return mdX;
-        }
+ZPositionDiff::~ZPositionDiff() {
+}
 
-        int ZPositionDiff::GetdY() const {
-            return mdY;
-        }
+int ZPositionDiff::GetdX() const {
+    return mdX;
+}
 
-        bool ZPositionDiff::operator==(const ZPositionDiff& other) const {
-            return (mdX == other.mdX && mdY == other.mdY);
-        }
+int ZPositionDiff::GetdY() const {
+    return mdY;
+}
 
-        bool ZPositionDiff::operator!=(const ZPositionDiff& other) const {
-            return !(*this == other);
-        }
+bool ZPositionDiff::operator==(const ZPositionDiff& other) const {
+    return (mdX == other.mdX && mdY == other.mdY);
+}
 
-        std::string ZPositionDiff::ToString() const {
-            return utl::ZString::Format("[%d;%d]", mdX, mdY);
-        }
+bool ZPositionDiff::operator!=(const ZPositionDiff& other) const {
+    return !(*this == other);
+}
 
-        ZPosition::ZPosition() {
-            mX = 0;
-            mY = 0;
-        }
+std::string ZPositionDiff::ToString() const {
+    return utl::ZString::Format("[%d;%d]", mdX, mdY);
+}
 
-        ZPosition::ZPosition(const ZPosition& other) {
-            mX = other.mX;
-            mY = other.mY;
-        }
+ZPosition::ZPosition() {
+    mX = 0;
+    mY = 0;
+}
 
-        ZPosition::ZPosition(int xValue, int yValue) {
-            mX = xValue;
-            mY = yValue;
-        }
+ZPosition::ZPosition(const ZPosition& other) {
+    mX = other.mX;
+    mY = other.mY;
+}
 
-        ZPosition::~ZPosition() {
-        }
+ZPosition::ZPosition(int xValue, int yValue) {
+    mX = xValue;
+    mY = yValue;
+}
 
-        int ZPosition::GetX() const {
-            return mX;
-        }
+ZPosition::~ZPosition() {
+}
 
-        int ZPosition::GetY() const {
-            return mY;
-        }
+int ZPosition::GetX() const {
+    return mX;
+}
 
-        const ZPosition ZPosition::operator+(const ZPositionDiff& diff) const {
-            int x = mX + diff.GetdX();
-            int y = mY + diff.GetdY();
+int ZPosition::GetY() const {
+    return mY;
+}
 
-            return ZPosition(x, y);
-        }
+const ZPosition ZPosition::operator+(const ZPositionDiff& diff) const {
+    int x = mX + diff.GetdX();
+    int y = mY + diff.GetdY();
 
-        const ZPositionDiff ZPosition::operator -(const ZPosition& other) const {
-            int dx = mX - other.mX;
-            int dy = mY - other.mY;
+    return ZPosition(x, y);
+}
 
-            return ZPositionDiff(dx, dy);
-        }
+const ZPositionDiff ZPosition::operator -(const ZPosition& other) const {
+    int dx = mX - other.mX;
+    int dy = mY - other.mY;
 
-        bool ZPosition::operator==(const ZPosition& other) const {
-            return (mX == other.mX && mY == other.mY);
-        }
+    return ZPositionDiff(dx, dy);
+}
 
-        bool ZPosition::operator!=(const ZPosition& other) const {
-            return !(*this == other);
-        }
+bool ZPosition::operator==(const ZPosition& other) const {
+    return (mX == other.mX && mY == other.mY);
+}
 
-        ZPosition& ZPosition::operator=(const ZPosition& other) {
-            mX = other.mX;
-            mY = other.mY;
+bool ZPosition::operator!=(const ZPosition& other) const {
+    return !(*this == other);
+}
 
-            return *this;
-        }
+ZPosition& ZPosition::operator=(const ZPosition& other) {
+    mX = other.mX;
+    mY = other.mY;
 
-        std::string ZPosition::ToString() const {
-            return utl::ZString::Format("[%d;%d]", mX, mY);
-        }
+    return *this;
+}
 
-    }
+std::string ZPosition::ToString() const {
+    return utl::ZString::Format("[%d;%d]", mX, mY);
+}
+
+}
 }

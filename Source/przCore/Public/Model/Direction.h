@@ -5,45 +5,46 @@
 #include <map>
 
 namespace prz {
-    namespace mdl {
+namespace mdl {
 
-        namespace ETurnDirection {
-            enum Type {
-                Forward = 0,
-                Left,
-                Right,
-                Back,
-                ForwardLeft,
-                ForwardRight
-            };
-        }
+namespace ETurnDirection {
+enum Type {
+    Forward = 0,
+    Left,
+    Right,
+    Back,
+    ForwardLeft,
+    ForwardRight
+};
+}
 
-        class ZDirection {
-        public:
-            ZDirection();
-            virtual ~ZDirection();
+class ZDirection {
+public:
+    ZDirection();
+    virtual ~ZDirection();
 
-            void Turn(ETurnDirection::Type direction);
-            ZDirection TurnCopy(ETurnDirection::Type direction);
+    void Turn(ETurnDirection::Type direction);
+    ZDirection TurnCopy(ETurnDirection::Type direction);
 
-            ZPositionDiff PredictMove() const;
-            void Align(const ZPositionDiff& diff);
+    ZPositionDiff PredictMove() const;
+    void Align(const ZPositionDiff& diff);
 
-        private:
-            typedef std::map<int, ZPositionDiff> ZPredictedMovesMap;
-            typedef std::map<ETurnDirection::Type, int> ZTurnDirectionToAngleMap;
+private:
+    typedef std::map<int, ZPositionDiff> ZPredictedMovesMap;
+    typedef std::map<ETurnDirection::Type, int> ZTurnDirectionToAngleMap;
 
-            static const double kPi;
-            static const ZPredictedMovesMap kPredictedMoves;
-            static const ZTurnDirectionToAngleMap kTurnDirectionToAngle;
+    static const double kPi;
+    static const ZPredictedMovesMap kPredictedMoves;
+    static const ZTurnDirectionToAngleMap kTurnDirectionToAngle;
 
-            static float GetAngleFromDiff(const ZPositionDiff& diff);
-            static ZPositionDiff GetPositionDiff(int angle);
+    static float GetAngleFromDiff(const ZPositionDiff& diff);
+    static ZPositionDiff GetPositionDiff(int angle);
 
-            void Turn(int angle);
+    void Turn(int angle);
 
-            int mAngle;
-        };
-    }
+    int mAngle;
+};
+
+}
 }
 

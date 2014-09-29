@@ -12,15 +12,15 @@
     SERVICE_MANAGER_UNREGISTER_SERVICE(prz::utl::ZServices::GetInstance(), serviceTypeName)
 
 namespace prz {
-    namespace utl {
+namespace utl {
 
-        class PRZCORE_API ZServices {
-        public:
-            ZServices() = delete;
-            virtual ~ZServices() = delete;
+class PRZCORE_API ZServices {
+public:
+    ZServices() = delete;
+    virtual ~ZServices() = delete;
 
-            static ZServiceManager& GetInstance();
-        };
+    static ZServiceManager& GetInstance();
+};
 
-    }
+}
 }

@@ -8,35 +8,37 @@
 #include "Model/DungeonLevelGenerator.h"
 
 namespace prz {
-    namespace mdl {
-        class ZDungeon {
-        public:
-            // ZDungeon owns its instance of IDungeonLevelGenerator
-            ZDungeon(IDungeonLevelGenerator* levelGenerator = new ZDungeonLevelGenerator());
-            virtual ~ZDungeon();
+namespace mdl {
 
-            const ZDungeonLevel* GetLevel(unsigned int levelIndex);
+class ZDungeon {
+public:
+    // ZDungeon owns its instance of IDungeonLevelGenerator
+    ZDungeon(IDungeonLevelGenerator* levelGenerator = new ZDungeonLevelGenerator());
+    virtual ~ZDungeon();
 
-            bool PlaceMonster(ZMonster* monster, unsigned int levelIndex, const ZPosition& position);
-            unsigned int GetMonsterLevelIndex(utl::ZIdType monsterId, bool* successFlag = nullptr) const;
-            ZMonster* RemoveMonster(utl::ZIdType monsterId);
+    const ZDungeonLevel* GetLevel(unsigned int levelIndex);
 
-            // returns monster by it's id or nullptr if dungeon has no monster with such id
-            ZMonster* GetMonster(utl::ZIdType monsterId);
-            const ZPosition* GetMonsterPosition(utl::ZIdType monsterId) const;
+    bool PlaceMonster(ZMonster* monster, unsigned int levelIndex, const ZPosition& position);
+    unsigned int GetMonsterLevelIndex(utl::ZIdType monsterId, bool* successFlag = nullptr) const;
+    ZMonster* RemoveMonster(utl::ZIdType monsterId);
 
-            bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
+    // returns monster by it's id or nullptr if dungeon has no monster with such id
+    ZMonster* GetMonster(utl::ZIdType monsterId);
+    const ZPosition* GetMonsterPosition(utl::ZIdType monsterId) const;
 
-        private:
-            typedef std::vector<ZDungeonLevel*> ZDungeonLevelList;
-            typedef std::unordered_map<utl::ZIdType, unsigned int> ZMonsterLevelMap;
+    bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
 
-            ZDungeonLevel* GetExistingLevelOrGenerateNew(unsigned int level);
-            void GenerateAbsentLevels(unsigned int maxLevelIndex);
+private:
+    typedef std::vector<ZDungeonLevel*> ZDungeonLevelList;
+    typedef std::unordered_map<utl::ZIdType, unsigned int> ZMonsterLevelMap;
 
-            ZDungeonLevelList mLevels;
-            ZMonsterLevelMap mMonsterLevelMap;
-            IDungeonLevelGenerator* mLevelGenerator;
-        };
-    }
+    ZDungeonLevel* GetExistingLevelOrGenerateNew(unsigned int level);
+    void GenerateAbsentLevels(unsigned int maxLevelIndex);
+
+    ZDungeonLevelList mLevels;
+    ZMonsterLevelMap mMonsterLevelMap;
+    IDungeonLevelGenerator* mLevelGenerator;
+};
+
+}
 }

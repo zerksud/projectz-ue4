@@ -6,37 +6,39 @@
 #include "Utils/LOG_ANSI.h"
 
 namespace prz {
-    namespace mdl {
-        ZMonster* ZMonster::CreateMonster() {
-            ZMonster* monster = new ZMonster();
+namespace mdl {
 
-            utl::IUniqueIdRegistry* registry = GET_SERVICE(prz::utl::IUniqueIdRegistry);
-            if (registry) {
-                registry->AssignUniqueId(monster);
-            }
+ZMonster* ZMonster::CreateMonster() {
+    ZMonster* monster = new ZMonster();
 
-            return monster;
-        }
+    utl::IUniqueIdRegistry* registry = GET_SERVICE(prz::utl::IUniqueIdRegistry);
+    if (registry) {
+        registry->AssignUniqueId(monster);
+    }
 
-        void ZMonster::DestroyMonster(ZMonster** monster) {
-            if (monster == nullptr) {
-                LOGE("Can't destroy nullptr as ZMonster**");
-                return;
-            }
+    return monster;
+}
 
-            if (*monster != nullptr && (*monster)->IsRegistered()) {
-                utl::IUniqueIdRegistry* registry = GET_SERVICE(prz::utl::IUniqueIdRegistry);
-                if (registry) {
-                    registry->ReleaseUniqueId(*monster);
-                }
-            }
+void ZMonster::DestroyMonster(ZMonster** monster) {
+    if (monster == nullptr) {
+        LOGE("Can't destroy nullptr as ZMonster**");
+        return;
+    }
 
-            delete *monster;
-            *monster = nullptr;
-        }
-
-        ZDirection& ZMonster::GetDirection() {
-            return mDirection;
+    if (*monster != nullptr && (*monster)->IsRegistered()) {
+        utl::IUniqueIdRegistry* registry = GET_SERVICE(prz::utl::IUniqueIdRegistry);
+        if (registry) {
+            registry->ReleaseUniqueId(*monster);
         }
     }
+
+    delete *monster;
+    *monster = nullptr;
+}
+
+ZDirection& ZMonster::GetDirection() {
+    return mDirection;
+}
+
+}
 }

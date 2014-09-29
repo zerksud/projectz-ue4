@@ -2,12 +2,12 @@
 #include "Utils/Services.h"
 
 namespace prz {
-    namespace utl {
+namespace utl {
 
-        ZServiceManager& ZServices::GetInstance() {
-            static ZServiceManager instance;
-            return instance;
-        }
+ZServiceManager& ZServices::GetInstance() {
+    static ZServiceManager instance;
+    return instance;
+}
 
-    }
+}
 }

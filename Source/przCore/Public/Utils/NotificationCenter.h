@@ -8,36 +8,38 @@
 #include "Utils/INotificationCenter.h"
 
 namespace prz {
-    namespace utl {
-        class PRZCORE_API ZNotificationCenter : public INotificationCenter {
-        public:
-            ZNotificationCenter();
-            ZNotificationCenter(const ZNotificationCenter& other) = delete;
-            ZNotificationCenter& operator=(const ZNotificationCenter& other) = delete;
-            virtual ~ZNotificationCenter();
+namespace utl {
 
-            virtual bool AddObserver(const std::string& name, void* observerOwner, ZNotificationEventHandler handler) override;
-            virtual bool RemoveObserver(const std::string& name, void* observerOwner) override;
+class PRZCORE_API ZNotificationCenter : public INotificationCenter {
+public:
+    ZNotificationCenter();
+    ZNotificationCenter(const ZNotificationCenter& other) = delete;
+    ZNotificationCenter& operator=(const ZNotificationCenter& other) = delete;
+    virtual ~ZNotificationCenter();
 
-            virtual bool PostNotification(const std::string& name) override;
-            virtual bool PostNotification(const std::string& name, const ZDictionary& dict) override;
+    virtual bool AddObserver(const std::string& name, void* observerOwner, ZNotificationEventHandler handler) override;
+    virtual bool RemoveObserver(const std::string& name, void* observerOwner) override;
 
-        private:
-            struct ZObserver {
-                void* observerOwner;
-                ZNotificationEventHandler handler;
+    virtual bool PostNotification(const std::string& name) override;
+    virtual bool PostNotification(const std::string& name, const ZDictionary& dict) override;
 
-                ZObserver(void* observerOwner, ZNotificationEventHandler handler) {
-                    this->observerOwner = observerOwner;
-                    this->handler = handler;
-                }
-            };
+private:
+    struct ZObserver {
+        void* observerOwner;
+        ZNotificationEventHandler handler;
 
-            typedef std::vector<ZObserver> ZObserverList;
-            typedef std::unordered_map<std::string, ZObserverList*> ZObserverListTable;
-            typedef std::pair<std::string, ZObserverList*> ZObserverListTablePair;
+        ZObserver(void* observerOwner, ZNotificationEventHandler handler) {
+            this->observerOwner = observerOwner;
+            this->handler = handler;
+        }
+    };
 
-            ZObserverListTable mObservers;
-        };
-    }
+    typedef std::vector<ZObserver> ZObserverList;
+    typedef std::unordered_map<std::string, ZObserverList*> ZObserverListTable;
+    typedef std::pair<std::string, ZObserverList*> ZObserverListTablePair;
+
+    ZObserverListTable mObservers;
+};
+
+}
 }

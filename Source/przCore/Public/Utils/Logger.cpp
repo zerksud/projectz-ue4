@@ -6,66 +6,67 @@ DEFINE_LOG_CATEGORY_STATIC(ProjectZ, All, All)
 //#define VERBOSE
 
 namespace prz {
-    namespace utl {
+namespace utl {
 
-        ZLogger::ZLogger() {
-        }
+ZLogger::ZLogger() {
+}
 
-        ZLogger::~ZLogger() {
-        }
+ZLogger::~ZLogger() {
+}
 
-        const char* ZLogger::kLogFormat =
+const char* ZLogger::kLogFormat =
 #ifdef VERBOSE
-            "[%s][%s:%d] "
+"[%s][%s:%d] "
 #endif
-            "%s";
+    "%s";
 
-        FString ZLogger::FormatUserMessage(const ANSICHAR* fileName, int32 lineNum, const TCHAR* userMessage) {
+FString ZLogger::FormatUserMessage(const ANSICHAR* fileName, int32 lineNum, const TCHAR* userMessage) {
 #ifdef VERBOSE
-            const FString currentDate = FDateTime::UtcNow().ToString();
+    const FString currentDate = FDateTime::UtcNow().ToString();
 #endif
-            const FString logMessage = FString::Printf(ANSI_TO_TCHAR(kLogFormat),
+    const FString logMessage = FString::Printf(ANSI_TO_TCHAR(kLogFormat),
 #ifdef VERBOSE
-                *currentDate, ANSI_TO_TCHAR(fileName), lineNum,
+        *currentDate, ANSI_TO_TCHAR(fileName), lineNum,
 #endif
-                userMessage);
+        userMessage);
 
-            return logMessage;
-        }
+    return logMessage;
+}
 
-        void ZLogger::Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const {
-            const FString logMessage = FormatUserMessage(fileName, lineNum, *userMessage);
+void ZLogger::Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const {
+    const FString logMessage = FormatUserMessage(fileName, lineNum, *userMessage);
 
-            FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, *logMessage);
+    FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, *logMessage);
 
-            if (mLogCallback) {
-                mLogCallback(verbosity, userMessage);
-            }
-        }
-
-        void ZLogger::Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const ANSICHAR* format, ...) const {
-            va_list args;
-            va_start(args, format);
-            int32 messageSize = vsnprintf(nullptr, 0, format, args);
-            va_end(args);
-
-            if (messageSize < 0) {
-                UE_LOG(ProjectZ, Error, TEXT("Can't use format '%s' for logging from %s:%d"), ANSI_TO_TCHAR(format), ANSI_TO_TCHAR(fileName), lineNum);
-                return;
-            }
-
-            char* userMessage = new char[messageSize + 1];
-            va_start(args, format);
-            vsprintf(userMessage, format, args);
-            va_end(args);
-
-            Log(verbosity, fileName, lineNum, ANSI_TO_TCHAR(userMessage));
-
-            delete[] userMessage;
-        }
-
-        void ZLogger::SetLogCallback(ZLogCallback callback) {
-            mLogCallback = callback;
-        }
+    if (mLogCallback) {
+        mLogCallback(verbosity, userMessage);
     }
+}
+
+void ZLogger::Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const ANSICHAR* format, ...) const {
+    va_list args;
+    va_start(args, format);
+    int32 messageSize = vsnprintf(nullptr, 0, format, args);
+    va_end(args);
+
+    if (messageSize < 0) {
+        UE_LOG(ProjectZ, Error, TEXT("Can't use format '%s' for logging from %s:%d"), ANSI_TO_TCHAR(format), ANSI_TO_TCHAR(fileName), lineNum);
+        return;
+    }
+
+    char* userMessage = new char[messageSize + 1];
+    va_start(args, format);
+    vsprintf(userMessage, format, args);
+    va_end(args);
+
+    Log(verbosity, fileName, lineNum, ANSI_TO_TCHAR(userMessage));
+
+    delete[] userMessage;
+}
+
+void ZLogger::SetLogCallback(ZLogCallback callback) {
+    mLogCallback = callback;
+}
+
+}
 }

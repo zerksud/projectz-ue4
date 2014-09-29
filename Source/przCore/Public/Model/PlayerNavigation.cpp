@@ -2,14 +2,14 @@
 #include "Model/PlayerNavigation.h"
 
 namespace prz {
-    namespace mdl {
+namespace mdl {
 
-        const char* ZPlayerNavigation::kTurnLeftNotification = "TurnLeftNotification";
-        const char* ZPlayerNavigation::kMoveForwardNotification = "MoveForwardNotification";
-        const char* ZPlayerNavigation::kTurnRightNotification = "TurnRightNotification";
-        const char* ZPlayerNavigation::kStrafeLeftNotification = "StrafeLeftNotification";
-        const char* ZPlayerNavigation::kMoveBackwardNotification = "MoveBackwardNotification";
-        const char* ZPlayerNavigation::kStrafeRightNotification = "StrafeRightNotification";
+const char* ZPlayerNavigation::kTurnLeftNotification = "TurnLeftNotification";
+const char* ZPlayerNavigation::kMoveForwardNotification = "MoveForwardNotification";
+const char* ZPlayerNavigation::kTurnRightNotification = "TurnRightNotification";
+const char* ZPlayerNavigation::kStrafeLeftNotification = "StrafeLeftNotification";
+const char* ZPlayerNavigation::kMoveBackwardNotification = "MoveBackwardNotification";
+const char* ZPlayerNavigation::kStrafeRightNotification = "StrafeRightNotification";
 
-    }
+}
 }

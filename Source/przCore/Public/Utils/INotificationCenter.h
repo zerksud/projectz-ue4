@@ -5,18 +5,20 @@
 #include "Utils/Dictionary.h"
 
 namespace prz {
-    namespace utl {
-        class INotificationCenter {
-        public:
-            virtual ~INotificationCenter() = default;
+namespace utl {
 
-            typedef std::function<void(const ZDictionary& dict)> ZNotificationEventHandler;
+class INotificationCenter {
+public:
+    virtual ~INotificationCenter() = default;
 
-            virtual bool AddObserver(const std::string& name, void* observerOwner, ZNotificationEventHandler handler) = 0;
-            virtual bool RemoveObserver(const std::string& name, void* observerOwner) = 0;
+    typedef std::function<void(const ZDictionary& dict)> ZNotificationEventHandler;
 
-            virtual bool PostNotification(const std::string& name) = 0;
-            virtual bool PostNotification(const std::string& name, const ZDictionary& dict) = 0;
-        };
-    }
+    virtual bool AddObserver(const std::string& name, void* observerOwner, ZNotificationEventHandler handler) = 0;
+    virtual bool RemoveObserver(const std::string& name, void* observerOwner) = 0;
+
+    virtual bool PostNotification(const std::string& name) = 0;
+    virtual bool PostNotification(const std::string& name, const ZDictionary& dict) = 0;
+};
+
+}
 }

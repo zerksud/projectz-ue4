@@ -4,29 +4,29 @@
 #include <string>
 
 namespace prz {
-    namespace mdl {
+namespace mdl {
 
-        class ZGameLog {
-        public:
-            ZGameLog();
-            virtual ~ZGameLog() = default;
+class ZGameLog {
+public:
+    ZGameLog();
+    virtual ~ZGameLog() = default;
 
-            void Clear();
-            void Log(const char* format, ...);
-            void SetHistoryMaxSize(unsigned int size);
+    void Clear();
+    void Log(const char* format, ...);
+    void SetHistoryMaxSize(unsigned int size);
 
-            typedef std::list<std::string> LogHistory;
-            const std::string& GetHistory(const std::string& delimeter = "\n");
+    typedef std::list<std::string> LogHistory;
+    const std::string& GetHistory(const std::string& delimeter = "\n");
 
-        private:
-            void AddMessage(const std::string& message);
+private:
+    void AddMessage(const std::string& message);
 
-            LogHistory mHistory;
-            unsigned int mHistoryMaxSize;
+    LogHistory mHistory;
+    unsigned int mHistoryMaxSize;
 
-            bool mCachedHistoryIsValid;
-            std::string mCachedHistory;
-        };
+    bool mCachedHistoryIsValid;
+    std::string mCachedHistory;
+};
 
-    }
+}
 }

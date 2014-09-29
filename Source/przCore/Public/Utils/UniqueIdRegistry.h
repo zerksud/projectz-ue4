@@ -8,27 +8,27 @@
 #include "Utils/IUniqueIdRegistry.h"
 
 namespace prz {
-    namespace utl {
+namespace utl {
 
-        class PRZCORE_API ZUniqueIdRegistry : public IUniqueIdRegistry {
-        public:
-            ZUniqueIdRegistry(ZIdType maxId = std::numeric_limits<ZIdType>::max());
-            ZUniqueIdRegistry(const ZUniqueIdRegistry& other) = delete;
-            ZUniqueIdRegistry& operator=(const ZUniqueIdRegistry& other) = delete;
-            virtual ~ZUniqueIdRegistry();
+class PRZCORE_API ZUniqueIdRegistry : public IUniqueIdRegistry {
+public:
+    ZUniqueIdRegistry(ZIdType maxId = std::numeric_limits<ZIdType>::max());
+    ZUniqueIdRegistry(const ZUniqueIdRegistry& other) = delete;
+    ZUniqueIdRegistry& operator=(const ZUniqueIdRegistry& other) = delete;
+    virtual ~ZUniqueIdRegistry();
 
-            bool AssignUniqueId(ZRegistrable* object) override;
-            bool ReleaseUniqueId(ZRegistrable* object) override;
+    bool AssignUniqueId(ZRegistrable* object) override;
+    bool ReleaseUniqueId(ZRegistrable* object) override;
 
-            unsigned int GetAssignedUniqueIdCount() const override;
+    unsigned int GetAssignedUniqueIdCount() const override;
 
-        private:
-            typedef std::unordered_set<ZIdType> ZReleasedIdSet;
+private:
+    typedef std::unordered_set<ZIdType> ZReleasedIdSet;
 
-            ZIdType mMaxId;
-            ZIdType mNextFreeId;
-            ZReleasedIdSet mReleasedIds;
-        };
+    ZIdType mMaxId;
+    ZIdType mNextFreeId;
+    ZReleasedIdSet mReleasedIds;
+};
 
-    }
+}
 }

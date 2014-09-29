@@ -4,34 +4,34 @@
 #include "Model/GameLog.h"
 
 namespace prz {
-    namespace mdl {
+namespace mdl {
 
-        class PRZCORE_API ZGame : public IGame {
-        public:
-            ZGame();
-            virtual ~ZGame();
+class PRZCORE_API ZGame : public IGame {
+public:
+    ZGame();
+    virtual ~ZGame();
 
-            virtual void StartNewGame() override;
+    virtual void StartNewGame() override;
 
-            virtual bool TryToMovePlayer(EMoveDirection::Type direction) override;
-            virtual void TurnPlayer(ETurnDirection::Type direction) override;
+    virtual bool TryToMovePlayer(EMoveDirection::Type direction) override;
+    virtual void TurnPlayer(ETurnDirection::Type direction) override;
 
-            virtual const ZMinimap GetMinimap() override;
-            virtual unsigned int GetMinimapSize() const override;
+    virtual const ZMinimap GetMinimap() override;
+    virtual unsigned int GetMinimapSize() const override;
 
-            virtual const std::string& GetLogHistory() override;
+    virtual const std::string& GetLogHistory() override;
 
-        private:
-            static const int kMinimapRadius;
-            static const int kMinimapSize;
+private:
+    static const int kMinimapRadius;
+    static const int kMinimapSize;
 
-            static const int kLogHistoryMaxSize;
+    static const int kLogHistoryMaxSize;
 
-            ZDungeon* mDungeon;
-            utl::ZIdType mPlayerId;
+    ZDungeon* mDungeon;
+    utl::ZIdType mPlayerId;
 
-            ZGameLog mLogHistory;
-        };
+    ZGameLog mLogHistory;
+};
 
-    }
+}
 }

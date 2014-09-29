@@ -1,25 +1,26 @@
 #pragma once
 
 namespace prz {
-    namespace utl {
+namespace utl {
 
-        typedef unsigned int ZIdType;
+typedef unsigned int ZIdType;
 
-        class ZRegistrable {
-        public:
-            static const ZIdType kNoId = 0;
+class ZRegistrable {
+public:
+    static const ZIdType kNoId = 0;
 
-            ZRegistrable();
-            ZRegistrable(const ZRegistrable& other) = default;
-            ZRegistrable& operator=(const ZRegistrable& other) = default;
-            virtual ~ZRegistrable();
+    ZRegistrable();
+    ZRegistrable(const ZRegistrable& other) = default;
+    ZRegistrable& operator=(const ZRegistrable& other) = default;
+    virtual ~ZRegistrable();
 
-            ZIdType GetId() const;
-            void SetId(ZIdType id);
-            bool IsRegistered() const;
+    ZIdType GetId() const;
+    void SetId(ZIdType id);
+    bool IsRegistered() const;
 
-        private:
-            ZIdType mId;
-        };
-    }
+private:
+    ZIdType mId;
+};
+
+}
 }
