@@ -169,11 +169,11 @@ bool ZDungeonLevelGenerator::DiggRoomIfAllCellsAreSolidAndNotBlocked(int minX, i
     }
 
     // tunnels should not start at room's corner or touch room's edge, so cells adjacent to corners should be blocked:
-    // #+##+#
-    // +    +
+    // #x##x#
+    // x    x
     // #    #
-    // +    +
-    // #+##+#
+    // x    x
+    // #x##x#
     path::ZPathFinder::BlockCell(mWeightedMap, minX - 1, minY);
     path::ZPathFinder::BlockCell(mWeightedMap, maxX + 1, minY);
     path::ZPathFinder::BlockCell(mWeightedMap, minX - 1, maxY);
