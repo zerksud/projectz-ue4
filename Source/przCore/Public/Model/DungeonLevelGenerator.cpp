@@ -298,7 +298,6 @@ void ZDungeonLevelGenerator::CalcUpStaircases(const ZDungeonLevel* previousLevel
     } else {
         int startPositionX = utl::ZRandomHelpers::GetRandomValue(5, kDungeonLevelWidth - 5);
         int startPositionY = utl::ZRandomHelpers::GetRandomValue(5, kDungeonLevelHeight - 5);
-        mMap[startPositionX][startPositionX] = EDungeonCell::UpStaircase;
         mUpStaircases.emplace_back(ZPosition(startPositionX, startPositionX), ZDirection());
     }
 }
