@@ -14,7 +14,9 @@ enum Type {
     Right,
     Back,
     ForwardLeft,
-    ForwardRight
+    ForwardRight,
+    BackLeft,
+    BackRight
 };
 }
 

@@ -192,25 +192,33 @@ void ZDungeonLevelGenerator::DigRandomTunnels() {
     }
 }
 
-int ZDungeonLevelGenerator::CountCellSolidNeighbours(const ZPosition& cell) const {
+int ZDungeonLevelGenerator::CountCellSolidNotBlockedNeighbours(const ZPosition& cell) const {
+    static const ETurnDirection::Type adjacentCellsDirections[] = {
+        ETurnDirection::BackLeft,
+        ETurnDirection::Left,
+        ETurnDirection::ForwardLeft,
+        ETurnDirection::Forward,
+        ETurnDirection::ForwardRight,
+        ETurnDirection::Right,
+        ETurnDirection::BackRight,
+        ETurnDirection::Back
+    };
+    static const size_t adjacentCellsDirectionsCount = sizeof(adjacentCellsDirections) / sizeof(*adjacentCellsDirections);
+    static const ZDirection baseDirection;
+
     int count = 0;
-    const int x = cell.GetX();
-    const int y = cell.GetY();
+    for (int i = 0; i < adjacentCellsDirectionsCount; ++i) {
+        ZPosition adjacentCell = cell + baseDirection.TurnCopy(adjacentCellsDirections[i]).PredictMove();
 
-    if (x == 0 || x > 0 && path::ZPathFinder::CellMustBeDigged(*mWeightedMap, x - 1, y)) {
-        ++count;
-    }
+        bool adjacentCellIsOnBorder = adjacentCell.GetX() == 0
+            || adjacentCell.GetX() == kDungeonLevelWidth
+            || adjacentCell.GetY() == 0
+            || adjacentCell.GetY() == kDungeonLevelHeight;
 
-    if (x == kDungeonLevelWidth || x < kDungeonLevelWidth && path::ZPathFinder::CellMustBeDigged(*mWeightedMap, x + 1, y)) {
-        ++count;
-    }
-
-    if (y == 0 || y > 0 && path::ZPathFinder::CellMustBeDigged(*mWeightedMap, x, y - 1)) {
-        ++count;
-    }
-
-    if (y == kDungeonLevelHeight || y < kDungeonLevelHeight && path::ZPathFinder::CellMustBeDigged(*mWeightedMap, x, y + 1)) {
-        ++count;
+        if (adjacentCellIsOnBorder
+            || path::ZPathFinder::CellMustBeDigged(*mWeightedMap, adjacentCell) && !path::ZPathFinder::CellIsBlocked(*mWeightedMap, adjacentCell)) {
+            ++count;
+        }
     }
 
     return count;
@@ -268,7 +276,7 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
         for (int j = 0; j < staircasePositionVariants.size(); ++j) {
             const ZPosition& cellPosition = staircasePositionVariants[j];
 
-            if (path::ZPathFinder::CellMustBeDigged(*mWeightedMap, cellPosition) && CountCellSolidNeighbours(cellPosition) == 3) {
+            if (path::ZPathFinder::CellMustBeDigged(*mWeightedMap, cellPosition) && CountCellSolidNotBlockedNeighbours(cellPosition) == 5) {
                 mMap[cellPosition.GetX()][cellPosition.GetY()] = EDungeonCell::DownStaircase;
                 ++staircasesGeneratedCount;
 

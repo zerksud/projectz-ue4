@@ -27,6 +27,8 @@ const ZDirection::ZTurnDirectionToAngleMap ZDirection::kTurnDirectionToAngle = {
         {ETurnDirection::Back, 180},
         {ETurnDirection::ForwardLeft, 45},
         {ETurnDirection::ForwardRight, -45},
+        {ETurnDirection::BackLeft, 135},
+        {ETurnDirection::BackRight, -135}
 };
 
 ZDirection::ZDirection() {

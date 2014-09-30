@@ -79,7 +79,7 @@ private:
     void ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell);
 
     void DigRandomTunnels();
-    int CountCellSolidNeighbours(const ZPosition& cell) const;
+    int CountCellSolidNotBlockedNeighbours(const ZPosition& cell) const;
     void CalcUpStaircases(const ZDungeonLevel* previousLevel = nullptr);
     void BlockStaircaseAdjacentCellsOnDirectionSide(const ZDirectionalStaircase& staircase);
     void MarkUpStaircasesAdjacentCellsOnDirectionSideAsBlocked();
