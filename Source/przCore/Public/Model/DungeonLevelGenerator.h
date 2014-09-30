@@ -70,11 +70,11 @@ private:
     bool TryToGenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically = true);
     void SplitSubDungeonVertically(BSPTreeNode* rootNode);
     void SplitSubDungeonHorizontally(BSPTreeNode* rootNode);
-    void DiggCellIfSolidAndNotBlocked(const ZPosition& position);
-    void DiggCellIfSolidAndNotBlocked(int x, int y);
+    void DigCellIfSolidAndNotBlocked(const ZPosition& position);
+    void DigCellIfSolidAndNotBlocked(int x, int y);
     bool TryToCreateRoomInsideSubDungeon(SubDungeon* dungeon);
     // returns true if room was successfully digged
-    bool DiggRoomIfAllCellsAreSolidAndNotBlocked(int minX, int minY, int maxX, int maxY);
+    bool DigRoomIfAllCellsAreSolidAndNotBlocked(int minX, int minY, int maxX, int maxY);
 
     void ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell);
 
@@ -82,8 +82,8 @@ private:
     int CountCellSolidNeighbours(const ZPosition& cell) const;
     void CalcUpStaircases(const ZDungeonLevel* previousLevel = nullptr);
     static ZPosition CropPositionInsideLevel(const ZPosition& position);
-    void DiggRoomsNearUpStaircases();
-    void DiggUpStaircases();
+    void DigRoomsNearUpStaircases();
+    void DigUpStaircases();
     void ConnectUpStaircasesWithSomeValidCell(const ZPosition& someValidCell);
     void AddRandomDownStaircases();
 
