@@ -24,6 +24,9 @@ public:
     static bool CellMustBeDigged(const ZWeightedMap& map, const ZPosition& position);
     static bool CellMustBeDigged(const ZWeightedMap& map, int x, int y);
 
+    static void ZPathFinder::BlockCell(ZWeightedMap* map, const ZPosition& position);
+    static void ZPathFinder::BlockCell(ZWeightedMap* map, int x, int y);
+
     typedef std::vector<ZPosition> PathCells;
     //returns list of path cells starting from finishCell if path between cells exists, or empty list otherwise
     static PathCells FindPathBetweenCells(const ZWeightedMap& map, const ZPosition& startCellPosition, const ZPosition& finishCellPosition, bool diggingIsAllowed = false);

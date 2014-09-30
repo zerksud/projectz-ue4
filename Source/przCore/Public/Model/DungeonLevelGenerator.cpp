@@ -120,15 +120,6 @@ void ZDungeonLevelGenerator::SplitSubDungeonHorizontally(BSPTreeNode* rootNode) 
     rootNode->higherSubDungeon = new BSPTreeNode(dungeon.x1, lowerSubDungeonY2 + 1, dungeon.x2, dungeon.y2);
 }
 
-void ZDungeonLevelGenerator::BlockCell(const ZPosition& position) {
-    BlockCell(position.GetX(), position.GetY());
-}
-
-void ZDungeonLevelGenerator::BlockCell(int x, int y) {
-    static const path::ZWeight forbiddenCellWeight = path::ZWeight::kInfinity;
-    mWeightedMap->SetCellWeight(x, y, forbiddenCellWeight);
-}
-
 bool ZDungeonLevelGenerator::CellIsBlocked(int x, int y) const {
     return (mWeightedMap->GetCellWeight(x, y) == path::ZWeight::kInfinity);
 }
@@ -183,15 +174,15 @@ bool ZDungeonLevelGenerator::DiggRoomIfAllCellsAreSolidAndNotBlocked(int minX, i
     // #    #
     // +    +
     // #+##+#
-    BlockCell(minX - 1, minY);
-    BlockCell(maxX + 1, minY);
-    BlockCell(minX - 1, maxY);
-    BlockCell(maxX + 1, maxY);
+    path::ZPathFinder::BlockCell(mWeightedMap, minX - 1, minY);
+    path::ZPathFinder::BlockCell(mWeightedMap, maxX + 1, minY);
+    path::ZPathFinder::BlockCell(mWeightedMap, minX - 1, maxY);
+    path::ZPathFinder::BlockCell(mWeightedMap, maxX + 1, maxY);
 
-    BlockCell(minX, minY - 1);
-    BlockCell(maxX, minY - 1);
-    BlockCell(minX, maxY + 1);
-    BlockCell(maxX, maxY + 1);
+    path::ZPathFinder::BlockCell(mWeightedMap, minX, minY - 1);
+    path::ZPathFinder::BlockCell(mWeightedMap, maxX, minY - 1);
+    path::ZPathFinder::BlockCell(mWeightedMap, minX, maxY + 1);
+    path::ZPathFinder::BlockCell(mWeightedMap, maxX, maxY + 1);
 
     return true;
 }
@@ -381,7 +372,7 @@ void ZDungeonLevelGenerator::DiggUpStaircases() {
 
         for (int i = 0; i < blockedCellsDirectionsSize; ++i) {
             ZPosition pos = staircase.position + blockedDirection.TurnCopy(blockedCellsDirections[i]).PredictMove();
-            BlockCell(pos);
+            path::ZPathFinder::BlockCell(mWeightedMap, pos);
         }
 
         DiggCellIfSolidAndNotBlocked(staircase.position);
@@ -401,8 +392,8 @@ void ZDungeonLevelGenerator::ConnectUpStaircasesWithSomeValidCell(const ZPositio
         ZPosition staircaseConnectedCellPosition = staircase.position + staircase.direction.TurnCopy(ETurnDirection::Back).PredictMove();
         if (mWeightedMap->GetCellWeight(staircaseConnectedCellPosition) == path::ZWeight::kInfinity) {
             mWeightedMap->GetCellWeight(staircaseConnectedCellPosition) = path::ZPathFinder::kEmptyCellWeight;
-            BlockCell(staircaseConnectedCellPosition + staircase.direction.TurnCopy(ETurnDirection::Left).PredictMove());
-            BlockCell(staircaseConnectedCellPosition + staircase.direction.TurnCopy(ETurnDirection::Right).PredictMove());
+            path::ZPathFinder::BlockCell(mWeightedMap, staircaseConnectedCellPosition + staircase.direction.TurnCopy(ETurnDirection::Left).PredictMove());
+            path::ZPathFinder::BlockCell(mWeightedMap, staircaseConnectedCellPosition + staircase.direction.TurnCopy(ETurnDirection::Right).PredictMove());
         }
 
         ConnectCells(staircase.position, someValidCell);
