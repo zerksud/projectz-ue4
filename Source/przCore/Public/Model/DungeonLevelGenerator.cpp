@@ -120,10 +120,6 @@ void ZDungeonLevelGenerator::SplitSubDungeonHorizontally(BSPTreeNode* rootNode) 
     rootNode->higherSubDungeon = new BSPTreeNode(dungeon.x1, lowerSubDungeonY2 + 1, dungeon.x2, dungeon.y2);
 }
 
-bool ZDungeonLevelGenerator::CellIsBlocked(int x, int y) const {
-    return (mWeightedMap->GetCellWeight(x, y) == path::ZWeight::kInfinity);
-}
-
 bool ZDungeonLevelGenerator::TryToCreateRoomInsideSubDungeon(SubDungeon* subDungeon) {
     int roomWidth = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, std::min(kRoomMaxSize, subDungeon->GetWidth() - 1 - 2));
     int roomX1 = subDungeon->x1 + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->GetWidth() - 2 - roomWidth);
@@ -156,7 +152,7 @@ bool ZDungeonLevelGenerator::DiggRoomIfAllCellsAreSolidAndNotBlocked(int minX, i
 
     for (int x = minX; x <= maxX; ++x) {
         for (int y = minY; y <= maxY; ++y) {
-            if (CellIsBlocked(x, y)) {
+            if (path::ZPathFinder::CellIsBlocked(*mWeightedMap, x, y)) {
                 return false;
             }
         }

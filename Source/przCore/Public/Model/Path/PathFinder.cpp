@@ -89,6 +89,14 @@ void ZPathFinder::BlockCell(ZWeightedMap* map, int x, int y) {
     map->SetCellWeight(x, y, path::ZWeight::kInfinity);
 }
 
+bool ZPathFinder::CellIsBlocked(const ZWeightedMap& map, const ZPosition& position) {
+    return CellIsBlocked(map, position.GetX(), position.GetY());
+}
+
+bool ZPathFinder::CellIsBlocked(const ZWeightedMap& map, int x, int y) {
+    return (map.GetCellWeight(x, y) == path::ZWeight::kInfinity);
+}
+
 ZWeightedCell* ZPathFinder::CreateNextPathCellIfMorePromising(const ZWeightedMap& map, const ZWeightedCell& currentCell, const ZPositionDiff& currentMoveDiff, const ZPosition& finishCellPosition, PathCellConnection** pathConnections) {
     ZPosition nextCellPosition = currentCell.position + currentMoveDiff;
     ZWeight pathToNextCellWeight = currentCell.pathToCellWeight + map.GetCellWeight(nextCellPosition);

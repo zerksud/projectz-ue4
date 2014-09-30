@@ -24,8 +24,11 @@ public:
     static bool CellMustBeDigged(const ZWeightedMap& map, const ZPosition& position);
     static bool CellMustBeDigged(const ZWeightedMap& map, int x, int y);
 
-    static void ZPathFinder::BlockCell(ZWeightedMap* map, const ZPosition& position);
-    static void ZPathFinder::BlockCell(ZWeightedMap* map, int x, int y);
+    static void BlockCell(ZWeightedMap* map, const ZPosition& position);
+    static void BlockCell(ZWeightedMap* map, int x, int y);
+
+    static bool CellIsBlocked(const ZWeightedMap& map, const ZPosition& position);
+    static bool CellIsBlocked(const ZWeightedMap& map, int x, int y);
 
     typedef std::vector<ZPosition> PathCells;
     //returns list of path cells starting from finishCell if path between cells exists, or empty list otherwise

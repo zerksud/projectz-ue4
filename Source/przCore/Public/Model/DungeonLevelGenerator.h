@@ -72,11 +72,6 @@ private:
     void SplitSubDungeonHorizontally(BSPTreeNode* rootNode);
     void DiggCellIfSolidAndNotBlocked(const ZPosition& position);
     void DiggCellIfSolidAndNotBlocked(int x, int y);
-    // assignes infinite weight to cell with position
-    void BlockCell(const ZPosition& position);
-    // assignes infinite weight to cell [x, y]
-    void BlockCell(int x, int y);
-    bool CellIsBlocked(int x, int y) const;
     bool TryToCreateRoomInsideSubDungeon(SubDungeon* dungeon);
     // returns true if room was successfully digged
     bool DiggRoomIfAllCellsAreSolidAndNotBlocked(int minX, int minY, int maxX, int maxY);
