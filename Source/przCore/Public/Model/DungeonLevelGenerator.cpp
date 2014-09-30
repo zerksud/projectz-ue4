@@ -329,13 +329,13 @@ void ZDungeonLevelGenerator::DiggRoomsNearUpStaircases() {
         ZPosition someEdgeCell = staircase.position + directionInsideRoom.PredictMove();
 
         ZDirection nearWallLeftDirection = directionInsideRoom.TurnCopy(ETurnDirection::Left);
-        int nearWallLeftPartMaxLength = kRoomMaxSize - 1;   // cause staircases shouldn't be adjacent to room's corner
+        int nearWallLeftPartMaxLength = kRoomMaxSize - 2;   // cause staircases shouldn't be adjacent to room's corner
         int nearWallLeftPartMinLength = 2;
         int nearWallLeftPartLength = utl::ZRandomHelpers::GetRandomValue(nearWallLeftPartMinLength, nearWallLeftPartMaxLength);
         ZPosition nearWallLeftEnd = someEdgeCell + nearWallLeftDirection.PredictMove() * (nearWallLeftPartLength - 1);
         nearWallLeftEnd = CropPositionInsideLevel(nearWallLeftEnd);
 
-        int nearWallLength = utl::ZRandomHelpers::GetRandomValue(std::max(nearWallLeftPartLength, kRoomMinSize), kRoomMaxSize);
+        int nearWallLength = utl::ZRandomHelpers::GetRandomValue(std::max(nearWallLeftPartLength + 1, kRoomMinSize), kRoomMaxSize);
         ZPosition nearWallRightEnd = nearWallLeftEnd + (nearWallLength - 1) * nearWallLeftDirection.TurnCopy(ETurnDirection::Back).PredictMove();
         nearWallRightEnd = CropPositionInsideLevel(nearWallRightEnd);
 
