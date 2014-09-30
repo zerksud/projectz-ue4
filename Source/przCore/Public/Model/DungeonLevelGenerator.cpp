@@ -252,16 +252,16 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
 
         std::vector<ZPosition> staircasePositionVariants;
         if (subDungeon.y1 > kRoomMinSize + 2) {
-            staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(subDungeon.x1, subDungeon.x2), subDungeon.y1 - 1);
+            staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(subDungeon.x1 + 1, subDungeon.x2 - 1), subDungeon.y1 - 1);
         }
         if (subDungeon.y2 < kDungeonLevelHeight - 1 - kRoomMinSize - 2) {
-            staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(subDungeon.x1, subDungeon.x2), subDungeon.y2 + 1);
+            staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(subDungeon.x1 + 1, subDungeon.x2 - 1), subDungeon.y2 + 1);
         }
         if (subDungeon.x1 > kRoomMinSize + 2) {
-            staircasePositionVariants.emplace_back(subDungeon.x1 - 1, utl::ZRandomHelpers::GetRandomValue(subDungeon.y1, subDungeon.y2));
+            staircasePositionVariants.emplace_back(subDungeon.x1 - 1, utl::ZRandomHelpers::GetRandomValue(subDungeon.y1 + 1, subDungeon.y2 - 1));
         }
         if (subDungeon.x2 < kDungeonLevelWidth - 1 - kRoomMinSize - 2) {
-            staircasePositionVariants.emplace_back(subDungeon.x2 + 1, utl::ZRandomHelpers::GetRandomValue(subDungeon.y1, subDungeon.y2));
+            staircasePositionVariants.emplace_back(subDungeon.x2 + 1, utl::ZRandomHelpers::GetRandomValue(subDungeon.y1 + 1, subDungeon.y2 - 1));
         }
         std::shuffle(staircasePositionVariants.begin(), staircasePositionVariants.end(), std::default_random_engine());
 
