@@ -24,7 +24,7 @@ public:
     virtual ~ZDirection() = default;
 
     void Turn(ETurnDirection::Type direction);
-    ZDirection TurnCopy(ETurnDirection::Type direction);
+    ZDirection TurnCopy(ETurnDirection::Type direction) const;
 
     ZPositionDiff PredictMove() const;
     void Align(const ZPositionDiff& diff);

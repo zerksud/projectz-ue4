@@ -302,6 +302,32 @@ void ZDungeonLevelGenerator::CalcUpStaircases(const ZDungeonLevel* previousLevel
     }
 }
 
+void ZDungeonLevelGenerator::BlockStaircaseAdjacentCellsOnDirectionSide(const ZDirectionalStaircase& staircase) {
+    ZDirection blockedDirection = staircase.direction;
+
+    static ETurnDirection::Type blockedCellsDirections[] = {
+        ETurnDirection::Left,
+        ETurnDirection::ForwardLeft,
+        ETurnDirection::Forward,
+        ETurnDirection::ForwardRight,
+        ETurnDirection::Right
+    };
+    static size_t blockedCellsDirectionsSize = sizeof(blockedCellsDirections) / sizeof(*blockedCellsDirections);
+
+    for (int i = 0; i < blockedCellsDirectionsSize; ++i) {
+        ZPosition pos = staircase.position + staircase.direction.TurnCopy(blockedCellsDirections[i]).PredictMove();
+        path::ZPathFinder::BlockCell(mWeightedMap, pos);
+    }
+}
+
+void ZDungeonLevelGenerator::MarkUpStaircasesAdjacentCellsOnDirectionSideAsBlocked() {
+    for (auto& staircase : mUpStaircases) {
+        BlockStaircaseAdjacentCellsOnDirectionSide(staircase);
+
+        path::ZPathFinder::BlockCell(mWeightedMap, staircase.position);
+    }
+}
+
 ZPosition ZDungeonLevelGenerator::CropPositionInsideLevel(const ZPosition& position) {
     return ZPosition(
         std::min(std::max(1, position.GetX()), kDungeonLevelWidth - 1),
@@ -351,27 +377,11 @@ void ZDungeonLevelGenerator::DigRoomsNearUpStaircases() {
 
 void ZDungeonLevelGenerator::DigUpStaircases() {
     for (auto& staircase : mUpStaircases) {
-        int x = staircase.position.GetX();
-        int y = staircase.position.GetY();
+        BlockStaircaseAdjacentCellsOnDirectionSide(staircase);
 
-        ZDirection blockedDirection = staircase.direction;
-
-        static ETurnDirection::Type blockedCellsDirections[] = {
-            ETurnDirection::Left,
-            ETurnDirection::ForwardLeft,
-            ETurnDirection::Forward,
-            ETurnDirection::ForwardRight,
-            ETurnDirection::Right
-        };
-        static size_t blockedCellsDirectionsSize = sizeof(blockedCellsDirections) / sizeof(*blockedCellsDirections);
-
-        for (int i = 0; i < blockedCellsDirectionsSize; ++i) {
-            ZPosition pos = staircase.position + blockedDirection.TurnCopy(blockedCellsDirections[i]).PredictMove();
-            path::ZPathFinder::BlockCell(mWeightedMap, pos);
-        }
-
-        DigCellIfSolidAndNotBlocked(staircase.position);
-        mMap[x][y] = EDungeonCell::UpStaircase;
+        // use direct assignment instead of dig-method cause staircase cell was blocked for room generation:
+        mWeightedMap->SetCellWeight(staircase.position, path::ZPathFinder::kEmptyCellWeight);
+        mMap[staircase.position.GetX()][staircase.position.GetY()] = EDungeonCell::UpStaircase;
     }
 }
 
@@ -400,6 +410,7 @@ ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previo
     mWeightedMap = new path::ZWeightedMap(kDungeonLevelWidth, kDungeonLevelHeight, path::ZPathFinder::kSolidRockCellWeight);
 
     CalcUpStaircases(previousLevel);
+    MarkUpStaircasesAdjacentCellsOnDirectionSideAsBlocked();
     DigRoomsNearUpStaircases();
     DigUpStaircases();
 

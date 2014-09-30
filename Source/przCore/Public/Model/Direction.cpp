@@ -42,7 +42,7 @@ void ZDirection::Turn(ETurnDirection::Type direction) {
     }
 }
 
-ZDirection ZDirection::TurnCopy(ETurnDirection::Type direction) {
+ZDirection ZDirection::TurnCopy(ETurnDirection::Type direction) const {
     ZDirection directionCopy(*this);
     directionCopy.Turn(direction);
 

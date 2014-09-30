@@ -81,6 +81,8 @@ private:
     void DigRandomTunnels();
     int CountCellSolidNeighbours(const ZPosition& cell) const;
     void CalcUpStaircases(const ZDungeonLevel* previousLevel = nullptr);
+    void BlockStaircaseAdjacentCellsOnDirectionSide(const ZDirectionalStaircase& staircase);
+    void MarkUpStaircasesAdjacentCellsOnDirectionSideAsBlocked();
     static ZPosition CropPositionInsideLevel(const ZPosition& position);
     void DigRoomsNearUpStaircases();
     void DigUpStaircases();
