@@ -272,7 +272,6 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
                 mMap[cellPosition.GetX()][cellPosition.GetY()] = EDungeonCell::DownStaircase;
                 ++staircasesGeneratedCount;
 
-                rooms.pop_back();
                 for (auto& room : rooms) {
                     int pathSize = path::ZPathFinder::FindPathBetweenCells(*mWeightedMap, currentRoom.someValidCell, room.someValidCell).size();
                     if (pathSize > 0 && pathSize < room.distanceToClosestStaircase) {
@@ -283,6 +282,8 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
                 break;
             }
         }
+
+        rooms.pop_back();
     }
 }
 
