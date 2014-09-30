@@ -33,11 +33,11 @@ void ZWeightedMap::SetCellWeight(int x, int y, const ZWeight& weight) {
     mCellWeights[x][y] = weight;
 }
 
-ZWeight ZWeightedMap::GetCellWeight(const ZPosition& pos) const {
+const ZWeight& ZWeightedMap::GetCellWeight(const ZPosition& pos) const {
     return GetCellWeight(pos.GetX(), pos.GetY());
 }
 
-ZWeight ZWeightedMap::GetCellWeight(int x, int y) const {
+const ZWeight& ZWeightedMap::GetCellWeight(int x, int y) const {
     return mCellWeights[x][y];
 }
 

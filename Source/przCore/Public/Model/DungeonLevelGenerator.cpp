@@ -387,7 +387,7 @@ void ZDungeonLevelGenerator::ConnectUpStaircasesWithSomeValidCell(const ZPositio
 
         ZPosition staircaseConnectedCellPosition = staircase.position + staircase.direction.TurnCopy(ETurnDirection::Back).PredictMove();
         if (path::ZPathFinder::CellIsBlocked(*mWeightedMap, staircaseConnectedCellPosition)) {
-            mWeightedMap->GetCellWeight(staircaseConnectedCellPosition) = path::ZPathFinder::kEmptyCellWeight;
+            mWeightedMap->SetCellWeight(staircaseConnectedCellPosition, path::ZPathFinder::kEmptyCellWeight);
             path::ZPathFinder::BlockCell(mWeightedMap, staircaseConnectedCellPosition + staircase.direction.TurnCopy(ETurnDirection::Left).PredictMove());
             path::ZPathFinder::BlockCell(mWeightedMap, staircaseConnectedCellPosition + staircase.direction.TurnCopy(ETurnDirection::Right).PredictMove());
         }

@@ -18,8 +18,8 @@ public:
     void SetCellWeight(const ZPosition& pos, const ZWeight& weight);
     void SetCellWeight(int x, int y, const ZWeight& weight);
 
-    ZWeight GetCellWeight(const ZPosition& pos) const;
-    ZWeight GetCellWeight(int x, int y) const;
+    const ZWeight& GetCellWeight(const ZPosition& pos) const;
+    const ZWeight& GetCellWeight(int x, int y) const;
 
 private:
     int mWidth;
