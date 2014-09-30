@@ -377,8 +377,6 @@ void ZDungeonLevelGenerator::DigRoomsNearUpStaircases() {
 
 void ZDungeonLevelGenerator::DigUpStaircases() {
     for (auto& staircase : mUpStaircases) {
-        BlockStaircaseAdjacentCellsOnDirectionSide(staircase);
-
         // use direct assignment instead of dig-method cause staircase cell was blocked for room generation:
         mWeightedMap->SetCellWeight(staircase.position, path::ZPathFinder::kEmptyCellWeight);
         mMap[staircase.position.GetX()][staircase.position.GetY()] = EDungeonCell::UpStaircase;
