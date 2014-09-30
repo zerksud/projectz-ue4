@@ -35,6 +35,7 @@ ZDungeonLevel::ZDungeonLevel(int width, int height, EDungeonCell::Type*** map, Z
 
     mWidth = width;
     mHeight = height;
+    mRooms = rooms;
     ParseMap(map);
 }
 
