@@ -45,7 +45,7 @@ void ZDungeonLevelGenerator::DigCellIfSolidAndNotBlocked(const ZPosition& positi
 }
 
 void ZDungeonLevelGenerator::DigCellIfSolidAndNotBlocked(int x, int y) {
-    if (mMap[x][y] == EDungeonCell::SolidRock && mWeightedMap->GetCellWeight(x, y) != path::ZWeight::kInfinity) {
+    if (mMap[x][y] == EDungeonCell::SolidRock && !path::ZPathFinder::CellIsBlocked(*mWeightedMap, x, y)) {
         mMap[x][y] = EDungeonCell::Emptiness;
         mWeightedMap->SetCellWeight(x, y, path::ZPathFinder::kEmptyCellWeight);
     }
@@ -381,12 +381,12 @@ void ZDungeonLevelGenerator::ConnectUpStaircasesWithSomeValidCell(const ZPositio
         int x = staircase.position.GetX();
         int y = staircase.position.GetY();
 
-        if (mWeightedMap->GetCellWeight(x, y) == path::ZWeight::kInfinity) {
+        if (path::ZPathFinder::CellIsBlocked(*mWeightedMap, x, y)) {
             mWeightedMap->SetCellWeight(x, y, path::ZPathFinder::kEmptyCellWeight);
         }
 
         ZPosition staircaseConnectedCellPosition = staircase.position + staircase.direction.TurnCopy(ETurnDirection::Back).PredictMove();
-        if (mWeightedMap->GetCellWeight(staircaseConnectedCellPosition) == path::ZWeight::kInfinity) {
+        if (path::ZPathFinder::CellIsBlocked(*mWeightedMap, staircaseConnectedCellPosition)) {
             mWeightedMap->GetCellWeight(staircaseConnectedCellPosition) = path::ZPathFinder::kEmptyCellWeight;
             path::ZPathFinder::BlockCell(mWeightedMap, staircaseConnectedCellPosition + staircase.direction.TurnCopy(ETurnDirection::Left).PredictMove());
             path::ZPathFinder::BlockCell(mWeightedMap, staircaseConnectedCellPosition + staircase.direction.TurnCopy(ETurnDirection::Right).PredictMove());
