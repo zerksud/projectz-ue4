@@ -344,42 +344,49 @@ ZPosition ZDungeonLevelGenerator::CropPositionInsideLevel(const ZPosition& posit
     );
 }
 
+const ZDungeonLevel::ZRoom ZDungeonLevelGenerator::CalcRoomNearStaircase(const ZDirectionalStaircase& staircase, int minSize, int maxSize) {
+    ZDirection directionInsideRoom = staircase.direction.TurnCopy(ETurnDirection::Back);
+    ZPosition someEdgeCell = staircase.position + directionInsideRoom.PredictMove();
+
+    ZDirection nearWallLeftDirection = directionInsideRoom.TurnCopy(ETurnDirection::Left);
+    int nearWallLeftPartMaxLength = maxSize - 2;   // cause staircases shouldn't be adjacent to room's corner
+    int nearWallLeftPartMinLength = 2;
+    int nearWallLeftPartLength = utl::ZRandomHelpers::GetRandomValue(nearWallLeftPartMinLength, nearWallLeftPartMaxLength);
+    ZPosition nearWallLeftEnd = someEdgeCell + nearWallLeftDirection.PredictMove() * (nearWallLeftPartLength - 1);
+    nearWallLeftEnd = CropPositionInsideLevel(nearWallLeftEnd);
+
+    int nearWallLength = utl::ZRandomHelpers::GetRandomValue(std::max(nearWallLeftPartLength + 1, minSize), maxSize);
+    ZPosition nearWallRightEnd = nearWallLeftEnd + (nearWallLength - 1) * nearWallLeftDirection.TurnCopy(ETurnDirection::Back).PredictMove();
+    nearWallRightEnd = CropPositionInsideLevel(nearWallRightEnd);
+
+    int farWallDistance = utl::ZRandomHelpers::GetRandomValue(minSize, maxSize);
+    ZPosition farWallLeftEnd = CropPositionInsideLevel(nearWallLeftEnd + directionInsideRoom.PredictMove() * (farWallDistance - 1));
+    ZPosition farWallRightEnd = CropPositionInsideLevel(nearWallRightEnd + directionInsideRoom.PredictMove() * (farWallDistance - 1));
+
+    int xValues[] = {farWallLeftEnd.GetX(), farWallRightEnd.GetX(), nearWallLeftEnd.GetX(), nearWallRightEnd.GetX()};
+    int yValues[] = {farWallLeftEnd.GetY(), farWallRightEnd.GetY(), nearWallLeftEnd.GetY(), nearWallRightEnd.GetY()};
+
+    int minX = *std::min_element(xValues, xValues + 4);
+    int minY = *std::min_element(yValues, yValues + 4);
+
+    int maxX = *std::max_element(xValues, xValues + 4);
+    int maxY = *std::max_element(yValues, yValues + 4);
+
+    return ZDungeonLevel::ZRoom(minX, minY, maxX, maxY);
+}
+
 void ZDungeonLevelGenerator::DigRoomsNearUpStaircases() {
-    for (auto& staircase : mUpStaircases) {
-        ZDirection directionInsideRoom = staircase.direction.TurnCopy(ETurnDirection::Back);
-        ZPosition someEdgeCell = staircase.position + directionInsideRoom.PredictMove();
+    for (const auto& staircase : mUpStaircases) {
+        
+        ZDungeonLevel::ZRoom room = CalcRoomNearStaircase(staircase, kRoomMinSize, kRoomMaxSize);
 
-        ZDirection nearWallLeftDirection = directionInsideRoom.TurnCopy(ETurnDirection::Left);
-        int nearWallLeftPartMaxLength = kRoomMaxSize - 2;   // cause staircases shouldn't be adjacent to room's corner
-        int nearWallLeftPartMinLength = 2;
-        int nearWallLeftPartLength = utl::ZRandomHelpers::GetRandomValue(nearWallLeftPartMinLength, nearWallLeftPartMaxLength);
-        ZPosition nearWallLeftEnd = someEdgeCell + nearWallLeftDirection.PredictMove() * (nearWallLeftPartLength - 1);
-        nearWallLeftEnd = CropPositionInsideLevel(nearWallLeftEnd);
-
-        int nearWallLength = utl::ZRandomHelpers::GetRandomValue(std::max(nearWallLeftPartLength + 1, kRoomMinSize), kRoomMaxSize);
-        ZPosition nearWallRightEnd = nearWallLeftEnd + (nearWallLength - 1) * nearWallLeftDirection.TurnCopy(ETurnDirection::Back).PredictMove();
-        nearWallRightEnd = CropPositionInsideLevel(nearWallRightEnd);
-
-        int farWallDistance = utl::ZRandomHelpers::GetRandomValue(kRoomMinSize, kRoomMaxSize);
-        ZPosition farWallLeftEnd = CropPositionInsideLevel(nearWallLeftEnd + directionInsideRoom.PredictMove() * (farWallDistance - 1));
-        ZPosition farWallRightEnd = CropPositionInsideLevel(nearWallRightEnd + directionInsideRoom.PredictMove() * (farWallDistance - 1));
-
-        int xValues[] = {farWallLeftEnd.GetX(), farWallRightEnd.GetX(), nearWallLeftEnd.GetX(), nearWallRightEnd.GetX()};
-        int yValues[] = {farWallLeftEnd.GetY(), farWallRightEnd.GetY(), nearWallLeftEnd.GetY(), nearWallRightEnd.GetY()};
-
-        int minX = *std::min_element(xValues, xValues + 4);
-        int minY = *std::min_element(yValues, yValues + 4);
-
-        int maxX = *std::max_element(xValues, xValues + 4);
-        int maxY = *std::max_element(yValues, yValues + 4);
-
-        bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(minX, minY, maxX, maxY);
+        bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(room.minX, room.minY, room.maxX, room.maxY);
         if (roomDigged) {
-            int someValidCellX = utl::ZRandomHelpers::GetRandomValue(minX, maxX);
-            int someValidCellY = utl::ZRandomHelpers::GetRandomValue(minY, maxY);
+            int someValidCellX = utl::ZRandomHelpers::GetRandomValue(room.minX, room.maxX);
+            int someValidCellY = utl::ZRandomHelpers::GetRandomValue(room.minY, room.maxY);
             ZPosition someValidCell = ZPosition(someValidCellX, someValidCellY);
 
-            mRooms.emplace_back(minX, minY, maxX, maxY, someValidCell);
+            mRooms.emplace_back(room.minX, room.minY, room.maxX, room.maxY, someValidCell);
         }
     }
 }

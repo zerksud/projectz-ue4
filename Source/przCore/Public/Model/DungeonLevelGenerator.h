@@ -84,6 +84,7 @@ private:
     void BlockStaircaseAdjacentCellsOnDirectionSide(const ZDirectionalStaircase& staircase);
     void MarkUpStaircasesAdjacentCellsOnDirectionSideAsBlocked();
     static ZPosition CropPositionInsideLevel(const ZPosition& position);
+    const ZDungeonLevel::ZRoom CalcRoomNearStaircase(const ZDirectionalStaircase& staircase, int minSize, int maxSize);
     void DigRoomsNearUpStaircases();
     void DigUpStaircases();
     void ConnectUpStaircasesWithSomeValidCell(const ZPosition& someValidCell);
