@@ -32,13 +32,13 @@ enum Type {
 class ZDungeonLevel {
 public:
     struct ZRoom {
-        int x1;
-        int y1;
-        int x2;
-        int y2;
+        int minX;
+        int minY;
+        int maxX;
+        int maxY;
 
-        ZRoom(int pX1, int pY1, int pX2, int pY2)
-            : x1(pX1), y1(pY1), x2(pX1), y2(pY2) {
+        ZRoom(int pMinX, int pMinY, int pMaxX, int pMaxY)
+            : minX(pMinX), minY(pMinY), maxX(pMaxX), maxY(pMaxY) {
         }
     };
     typedef std::vector<ZRoom> ZRoomList;
