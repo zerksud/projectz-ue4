@@ -274,14 +274,16 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
         std::shuffle(staircasePositionVariants.begin(), staircasePositionVariants.end(), std::default_random_engine());
 
         for (int j = 0; j < staircasePositionVariants.size(); ++j) {
-            const ZPosition& cellPosition = staircasePositionVariants[j];
+            const ZPosition& staircasePosition = staircasePositionVariants[j];
 
-            if (path::ZPathFinder::CellMustBeDigged(*mWeightedMap, cellPosition) && CountCellSolidNotBlockedNeighbours(cellPosition) == 5) {
-                mMap[cellPosition.GetX()][cellPosition.GetY()] = EDungeonCell::DownStaircase;
+            bool mustBeDigged = path::ZPathFinder::CellMustBeDigged(*mWeightedMap, staircasePosition);
+            bool isLocatedInPocket = CountCellSolidNotBlockedNeighbours(staircasePosition) == 5;
+            if (mustBeDigged && isLocatedInPocket) {
+                mMap[staircasePosition.GetX()][staircasePosition.GetY()] = EDungeonCell::DownStaircase;
                 ++staircasesGeneratedCount;
 
                 for (auto& room : rooms) {
-                    int pathSize = path::ZPathFinder::FindPathBetweenCells(*mWeightedMap, cellPosition, room.someValidCell).size();
+                    int pathSize = path::ZPathFinder::FindPathBetweenCells(*mWeightedMap, staircasePosition, room.someValidCell).size();
                     if (pathSize > 0 && pathSize < room.distanceToClosestStaircase) {
                         room.distanceToClosestStaircase = pathSize;
                     }
