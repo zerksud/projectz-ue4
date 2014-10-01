@@ -281,7 +281,7 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
                 ++staircasesGeneratedCount;
 
                 for (auto& room : rooms) {
-                    int pathSize = path::ZPathFinder::FindPathBetweenCells(*mWeightedMap, currentRoom.someValidCell, room.someValidCell).size();
+                    int pathSize = path::ZPathFinder::FindPathBetweenCells(*mWeightedMap, cellPosition, room.someValidCell).size();
                     if (pathSize > 0 && pathSize < room.distanceToClosestStaircase) {
                         room.distanceToClosestStaircase = pathSize;
                     }
