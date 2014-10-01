@@ -21,6 +21,8 @@ public:
     static const ZWeight kTunnelTurnPenalty;
     static const int kEstimatedPathWeightFactor;
 
+    static int CalcCellsDistance(const ZPosition& left, const ZPosition& right);
+
     static bool CellMustBeDigged(const ZWeightedMap& map, const ZPosition& position);
     static bool CellMustBeDigged(const ZWeightedMap& map, int x, int y);
 

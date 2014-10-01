@@ -66,7 +66,7 @@ struct PathCellConnection {
     }
 };
 
-int CalcCellsDistance(const ZPosition& left, const ZPosition& right) {
+int ZPathFinder::CalcCellsDistance(const ZPosition& left, const ZPosition& right) {
     ZPositionDiff diff = right - left;
     int distance = std::abs(diff.GetdX()) + std::abs(diff.GetdY());
 
