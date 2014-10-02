@@ -44,7 +44,7 @@ public:
     typedef std::vector<ZRoom> ZRoomList;
 
     // holds map matrix
-    ZDungeonLevel(int width, int height, EDungeonCell::Type*** map, ZRoomList rooms = ZRoomList());
+    ZDungeonLevel(int width, int height, EDungeonCell::Type*** map, const ZRoomList& rooms = ZRoomList(), const ZRoomList& nextLevelStaircaseRooms = ZRoomList());
     ZDungeonLevel(const ZDungeonLevel& other) = delete;
     ZDungeonLevel& operator=(const ZDungeonLevel& other) = delete;
     virtual ~ZDungeonLevel();
@@ -63,6 +63,8 @@ public:
     const StaircaseList& GetDownStaircases() const;
 
     const ZDirection GetStaircaseDirection(const ZPosition& position) const;
+
+    const ZRoomList& GetNextLevelStaircaseRooms() const;
 
     EDungeonCell::Type GetCellType(int x, int y) const;
     EDungeonCell::Type GetCellType(const ZPosition& pos) const;
@@ -124,6 +126,7 @@ private:
     int mHeight;
     EDungeonCell::Type** mTerrain;
     ZRoomList mRooms;
+    ZRoomList mNextLevelStaircaseRooms;
 
     StaircaseList mUpStaircases;
     StaircaseList mDownStaircases;

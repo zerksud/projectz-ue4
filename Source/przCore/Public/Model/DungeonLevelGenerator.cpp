@@ -443,7 +443,7 @@ ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previo
         roomList.emplace_back(room.x1, room.y1, room.x2, room.y2);
     }
 
-    ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap, roomList);
+    ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap, roomList, ZDungeonLevel::ZRoomList());
 
     delete mWeightedMap;
     mRooms.clear();

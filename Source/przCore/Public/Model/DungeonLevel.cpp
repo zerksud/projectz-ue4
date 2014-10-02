@@ -26,7 +26,7 @@ void ZDungeonLevel::CreateFailSafeDungeon() {
     ParseMap(&map);
 }
 
-ZDungeonLevel::ZDungeonLevel(int width, int height, EDungeonCell::Type*** map, ZRoomList rooms) {
+ZDungeonLevel::ZDungeonLevel(int width, int height, EDungeonCell::Type*** map, const ZRoomList& rooms, const ZRoomList& nextLevelStaircaseRooms) {
     if (width <= 0 || height <= 0) {
         LOGE("Can't create dungeon with size %dx%d", width, height);
         CreateFailSafeDungeon();
@@ -117,6 +117,10 @@ const ZDirection ZDungeonLevel::GetStaircaseDirection(const ZPosition& position)
     }
 
     return direction;
+}
+
+const ZDungeonLevel::ZRoomList& ZDungeonLevel::GetNextLevelStaircaseRooms() const {
+    return mNextLevelStaircaseRooms;
 }
 
 EDungeonCell::Type ZDungeonLevel::GetCellType(int x, int y) const {
