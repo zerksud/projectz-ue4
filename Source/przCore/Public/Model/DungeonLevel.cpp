@@ -105,7 +105,7 @@ const ZDungeonLevel::StaircaseList& ZDungeonLevel::GetDownStaircases() const {
     return mDownStaircases;
 }
 
-ZDirection ZDungeonLevel::GetStaircaseDirection(const ZPosition& position) const {
+const ZDirection ZDungeonLevel::GetStaircaseDirection(const ZPosition& position) const {
     ZDirection direction;
 
     if (!CellIsSolid(position.GetX() + 1, position.GetY())) {

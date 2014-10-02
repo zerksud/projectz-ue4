@@ -62,7 +62,7 @@ public:
     const StaircaseList& GetUpStaircases() const;
     const StaircaseList& GetDownStaircases() const;
 
-    ZDirection GetStaircaseDirection(const ZPosition& position) const;
+    const ZDirection GetStaircaseDirection(const ZPosition& position) const;
 
     EDungeonCell::Type GetCellType(int x, int y) const;
     EDungeonCell::Type GetCellType(const ZPosition& pos) const;
