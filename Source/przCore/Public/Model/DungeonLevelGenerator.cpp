@@ -321,7 +321,7 @@ void ZDungeonLevelGenerator::CalcUpStaircases(const ZDungeonLevel* previousLevel
     }
 }
 
-void ZDungeonLevelGenerator::BlockStaircaseAdjacentCellsOnDirectionSide(const ZDirectionalStaircase& staircase) {
+void ZDungeonLevelGenerator::BlockStaircaseAdjacentCellsOnDirectionSide(path::ZWeightedMap* weightedMap, const ZDirectionalStaircase& staircase) {
     ZDirection blockedDirection = staircase.direction;
 
     static ETurnDirection::Type blockedCellsDirections[] = {
@@ -335,13 +335,13 @@ void ZDungeonLevelGenerator::BlockStaircaseAdjacentCellsOnDirectionSide(const ZD
 
     for (int i = 0; i < blockedCellsDirectionsSize; ++i) {
         ZPosition pos = staircase.position + staircase.direction.TurnCopy(blockedCellsDirections[i]).PredictMove();
-        path::ZPathFinder::BlockCell(mWeightedMap, pos);
+        path::ZPathFinder::BlockCell(weightedMap, pos);
     }
 }
 
 void ZDungeonLevelGenerator::MarkUpStaircasesAdjacentCellsOnDirectionSideAsBlocked() {
     for (auto& staircase : mUpStaircases) {
-        BlockStaircaseAdjacentCellsOnDirectionSide(staircase);
+        BlockStaircaseAdjacentCellsOnDirectionSide(mWeightedMap, staircase);
 
         path::ZPathFinder::BlockCell(mWeightedMap, staircase.position);
     }
