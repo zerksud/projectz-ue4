@@ -321,7 +321,7 @@ void ZDungeonLevelGenerator::CalcUpStaircases(const ZDungeonLevel* previousLevel
     }
 }
 
-void ZDungeonLevelGenerator::BlockStaircaseAdjacentCellsOnDirectionSide(path::ZWeightedMap* weightedMap, const ZDirectionalStaircase& staircase) {
+void ZDungeonLevelGenerator::BlockStaircasePocketCells(path::ZWeightedMap* weightedMap, const ZDirectionalStaircase& staircase) {
     ZDirection blockedDirection = staircase.direction;
 
     static ETurnDirection::Type blockedCellsDirections[] = {
@@ -339,9 +339,9 @@ void ZDungeonLevelGenerator::BlockStaircaseAdjacentCellsOnDirectionSide(path::ZW
     }
 }
 
-void ZDungeonLevelGenerator::MarkUpStaircasesAdjacentCellsOnDirectionSideAsBlocked() {
+void ZDungeonLevelGenerator::BlockUpStaircasesAndTheirPocketCells() {
     for (auto& staircase : mUpStaircases) {
-        BlockStaircaseAdjacentCellsOnDirectionSide(mWeightedMap, staircase);
+        BlockStaircasePocketCells(mWeightedMap, staircase);
 
         path::ZPathFinder::BlockCell(mWeightedMap, staircase.position);
     }
@@ -429,7 +429,7 @@ ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previo
     mWeightedMap = new path::ZWeightedMap(kDungeonLevelWidth, kDungeonLevelHeight, path::ZPathFinder::kSolidRockCellWeight);
 
     CalcUpStaircases(previousLevel);
-    MarkUpStaircasesAdjacentCellsOnDirectionSideAsBlocked();
+    BlockUpStaircasesAndTheirPocketCells();
     DigRoomsNearUpStaircases();
     DigUpStaircases();
 

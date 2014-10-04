@@ -82,8 +82,8 @@ private:
     int CountCellSolidNotBlockedNeighbours(const ZPosition& cell) const;
     static void CalcUpStaircases(const ZDirectionalStaircaseList& previousLevelDownStaircases, ZDirectionalStaircaseList* upStaircases);
     void CalcUpStaircases(const ZDungeonLevel* previousLevel = nullptr);
-    void BlockStaircaseAdjacentCellsOnDirectionSide(path::ZWeightedMap* weightedMap, const ZDirectionalStaircase& staircase);
-    void MarkUpStaircasesAdjacentCellsOnDirectionSideAsBlocked();
+    void BlockStaircasePocketCells(path::ZWeightedMap* weightedMap, const ZDirectionalStaircase& staircase);
+    void BlockUpStaircasesAndTheirPocketCells();
     static ZPosition CropPositionInsideLevel(const ZPosition& position);
     static const ZDungeonLevel::ZRoom CalcRoomNearStaircase(const ZDirectionalStaircase& staircase, int minSize, int maxSize);
     void DigRoomsNearUpStaircases();
