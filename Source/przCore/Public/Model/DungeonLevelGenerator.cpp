@@ -27,16 +27,16 @@ const int ZDungeonLevelGenerator::kStaircaseCount = 3;
 struct BSPTreeNode {
     SubDungeon dungeon;
 
-    BSPTreeNode* lowerSubDungeon;
-    BSPTreeNode* higherSubDungeon;
+    BSPTreeNode* lowerTreeNode;
+    BSPTreeNode* higherTreeNode;
 
     BSPTreeNode(int x1, int y1, int x2, int y2)
-        : dungeon(x1, y1, x2, y2), lowerSubDungeon(nullptr), higherSubDungeon(nullptr) {
+        : dungeon(x1, y1, x2, y2), lowerTreeNode(nullptr), higherTreeNode(nullptr) {
     }
 
     ~BSPTreeNode() {
-        delete lowerSubDungeon;
-        delete higherSubDungeon;
+        delete lowerTreeNode;
+        delete higherTreeNode;
     }
 };
 
@@ -58,11 +58,11 @@ void ZDungeonLevelGenerator::ConnectCells(const ZPosition& someCell, const ZPosi
     }
 }
 
-void ShrinkSubDungeon(SubDungeon* outerSubDungeon, const SubDungeon& lowerSubDungeon, const SubDungeon& higherSubDungeon) {
-    outerSubDungeon->x1 = std::min(lowerSubDungeon.x1, higherSubDungeon.x1);
-    outerSubDungeon->y1 = std::min(lowerSubDungeon.y1, higherSubDungeon.y1);
-    outerSubDungeon->x2 = std::max(lowerSubDungeon.x2, higherSubDungeon.x2);
-    outerSubDungeon->y2 = std::max(lowerSubDungeon.y2, higherSubDungeon.y2);
+void ShrinkSubDungeon(SubDungeon* outerSubDungeon, const SubDungeon& lowerTreeNode, const SubDungeon& higherTreeNode) {
+    outerSubDungeon->x1 = std::min(lowerTreeNode.x1, higherTreeNode.x1);
+    outerSubDungeon->y1 = std::min(lowerTreeNode.y1, higherTreeNode.y1);
+    outerSubDungeon->x2 = std::max(lowerTreeNode.x2, higherTreeNode.x2);
+    outerSubDungeon->y2 = std::max(lowerTreeNode.y2, higherTreeNode.y2);
 }
 
 bool ZDungeonLevelGenerator::TryToGenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically) {
@@ -78,19 +78,19 @@ bool ZDungeonLevelGenerator::TryToGenerateBSPTree(BSPTreeNode* rootNode, bool tr
         return TryToCreateRoomInsideSubDungeon(&rootSubDungeon);
     }
 
-    bool lowerSubDungeonGenerated = TryToGenerateBSPTree(rootNode->lowerSubDungeon, !tryToSplitVertically);
-    bool higherSubDungeonGenerated = TryToGenerateBSPTree(rootNode->higherSubDungeon, !tryToSplitVertically);
+    bool lowerTreeNodeGenerated = TryToGenerateBSPTree(rootNode->lowerTreeNode, !tryToSplitVertically);
+    bool higherTreeNodeGenerated = TryToGenerateBSPTree(rootNode->higherTreeNode, !tryToSplitVertically);
 
-    if (lowerSubDungeonGenerated && higherSubDungeonGenerated) {
-        const SubDungeon& lowerSubDungeon = rootNode->lowerSubDungeon->dungeon;
-        const SubDungeon& higherSubDungeon = rootNode->higherSubDungeon->dungeon;
-        ShrinkSubDungeon(&rootSubDungeon, lowerSubDungeon, higherSubDungeon);
-        rootSubDungeon.someValidCell = lowerSubDungeon.someValidCell;
-        ConnectCells(lowerSubDungeon.someValidCell, higherSubDungeon.someValidCell);
-    } else if (lowerSubDungeonGenerated) {
-        rootSubDungeon = rootNode->lowerSubDungeon->dungeon;
-    } else if (higherSubDungeonGenerated) {
-        rootSubDungeon = rootNode->higherSubDungeon->dungeon;
+    if (lowerTreeNodeGenerated && higherTreeNodeGenerated) {
+        const SubDungeon& lowerTreeNode = rootNode->lowerTreeNode->dungeon;
+        const SubDungeon& higherTreeNode = rootNode->higherTreeNode->dungeon;
+        ShrinkSubDungeon(&rootSubDungeon, lowerTreeNode, higherTreeNode);
+        rootSubDungeon.someValidCell = lowerTreeNode.someValidCell;
+        ConnectCells(lowerTreeNode.someValidCell, higherTreeNode.someValidCell);
+    } else if (lowerTreeNodeGenerated) {
+        rootSubDungeon = rootNode->lowerTreeNode->dungeon;
+    } else if (higherTreeNodeGenerated) {
+        rootSubDungeon = rootNode->higherTreeNode->dungeon;
     } else {
         return false;
     }
@@ -102,22 +102,22 @@ void ZDungeonLevelGenerator::SplitSubDungeonVertically(BSPTreeNode* rootNode) {
     SubDungeon& dungeon = rootNode->dungeon;
 
     int maxSubDungeonsWidthDiff = rootNode->dungeon.GetWidth() - 2 * kSubDungeonMinSize;
-    int lowerSubDungeonWidth = kSubDungeonMinSize + utl::ZRandomHelpers::GetRandomValue(maxSubDungeonsWidthDiff);
-    int lowerSubDungeonX2 = dungeon.x1 + lowerSubDungeonWidth - 1;
+    int lowerTreeNodeWidth = kSubDungeonMinSize + utl::ZRandomHelpers::GetRandomValue(maxSubDungeonsWidthDiff);
+    int lowerTreeNodeX2 = dungeon.x1 + lowerTreeNodeWidth - 1;
 
-    rootNode->lowerSubDungeon = new BSPTreeNode(dungeon.x1, dungeon.y1, lowerSubDungeonX2, dungeon.y2);
-    rootNode->higherSubDungeon = new BSPTreeNode(lowerSubDungeonX2 + 1, dungeon.y1, dungeon.x2, dungeon.y2);
+    rootNode->lowerTreeNode = new BSPTreeNode(dungeon.x1, dungeon.y1, lowerTreeNodeX2, dungeon.y2);
+    rootNode->higherTreeNode = new BSPTreeNode(lowerTreeNodeX2 + 1, dungeon.y1, dungeon.x2, dungeon.y2);
 }
 
 void ZDungeonLevelGenerator::SplitSubDungeonHorizontally(BSPTreeNode* rootNode) {
     SubDungeon& dungeon = rootNode->dungeon;
 
     int maxSubDungeonsHeightDiff = dungeon.GetHeight() - 2 * kSubDungeonMinSize;
-    int lowerSubDungeonHeight = kSubDungeonMinSize + utl::ZRandomHelpers::GetRandomValue(maxSubDungeonsHeightDiff);
-    int lowerSubDungeonY2 = dungeon.y1 + lowerSubDungeonHeight - 1;
+    int lowerTreeNodeHeight = kSubDungeonMinSize + utl::ZRandomHelpers::GetRandomValue(maxSubDungeonsHeightDiff);
+    int lowerTreeNodeY2 = dungeon.y1 + lowerTreeNodeHeight - 1;
 
-    rootNode->lowerSubDungeon = new BSPTreeNode(dungeon.x1, dungeon.y1, dungeon.x2, lowerSubDungeonY2);
-    rootNode->higherSubDungeon = new BSPTreeNode(dungeon.x1, lowerSubDungeonY2 + 1, dungeon.x2, dungeon.y2);
+    rootNode->lowerTreeNode = new BSPTreeNode(dungeon.x1, dungeon.y1, dungeon.x2, lowerTreeNodeY2);
+    rootNode->higherTreeNode = new BSPTreeNode(dungeon.x1, lowerTreeNodeY2 + 1, dungeon.x2, dungeon.y2);
 }
 
 bool ZDungeonLevelGenerator::TryToCreateRoomInsideSubDungeon(SubDungeon* subDungeon) {
