@@ -92,7 +92,7 @@ private:
 
     EDungeonCell::Type** mMap;
     path::ZWeightedMap* mWeightedMap;
-    DungeonRooms mRooms;
+    ZDungeonLevel::ZRoomList mRooms;
     ZDirectionalStaircaseList mUpStaircases;
 };
 

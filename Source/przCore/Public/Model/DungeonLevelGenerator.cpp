@@ -135,7 +135,7 @@ bool ZDungeonLevelGenerator::TryToCreateRoomInsideSubDungeon(SubDungeon* subDung
         int someValidCellY = utl::ZRandomHelpers::GetRandomValue(roomY1, roomY2);
         ZPosition someValidCell = ZPosition(someValidCellX, someValidCellY);
         *subDungeon = SubDungeon(roomX1, roomY1, roomX2, roomY2, someValidCell);
-        mRooms.push_back(*subDungeon);
+        mRooms.emplace_back(roomX1, roomY1, roomX2, roomY2);
     }
 
     return roomDigged;
@@ -188,7 +188,7 @@ void ZDungeonLevelGenerator::DigRandomTunnels() {
     for (int i = 0; i < tryCount; ++i) {
         int fromRoomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
         int toRoomIndex = utl::ZRandomHelpers::GetRandomValue(mRooms.size() - 1);
-        ConnectCells(mRooms[fromRoomIndex].someValidCell, mRooms[toRoomIndex].someValidCell);
+        ConnectCells(mRooms[fromRoomIndex].GetRandomCell(), mRooms[toRoomIndex].GetRandomCell());
     }
 }
 
@@ -224,7 +224,7 @@ int ZDungeonLevelGenerator::CountCellSolidNotBlockedNeighbours(const ZPosition& 
     return count;
 }
 
-struct Room {
+struct DistancedRoom {
     int index;
     ZPosition someValidCell;
     int distanceToClosestStaircase;
@@ -234,11 +234,11 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
     const int staircasesToBeGeneratedCount = std::min(kStaircaseCount, (int)mRooms.size());
     int staircasesGeneratedCount = 0;
 
-    std::vector<Room> rooms;
+    std::vector<DistancedRoom> distancedRooms;
     for (int i = 0; i < mRooms.size(); ++i) {
-        Room room;
+        DistancedRoom room;
         room.index = i;
-        room.someValidCell = mRooms[i].someValidCell;
+        room.someValidCell = mRooms[i].center;
         room.distanceToClosestStaircase = std::numeric_limits<int>::max();
         for (auto& upStaircase : mUpStaircases) {
             int pathSize = path::ZPathFinder::FindPathBetweenCells(*mWeightedMap, room.someValidCell, upStaircase.position).size();
@@ -247,29 +247,29 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
             }
         }
 
-        rooms.push_back(room);
+        distancedRooms.push_back(room);
     }
 
-    while (rooms.size() > 0 && staircasesGeneratedCount < staircasesToBeGeneratedCount) {
-        std::sort(rooms.begin(), rooms.end(), [](Room left, Room right) {
+    while (distancedRooms.size() > 0 && staircasesGeneratedCount < staircasesToBeGeneratedCount) {
+        std::sort(distancedRooms.begin(), distancedRooms.end(), [](DistancedRoom left, DistancedRoom right) {
             return left.distanceToClosestStaircase < right.distanceToClosestStaircase;
         });
 
-        const Room& currentRoom = rooms[rooms.size() - 1];
-        const SubDungeon& subDungeon = mRooms[currentRoom.index];
+        const DistancedRoom& currentRoom = distancedRooms[distancedRooms.size() - 1];
+        const ZDungeonLevel::ZRoom& room = mRooms[currentRoom.index];
 
         std::vector<ZPosition> staircasePositionVariants;
-        if (subDungeon.y1 > kRoomMinSize + 2) {
-            staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(subDungeon.x1 + 1, subDungeon.x2 - 1), subDungeon.y1 - 1);
+        if (room.minY > kRoomMinSize + 2) {
+            staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(room.minX + 1, room.maxX - 1), room.minY - 1);
         }
-        if (subDungeon.y2 < kDungeonLevelHeight - 1 - kRoomMinSize - 2) {
-            staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(subDungeon.x1 + 1, subDungeon.x2 - 1), subDungeon.y2 + 1);
+        if (room.maxY < kDungeonLevelHeight - 1 - kRoomMinSize - 2) {
+            staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(room.minX + 1, room.maxX - 1), room.maxY + 1);
         }
-        if (subDungeon.x1 > kRoomMinSize + 2) {
-            staircasePositionVariants.emplace_back(subDungeon.x1 - 1, utl::ZRandomHelpers::GetRandomValue(subDungeon.y1 + 1, subDungeon.y2 - 1));
+        if (room.minX > kRoomMinSize + 2) {
+            staircasePositionVariants.emplace_back(room.minX - 1, utl::ZRandomHelpers::GetRandomValue(room.minY + 1, room.maxY - 1));
         }
-        if (subDungeon.x2 < kDungeonLevelWidth - 1 - kRoomMinSize - 2) {
-            staircasePositionVariants.emplace_back(subDungeon.x2 + 1, utl::ZRandomHelpers::GetRandomValue(subDungeon.y1 + 1, subDungeon.y2 - 1));
+        if (room.maxX < kDungeonLevelWidth - 1 - kRoomMinSize - 2) {
+            staircasePositionVariants.emplace_back(room.maxX + 1, utl::ZRandomHelpers::GetRandomValue(room.minY + 1, room.maxY - 1));
         }
         std::shuffle(staircasePositionVariants.begin(), staircasePositionVariants.end(), std::default_random_engine());
 
@@ -282,7 +282,7 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
                 mMap[staircasePosition.GetX()][staircasePosition.GetY()] = EDungeonCell::DownStaircase;
                 ++staircasesGeneratedCount;
 
-                for (auto& room : rooms) {
+                for (auto& room : distancedRooms) {
                     int pathSize = path::ZPathFinder::FindPathBetweenCells(*mWeightedMap, staircasePosition, room.someValidCell).size();
                     if (pathSize > 0 && pathSize < room.distanceToClosestStaircase) {
                         room.distanceToClosestStaircase = pathSize;
@@ -293,7 +293,7 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
             }
         }
 
-        rooms.pop_back();
+        distancedRooms.pop_back();
     }
 }
 
@@ -384,11 +384,7 @@ void ZDungeonLevelGenerator::DigRoomsNearUpStaircases() {
 
         bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(room.minX, room.minY, room.maxX, room.maxY);
         if (roomDigged) {
-            int someValidCellX = utl::ZRandomHelpers::GetRandomValue(room.minX, room.maxX);
-            int someValidCellY = utl::ZRandomHelpers::GetRandomValue(room.minY, room.maxY);
-            ZPosition someValidCell = ZPosition(someValidCellX, someValidCellY);
-
-            mRooms.emplace_back(room.minX, room.minY, room.maxX, room.maxY, someValidCell);
+            mRooms.push_back(room);
         }
     }
 }
@@ -438,12 +434,7 @@ ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previo
     ConnectUpStaircasesWithSomeValidCell(subDungeonsTreeRoot.dungeon.someValidCell);
     AddRandomDownStaircases();
 
-    ZDungeonLevel::ZRoomList roomList;
-    for (auto room : mRooms) {
-        roomList.emplace_back(room.x1, room.y1, room.x2, room.y2);
-    }
-
-    ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap, roomList, ZDungeonLevel::ZRoomList());
+    ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap, mRooms, ZDungeonLevel::ZRoomList());
 
     delete mWeightedMap;
     mRooms.clear();

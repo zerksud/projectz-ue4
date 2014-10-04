@@ -26,16 +26,17 @@ void ZDungeonLevel::CreateFailSafeDungeon() {
     ParseMap(&map);
 }
 
-ZDungeonLevel::ZDungeonLevel(int width, int height, EDungeonCell::Type*** map, const ZRoomList& rooms, const ZRoomList& nextLevelStaircaseRooms) {
+ZDungeonLevel::ZDungeonLevel(int width, int height, EDungeonCell::Type*** map, const ZRoomList& rooms, const ZRoomList& nextLevelStaircaseRooms)
+    : mWidth(width),
+    mHeight(height),
+    mRooms(rooms),
+    mNextLevelStaircaseRooms(nextLevelStaircaseRooms) {
     if (width <= 0 || height <= 0) {
         LOGE("Can't create dungeon with size %dx%d", width, height);
         CreateFailSafeDungeon();
         return;
     }
 
-    mWidth = width;
-    mHeight = height;
-    mRooms = rooms;
     ParseMap(map);
 }
 

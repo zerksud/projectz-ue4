@@ -5,6 +5,7 @@
 
 #include "Model/Position.h"
 #include "Model/Monster.h"
+#include "Utils/RandomHelpers.h"
 
 namespace prz {
 namespace mdl {
@@ -32,13 +33,25 @@ enum Type {
 class ZDungeonLevel {
 public:
     struct ZRoom {
-        int minX;
-        int minY;
-        int maxX;
-        int maxY;
+        const int minX;
+        const int minY;
+        const int maxX;
+        const int maxY;
+        const ZPosition center;
 
         ZRoom(int pMinX, int pMinY, int pMaxX, int pMaxY)
-            : minX(pMinX), minY(pMinY), maxX(pMaxX), maxY(pMaxY) {
+            : minX(pMinX), 
+            minY(pMinY), 
+            maxX(pMaxX), 
+            maxY(pMaxY), 
+            center((pMinX + pMaxX) / 2, (pMinY + pMaxY) / 2) {
+        }
+
+        const ZPosition GetRandomCell() const {
+            int randomX = utl::ZRandomHelpers::GetRandomValue(minX, maxX);
+            int randomY = utl::ZRandomHelpers::GetRandomValue(minY, maxY);
+
+            return ZPosition(randomX, randomY);
         }
     };
     typedef std::vector<ZRoom> ZRoomList;
