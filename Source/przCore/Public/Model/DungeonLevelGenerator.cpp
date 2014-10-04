@@ -297,18 +297,26 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
     }
 }
 
+void ZDungeonLevelGenerator::CalcUpStaircases(const ZDirectionalStaircaseList& previousLevelDownStaircases, ZDirectionalStaircaseList* upStaircases) {
+    for (auto& downStaircase : previousLevelDownStaircases) {
+        ZPosition upStaircasePosition = downStaircase.position + downStaircase.direction.PredictMove();
+        ZDirection upStaircaseDirection = downStaircase.direction.TurnCopy(ETurnDirection::Back);
+
+        upStaircases->emplace_back(upStaircasePosition, upStaircaseDirection);
+    }
+}
+
 void ZDungeonLevelGenerator::CalcUpStaircases(const ZDungeonLevel* previousLevel) {
     if (previousLevel) {
-        for (auto& previousLevelStaircasePosition : previousLevel->GetDownStaircases()) {
-            ZDirection downStaircaseDirection = previousLevel->GetStaircaseDirection(previousLevelStaircasePosition);
-            ZPosition upStaircasePosition = previousLevelStaircasePosition + downStaircaseDirection.PredictMove();
-            ZDirection upStaircaseDirection = downStaircaseDirection.TurnCopy(ETurnDirection::Back);
-
-            mUpStaircases.emplace_back(upStaircasePosition, upStaircaseDirection);
+        ZDirectionalStaircaseList downStaircases;
+        for (const auto& downStaircasePosition : previousLevel->GetDownStaircases()) {
+            ZDirection downStaircaseDirection = previousLevel->GetStaircaseDirection(downStaircasePosition);
+            downStaircases.emplace_back(downStaircasePosition, downStaircaseDirection);
         }
+        CalcUpStaircases(downStaircases, &mUpStaircases);
     } else {
-        int startPositionX = utl::ZRandomHelpers::GetRandomValue(5, kDungeonLevelWidth - 5);
-        int startPositionY = utl::ZRandomHelpers::GetRandomValue(5, kDungeonLevelHeight - 5);
+        int startPositionX = utl::ZRandomHelpers::GetRandomValue(kRoomMaxSize, kDungeonLevelWidth - kRoomMaxSize);
+        int startPositionY = utl::ZRandomHelpers::GetRandomValue(kRoomMaxSize, kDungeonLevelHeight - kRoomMaxSize);
         mUpStaircases.emplace_back(ZPosition(startPositionX, startPositionX), ZDirection());
     }
 }
@@ -379,7 +387,6 @@ const ZDungeonLevel::ZRoom ZDungeonLevelGenerator::CalcRoomNearStaircase(const Z
 
 void ZDungeonLevelGenerator::DigRoomsNearUpStaircases() {
     for (const auto& staircase : mUpStaircases) {
-        
         ZDungeonLevel::ZRoom room = CalcRoomNearStaircase(staircase, kRoomMinSize, kRoomMaxSize);
 
         bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(room.minX, room.minY, room.maxX, room.maxY);
