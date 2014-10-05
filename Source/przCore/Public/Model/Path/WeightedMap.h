@@ -10,6 +10,7 @@ namespace path {
 class ZWeightedMap {
 public:
     ZWeightedMap(int width, int height, const ZWeight& defaultCellWeight);
+    ZWeightedMap(const ZWeightedMap& other);
     ~ZWeightedMap();
 
     int GetWidth() const;

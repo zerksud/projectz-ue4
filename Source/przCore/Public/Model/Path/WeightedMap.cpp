@@ -1,17 +1,27 @@
 #include "przCorePCH.h"
 #include "Model/Path/WeightedMap.h"
 
+#include <algorithm>
+
 #include "Utils/MatrixHelpers.h"
 
 namespace prz {
 namespace mdl {
 namespace path {
 
-ZWeightedMap::ZWeightedMap(int width, int height, const ZWeight& defaultCellWeight) {
-    mWidth = width;
-    mHeight = height;
+ZWeightedMap::ZWeightedMap(int width, int height, const ZWeight& defaultCellWeight)
+    : mWidth(width),
+        mHeight(height) {
     utl::ZMatrix::Allocate(&mCellWeights, mWidth, mHeight, defaultCellWeight);
 };
+
+ZWeightedMap::ZWeightedMap(const ZWeightedMap& other)
+    : mWidth(other.mWidth),
+        mHeight(other.mHeight) {
+    utl::ZMatrix::Allocate(&mCellWeights, mWidth, mHeight);
+
+    std::copy(other.mCellWeights, other.mCellWeights + mWidth * mHeight, mCellWeights);
+}
 
 ZWeightedMap::~ZWeightedMap() {
     utl::ZMatrix::Deallocate(&mCellWeights, mHeight);
