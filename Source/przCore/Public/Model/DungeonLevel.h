@@ -33,17 +33,17 @@ enum Type {
 class ZDungeonLevel {
 public:
     struct ZRoom {
-        const int minX;
-        const int minY;
-        const int maxX;
-        const int maxY;
-        const ZPosition center;
+        int minX;
+        int minY;
+        int maxX;
+        int maxY;
+        ZPosition center;
 
         ZRoom(int pMinX, int pMinY, int pMaxX, int pMaxY)
-            : minX(pMinX), 
-            minY(pMinY), 
-            maxX(pMaxX), 
-            maxY(pMaxY), 
+            : minX(pMinX),
+            minY(pMinY),
+            maxX(pMaxX),
+            maxY(pMaxY),
             center((pMinX + pMaxX) / 2, (pMinY + pMaxY) / 2) {
         }
 
