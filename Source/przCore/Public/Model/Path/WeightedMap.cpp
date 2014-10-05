@@ -23,7 +23,21 @@ ZWeightedMap::ZWeightedMap(const ZWeightedMap& other)
 
 ZWeightedMap::~ZWeightedMap() {
     utl::ZMatrix::Deallocate(&mCellWeights, mHeight);
-};
+}
+
+ZWeightedMap& ZWeightedMap::operator=(ZWeightedMap other) {
+    swap(*this, other);
+
+    return *this;
+}
+
+void swap(ZWeightedMap& left, ZWeightedMap& right) {
+    using std::swap;
+
+    swap(left.mWidth, right.mWidth);
+    swap(left.mHeight, right.mHeight);
+    swap(left.mCellWeights, right.mCellWeights);
+}
 
 int ZWeightedMap::GetWidth() const {
     return mWidth;

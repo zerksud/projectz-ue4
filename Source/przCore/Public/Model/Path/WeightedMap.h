@@ -13,6 +13,10 @@ public:
     ZWeightedMap(const ZWeightedMap& other);
     ~ZWeightedMap();
 
+    ZWeightedMap& operator=(ZWeightedMap other);
+
+    friend void swap(ZWeightedMap& left, ZWeightedMap& right);
+
     int GetWidth() const;
     int GetHeight() const;
 
