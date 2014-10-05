@@ -40,21 +40,21 @@ struct BSPTreeNode {
     }
 };
 
-void ZDungeonLevelGenerator::DigCellIfSolidAndNotBlocked(path::ZWeightedMap* map, const ZPosition& position) {
-    DigCellIfSolidAndNotBlocked(map, position.GetX(), position.GetY());
+void ZDungeonLevelGenerator::DigCellIfSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, const ZPosition& position) {
+    DigCellIfSolidAndNotBlocked(map, weightedMap, position.GetX(), position.GetY());
 }
 
-void ZDungeonLevelGenerator::DigCellIfSolidAndNotBlocked(path::ZWeightedMap* map, int x, int y) {
-    if (mMap[x][y] == EDungeonCell::SolidRock && !path::ZPathFinder::CellIsBlocked(*map, x, y)) {
-        mMap[x][y] = EDungeonCell::Emptiness;
-        map->SetCellWeight(x, y, path::ZPathFinder::kEmptyCellWeight);
+void ZDungeonLevelGenerator::DigCellIfSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, int x, int y) {
+    if (map[x][y] == EDungeonCell::SolidRock && !path::ZPathFinder::CellIsBlocked(*weightedMap, x, y)) {
+        map[x][y] = EDungeonCell::Emptiness;
+        weightedMap->SetCellWeight(x, y, path::ZPathFinder::kEmptyCellWeight);
     }
 }
 
 void ZDungeonLevelGenerator::ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell) {
     path::ZPathFinder::PathCells path = path::ZPathFinder::FindPathBetweenCells(*mWeightedMap, someCell, anotherCell, true);
     for (auto cell : path) {
-        DigCellIfSolidAndNotBlocked(mWeightedMap, cell);
+        DigCellIfSolidAndNotBlocked(mMap, mWeightedMap, cell);
     }
 }
 
@@ -129,7 +129,7 @@ bool ZDungeonLevelGenerator::TryToCreateRoomInsideSubDungeon(SubDungeon* subDung
     int roomY1 = subDungeon->y1 + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->GetHeight() - 2 - roomHeight);
     int roomY2 = roomY1 + roomHeight - 1;
 
-    bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(mWeightedMap, roomX1, roomY1, roomX2, roomY2);
+    bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(mMap, mWeightedMap, roomX1, roomY1, roomX2, roomY2);
     if (roomDigged) {
         int someValidCellX = utl::ZRandomHelpers::GetRandomValue(roomX1, roomX2);
         int someValidCellY = utl::ZRandomHelpers::GetRandomValue(roomY1, roomY2);
@@ -141,10 +141,10 @@ bool ZDungeonLevelGenerator::TryToCreateRoomInsideSubDungeon(SubDungeon* subDung
     return roomDigged;
 }
 
-bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(path::ZWeightedMap* map, int minX, int minY, int maxX, int maxY) {
+bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, int minX, int minY, int maxX, int maxY) {
     for (int x = minX - 1; x <= maxX + 1; ++x) {
         for (int y = minY - 1; y <= maxY + 1; ++y) {
-            if (!path::ZPathFinder::CellMustBeDigged(*map, x, y)) {
+            if (!path::ZPathFinder::CellMustBeDigged(*weightedMap, x, y)) {
                 return false;
             }
         }
@@ -152,7 +152,7 @@ bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(path::ZWeigh
 
     for (int x = minX; x <= maxX; ++x) {
         for (int y = minY; y <= maxY; ++y) {
-            if (path::ZPathFinder::CellIsBlocked(*map, x, y)) {
+            if (path::ZPathFinder::CellIsBlocked(*weightedMap, x, y)) {
                 return false;
             }
         }
@@ -160,7 +160,7 @@ bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(path::ZWeigh
 
     for (int x = minX; x <= maxX; ++x) {
         for (int y = minY; y <= maxY; ++y) {
-            DigCellIfSolidAndNotBlocked(map, x, y);
+            DigCellIfSolidAndNotBlocked(map, weightedMap, x, y);
         }
     }
 
@@ -170,15 +170,15 @@ bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(path::ZWeigh
     // #    #
     // x    x
     // #x##x#
-    path::ZPathFinder::BlockCell(map, minX - 1, minY);
-    path::ZPathFinder::BlockCell(map, maxX + 1, minY);
-    path::ZPathFinder::BlockCell(map, minX - 1, maxY);
-    path::ZPathFinder::BlockCell(map, maxX + 1, maxY);
+    path::ZPathFinder::BlockCell(weightedMap, minX - 1, minY);
+    path::ZPathFinder::BlockCell(weightedMap, maxX + 1, minY);
+    path::ZPathFinder::BlockCell(weightedMap, minX - 1, maxY);
+    path::ZPathFinder::BlockCell(weightedMap, maxX + 1, maxY);
 
-    path::ZPathFinder::BlockCell(map, minX, minY - 1);
-    path::ZPathFinder::BlockCell(map, maxX, minY - 1);
-    path::ZPathFinder::BlockCell(map, minX, maxY + 1);
-    path::ZPathFinder::BlockCell(map, maxX, maxY + 1);
+    path::ZPathFinder::BlockCell(weightedMap, minX, minY - 1);
+    path::ZPathFinder::BlockCell(weightedMap, maxX, minY - 1);
+    path::ZPathFinder::BlockCell(weightedMap, minX, maxY + 1);
+    path::ZPathFinder::BlockCell(weightedMap, maxX, maxY + 1);
 
     return true;
 }
@@ -250,6 +250,10 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
         distancedRooms.push_back(room);
     }
 
+    path::ZWeightedMap nextLevelMapTemplate(kDungeonLevelWidth, kDungeonLevelHeight, path::ZPathFinder::kSolidRockCellWeight);
+    EDungeonCell::Type** fakeNextLevelMap;
+    utl::ZMatrix::Allocate(&fakeNextLevelMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
+
     while (distancedRooms.size() > 0 && staircasesGeneratedCount < staircasesToBeGeneratedCount) {
         std::sort(distancedRooms.begin(), distancedRooms.end(), [](DistancedRoom left, DistancedRoom right) {
             return left.distanceToClosestStaircase < right.distanceToClosestStaircase;
@@ -258,32 +262,47 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
         const DistancedRoom& currentRoom = distancedRooms[distancedRooms.size() - 1];
         const ZDungeonLevel::ZRoom& room = mRooms[currentRoom.index];
 
-        std::vector<ZPosition> staircasePositionVariants;
+        std::vector<ZDirectionalStaircase> staircaseVariants;
         if (room.minY > kRoomMinSize + 2) {
-            staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(room.minX + 1, room.maxX - 1), room.minY - 1);
+            ZPosition position(utl::ZRandomHelpers::GetRandomValue(room.minX + 1, room.maxX - 1), room.minY - 1);
+            staircaseVariants.emplace_back(position, ZDirection(ETurnDirection::Left));
         }
         if (room.maxY < kDungeonLevelHeight - 1 - kRoomMinSize - 2) {
-            staircasePositionVariants.emplace_back(utl::ZRandomHelpers::GetRandomValue(room.minX + 1, room.maxX - 1), room.maxY + 1);
+            ZPosition position(utl::ZRandomHelpers::GetRandomValue(room.minX + 1, room.maxX - 1), room.maxY + 1);
+            staircaseVariants.emplace_back(position, ZDirection(ETurnDirection::Right));
         }
         if (room.minX > kRoomMinSize + 2) {
-            staircasePositionVariants.emplace_back(room.minX - 1, utl::ZRandomHelpers::GetRandomValue(room.minY + 1, room.maxY - 1));
+            ZPosition position(room.minX - 1, utl::ZRandomHelpers::GetRandomValue(room.minY + 1, room.maxY - 1));
+            staircaseVariants.emplace_back(position, ZDirection(ETurnDirection::Back));
         }
         if (room.maxX < kDungeonLevelWidth - 1 - kRoomMinSize - 2) {
-            staircasePositionVariants.emplace_back(room.maxX + 1, utl::ZRandomHelpers::GetRandomValue(room.minY + 1, room.maxY - 1));
+            ZPosition position(room.maxX + 1, utl::ZRandomHelpers::GetRandomValue(room.minY + 1, room.maxY - 1));
+            staircaseVariants.emplace_back(position, ZDirection());
         }
-        std::shuffle(staircasePositionVariants.begin(), staircasePositionVariants.end(), std::default_random_engine());
+        std::shuffle(staircaseVariants.begin(), staircaseVariants.end(), std::default_random_engine());
 
-        for (int j = 0; j < staircasePositionVariants.size(); ++j) {
-            const ZPosition& staircasePosition = staircasePositionVariants[j];
+        for (int j = 0; j < staircaseVariants.size(); ++j) {
+            const ZDirectionalStaircase& staircase = staircaseVariants[j];
 
-            bool mustBeDigged = path::ZPathFinder::CellMustBeDigged(*mWeightedMap, staircasePosition);
-            bool isLocatedInPocket = CountCellSolidNotBlockedNeighbours(staircasePosition) == 5;
-            if (mustBeDigged && isLocatedInPocket) {
-                mMap[staircasePosition.GetX()][staircasePosition.GetY()] = EDungeonCell::DownStaircase;
+            bool mustBeDigged = path::ZPathFinder::CellMustBeDigged(*mWeightedMap, staircase.position);
+            bool isLocatedInPocket = CountCellSolidNotBlockedNeighbours(staircase.position) == 5;
+
+            path::ZWeightedMap nextLevelMapTemplateCopy(nextLevelMapTemplate);
+            ZDirectionalStaircase nextLevelUpStaircase = CalcUpStaircase(staircase.position, staircase.direction);
+            BlockStaircasePocketCells(&nextLevelMapTemplateCopy, nextLevelUpStaircase);
+            path::ZPathFinder::BlockCell(&nextLevelMapTemplateCopy, nextLevelUpStaircase.position);
+            ZDungeonLevel::ZRoom staircaseRoom = CalcRoomNearStaircase(nextLevelUpStaircase, kRoomMinSize, kRoomMaxSize);
+            bool canDigRoom = DigRoomIfAllCellsAreSolidAndNotBlocked(fakeNextLevelMap, &nextLevelMapTemplateCopy, staircaseRoom.minX, staircaseRoom.minY, staircaseRoom.maxX, staircaseRoom.maxY);
+
+            if (mustBeDigged && isLocatedInPocket && canDigRoom) {
+                mMap[staircase.position.GetX()][staircase.position.GetY()] = EDungeonCell::DownStaircase;
                 ++staircasesGeneratedCount;
 
+                nextLevelMapTemplate = nextLevelMapTemplateCopy;
+                mNextLevelStaircaseRooms.push_back(staircaseRoom);
+
                 for (auto& room : distancedRooms) {
-                    int pathSize = path::ZPathFinder::FindPathBetweenCells(*mWeightedMap, staircasePosition, room.someValidCell).size();
+                    int pathSize = path::ZPathFinder::FindPathBetweenCells(*mWeightedMap, staircase.position, room.someValidCell).size();
                     if (pathSize > 0 && pathSize < room.distanceToClosestStaircase) {
                         room.distanceToClosestStaircase = pathSize;
                     }
@@ -295,6 +314,8 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
 
         distancedRooms.pop_back();
     }
+
+    utl::ZMatrix::Deallocate<EDungeonCell::Type>(&fakeNextLevelMap, kDungeonLevelHeight);
 }
 
 const ZDungeonLevelGenerator::ZDirectionalStaircase ZDungeonLevelGenerator::CalcUpStaircase(const ZPosition& downStaircasePosition, const ZDirection& downStaircaseDirection) {
@@ -309,7 +330,7 @@ void ZDungeonLevelGenerator::CalcUpStaircases(const ZDungeonLevel* previousLevel
         for (const auto& downStaircasePosition : previousLevel->GetDownStaircases()) {
             ZDirection downStaircaseDirection = previousLevel->GetStaircaseDirection(downStaircasePosition);
             ZDirectionalStaircase upStaircase = CalcUpStaircase(downStaircasePosition, downStaircaseDirection);
-            
+
             mUpStaircases.emplace_back(upStaircase);
         }
     } else {
@@ -383,11 +404,19 @@ const ZDungeonLevel::ZRoom ZDungeonLevelGenerator::CalcRoomNearStaircase(const Z
     return ZDungeonLevel::ZRoom(minX, minY, maxX, maxY);
 }
 
-void ZDungeonLevelGenerator::DigRoomsNearUpStaircases() {
-    for (const auto& staircase : mUpStaircases) {
-        ZDungeonLevel::ZRoom room = CalcRoomNearStaircase(staircase, kRoomMinSize, kRoomMaxSize);
+void ZDungeonLevelGenerator::DigRoomsNearUpStaircases(const ZDungeonLevel* previousLevel) {
+    ZDungeonLevel::ZRoomList roomList;
+    if (previousLevel) {
+        roomList = previousLevel->GetNextLevelStaircaseRooms();
+    } else {
+        for (const auto& staircase : mUpStaircases) {
+            ZDungeonLevel::ZRoom room = CalcRoomNearStaircase(staircase, kRoomMinSize, kRoomMaxSize);
+            roomList.push_back(room);
+        }
+    }
 
-        bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(mWeightedMap, room.minX, room.minY, room.maxX, room.maxY);
+    for (const auto& room : roomList) {
+        bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(mMap, mWeightedMap, room.minX, room.minY, room.maxX, room.maxY);
         if (roomDigged) {
             mRooms.push_back(room);
         }
@@ -428,7 +457,7 @@ ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previo
 
     CalcUpStaircases(previousLevel);
     BlockUpStaircasesAndTheirPocketCells();
-    DigRoomsNearUpStaircases();
+    DigRoomsNearUpStaircases(previousLevel);
     DigUpStaircases();
 
     BSPTreeNode subDungeonsTreeRoot(0, 0, kDungeonLevelWidth, kDungeonLevelHeight);
@@ -439,10 +468,11 @@ ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previo
     ConnectUpStaircasesWithSomeValidCell(subDungeonsTreeRoot.dungeon.someValidCell);
     AddRandomDownStaircases();
 
-    ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap, mRooms, ZDungeonLevel::ZRoomList());
+    ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap, mRooms, mNextLevelStaircaseRooms);
 
     delete mWeightedMap;
     mRooms.clear();
+    mNextLevelStaircaseRooms.clear();
     mUpStaircases.clear();
 
     return level;
