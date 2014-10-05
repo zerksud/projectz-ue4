@@ -74,7 +74,7 @@ private:
     void DigCellIfSolidAndNotBlocked(path::ZWeightedMap* map, int x, int y);
     bool TryToCreateRoomInsideSubDungeon(SubDungeon* dungeon);
     // returns true if room was successfully digged
-    bool DigRoomIfAllCellsAreSolidAndNotBlocked(int minX, int minY, int maxX, int maxY);
+    bool DigRoomIfAllCellsAreSolidAndNotBlocked(path::ZWeightedMap* map, int minX, int minY, int maxX, int maxY);
 
     void ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell);
 

@@ -129,7 +129,7 @@ bool ZDungeonLevelGenerator::TryToCreateRoomInsideSubDungeon(SubDungeon* subDung
     int roomY1 = subDungeon->y1 + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->GetHeight() - 2 - roomHeight);
     int roomY2 = roomY1 + roomHeight - 1;
 
-    bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(roomX1, roomY1, roomX2, roomY2);
+    bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(mWeightedMap, roomX1, roomY1, roomX2, roomY2);
     if (roomDigged) {
         int someValidCellX = utl::ZRandomHelpers::GetRandomValue(roomX1, roomX2);
         int someValidCellY = utl::ZRandomHelpers::GetRandomValue(roomY1, roomY2);
@@ -141,10 +141,10 @@ bool ZDungeonLevelGenerator::TryToCreateRoomInsideSubDungeon(SubDungeon* subDung
     return roomDigged;
 }
 
-bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(int minX, int minY, int maxX, int maxY) {
+bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(path::ZWeightedMap* map, int minX, int minY, int maxX, int maxY) {
     for (int x = minX - 1; x <= maxX + 1; ++x) {
         for (int y = minY - 1; y <= maxY + 1; ++y) {
-            if (!path::ZPathFinder::CellMustBeDigged(*mWeightedMap, x, y)) {
+            if (!path::ZPathFinder::CellMustBeDigged(*map, x, y)) {
                 return false;
             }
         }
@@ -152,7 +152,7 @@ bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(int minX, in
 
     for (int x = minX; x <= maxX; ++x) {
         for (int y = minY; y <= maxY; ++y) {
-            if (path::ZPathFinder::CellIsBlocked(*mWeightedMap, x, y)) {
+            if (path::ZPathFinder::CellIsBlocked(*map, x, y)) {
                 return false;
             }
         }
@@ -160,7 +160,7 @@ bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(int minX, in
 
     for (int x = minX; x <= maxX; ++x) {
         for (int y = minY; y <= maxY; ++y) {
-            DigCellIfSolidAndNotBlocked(mWeightedMap, x, y);
+            DigCellIfSolidAndNotBlocked(map, x, y);
         }
     }
 
@@ -170,15 +170,15 @@ bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(int minX, in
     // #    #
     // x    x
     // #x##x#
-    path::ZPathFinder::BlockCell(mWeightedMap, minX - 1, minY);
-    path::ZPathFinder::BlockCell(mWeightedMap, maxX + 1, minY);
-    path::ZPathFinder::BlockCell(mWeightedMap, minX - 1, maxY);
-    path::ZPathFinder::BlockCell(mWeightedMap, maxX + 1, maxY);
+    path::ZPathFinder::BlockCell(map, minX - 1, minY);
+    path::ZPathFinder::BlockCell(map, maxX + 1, minY);
+    path::ZPathFinder::BlockCell(map, minX - 1, maxY);
+    path::ZPathFinder::BlockCell(map, maxX + 1, maxY);
 
-    path::ZPathFinder::BlockCell(mWeightedMap, minX, minY - 1);
-    path::ZPathFinder::BlockCell(mWeightedMap, maxX, minY - 1);
-    path::ZPathFinder::BlockCell(mWeightedMap, minX, maxY + 1);
-    path::ZPathFinder::BlockCell(mWeightedMap, maxX, maxY + 1);
+    path::ZPathFinder::BlockCell(map, minX, minY - 1);
+    path::ZPathFinder::BlockCell(map, maxX, minY - 1);
+    path::ZPathFinder::BlockCell(map, minX, maxY + 1);
+    path::ZPathFinder::BlockCell(map, maxX, maxY + 1);
 
     return true;
 }
@@ -387,7 +387,7 @@ void ZDungeonLevelGenerator::DigRoomsNearUpStaircases() {
     for (const auto& staircase : mUpStaircases) {
         ZDungeonLevel::ZRoom room = CalcRoomNearStaircase(staircase, kRoomMinSize, kRoomMaxSize);
 
-        bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(room.minX, room.minY, room.maxX, room.maxY);
+        bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(mWeightedMap, room.minX, room.minY, room.maxX, room.maxY);
         if (roomDigged) {
             mRooms.push_back(room);
         }
