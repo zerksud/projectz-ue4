@@ -40,21 +40,21 @@ struct BSPTreeNode {
     }
 };
 
-void ZDungeonLevelGenerator::DigCellIfSolidAndNotBlocked(const ZPosition& position) {
-    DigCellIfSolidAndNotBlocked(position.GetX(), position.GetY());
+void ZDungeonLevelGenerator::DigCellIfSolidAndNotBlocked(path::ZWeightedMap* map, const ZPosition& position) {
+    DigCellIfSolidAndNotBlocked(map, position.GetX(), position.GetY());
 }
 
-void ZDungeonLevelGenerator::DigCellIfSolidAndNotBlocked(int x, int y) {
-    if (mMap[x][y] == EDungeonCell::SolidRock && !path::ZPathFinder::CellIsBlocked(*mWeightedMap, x, y)) {
+void ZDungeonLevelGenerator::DigCellIfSolidAndNotBlocked(path::ZWeightedMap* map, int x, int y) {
+    if (mMap[x][y] == EDungeonCell::SolidRock && !path::ZPathFinder::CellIsBlocked(*map, x, y)) {
         mMap[x][y] = EDungeonCell::Emptiness;
-        mWeightedMap->SetCellWeight(x, y, path::ZPathFinder::kEmptyCellWeight);
+        map->SetCellWeight(x, y, path::ZPathFinder::kEmptyCellWeight);
     }
 }
 
 void ZDungeonLevelGenerator::ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell) {
     path::ZPathFinder::PathCells path = path::ZPathFinder::FindPathBetweenCells(*mWeightedMap, someCell, anotherCell, true);
     for (auto cell : path) {
-        DigCellIfSolidAndNotBlocked(cell);
+        DigCellIfSolidAndNotBlocked(mWeightedMap, cell);
     }
 }
 
@@ -160,7 +160,7 @@ bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(int minX, in
 
     for (int x = minX; x <= maxX; ++x) {
         for (int y = minY; y <= maxY; ++y) {
-            DigCellIfSolidAndNotBlocked(x, y);
+            DigCellIfSolidAndNotBlocked(mWeightedMap, x, y);
         }
     }
 

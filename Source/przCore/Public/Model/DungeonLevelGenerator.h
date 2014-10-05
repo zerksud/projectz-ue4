@@ -70,8 +70,8 @@ private:
     bool TryToGenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically = true);
     void SplitSubDungeonVertically(BSPTreeNode* rootNode);
     void SplitSubDungeonHorizontally(BSPTreeNode* rootNode);
-    void DigCellIfSolidAndNotBlocked(const ZPosition& position);
-    void DigCellIfSolidAndNotBlocked(int x, int y);
+    void DigCellIfSolidAndNotBlocked(path::ZWeightedMap* map, const ZPosition& position);
+    void DigCellIfSolidAndNotBlocked(path::ZWeightedMap* map, int x, int y);
     bool TryToCreateRoomInsideSubDungeon(SubDungeon* dungeon);
     // returns true if room was successfully digged
     bool DigRoomIfAllCellsAreSolidAndNotBlocked(int minX, int minY, int maxX, int maxY);
