@@ -18,9 +18,7 @@ ZWeightedMap::ZWeightedMap(int width, int height, const ZWeight& defaultCellWeig
 ZWeightedMap::ZWeightedMap(const ZWeightedMap& other)
     : mWidth(other.mWidth),
         mHeight(other.mHeight) {
-    utl::ZMatrix::Allocate(&mCellWeights, mWidth, mHeight);
-
-    std::copy(other.mCellWeights, other.mCellWeights + mWidth * mHeight, mCellWeights);
+    utl::ZMatrix::AllocateAndCopy(&mCellWeights, other.mCellWeights, mWidth, mHeight);
 }
 
 ZWeightedMap::~ZWeightedMap() {
