@@ -80,7 +80,7 @@ private:
 
     void DigRandomTunnels();
     int CountCellSolidNotBlockedNeighbours(const ZPosition& cell) const;
-    static void CalcUpStaircases(const ZDirectionalStaircaseList& previousLevelDownStaircases, ZDirectionalStaircaseList* upStaircases);
+    static const ZDirectionalStaircase CalcUpStaircase(const ZPosition& downStaircasePosition, const ZDirection& downStaircaseDirection);
     void CalcUpStaircases(const ZDungeonLevel* previousLevel = nullptr);
     void BlockStaircasePocketCells(path::ZWeightedMap* weightedMap, const ZDirectionalStaircase& staircase);
     void BlockUpStaircasesAndTheirPocketCells();
