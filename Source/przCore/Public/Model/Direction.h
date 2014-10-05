@@ -23,6 +23,7 @@ enum Type {
 class ZDirection {
 public:
     ZDirection();
+    ZDirection(ETurnDirection::Type direction);
     virtual ~ZDirection() = default;
 
     void Turn(ETurnDirection::Type direction);

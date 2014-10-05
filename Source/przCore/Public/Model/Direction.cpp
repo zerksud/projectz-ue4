@@ -31,8 +31,13 @@ const ZDirection::ZTurnDirectionToAngleMap ZDirection::kTurnDirectionToAngle = {
         {ETurnDirection::BackRight, -135}
 };
 
-ZDirection::ZDirection() {
-    mAngle = 0;
+ZDirection::ZDirection()
+    : mAngle(0) {
+}
+
+ZDirection::ZDirection(ETurnDirection::Type direction)
+    : mAngle(0) {
+    Turn(direction);
 }
 
 void ZDirection::Turn(ETurnDirection::Type direction) {
