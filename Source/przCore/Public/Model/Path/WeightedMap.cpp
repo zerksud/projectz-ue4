@@ -60,6 +60,11 @@ const ZWeight& ZWeightedMap::GetCellWeight(const ZPosition& pos) const {
 }
 
 const ZWeight& ZWeightedMap::GetCellWeight(int x, int y) const {
+    if (x < 0 || x >= mWidth
+        || y < 0 || y >= mHeight) {
+        return ZWeight::kInfinity;
+    }
+
     return mCellWeights[x][y];
 }
 
