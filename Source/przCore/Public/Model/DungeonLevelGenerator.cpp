@@ -197,15 +197,25 @@ bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(EDungeonCell
     // #    #
     // x    x
     // #x##x#
-    path::ZPathFinder::BlockCell(weightedMap, minX - 1, minY);
-    path::ZPathFinder::BlockCell(weightedMap, maxX + 1, minY);
-    path::ZPathFinder::BlockCell(weightedMap, minX - 1, maxY);
-    path::ZPathFinder::BlockCell(weightedMap, maxX + 1, maxY);
+    if (minX > 0) {
+        path::ZPathFinder::BlockCell(weightedMap, minX - 1, minY);
+        path::ZPathFinder::BlockCell(weightedMap, minX - 1, maxY);
+    }
 
-    path::ZPathFinder::BlockCell(weightedMap, minX, minY - 1);
-    path::ZPathFinder::BlockCell(weightedMap, maxX, minY - 1);
-    path::ZPathFinder::BlockCell(weightedMap, minX, maxY + 1);
-    path::ZPathFinder::BlockCell(weightedMap, maxX, maxY + 1);
+    if (maxX < weightedMap->GetWidth() - 1) {
+        path::ZPathFinder::BlockCell(weightedMap, maxX + 1, minY);
+        path::ZPathFinder::BlockCell(weightedMap, maxX + 1, maxY);
+    }
+
+    if (minY > 0) {
+        path::ZPathFinder::BlockCell(weightedMap, minX, minY - 1);
+        path::ZPathFinder::BlockCell(weightedMap, maxX, minY - 1);
+    }
+
+    if (maxY < weightedMap->GetHeight() - 1) {
+        path::ZPathFinder::BlockCell(weightedMap, minX, maxY + 1);
+        path::ZPathFinder::BlockCell(weightedMap, maxX, maxY + 1);
+    }
 
     return true;
 }
