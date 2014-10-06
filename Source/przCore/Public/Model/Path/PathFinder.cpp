@@ -137,7 +137,9 @@ ZPathFinder::PathCells ZPathFinder::FindPathBetweenCells(const ZWeightedMap& map
 
         ZWeightedCell* cell;
         ZPositionDiff diff = ZPositionDiff(-1, 0);
-        if (currentCellPosition.GetX() > 0 && (diggingIsAllowed || !CellMustBeDigged(map, currentCellPosition + diff))) {
+        if (currentCellPosition.GetX() > 0 
+            && (diggingIsAllowed || !CellMustBeDigged(map, currentCellPosition + diff)) 
+            && !CellIsBlocked(map, currentCellPosition + diff)) {
             cell = CreateNextPathCellIfMorePromising(map, *currentCell, diff, finishCellPosition, pathConnections);
             if (cell) {
                 queue.push(cell);
@@ -145,7 +147,9 @@ ZPathFinder::PathCells ZPathFinder::FindPathBetweenCells(const ZWeightedMap& map
         }
 
         diff = ZPositionDiff(1, 0);
-        if (currentCellPosition.GetX() < map.GetWidth() - 1 && (diggingIsAllowed || !CellMustBeDigged(map, currentCellPosition + diff))) {
+        if (currentCellPosition.GetX() < map.GetWidth() - 1 
+            && (diggingIsAllowed || !CellMustBeDigged(map, currentCellPosition + diff))
+            && !CellIsBlocked(map, currentCellPosition + diff)) {
             cell = CreateNextPathCellIfMorePromising(map, *currentCell, diff, finishCellPosition, pathConnections);
             if (cell) {
                 queue.push(cell);
@@ -153,7 +157,9 @@ ZPathFinder::PathCells ZPathFinder::FindPathBetweenCells(const ZWeightedMap& map
         }
 
         diff = ZPositionDiff(0, -1);
-        if (currentCellPosition.GetY() > 0 && (diggingIsAllowed || !CellMustBeDigged(map, currentCellPosition + diff))) {
+        if (currentCellPosition.GetY() > 0 
+            && (diggingIsAllowed || !CellMustBeDigged(map, currentCellPosition + diff))
+            && !CellIsBlocked(map, currentCellPosition + diff)) {
             cell = CreateNextPathCellIfMorePromising(map, *currentCell, diff, finishCellPosition, pathConnections);
             if (cell) {
                 queue.push(cell);
@@ -161,7 +167,9 @@ ZPathFinder::PathCells ZPathFinder::FindPathBetweenCells(const ZWeightedMap& map
         }
 
         diff = ZPositionDiff(0, 1);
-        if (currentCellPosition.GetY() < map.GetHeight() - 1 && (diggingIsAllowed || !CellMustBeDigged(map, currentCellPosition + diff))) {
+        if (currentCellPosition.GetY() < map.GetHeight() - 1 
+            && (diggingIsAllowed || !CellMustBeDigged(map, currentCellPosition + diff))
+            && !CellIsBlocked(map, currentCellPosition + diff)) {
             cell = CreateNextPathCellIfMorePromising(map, *currentCell, diff, finishCellPosition, pathConnections);
             if (cell) {
                 queue.push(cell);
