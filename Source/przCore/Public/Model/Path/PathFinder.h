@@ -23,9 +23,6 @@ public:
 
     static int CalcCellsDistance(const ZPosition& left, const ZPosition& right);
 
-    static bool CellMustBeDigged(const ZWeightedMap& map, const ZPosition& position);
-    static bool CellMustBeDigged(const ZWeightedMap& map, int x, int y);
-
     static void BlockCell(ZWeightedMap* map, const ZPosition& position);
     static void BlockCell(ZWeightedMap* map, int x, int y);
 
@@ -37,6 +34,9 @@ public:
     static PathCells FindPathBetweenCells(const ZWeightedMap& map, const ZPosition& startCellPosition, const ZPosition& finishCellPosition, bool diggingIsAllowed = false);
 
 private:
+    static bool CellMustBeDigged(const ZWeightedMap& map, const ZPosition& position);
+    static bool CellMustBeDigged(const ZWeightedMap& map, int x, int y);
+
     // returns true if path from cell to neighbor is shorter than previous path to that cell
     static ZWeightedCell* ZPathFinder::CreateNextPathCellIfMorePromising(const ZWeightedMap& map, const ZWeightedCell& currentCell, const ZPositionDiff& currentMoveDiff, const ZPosition& finishCellPosition, PathCellConnection** pathConnections);
 };

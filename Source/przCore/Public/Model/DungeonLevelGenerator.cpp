@@ -141,10 +141,18 @@ bool ZDungeonLevelGenerator::TryToCreateRoomInsideSubDungeon(SubDungeon* subDung
     return roomDigged;
 }
 
+bool CellIsSolidRock(EDungeonCell::Type** map, int x, int y) {
+    return map[x][y] == EDungeonCell::SolidRock;
+}
+
+bool CellIsSolidRock(EDungeonCell::Type** map, const ZPosition& position) {
+    return CellIsSolidRock(map, position.GetX(), position.GetY());
+}
+
 bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, int minX, int minY, int maxX, int maxY) {
     for (int x = minX - 1; x <= maxX + 1; ++x) {
         for (int y = minY - 1; y <= maxY + 1; ++y) {
-            if (!path::ZPathFinder::CellMustBeDigged(*weightedMap, x, y)) {
+            if (!CellIsSolidRock(map, x, y)) {
                 return false;
             }
         }
@@ -216,7 +224,7 @@ int ZDungeonLevelGenerator::CountCellSolidNotBlockedNeighbours(const ZPosition& 
             || adjacentCell.GetY() == kDungeonLevelHeight;
 
         if (adjacentCellIsOnBorder
-            || path::ZPathFinder::CellMustBeDigged(*mWeightedMap, adjacentCell) && !path::ZPathFinder::CellIsBlocked(*mWeightedMap, adjacentCell)) {
+            || CellIsSolidRock(mMap, adjacentCell) && !path::ZPathFinder::CellIsBlocked(*mWeightedMap, adjacentCell)) {
             ++count;
         }
     }
@@ -284,7 +292,8 @@ void ZDungeonLevelGenerator::AddRandomDownStaircases() {
         for (int j = 0; j < staircaseVariants.size(); ++j) {
             const ZDirectionalStaircase& staircase = staircaseVariants[j];
 
-            bool mustBeDigged = path::ZPathFinder::CellMustBeDigged(*mWeightedMap, staircase.position);
+            bool mustBeDigged = CellIsSolidRock(mMap, staircase.position);
+            bool isNotBlocked = !path::ZPathFinder::CellIsBlocked(*mWeightedMap, staircase.position);
             bool isLocatedInPocket = CountCellSolidNotBlockedNeighbours(staircase.position) == 5;
 
             path::ZWeightedMap nextLevelMapTemplateCopy(nextLevelMapTemplate);
