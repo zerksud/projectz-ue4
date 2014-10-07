@@ -302,19 +302,19 @@ void ZDungeonLevelGenerator::DigRandomDownStaircases() {
         std::vector<ZDirectionalStaircase> staircaseVariants;
         if (room.minY > kRoomMinSize + 2) {
             ZPosition position(utl::ZRandomHelpers::GetRandomValue(room.minX + 1, room.maxX - 1), room.minY - 1);
-            staircaseVariants.emplace_back(position, ZDirection(ETurnDirection::Left));
+            staircaseVariants.emplace_back(position, ZDirection::kLeft);
         }
         if (room.maxY < kDungeonLevelHeight - 1 - kRoomMinSize - 2) {
             ZPosition position(utl::ZRandomHelpers::GetRandomValue(room.minX + 1, room.maxX - 1), room.maxY + 1);
-            staircaseVariants.emplace_back(position, ZDirection(ETurnDirection::Right));
+            staircaseVariants.emplace_back(position, ZDirection::kRight);
         }
         if (room.minX > kRoomMinSize + 2) {
             ZPosition position(room.minX - 1, utl::ZRandomHelpers::GetRandomValue(room.minY + 1, room.maxY - 1));
-            staircaseVariants.emplace_back(position, ZDirection(ETurnDirection::Back));
+            staircaseVariants.emplace_back(position, ZDirection::kBack);
         }
         if (room.maxX < kDungeonLevelWidth - 1 - kRoomMinSize - 2) {
             ZPosition position(room.maxX + 1, utl::ZRandomHelpers::GetRandomValue(room.minY + 1, room.maxY - 1));
-            staircaseVariants.emplace_back(position, ZDirection());
+            staircaseVariants.emplace_back(position, ZDirection::kForward);
         }
         std::shuffle(staircaseVariants.begin(), staircaseVariants.end(), std::default_random_engine());
 
