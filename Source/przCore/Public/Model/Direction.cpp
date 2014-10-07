@@ -10,6 +10,11 @@ namespace prz {
 namespace mdl {
 const double ZDirection::kPi = 3.14159265359;
 
+const ZDirection ZDirection::kForward;
+const ZDirection ZDirection::kLeft(ETurnDirection::Left);
+const ZDirection ZDirection::kRight(ETurnDirection::Right);
+const ZDirection ZDirection::kBack(ETurnDirection::Back);
+
 const ZDirection::ZPredictedMovesMap ZDirection::kPredictedMoves = {
         {0, ZPositionDiff(1.0f, 0.0f)},
         {45, ZPositionDiff(1.0f, -1.0f)},

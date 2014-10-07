@@ -22,6 +22,11 @@ enum Type {
 
 class ZDirection {
 public:
+    static const ZDirection kForward;
+    static const ZDirection kLeft;
+    static const ZDirection kRight;
+    static const ZDirection kBack;
+
     ZDirection();
     ZDirection(ETurnDirection::Type direction);
     virtual ~ZDirection() = default;
