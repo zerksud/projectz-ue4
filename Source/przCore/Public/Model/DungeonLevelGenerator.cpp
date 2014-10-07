@@ -267,7 +267,7 @@ struct DistancedRoom {
     int distanceToClosestStaircase;
 };
 
-void ZDungeonLevelGenerator::AddRandomDownStaircases() {
+void ZDungeonLevelGenerator::DigRandomDownStaircases() {
     const int staircasesToBeGeneratedCount = std::min(kStaircaseCount, (int)mRooms.size());
     int staircasesGeneratedCount = 0;
 
@@ -504,7 +504,7 @@ ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previo
 
     DigRandomTunnels();
     ConnectUpStaircasesWithSomeValidCell(subDungeonsTreeRoot.dungeon.someValidCell);
-    AddRandomDownStaircases();
+    DigRandomDownStaircases();
 
     ZDungeonLevel* level = new ZDungeonLevel(kDungeonLevelWidth, kDungeonLevelHeight, &mMap, mRooms, mNextLevelStaircaseRooms);
 

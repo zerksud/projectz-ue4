@@ -92,7 +92,7 @@ private:
     void DigRoomsNearUpStaircases(const ZDungeonLevel* previousLevel);
     void DigUpStaircases();
     void ConnectUpStaircasesWithSomeValidCell(const ZPosition& someValidCell);
-    void AddRandomDownStaircases();
+    void DigRandomDownStaircases();
 
     EDungeonCell::Type** mMap;
     path::ZWeightedMap* mWeightedMap;
