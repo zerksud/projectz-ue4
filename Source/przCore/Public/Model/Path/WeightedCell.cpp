@@ -6,7 +6,9 @@ namespace mdl {
 namespace path {
 
 const int ZWeight::kInfiniteWeight = -1;
-const ZWeight ZWeight::kInfinity = ZWeight(ZWeight::kInfiniteWeight);
+
+const ZWeight ZWeight::kInfinity(ZWeight::kInfiniteWeight);
+const ZWeight ZWeight::kZero(0);
 
 ZWeight::ZWeight()
     : mValue(kInfiniteWeight) {

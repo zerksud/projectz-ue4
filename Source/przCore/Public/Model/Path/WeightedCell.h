@@ -9,6 +9,7 @@ namespace path {
 class ZWeight {
 public:
     static const ZWeight kInfinity;
+    static const ZWeight kZero;
 
     ZWeight();
     ZWeight(int value);
