@@ -9,6 +9,7 @@
 
 #include "Utils/MatrixHelpers.h"
 #include "Utils/RandomHelpers.h"
+#include "Utils/LOG_ANSI.h"
 
 namespace prz {
 namespace mdl {
@@ -292,6 +293,8 @@ void ZDungeonLevelGenerator::DigRandomDownStaircases() {
     utl::ZMatrix::Allocate(&fakeNextLevelMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
 
     while (distancedRooms.size() > 0 && staircasesGeneratedCount < staircasesToBeGeneratedCount) {
+        LOGD("got %d staircases, %d more to get", staircasesGeneratedCount, staircasesToBeGeneratedCount - staircasesGeneratedCount);
+
         std::sort(distancedRooms.begin(), distancedRooms.end(), [](DistancedRoom left, DistancedRoom right) {
             return left.distanceToClosestStaircase < right.distanceToClosestStaircase;
         });
@@ -326,11 +329,21 @@ void ZDungeonLevelGenerator::DigRandomDownStaircases() {
             bool isLocatedInPocket = CountCellSolidNotBlockedNeighbours(staircase.position) == 5;
 
             path::ZWeightedMap nextLevelMapTemplateCopy(nextLevelMapTemplate);
+            LOGD("current map without new staircase:\n%s", nextLevelMapTemplateCopy.ToString().c_str());
+
             ZDirectionalStaircase nextLevelUpStaircase = CalcUpStaircase(staircase.position, staircase.direction);
             BlockStaircasePocketCells(&nextLevelMapTemplateCopy, nextLevelUpStaircase);
+            LOGD("blocked new staircase pocket:\n%s", nextLevelMapTemplateCopy.ToString().c_str());
+
             path::ZPathFinder::BlockCell(&nextLevelMapTemplateCopy, nextLevelUpStaircase.position);
+
             ZDungeonLevel::ZRoom staircaseRoom = CalcRoomNearStaircase(nextLevelUpStaircase, kRoomMinSize, kRoomMaxSize);
             bool canDigRoom = DigRoomIfAllCellsAreSolidAndNotBlocked(fakeNextLevelMap, &nextLevelMapTemplateCopy, staircaseRoom.minX, staircaseRoom.minY, staircaseRoom.maxX, staircaseRoom.maxY);
+            if (canDigRoom) {
+                LOGD("map with new staircase room:\n%s", nextLevelMapTemplateCopy.ToString().c_str());
+            }
+
+            LOGD("mustBeDigged = %d; isLocatedInPocket = %d; canDigRoom = %d", mustBeDigged, isLocatedInPocket, canDigRoom);
 
             if (mustBeDigged && isLocatedInPocket && canDigRoom) {
                 mMap[staircase.position.GetX()][staircase.position.GetY()] = EDungeonCell::DownStaircase;
