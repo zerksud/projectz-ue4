@@ -230,7 +230,7 @@ void ZDungeonLevelGenerator::DigRandomTunnels() {
     }
 }
 
-int ZDungeonLevelGenerator::CountCellSolidNotBlockedNeighbours(const ZPosition& cell) const {
+int ZDungeonLevelGenerator::CountCellSolidNeighbours(const ZPosition& cell) const {
     static const ETurnDirection::Type adjacentCellsDirections[] = {
         ETurnDirection::BackLeft,
         ETurnDirection::Left,
@@ -254,7 +254,7 @@ int ZDungeonLevelGenerator::CountCellSolidNotBlockedNeighbours(const ZPosition& 
             || adjacentCell.GetY() == kDungeonLevelHeight;
 
         if (adjacentCellIsOnBorder
-            || CellIsSolidRock(mMap, adjacentCell) && !path::ZPathFinder::CellIsBlocked(*mWeightedMap, adjacentCell)) {
+                || CellIsSolidRock(mMap, adjacentCell)) {
             ++count;
         }
     }
@@ -326,7 +326,7 @@ void ZDungeonLevelGenerator::DigRandomDownStaircases() {
 
             bool mustBeDigged = CellIsSolidRock(mMap, staircase.position);
             bool isNotBlocked = !path::ZPathFinder::CellIsBlocked(*mWeightedMap, staircase.position);
-            bool isLocatedInPocket = CountCellSolidNotBlockedNeighbours(staircase.position) == 5;
+            bool isLocatedInPocket = CountCellSolidNeighbours(staircase.position) == 5;
 
             path::ZWeightedMap nextLevelMapTemplateCopy(nextLevelMapTemplate);
             LOGD("current map without new staircase:\n%s", nextLevelMapTemplateCopy.ToString().c_str());
