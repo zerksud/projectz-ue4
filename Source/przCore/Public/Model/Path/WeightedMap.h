@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "Model/Path/WeightedCell.h"
 #include "Model/Position.h"
 
@@ -25,6 +27,8 @@ public:
 
     const ZWeight& GetCellWeight(const ZPosition& pos) const;
     const ZWeight& GetCellWeight(int x, int y) const;
+
+    const std::string ToString() const;
 
 private:
     int mWidth;

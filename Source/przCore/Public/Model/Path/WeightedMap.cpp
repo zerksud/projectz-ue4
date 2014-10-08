@@ -2,6 +2,7 @@
 #include "Model/Path/WeightedMap.h"
 
 #include <algorithm>
+#include <sstream>
 
 #include "Utils/MatrixHelpers.h"
 
@@ -66,6 +67,32 @@ const ZWeight& ZWeightedMap::GetCellWeight(int x, int y) const {
     }
 
     return mCellWeights[x][y];
+}
+
+char GetWeightChar(const ZWeight& weight) {
+    static const char kZeroWeight = '.';
+    static const char kInfinityWeight = 'x';
+    static const char kPositiveWeight = '#';
+
+    if (weight == ZWeight::kZero) {
+        return kZeroWeight;
+    } else if (weight == ZWeight::kInfinity) {
+        return kInfinityWeight;
+    } 
+    
+    return kPositiveWeight;
+}
+
+const std::string ZWeightedMap::ToString() const {
+    std::stringstream ss;
+    for (int x = mWidth - 1; x >= 0; --x) {
+        for (int y = 0; y < mHeight; ++y) {
+            ss << GetWeightChar(mCellWeights[x][y]);
+        }
+        ss << std::endl;
+    }
+
+    return ss.str();
 }
 
 }
