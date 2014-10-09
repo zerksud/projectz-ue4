@@ -25,7 +25,7 @@ void initializeServices() {
     ILogger* loggerService = new ZLogger();
 
     loggerService->SetLogCallback([](ELogVerbosity::Type verbosity, const FString& message) {
-        if (GEngine) {
+        if (GEngine && verbosity < ELogVerbosity::VeryVerbose) {
             GEngine->AddOnScreenDebugMessage(-1, 5.0f, (verbosity == ELogVerbosity::Error) ? FColor::Red : FColor::Yellow, message);
         }
     });
