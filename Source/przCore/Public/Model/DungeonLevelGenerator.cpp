@@ -155,22 +155,28 @@ bool ZDungeonLevelGenerator::CellIsSolidRock(EDungeonCell::Type** map, const ZPo
     return CellIsSolidRock(map, position.GetX(), position.GetY());
 }
 
+void PushBackValidWallCells(std::vector<ZPosition>* wallCells, int roomMinX, int roomMinY, int roomMaxX, int roomMaxY) {
+    int x;
+    int y = roomMinY - 1;
+    for (x = roomMinX - 1; x <= roomMaxX + 1; ++x) {
+        wallCells->emplace_back(x, y);
+    }
+    for (y = roomMinY; y <= roomMaxY + 1; ++y) {
+        wallCells->emplace_back(x, y);
+    }
+    for (x = roomMaxX; x >= roomMinX - 1; --x) {
+        wallCells->emplace_back(x, y);
+    }
+    for (y = roomMaxY; y >= roomMinY; --y) {
+        wallCells->emplace_back(x, y);
+    }
+}
+
 bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, int minX, int minY, int maxX, int maxY) {
     std::vector<ZPosition> wallCells;
-    int x;
-    int y = minY - 1;
-    for (x = minX - 1; x <= maxX + 1; ++x) {
-        wallCells.emplace_back(x, y);
-    }
-    for (y = minY; y <= maxY + 1; ++y) {
-        wallCells.emplace_back(x, y);
-    }
-    for (x = maxX; x >= minX - 1; --x) {
-        wallCells.emplace_back(x, y);
-    }
-    for (y = maxY; y >= minY; --y) {
-        wallCells.emplace_back(x, y);
-    }
+    PushBackValidWallCells(&wallCells, minX, minY, maxX, maxY);
+    PushBackValidWallCells(&wallCells, minX - 1, minY - 1, maxX + 1, maxY + 1);
+
     for (auto& cellPosition : wallCells) {
         if (!CellIsSolidRock(map, cellPosition)) {
             return false;
