@@ -88,7 +88,7 @@ private:
     void BlockStaircasePocketCells(path::ZWeightedMap* weightedMap, const ZDirectionalStaircase& staircase);
     void BlockUpStaircasesAndTheirPocketCells();
     static ZPosition CropPositionInsideLevel(const ZPosition& position);
-    static const ZDungeonLevel::ZRoom CalcRoomNearStaircase(const ZDirectionalStaircase& staircase, int minSize, int maxSize);
+    static bool TryToCalcRoomNearStaircase(const ZDirectionalStaircase& staircase, int minSize, int maxSize, ZDungeonLevel::ZRoom* room);
     void DigRoomsNearUpStaircases(const ZDungeonLevel* previousLevel);
     void DigUpStaircases();
     void ConnectUpStaircasesWithSomeValidCell(const ZPosition& someValidCell);
