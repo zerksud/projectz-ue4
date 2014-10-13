@@ -32,9 +32,7 @@ template<typename T>
 void AllocateAndCopy(T*** dst, T const * const * src, unsigned int width, unsigned int height) {
     Allocate(dst, width, height);
     for (unsigned int i = 0; i < height; ++i) {
-        for (unsigned int j = 0; j < width; ++j) {
-            (*dst)[i][j] = src[i][j];
-        }
+        memcpy((*dst)[i], src[i], width * sizeof(T));
     }
 }
 
