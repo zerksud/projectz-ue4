@@ -38,7 +38,7 @@ private:
     static bool CellMustBeDigged(const ZWeightedMap& map, int x, int y);
 
     // returns true if path from cell to neighbor is shorter than previous path to that cell
-    static ZWeightedCell* ZPathFinder::CreateNextPathCellIfMorePromising(const ZWeightedMap& map, const ZWeightedCell& currentCell, const ZPositionDiff& currentMoveDiff, const ZPosition& finishCellPosition, PathCellConnection** pathConnections);
+    static ZWeightedCell* CreateNextPathCellIfMorePromising(const ZWeightedMap& map, const ZWeightedCell& currentCell, const ZPositionDiff& currentMoveDiff, const ZPosition& finishCellPosition, PathCellConnection** pathConnections);
 };
 
 }
