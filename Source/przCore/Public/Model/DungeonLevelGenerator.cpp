@@ -130,13 +130,12 @@ bool ZDungeonLevelGenerator::TryToCreateRoomInsideSubDungeon(SubDungeon* subDung
     int roomY1 = subDungeon->y1 + utl::ZRandomHelpers::GetRandomValue(1, subDungeon->GetHeight() - 2 - roomHeight);
     int roomY2 = roomY1 + roomHeight - 1;
 
+    ZDungeonLevel::ZRoom room(roomX1, roomY1, roomX2, roomY2);
+
     bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(mMap, mWeightedMap, roomX1, roomY1, roomX2, roomY2);
     if (roomDigged) {
-        int someValidCellX = utl::ZRandomHelpers::GetRandomValue(roomX1, roomX2);
-        int someValidCellY = utl::ZRandomHelpers::GetRandomValue(roomY1, roomY2);
-        ZPosition someValidCell = ZPosition(someValidCellX, someValidCellY);
-        *subDungeon = SubDungeon(roomX1, roomY1, roomX2, roomY2, someValidCell);
-        mRooms.emplace_back(roomX1, roomY1, roomX2, roomY2);
+        *subDungeon = SubDungeon(roomX1, roomY1, roomX2, roomY2, room.GetRandomCell());
+        mRooms.push_back(room);
     }
 
     return roomDigged;
