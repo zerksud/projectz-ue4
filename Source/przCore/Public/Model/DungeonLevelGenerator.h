@@ -77,7 +77,7 @@ private:
     static bool CellIsSolidRock(EDungeonCell::Type** map, const ZPosition& position);
 
     // returns true if room was successfully digged
-    static bool DigRoomIfAllCellsAreSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, int minX, int minY, int maxX, int maxY);
+    static bool DigRoomIfAllCellsAreSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, const ZDungeonLevel::ZRoom& room);
 
     void ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell);
 

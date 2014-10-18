@@ -132,7 +132,7 @@ bool ZDungeonLevelGenerator::TryToCreateRoomInsideSubDungeon(SubDungeon* subDung
 
     ZDungeonLevel::ZRoom room(roomX1, roomY1, roomX2, roomY2);
 
-    bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(mMap, mWeightedMap, roomX1, roomY1, roomX2, roomY2);
+    bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(mMap, mWeightedMap, room);
     if (roomDigged) {
         *subDungeon = SubDungeon(roomX1, roomY1, roomX2, roomY2, room.GetRandomCell());
         mRooms.push_back(room);
@@ -171,7 +171,12 @@ void PushBackValidWallCells(std::vector<ZPosition>* wallCells, int roomMinX, int
     }
 }
 
-bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, int minX, int minY, int maxX, int maxY) {
+bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, const ZDungeonLevel::ZRoom& room) {
+    int minX = room.minX;
+    int maxX = room.maxX;
+    int minY = room.minY;
+    int maxY = room.maxY;
+
     std::vector<ZPosition> wallCells;
     PushBackValidWallCells(&wallCells, minX, minY, maxX, maxY);
     PushBackValidWallCells(&wallCells, minX - 1, minY - 1, maxX + 1, maxY + 1);
@@ -348,7 +353,7 @@ void ZDungeonLevelGenerator::DigRandomDownStaircases() {
                 LOGD("cant calc room near staircase");
                 continue;
             }
-            bool canDigRoom = DigRoomIfAllCellsAreSolidAndNotBlocked(fakeNextLevelMap, &nextLevelMapTemplateCopy, staircaseRoom.minX, staircaseRoom.minY, staircaseRoom.maxX, staircaseRoom.maxY);
+            bool canDigRoom = DigRoomIfAllCellsAreSolidAndNotBlocked(fakeNextLevelMap, &nextLevelMapTemplateCopy, staircaseRoom);
             if (canDigRoom) {
                 LOGD("map with new staircase room:\n%s", nextLevelMapTemplateCopy.ToString().c_str());
             }
@@ -492,7 +497,7 @@ void ZDungeonLevelGenerator::DigRoomsNearUpStaircases(const ZDungeonLevel* previ
     }
 
     for (const auto& room : roomList) {
-        bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(mMap, mWeightedMap, room.minX, room.minY, room.maxX, room.maxY);
+        bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(mMap, mWeightedMap, room);
         if (roomDigged) {
             mRooms.push_back(room);
         }
