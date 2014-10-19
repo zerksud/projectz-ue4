@@ -34,8 +34,6 @@ struct SubDungeon {
     }
 };
 
-typedef std::vector<SubDungeon> DungeonRooms;
-
 struct PathCellConnection;
 
 class ZDungeonLevelGenerator : public IDungeonLevelGenerator {
