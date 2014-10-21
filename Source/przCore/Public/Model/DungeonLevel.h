@@ -30,20 +30,27 @@ enum Type {
 };
 }
 
+struct ZBounds {
+    int minX;
+    int minY;
+    int maxX;
+    int maxY;
+
+    ZBounds(int pMinX, int pMinY, int pMaxX, int pMaxY)
+        : minX(pMinX),
+        minY(pMinY),
+        maxX(pMaxX),
+        maxY(pMaxY) {
+    }
+};
+
 class ZDungeonLevel {
 public:
-    struct ZRoom {
-        int minX;
-        int minY;
-        int maxX;
-        int maxY;
+    struct ZRoom : public ZBounds {
         ZPosition center;
 
         ZRoom(int pMinX, int pMinY, int pMaxX, int pMaxY)
-            : minX(pMinX),
-            minY(pMinY),
-            maxX(pMaxX),
-            maxY(pMaxY),
+            : ZBounds(pMinX, pMinY, pMaxX, pMaxY),
             center((pMinX + pMaxX) / 2, (pMinY + pMaxY) / 2) {
         }
 
