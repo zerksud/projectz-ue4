@@ -25,6 +25,29 @@ const float ZDungeonLevelGenerator::kRoomCountFractionToDigRandomTunnelsFrom = 0
 
 const int ZDungeonLevelGenerator::kStaircaseCount = 3;
 
+struct SubDungeon : public ZBounds {
+
+    ZPosition someValidCell;
+
+    SubDungeon(int pMinX, int pMinY, int pMaxX, int pMaxY)
+        : ZBounds(pMinX, pMinY, pMaxX, pMaxY),
+        someValidCell(-1, -1) {
+    }
+
+    SubDungeon(int pMinX, int pMinY, int pMaxX, int pMaxY, const ZPosition& pSomeValidCell)
+        : ZBounds(pMinX, pMinY, pMaxX, pMaxY),
+        someValidCell(pSomeValidCell) {
+    }
+
+    int GetWidth() {
+        return (maxX - minX + 1);
+    }
+
+    int GetHeight() {
+        return (maxY - minY + 1);
+    }
+};
+
 struct BSPTreeNode {
     SubDungeon dungeon;
 
