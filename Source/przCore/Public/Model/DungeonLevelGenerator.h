@@ -9,28 +9,26 @@ namespace mdl {
 
 struct BSPTreeNode;
 
-struct SubDungeon {
-    int x1;
-    int y1;
-    int x2;
-    int y2;
+struct SubDungeon : public ZBounds {
 
     ZPosition someValidCell;
 
-    SubDungeon(int pX1, int pY1, int pX2, int pY2)
-        : x1(pX1), y1(pY1), x2(pX2), y2(pY2), someValidCell(-1, -1) {
+    SubDungeon(int pMinX, int pMinY, int pMaxX, int pMaxY)
+        : ZBounds(pMinX, pMinY, pMaxX, pMaxY),
+        someValidCell(-1, -1) {
     }
 
-    SubDungeon(int pX1, int pY1, int pX2, int pY2, const ZPosition& pSomeValidCell)
-        : x1(pX1), y1(pY1), x2(pX2), y2(pY2), someValidCell(pSomeValidCell) {
+    SubDungeon(int pMinX, int pMinY, int pMaxX, int pMaxY, const ZPosition& pSomeValidCell)
+        : ZBounds(pMinX, pMinY, pMaxX, pMaxY),
+        someValidCell(pSomeValidCell) {
     }
 
     int GetWidth() {
-        return (x2 - x1 + 1);
+        return (maxX - minX + 1);
     }
 
     int GetHeight() {
-        return (y2 - y1 + 1);
+        return (maxY - minY + 1);
     }
 };
 
