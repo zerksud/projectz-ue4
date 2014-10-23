@@ -149,7 +149,7 @@ bool ZDungeonLevelGenerator::TryToCreateRoomInsideSubDungeon(SubDungeon* subDung
 
     bool roomDigged = DigRoomIfAllCellsAreSolidAndNotBlocked(mMap, mWeightedMap, room);
     if (roomDigged) {
-        *subDungeon = SubDungeon(roomMinX, roomMinY, roomMaxX, roomMaxY, room.GetRandomCell());
+        subDungeon->someValidCell = room.GetRandomCell();
         mRooms.push_back(room);
     }
 
