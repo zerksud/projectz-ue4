@@ -12,6 +12,7 @@
 	],
 	"TargetPlatforms": [
 		"WindowsNoEditor",
-		"Android"
+		"Android",
+		"LinuxNoEditor"
 	]
 }
