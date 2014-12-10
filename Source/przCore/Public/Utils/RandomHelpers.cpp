@@ -8,7 +8,7 @@ namespace prz {
 namespace utl {
 
 void ZRandomHelpers::Initialize() {
-    std::srand(std::time(0));
+    std::srand(static_cast<unsigned int>(std::time(0)));
 }
 
 bool ZRandomHelpers::FlipCoin() {
