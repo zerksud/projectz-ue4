@@ -3,5 +3,6 @@
 
 const FName FNavigationStyle::TypeName = TEXT("FNavigationStyle");
 
-UNavigationWidgetStyle::UNavigationWidgetStyle(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP) {
+UNavigationWidgetStyle::UNavigationWidgetStyle(const FObjectInitializer& ObjectInitializer)
+    : Super(ObjectInitializer) {
 }

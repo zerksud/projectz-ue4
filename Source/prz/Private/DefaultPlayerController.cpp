@@ -10,8 +10,8 @@
 
 #include "Model/PlayerNavigation.h"
 
-ADefaultPlayerController::ADefaultPlayerController(const class FPostConstructInitializeProperties& PCIP)
-: Super(PCIP) {
+ADefaultPlayerController::ADefaultPlayerController(const FObjectInitializer& ObjectInitializer)
+    : Super(ObjectInitializer) {
     bShowMouseCursor = 1;
     bEnableClickEvents = 1;
 }

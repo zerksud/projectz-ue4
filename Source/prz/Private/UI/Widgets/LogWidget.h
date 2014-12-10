@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Slate.h"
+#include "SlateBasics.h"
 
 class SLogWidget : public SCompoundWidget {
     SLATE_BEGIN_ARGS(SLogWidget) {

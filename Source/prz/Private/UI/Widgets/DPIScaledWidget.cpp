@@ -1,6 +1,8 @@
 #include "prz.h"
 #include "UI/Widgets/DPIScaledWidget.h"
 
+#include "Widgets/Layout/SDPIScaler.h"
+
 #include "Utils/LOG_ANSI.h"
 
 void SDPIScaledWidget::Construct(const FArguments& InArgs) {

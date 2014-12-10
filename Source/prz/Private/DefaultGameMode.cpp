@@ -12,8 +12,8 @@
 
 #include "Model/Game.h"
 
-ADefaultGameMode::ADefaultGameMode(const class FPostConstructInitializeProperties& PCIP)
-: Super(PCIP) {
+ADefaultGameMode::ADefaultGameMode(const FObjectInitializer& ObjectInitializer)
+    : Super(ObjectInitializer) {
     DefaultPawnClass = ADefaultPlayerCharacter::StaticClass();
     PlayerControllerClass = ADefaultPlayerController::StaticClass();
     HUDClass = ADefaultHUD::StaticClass();

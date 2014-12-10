@@ -3,5 +3,6 @@
 
 const FName FMinimapStyle::TypeName = TEXT("FMinimapStyle");
 
-UMinimapWidgetStyle::UMinimapWidgetStyle(const class FPostConstructInitializeProperties& PCIP) : Super(PCIP) {
+UMinimapWidgetStyle::UMinimapWidgetStyle(const FObjectInitializer& ObjectInitializer)
+    : Super(ObjectInitializer) {
 }

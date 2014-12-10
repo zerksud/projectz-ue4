@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Slate.h"
+#include "SlateBasics.h"
 
 class SDPIScaledWidget : public SCompoundWidget {
     SLATE_BEGIN_ARGS(SDPIScaledWidget) {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Slate.h"
+#include "SlateBasics.h"
 
 class SNavigationWidget : public SCompoundWidget {
     SLATE_BEGIN_ARGS(SNavigationWidget) {

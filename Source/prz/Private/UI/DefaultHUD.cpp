@@ -11,8 +11,8 @@
 #include "Utils/Services.h"
 #include "Model/IGame.h"
 
-ADefaultHUD::ADefaultHUD(const class FPostConstructInitializeProperties& PCIP)
-: Super(PCIP) {
+ADefaultHUD::ADefaultHUD(const FObjectInitializer& ObjectInitializer)
+: Super(ObjectInitializer) {
 }
 
 void ADefaultHUD::BeginPlay() {

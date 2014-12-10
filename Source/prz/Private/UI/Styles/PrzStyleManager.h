@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Slate.h"
+#include "SlateBasics.h"
 
 class FPrzStyleManager {
 public:
