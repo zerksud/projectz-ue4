@@ -20,9 +20,7 @@ ADefaultGameMode::ADefaultGameMode(const FObjectInitializer& ObjectInitializer)
 }
 
 void initializeServices() {
-    using namespace prz::utl;
-
-    ILogger* loggerService = new ZLogger();
+    prz::utl::ILogger* loggerService = new prz::utl::ZLogger();
 
     loggerService->SetLogCallback([](ELogVerbosity::Type verbosity, const FString& message) {
         if (GEngine && verbosity < ELogVerbosity::VeryVerbose) {

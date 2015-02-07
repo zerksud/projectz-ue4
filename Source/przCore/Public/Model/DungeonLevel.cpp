@@ -57,8 +57,6 @@ void ZDungeonLevel::ParseMap(EDungeonCell::Type*** map) {
 }
 
 ZDungeonLevel::~ZDungeonLevel() {
-    using namespace utl;
-
     for (auto& pair : mMonsterList) {
         delete pair.second;
     }

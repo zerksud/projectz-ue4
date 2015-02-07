@@ -72,9 +72,7 @@ void SNavigationWidget::Construct(const FArguments& InArgs) {
 }
 
 FReply SNavigationWidget::OnButtonClicked(int32 notificationIndex) {
-    using namespace prz::utl;
-
-    INotificationCenter* nc = GET_SERVICE(prz::utl::INotificationCenter);
+    prz::utl::INotificationCenter* nc = GET_SERVICE(prz::utl::INotificationCenter);
     nc->PostNotification(kNotificationNames[notificationIndex]);
 
     return FReply::Handled();
