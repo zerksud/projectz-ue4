@@ -64,7 +64,5 @@ int32 SMinimapWidget::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedG
 }
 
 void SMinimapWidget::SetMinimap(const prz::mdl::ZMinimap& minimap) {
-    using namespace prz::mdl;
-
-    mMinimap = TSharedPtr<ZMinimap>(new ZMinimap(minimap));
+    mMinimap = TSharedPtr<prz::mdl::ZMinimap>(new prz::mdl::ZMinimap(minimap));
 }

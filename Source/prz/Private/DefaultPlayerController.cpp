@@ -42,10 +42,9 @@ void ADefaultPlayerController::SetupInputComponent() {
 }
 
 void ADefaultPlayerController::SetupObservers() {
-    using namespace prz::utl;
-    using namespace prz::mdl;
+    using prz::mdl::ZPlayerNavigation;
 
-    INotificationCenter* nc = GET_SERVICE(prz::utl::INotificationCenter);
+    prz::utl::INotificationCenter* nc = GET_SERVICE(prz::utl::INotificationCenter);
     if (nc) {
         std::map<std::string, FMethodNoParamsPtr> notificationMethodMap = {
             {ZPlayerNavigation::kTurnLeftNotification, &ADefaultPlayerController::TurnLeft},
@@ -58,7 +57,7 @@ void ADefaultPlayerController::SetupObservers() {
 
         for (auto& pair : notificationMethodMap) {
             FMethodNoParamsPtr method = pair.second;
-            nc->AddObserver(pair.first, this, [this, method](const ZDictionary& dict) {
+            nc->AddObserver(pair.first, this, [this, method](const prz::utl::ZDictionary& dict) {
                 (this->*method)();
             });
         }
