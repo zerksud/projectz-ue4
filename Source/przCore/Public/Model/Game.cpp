@@ -1,7 +1,7 @@
 #include "przCorePCH.h"
 #include "Model/Game.h"
 
-#include "Utils/LOG_ANSI.h"
+#include "Utils/LOG.h"
 #include "Utils/MatrixHelpers.h"
 #include "Utils/StringHelpers.h"
 

@@ -27,16 +27,6 @@ FString ZLogger::FormatUserMessage(const ANSICHAR* fileName, int32 lineNum, cons
     return logMessage;
 }
 
-void ZLogger::Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const {
-    const FString logMessage = FormatUserMessage(fileName, lineNum, *userMessage);
-
-    FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, *logMessage);
-
-    if (mLogCallback) {
-        mLogCallback(verbosity, userMessage);
-    }
-}
-
 void ZLogger::Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const ANSICHAR* format, ...) const {
     va_list args;
     va_start(args, format);
@@ -53,7 +43,13 @@ void ZLogger::Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32
     vsprintf(userMessage, format, args);
     va_end(args);
 
-    Log(verbosity, fileName, lineNum, ANSI_TO_TCHAR(userMessage));
+    const FString logMessage = FormatUserMessage(fileName, lineNum, ANSI_TO_TCHAR(userMessage));
+
+    FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, *logMessage);
+
+    if (mLogCallback) {
+        mLogCallback(verbosity, userMessage);
+    }
 
     delete[] userMessage;
 }

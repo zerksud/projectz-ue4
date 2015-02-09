@@ -1,7 +1,7 @@
 #include "przCorePCH.h"
 #include "Model/GameLog.h"
 
-#include "Utils/LOG_ANSI.h"
+#include "Utils/LOG.h"
 #include "Utils/StringHelpers.h"
 
 namespace prz {

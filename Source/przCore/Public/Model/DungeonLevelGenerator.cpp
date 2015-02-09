@@ -9,7 +9,7 @@
 
 #include "Utils/MatrixHelpers.h"
 #include "Utils/RandomHelpers.h"
-#include "Utils/LOG_ANSI.h"
+#include "Utils/LOG.h"
 
 namespace prz {
 namespace mdl {

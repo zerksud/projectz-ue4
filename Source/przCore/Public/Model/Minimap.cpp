@@ -1,7 +1,7 @@
 #include "przCorePCH.h"
 #include "Model/Minimap.h"
 
-#include "Utils/LOG_ANSI.h"
+#include "Utils/LOG.h"
 #include "Utils/MatrixHelpers.h"
 
 namespace prz {

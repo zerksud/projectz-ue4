@@ -4,7 +4,7 @@
 #include <cmath>
 
 #include "Model/Direction.h"
-#include "Utils/LOG_ANSI.h"
+#include "Utils/LOG.h"
 
 namespace prz {
 namespace mdl {

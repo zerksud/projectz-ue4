@@ -10,7 +10,6 @@ public:
     ZLogger() = default;
     virtual ~ZLogger() = default;
 
-    virtual void Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const FString userMessage) const override;
     virtual void Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const ANSICHAR* format, ...) const override;
     virtual void SetLogCallback(ZLogCallback callback) override;
 

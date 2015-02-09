@@ -3,7 +3,7 @@
 
 #include "Widgets/Layout/SDPIScaler.h"
 
-#include "Utils/LOG_ANSI.h"
+#include "Utils/LOG.h"
 
 void SDPIScaledWidget::Construct(const FArguments& InArgs) {
     OwnerHUD = InArgs._OwnerHUD;

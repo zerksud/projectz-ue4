@@ -3,14 +3,8 @@
 #include "Utils/ILogger.h"
 #include "Utils/Services.h"
 
-#define LOGD(format, ...) \
-    (GET_SERVICE(prz::utl::ILogger)->Log(ELogVerbosity::VeryVerbose, __FILE__, __LINE__, FString::Printf(ANSI_TO_TCHAR(format), ##__VA_ARGS__)))
-
-#define LOGE(format, ...) \
-    (GET_SERVICE(prz::utl::ILogger)->Log(ELogVerbosity::Error, __FILE__, __LINE__, FString::Printf(ANSI_TO_TCHAR(format), ##__VA_ARGS__)))
-
-#define LOGD_ANSI(...) \
+#define LOGD(...) \
     (GET_SERVICE(prz::utl::ILogger)->Log(ELogVerbosity::VeryVerbose, __FILE__, __LINE__, __VA_ARGS__))
 
-#define LOGE_ANSI(...) \
+#define LOGE(...) \
     (GET_SERVICE(prz::utl::ILogger)->Log(ELogVerbosity::Error, __FILE__, __LINE__, __VA_ARGS__))

@@ -1,7 +1,7 @@
 #include "przCorePCH.h"
 #include "Model/DungeonLevel.h"
 
-#include "Utils/LOG_ANSI.h"
+#include "Utils/LOG.h"
 #include "Utils/VectorHelpers.h"
 #include "Utils/MatrixHelpers.h"
 
