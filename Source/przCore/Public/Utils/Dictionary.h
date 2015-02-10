@@ -14,16 +14,16 @@ public:
     ZDictionary() = default;
     ZDictionary(const ZDictionary& other);
     ZDictionary(ZDictionary&& other);
-    ZDictionary(const int pInt);
-    ZDictionary(const bool pBool);
+    ZDictionary(int pInt);
+    ZDictionary(bool pBool);
     ZDictionary& operator=(ZDictionary other);
     virtual ~ZDictionary();
 
     ZDictionary& operator[](const char* key);
     const ZDictionary& operator[](const char* key) const;
 
-    const int AsInt() const;
-    const bool AsBool() const;
+    int AsInt() const;
+    bool AsBool() const;
 
     friend void swap(ZDictionary& left, ZDictionary& right) {
         using std::swap;

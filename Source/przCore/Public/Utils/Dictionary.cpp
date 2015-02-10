@@ -27,11 +27,11 @@ ZDictionary::ZDictionary(ZDictionary&& other) {
     swap(*this, other);
 }
 
-ZDictionary::ZDictionary(const int pInt) : mValueType(intValue) {
+ZDictionary::ZDictionary(int pInt) : mValueType(intValue) {
     mValue.asInt = pInt;
 }
 
-ZDictionary::ZDictionary(const bool pBool) : mValueType(boolValue) {
+ZDictionary::ZDictionary(bool pBool) : mValueType(boolValue) {
     mValue.asBool = pBool;
 }
 
@@ -70,7 +70,7 @@ const ZDictionary& ZDictionary::operator[](const char* key) const {
     return *this;
 }
 
-const int ZDictionary::AsInt() const {
+int ZDictionary::AsInt() const {
     if (mValueType == intValue) {
         return mValue.asInt;
     }
@@ -78,7 +78,7 @@ const int ZDictionary::AsInt() const {
     LOGE("Can't get ZDictionary value of type %d AsInt", mValueType);
     return 0;
 }
-const bool ZDictionary::AsBool() const {
+bool ZDictionary::AsBool() const {
     if (mValueType == boolValue) {
         return mValue.asBool;
     }
