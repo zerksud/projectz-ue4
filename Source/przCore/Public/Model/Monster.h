@@ -16,6 +16,8 @@ public:
 
     ZDirection& GetDirection();
 
+    unsigned int GetViewDistance() const;
+
 private:
     ZMonster() = default;
     virtual ~ZMonster() = default;

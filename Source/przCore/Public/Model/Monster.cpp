@@ -40,5 +40,9 @@ ZDirection& ZMonster::GetDirection() {
     return mDirection;
 }
 
+unsigned int ZMonster::GetViewDistance() const {
+    return 8;
+}
+
 }
 }
