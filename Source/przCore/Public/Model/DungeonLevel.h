@@ -3,23 +3,13 @@
 #include <unordered_map>
 #include <vector>
 
+#include "Model/FieldOfView.h"
 #include "Model/Position.h"
 #include "Model/Monster.h"
 #include "Utils/RandomHelpers.h"
 
 namespace prz {
 namespace mdl {
-
-namespace EDungeonCell {
-enum Type {
-    Unknown,
-    SolidRock,
-    Emptiness,
-    DownStaircase,
-    UpStaircase,
-    Monster
-};
-}
 
 namespace EMoveDirection {
 enum Type {
