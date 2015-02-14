@@ -91,6 +91,8 @@ public:
     ZMonster* GetMonster(const ZPosition& position);
     ZMonster* GetMonster(int x, int y);
 
+    bool UpdateFieldOfView(utl::ZIdType monsterId);
+
     bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
 
 private:

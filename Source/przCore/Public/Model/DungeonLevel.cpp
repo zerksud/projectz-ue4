@@ -234,6 +234,31 @@ ZMonster* ZDungeonLevel::GetMonster(int x, int y) {
     return nullptr;
 }
 
+bool ZDungeonLevel::UpdateFieldOfView(utl::ZIdType monsterId) {
+    ZPlacedMonster* placedMonster = GetPlacedMonster(monsterId);
+    if (placedMonster == nullptr) {
+        LOGE("Can't update field of view for not-placed monster with id = %d", monsterId);
+        return false;
+    }
+
+    EDungeonCell::Type** fieldOfViewData;
+    int viewDistance = placedMonster->monster->GetViewDistance();
+    utl::ZMatrix::Allocate(&fieldOfViewData, viewDistance * 2 + 1);
+
+    int x = placedMonster->position.GetX();
+    int y = placedMonster->position.GetY();
+
+    for (int dx = -viewDistance; dx <= viewDistance; ++dx) {
+        for (int dy = -viewDistance; dy <= viewDistance; ++dy) {
+            fieldOfViewData[dx + viewDistance][dy + viewDistance] = GetCellType(x + dx, y + dy);
+        }
+    }
+
+    placedMonster->monster->UpdateFieldOfView(ZFieldOfView(viewDistance, fieldOfViewData));
+
+    return true;
+}
+
 ZDungeonLevel::ZPlacedMonster* ZDungeonLevel::GetPlacedMonster(utl::ZIdType monsterId) {
     auto pos = mMonsterList.find(monsterId);
     if (pos == mMonsterList.end()) {
