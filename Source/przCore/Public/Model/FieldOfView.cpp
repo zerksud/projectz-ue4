@@ -23,13 +23,13 @@ ZFieldOfView::ZFieldOfView(const ZFieldOfView& other) {
 
 ZFieldOfView::ZFieldOfView(ZFieldOfView&& other) {
     swap(*this, other);
-    other.mData = nullptr;
+
+    other.mRadius = 0;
+    utl::ZMatrix::Allocate(&other.mData, 1, 1, EDungeonCell::Monster);
 }
 
 ZFieldOfView::~ZFieldOfView() {
-    if (mData != nullptr) {
-        utl::ZMatrix::Deallocate(&mData, mRadius * 2 + 1);
-    }
+    utl::ZMatrix::Deallocate(&mData, mRadius * 2 + 1);
 }
 
 ZFieldOfView& ZFieldOfView::operator=(ZFieldOfView other) {
