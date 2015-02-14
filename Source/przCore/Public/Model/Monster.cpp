@@ -44,5 +44,13 @@ unsigned int ZMonster::GetViewDistance() const {
     return 8;
 }
 
+void ZMonster::UpdateFieldOfView(ZFieldOfView&& newFieldOfView) {
+    mFieldOfView = newFieldOfView;
+}
+
+const ZFieldOfView& ZMonster::GetFieldOfView() const {
+    return mFieldOfView;
+}
+
 }
 }

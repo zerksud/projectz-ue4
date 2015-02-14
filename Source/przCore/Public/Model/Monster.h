@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Model/Direction.h"
+#include "Model/FieldOfView.h"
 #include "Utils/Registrable.h"
 
 namespace prz {
@@ -18,10 +19,14 @@ public:
 
     unsigned int GetViewDistance() const;
 
+    void UpdateFieldOfView(ZFieldOfView&& newFieldOfView);
+    const ZFieldOfView& GetFieldOfView() const;
+    
 private:
     ZMonster() = default;
     virtual ~ZMonster() = default;
     ZDirection mDirection;
+    ZFieldOfView mFieldOfView;
 };
 
 }
