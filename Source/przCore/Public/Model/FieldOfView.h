@@ -16,6 +16,7 @@ enum Type {
 
 class ZFieldOfView {
 public:
+    ZFieldOfView();
     // ZFieldOfView owns fovData
     ZFieldOfView(unsigned int radius, EDungeonCell::Type** fovData);
     ZFieldOfView(const ZFieldOfView& other);

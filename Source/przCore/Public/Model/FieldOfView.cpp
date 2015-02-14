@@ -6,6 +6,11 @@
 namespace prz {
 namespace mdl {
 
+ZFieldOfView::ZFieldOfView():
+mRadius(0) {
+    utl::ZMatrix::Allocate(&mData, 1, 1, EDungeonCell::Monster);
+}
+
 ZFieldOfView::ZFieldOfView(unsigned int radius, EDungeonCell::Type** fovData) :
 mRadius(radius),
 mData(fovData) {
