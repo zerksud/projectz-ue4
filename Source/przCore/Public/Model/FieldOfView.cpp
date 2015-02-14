@@ -11,8 +11,33 @@ mRadius(radius),
 mData(fovData) {
 }
 
+ZFieldOfView::ZFieldOfView(const ZFieldOfView& other) {
+    mRadius = other.mRadius;
+    utl::ZMatrix::AllocateAndCopy(&mData, other.mData, mRadius * 2 + 1);
+}
+
+ZFieldOfView::ZFieldOfView(ZFieldOfView&& other) {
+    swap(*this, other);
+    other.mData = nullptr;
+}
+
 ZFieldOfView::~ZFieldOfView() {
-    utl::ZMatrix::Deallocate(&mData, mRadius * 2 + 1);
+    if (mData != nullptr) {
+        utl::ZMatrix::Deallocate(&mData, mRadius * 2 + 1);
+    }
+}
+
+ZFieldOfView& ZFieldOfView::operator=(ZFieldOfView other) {
+    swap(*this, other);
+
+    return *this;
+}
+
+void swap(ZFieldOfView& left, ZFieldOfView& right) {
+    using std::swap;
+
+    swap(left.mRadius, right.mRadius);
+    swap(left.mData, right.mData);
 }
 
 EDungeonCell::Type ZFieldOfView::GetCell(int dx, int dy) const {
