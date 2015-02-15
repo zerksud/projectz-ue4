@@ -250,7 +250,9 @@ bool ZDungeonLevel::UpdateFieldOfView(utl::ZIdType monsterId) {
 
     for (int dx = -viewDistance; dx <= viewDistance; ++dx) {
         for (int dy = -viewDistance; dy <= viewDistance; ++dy) {
-            fieldOfViewData[dx + viewDistance][dy + viewDistance] = GetCellType(x + dx, y + dy);
+            if (dx * dx + dy * dy <= viewDistance * viewDistance) {
+                fieldOfViewData[dx + viewDistance][dy + viewDistance] = GetCellType(x + dx, y + dy);
+            }
         }
     }
 
