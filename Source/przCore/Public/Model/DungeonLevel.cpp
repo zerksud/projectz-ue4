@@ -1,6 +1,8 @@
 #include "przCorePCH.h"
 #include "Model/DungeonLevel.h"
 
+#include "Model/FieldOfViewBuilder.h"
+
 #include "Utils/LOG.h"
 #include "Utils/VectorHelpers.h"
 #include "Utils/MatrixHelpers.h"
@@ -241,22 +243,9 @@ bool ZDungeonLevel::UpdateFieldOfView(utl::ZIdType monsterId) {
         return false;
     }
 
-    EDungeonCell::Type** fieldOfViewData;
-    int viewDistance = placedMonster->monster->GetViewDistance();
-    utl::ZMatrix::Allocate(&fieldOfViewData, viewDistance * 2 + 1);
-
-    int x = placedMonster->position.GetX();
-    int y = placedMonster->position.GetY();
-
-    for (int dx = -viewDistance; dx <= viewDistance; ++dx) {
-        for (int dy = -viewDistance; dy <= viewDistance; ++dy) {
-            if (dx * dx + dy * dy <= viewDistance * viewDistance) {
-                fieldOfViewData[dx + viewDistance][dy + viewDistance] = GetCellType(x + dx, y + dy);
-            }
-        }
-    }
-
-    placedMonster->monster->UpdateFieldOfView(ZFieldOfView(viewDistance, fieldOfViewData));
+    ZPosition position = placedMonster->position;
+    unsigned int viewDistance = placedMonster->monster->GetViewDistance();
+    placedMonster->monster->UpdateFieldOfView(ZFieldOfViewBuilder::Build(position, viewDistance, *this));
 
     return true;
 }
