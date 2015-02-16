@@ -33,6 +33,7 @@ bool ZDungeon::PlaceMonster(ZMonster* monster, unsigned int levelIndex, const ZP
     bool success = level->PlaceMonster(monster, position);
     if (success) {
         mMonsterLevelMap[monster->GetId()] = levelIndex;
+        level->UpdateFieldOfView(monster->GetId());     // TODO: move FOV update to end of turn; update all FOV's together or on request
     }
 
     return success;
@@ -134,6 +135,8 @@ bool ZDungeon::TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type dir
                 moveIsSuccessful = false;
             }
         }
+
+        mLevels[monsterLevelIterator->second]->UpdateFieldOfView(monsterId);    // TODO: move FOV update to end of turn; update all FOV's together or on request
     }
 
     return moveIsSuccessful;
