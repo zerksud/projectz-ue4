@@ -18,17 +18,24 @@ public:
 
     bool operator==(const ZPositionDiff& other) const;
     bool operator!=(const ZPositionDiff& other) const;
-
-    const ZPositionDiff operator*(int mult);
+    
+    int LengthSquare() const;
 
     std::string ToString() const;
+
+    ZPositionDiff& operator+=(const ZPositionDiff& other);
+    
+    friend const ZPositionDiff operator*(int mult, const ZPositionDiff& diff);
+    friend const ZPositionDiff operator*(const ZPositionDiff& diff, int mult);
+    friend const ZPositionDiff operator+(const ZPositionDiff& left, const ZPositionDiff& right);
+    friend const ZPositionDiff operator-(const ZPositionDiff& left, const ZPositionDiff& right);
+
+    friend void swap(ZPositionDiff& left, ZPositionDiff& right);
 
 private:
     int mdX;
     int mdY;
 };
-
-const ZPositionDiff operator*(int mult, const ZPositionDiff& diff);
 
 class ZPosition {
 public:
@@ -43,9 +50,12 @@ public:
     const ZPosition operator+(const ZPositionDiff& diff) const;
     const ZPosition operator-(const ZPositionDiff& diff) const;
     const ZPositionDiff operator-(const ZPosition& other) const;
+
     bool operator==(const ZPosition& other) const;
     bool operator!=(const ZPosition& other) const;
+    
     ZPosition& operator=(const ZPosition& other);
+    ZPosition& operator+=(const ZPositionDiff& diff);
 
     std::string ToString() const;
 

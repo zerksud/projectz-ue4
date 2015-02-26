@@ -1,6 +1,8 @@
 #include "przCorePCH.h"
 #include "Model/Position.h"
 
+#include <utility>
+
 #include "Utils/StringHelpers.h"
 
 namespace prz {
@@ -35,16 +37,40 @@ bool ZPositionDiff::operator!=(const ZPositionDiff& other) const {
     return !(*this == other);
 }
 
-const ZPositionDiff ZPositionDiff::operator*(int mult) {
-    return ZPositionDiff(mdX * mult, mdY * mult);
+int ZPositionDiff::LengthSquare() const {
+    return mdX * mdX + mdY * mdY;
 }
 
 std::string ZPositionDiff::ToString() const {
     return utl::ZString::Format("[%d;%d]", mdX, mdY);
 }
 
+ZPositionDiff& ZPositionDiff::operator+=(const ZPositionDiff& other) {
+    *this = *this + other;
+    return *this;
+}
+
 const ZPositionDiff operator*(int mult, const ZPositionDiff& diff) {
-    return ZPositionDiff(diff.GetdX() * mult, diff.GetdY() * mult);
+    return ZPositionDiff(diff.mdX * mult, diff.mdY * mult);
+}
+
+const ZPositionDiff operator*(const ZPositionDiff& diff, int mult) {
+    return mult * diff;
+}
+
+const ZPositionDiff operator+(const ZPositionDiff& left, const ZPositionDiff& right) {
+    return ZPositionDiff(left.mdX + right.mdX, left.mdY + right.mdY);
+}
+
+const ZPositionDiff operator-(const ZPositionDiff& left, const ZPositionDiff& right) {
+    return ZPositionDiff(left.mdX - right.mdX, left.mdY - right.mdY);
+}
+
+void swap(ZPositionDiff& left, ZPositionDiff&right) {
+    using std::swap;
+
+    swap(left.mdX, right.mdX);
+    swap(left.mdY, right.mdY);
 }
 
 ZPosition::ZPosition() {
@@ -105,6 +131,12 @@ bool ZPosition::operator!=(const ZPosition& other) const {
 ZPosition& ZPosition::operator=(const ZPosition& other) {
     mX = other.mX;
     mY = other.mY;
+
+    return *this;
+}
+
+ZPosition& ZPosition::operator+=(const ZPositionDiff& diff) {
+    *this = *this + diff;
 
     return *this;
 }

@@ -11,6 +11,11 @@ public:
     ZFieldOfViewBuilder() = delete;
 
     static ZFieldOfView Build(const ZPosition& position, int viewDistance, const ZDungeonLevel& dungeonLevel);
+    
+private:
+    ZPosition mFieldOfViewCenter;
+    int mViewDistance;
+    const ZDungeonLevel& mCurrentDungeonLevel;
 };
 
 }
