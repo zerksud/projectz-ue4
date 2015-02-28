@@ -121,6 +121,8 @@ void ScanSector(SectorScanData* sectorScanData, int rowNumber, float leftMaxSlop
                     LOGD("current cell is first solid; initiating subscan");
                     ScanSector(sectorScanData, currentRowNumber + 1, currentRowLeftMaxSlope, cellLeftSlope);
                 }
+            } else if (previousCellIsSolid) {
+                currentRowLeftMaxSlope = nextRowLeftMaxSlope;
             }
 
             previousCellIsSolid = cellIsSolid;
