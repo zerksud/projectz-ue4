@@ -25,8 +25,8 @@ struct FieldOfViewData {
         utl::ZMatrix::Allocate(&cells, size, size, EDungeonCell::Unknown);
     }
 
-    bool CellIsCloseEnough(const ZPositionDiff& realSectorPositionDiff) const {
-        return realSectorPositionDiff.LengthSquare() < viewDistance * viewDistance;
+    bool CellIsIsTooFar(const ZPositionDiff& positionDiff) const {
+        return positionDiff.LengthSquare() >= viewDistance * viewDistance;
     }
 
     void MarkCellAsVisible(const ZPositionDiff& realSectorPositionDiff) {
@@ -102,15 +102,15 @@ void ScanSector(SectorScanData* sectorScanData, int rowNumber, float leftMaxSlop
             if (cellLeftSlope < rightMinSlope) {
                 break;
             }
-
-            ZPositionDiff realSectorCellDiff = sectorScanData->conversionMatrix * cellDiff;
-            if (fieldOfViewData->CellIsCloseEnough(realSectorCellDiff)) {
-                LOGD("cell %s with slopes [%f; %f] is visible", cellDiff.ToString().c_str(), cellLeftSlope, cellRightSlope);
-                fieldOfViewData->MarkCellAsVisible(realSectorCellDiff);
-            } else {
+            
+            if (fieldOfViewData->CellIsIsTooFar(cellDiff)) {
                 continue;
             }
-
+            
+            LOGD("cell %s with slopes [%f; %f] is visible", cellDiff.ToString().c_str(), cellLeftSlope, cellRightSlope);
+            ZPositionDiff realSectorCellDiff = sectorScanData->conversionMatrix * cellDiff;
+            fieldOfViewData->MarkCellAsVisible(realSectorCellDiff);
+            
             bool cellIsSolid = fieldOfViewData->CellIsSolid(realSectorCellDiff);
             if (cellIsSolid) {
                 nextRowLeftMaxSlope = cellRightSlope;
