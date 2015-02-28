@@ -31,7 +31,7 @@ void ZGame::StartNewGame() {
     mLogHistory.Log("It's dark in here.");
 }
 
-bool ZGame::TryToMovePlayer(EMoveDirection::Type direction) {
+bool ZGame::TryToMovePlayer(EMoveDirection direction) {
     unsigned int levelIndexBeforeMove = mDungeon->GetMonsterLevelIndex(mPlayerId);
     bool success = mDungeon->TryToMoveMonster(mPlayerId, direction);
     if (success) {
@@ -49,7 +49,7 @@ bool ZGame::TryToMovePlayer(EMoveDirection::Type direction) {
     return success;
 }
 
-void ZGame::TurnPlayer(ETurnDirection::Type direction) {
+void ZGame::TurnPlayer(ETurnDirection direction) {
     mDungeon->GetMonster(mPlayerId)->GetDirection().Turn(direction);
 }
 
@@ -64,7 +64,7 @@ ZPosition GetRotatedPosition(const ZPositionDiff& sinCosOfReversedAngle, int x, 
 }
 
 const ZMinimap ZGame::GetMinimap() {
-    EDungeonCell::Type** cells;
+    EDungeonCell** cells;
     utl::ZMatrix::Allocate(&cells, kMinimapSize);
 
     unsigned int currentLevel = mDungeon->GetMonsterLevelIndex(mPlayerId);
@@ -84,7 +84,7 @@ const ZMinimap ZGame::GetMinimap() {
 
     for (int dx = -kMinimapRadius; dx <= kMinimapRadius; ++dx) {
         for (int dy = -kMinimapRadius; dy <= kMinimapRadius; ++dy) {
-            EDungeonCell::Type minimapCell = playerFOV.GetCell(dx, dy);
+            EDungeonCell minimapCell = playerFOV.GetCell(dx, dy);
 
             ZPosition rotatedCell = GetRotatedPosition(minimapDirectionSinCos, dx, dy);
             int x = kMinimapRadius + rotatedCell.GetX();

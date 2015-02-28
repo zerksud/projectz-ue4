@@ -21,14 +21,14 @@ void ZDungeonLevel::CreateFailSafeDungeon() {
     mWidth = 1;
     mHeight = 1;
 
-    EDungeonCell::Type** map;
+    EDungeonCell** map;
     utl::ZMatrix::Allocate(&map, 1);
     map[0][0] = EDungeonCell::DownStaircase;
 
     ParseMap(&map);
 }
 
-ZDungeonLevel::ZDungeonLevel(int width, int height, EDungeonCell::Type*** map, const ZRoomList& rooms, const ZRoomList& nextLevelStaircaseRooms)
+ZDungeonLevel::ZDungeonLevel(int width, int height, EDungeonCell*** map, const ZRoomList& rooms, const ZRoomList& nextLevelStaircaseRooms)
     : mWidth(width),
     mHeight(height),
     mRooms(rooms),
@@ -42,12 +42,12 @@ ZDungeonLevel::ZDungeonLevel(int width, int height, EDungeonCell::Type*** map, c
     ParseMap(map);
 }
 
-void ZDungeonLevel::ParseMap(EDungeonCell::Type*** map) {
+void ZDungeonLevel::ParseMap(EDungeonCell*** map) {
     mTerrain = *map;
 
     for (int x = 0; x < mWidth; ++x) {
         for (int y = 0; y < mHeight; ++y) {
-            EDungeonCell::Type mapCell = mTerrain[x][y];
+            EDungeonCell mapCell = mTerrain[x][y];
 
             if (mapCell == EDungeonCell::UpStaircase) {
                 mUpStaircases.push_back(ZPosition(x, y));
@@ -63,7 +63,7 @@ ZDungeonLevel::~ZDungeonLevel() {
         delete pair.second;
     }
 
-    utl::ZMatrix::Deallocate<EDungeonCell::Type>(&mTerrain, mHeight);
+    utl::ZMatrix::Deallocate<EDungeonCell>(&mTerrain, mHeight);
 }
 
 int ZDungeonLevel::GetWidth() const {
@@ -124,7 +124,7 @@ const ZDungeonLevel::ZRoomList& ZDungeonLevel::GetNextLevelStaircaseRooms() cons
     return mNextLevelStaircaseRooms;
 }
 
-EDungeonCell::Type ZDungeonLevel::GetCellType(int x, int y) const {
+EDungeonCell ZDungeonLevel::GetCellType(int x, int y) const {
     if (CellIndicesAreValid(x, y)) {
         return GetCellTypeImpl(x, y);
     }
@@ -132,16 +132,16 @@ EDungeonCell::Type ZDungeonLevel::GetCellType(int x, int y) const {
     return EDungeonCell::SolidRock;
 }
 
-EDungeonCell::Type ZDungeonLevel::GetCellType(const ZPosition& pos) const {
+EDungeonCell ZDungeonLevel::GetCellType(const ZPosition& pos) const {
     return GetCellType(pos.GetX(), pos.GetY());
 }
 
-EDungeonCell::Type ZDungeonLevel::GetCellTypeImpl(int x, int y) const {
+EDungeonCell ZDungeonLevel::GetCellTypeImpl(int x, int y) const {
     if (GetPlacedMonster(x, y) != nullptr) {
         return EDungeonCell::Monster;
     }
 
-    EDungeonCell::Type cellType = mTerrain[x][y];
+    EDungeonCell cellType = mTerrain[x][y];
 
     return cellType;
 }
@@ -284,7 +284,7 @@ bool ZDungeonLevel::MovementIsDiagonalAroundTheCorner(const ZPosition& origin, c
         CellIsSolidImpl(origin.GetX() + diff.GetdX(), origin.GetY());
 }
 
-bool ZDungeonLevel::TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff) {
+bool ZDungeonLevel::TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection direction, ZPositionDiff* OutExpectedMoveDiff) {
     ZPlacedMonster* placedMonster = GetPlacedMonster(monsterId);
     if (placedMonster == nullptr) {
         LOGE("Can't move not-placed monster with id = %d", monsterId);

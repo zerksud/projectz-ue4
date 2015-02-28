@@ -11,14 +11,12 @@
 namespace prz {
 namespace mdl {
 
-namespace EMoveDirection {
-enum Type {
+enum class EMoveDirection {
     Forward,
     Backward,
     Left,
     Right
 };
-}
 
 struct ZBounds {
     int minX;
@@ -54,7 +52,7 @@ public:
     typedef std::vector<ZRoom> ZRoomList;
 
     // holds map matrix
-    ZDungeonLevel(int width, int height, EDungeonCell::Type*** map, const ZRoomList& rooms = ZRoomList(), const ZRoomList& nextLevelStaircaseRooms = ZRoomList());
+    ZDungeonLevel(int width, int height, EDungeonCell*** map, const ZRoomList& rooms = ZRoomList(), const ZRoomList& nextLevelStaircaseRooms = ZRoomList());
     ZDungeonLevel(const ZDungeonLevel& other) = delete;
     ZDungeonLevel& operator=(const ZDungeonLevel& other) = delete;
     virtual ~ZDungeonLevel();
@@ -76,8 +74,8 @@ public:
 
     const ZRoomList& GetNextLevelStaircaseRooms() const;
 
-    EDungeonCell::Type GetCellType(int x, int y) const;
-    EDungeonCell::Type GetCellType(const ZPosition& pos) const;
+    EDungeonCell GetCellType(int x, int y) const;
+    EDungeonCell GetCellType(const ZPosition& pos) const;
 
     bool PlaceMonster(ZMonster* monster, const ZPosition& position);
     ZMonster* RemoveMonster(utl::ZIdType monsterId);
@@ -93,15 +91,15 @@ public:
 
     bool UpdateFieldOfView(utl::ZIdType monsterId);
 
-    bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
+    bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
 
 private:
-    typedef std::map<EMoveDirection::Type, ETurnDirection::Type> ZMoveToTurnDirectionMap;
+    typedef std::map<EMoveDirection, ETurnDirection> ZMoveToTurnDirectionMap;
     static const ZMoveToTurnDirectionMap kMoveToTurnDirectionMap;
 
     void CreateFailSafeDungeon();
 
-    void ParseMap(EDungeonCell::Type*** map);
+    void ParseMap(EDungeonCell*** map);
     bool CellIndicesAreValid(int x, int y) const;
 
     int CalcCellLinearIndex(int x, int y) const;
@@ -110,7 +108,7 @@ private:
     bool CellIsSolidImpl(int x, int y) const;
     bool CellIsEmptyImpl(int x, int y) const;
 
-    EDungeonCell::Type GetCellTypeImpl(int x, int y) const;
+    EDungeonCell GetCellTypeImpl(int x, int y) const;
 
     struct ZPlacedMonster {
         ZMonster* monster;
@@ -136,7 +134,7 @@ private:
 
     int mWidth;
     int mHeight;
-    EDungeonCell::Type** mTerrain;
+    EDungeonCell** mTerrain;
     ZRoomList mRooms;
     ZRoomList mNextLevelStaircaseRooms;
 

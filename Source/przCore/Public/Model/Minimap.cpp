@@ -7,7 +7,7 @@
 namespace prz {
 namespace mdl {
 
-ZMinimap::ZMinimap(unsigned int sideSize, EDungeonCell::Type*** cells) {
+ZMinimap::ZMinimap(unsigned int sideSize, EDungeonCell*** cells) {
     mSize = sideSize;
     mCells = *cells;
     *cells = nullptr;
@@ -15,7 +15,7 @@ ZMinimap::ZMinimap(unsigned int sideSize, EDungeonCell::Type*** cells) {
 
 ZMinimap::ZMinimap(const ZMinimap& other) {
     mSize = other.mSize;
-    utl::ZMatrix::AllocateAndCopy<EDungeonCell::Type>(&mCells, other.mCells, mSize);
+    utl::ZMatrix::AllocateAndCopy<EDungeonCell>(&mCells, other.mCells, mSize);
 }
 
 ZMinimap::ZMinimap(ZMinimap&& other) {
@@ -42,7 +42,7 @@ bool ZMinimap::IndicesAreValid(unsigned int x, unsigned int y) const {
     return (x < mSize && y < mSize);
 }
 
-EDungeonCell::Type ZMinimap::GetCell(unsigned int x, unsigned int y) const {
+EDungeonCell ZMinimap::GetCell(unsigned int x, unsigned int y) const {
     if (!IndicesAreValid(x, y)) {
         LOGE("Can't get cell %dx%d from minimap of size %d", x, y, mSize);
         return EDungeonCell::Unknown;

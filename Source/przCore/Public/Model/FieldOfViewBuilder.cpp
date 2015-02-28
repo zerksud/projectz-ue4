@@ -15,7 +15,7 @@ struct FieldOfViewData {
     const ZPosition viewerPosition;
     const int viewDistance;
     const ZDungeonLevel& dungeonLevel;
-    EDungeonCell::Type** cells;
+    EDungeonCell** cells;
 
     FieldOfViewData(const ZPosition& pViewerPosition, int pViewDistance, const ZDungeonLevel& pDungeonLevel) :
     viewerPosition(pViewerPosition),
@@ -51,14 +51,12 @@ struct SectorScanData {
     }
 };
 
-namespace CellSlope {
-    enum Type {
-        Left,
-        Right
-    };
-}
+enum CellSlope {
+    Left,
+    Right
+};
 
-static float CalcSlope(const ZPositionDiff& positionDiff, CellSlope::Type slope) {
+static float CalcSlope(const ZPositionDiff& positionDiff, CellSlope slope) {
     static const float kSlopeRowDiff[] = {-0.5f, 0.5f};
 
     float slopeDeltaX = positionDiff.GetdX() + kSlopeRowDiff[slope];

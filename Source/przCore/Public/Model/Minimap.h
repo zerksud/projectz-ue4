@@ -12,7 +12,7 @@ namespace mdl {
 class PRZCORE_API ZMinimap {
 public:
     // holds cells matrix
-    ZMinimap(unsigned int size, EDungeonCell::Type*** cells);
+    ZMinimap(unsigned int size, EDungeonCell*** cells);
     ZMinimap(const ZMinimap& other);
     ZMinimap(ZMinimap&& other);
     ZMinimap& operator=(ZMinimap other);
@@ -26,13 +26,13 @@ public:
     }
 
     unsigned int GetSize() const;
-    EDungeonCell::Type GetCell(unsigned int x, unsigned int y) const;
+    EDungeonCell GetCell(unsigned int x, unsigned int y) const;
 
 private:
     bool IndicesAreValid(unsigned int x, unsigned int y) const;
 
     unsigned int mSize;
-    EDungeonCell::Type** mCells;
+    EDungeonCell** mCells;
 };
 
 }

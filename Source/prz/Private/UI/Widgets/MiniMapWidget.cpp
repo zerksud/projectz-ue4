@@ -6,7 +6,7 @@
 #include "UI/Styles/PrzStyleManager.h"
 #include "UI/Styles/MinimapWidgetStyle.h"
 
-typedef std::map<prz::mdl::EDungeonCell::Type, FColor> DungeonCellColorMap;
+typedef std::map<prz::mdl::EDungeonCell, FColor> DungeonCellColorMap;
 
 DungeonCellColorMap GetDungeonCellColorMap() {
     using namespace prz::mdl;
@@ -24,7 +24,7 @@ DungeonCellColorMap GetDungeonCellColorMap() {
     return cellToColorMap;
 }
 
-FColor CellToColor(const DungeonCellColorMap& cellToColorMap, prz::mdl::EDungeonCell::Type cell) {
+FColor CellToColor(const DungeonCellColorMap& cellToColorMap, prz::mdl::EDungeonCell cell) {
     auto pos = cellToColorMap.find(cell);
     if (pos != cellToColorMap.end()) {
         return pos->second;

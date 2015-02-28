@@ -68,7 +68,7 @@ ZMatrix2D ZMatrix2D::FlipY() {
 
 ZMatrix2D ZMatrix2D::Rotate(int rightAnglesCount) {
     ZDirection direction;
-    ETurnDirection::Type turnDirection = rightAnglesCount > 0 ? ETurnDirection::Left : ETurnDirection::Right;
+    ETurnDirection turnDirection = rightAnglesCount > 0 ? ETurnDirection::Left : ETurnDirection::Right;
     for (int turnIndex = 0; turnIndex < abs(rightAnglesCount); ++turnIndex) {
         direction.Turn(turnDirection);
     }

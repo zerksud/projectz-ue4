@@ -42,20 +42,16 @@ ZDirection::ZDirection()
     : mAngle(0) {
 }
 
-ZDirection::ZDirection(ETurnDirection::Type direction)
+ZDirection::ZDirection(ETurnDirection direction)
     : mAngle(0) {
     Turn(direction);
 }
 
-void ZDirection::Turn(ETurnDirection::Type direction) {
-    if (direction > ETurnDirection::BackRight) {
-        LOGE("Got unsupported ETurnDirection = %d", direction);
-    } else {
-        Turn(kTurnDirectionToAngle[direction]);
-    }
+void ZDirection::Turn(ETurnDirection direction) {
+    Turn(kTurnDirectionToAngle[(int)direction]);
 }
 
-ZDirection ZDirection::TurnCopy(ETurnDirection::Type direction) const {
+ZDirection ZDirection::TurnCopy(ETurnDirection direction) const {
     ZDirection directionCopy(*this);
     directionCopy.Turn(direction);
 

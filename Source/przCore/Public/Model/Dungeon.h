@@ -26,7 +26,7 @@ public:
     ZMonster* GetMonster(utl::ZIdType monsterId);
     const ZPosition* GetMonsterPosition(utl::ZIdType monsterId) const;
 
-    bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection::Type direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
+    bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
 
 private:
     typedef std::vector<ZDungeonLevel*> ZDungeonLevelList;

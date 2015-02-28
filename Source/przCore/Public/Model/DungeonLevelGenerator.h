@@ -43,14 +43,14 @@ private:
     bool TryToGenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically = true);
     void SplitSubDungeonVertically(BSPTreeNode* rootNode);
     void SplitSubDungeonHorizontally(BSPTreeNode* rootNode);
-    static void DigCellIfSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, const ZPosition& position);
-    static void DigCellIfSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, int x, int y);
+    static void DigCellIfSolidAndNotBlocked(EDungeonCell** map, path::ZWeightedMap* weightedMap, const ZPosition& position);
+    static void DigCellIfSolidAndNotBlocked(EDungeonCell** map, path::ZWeightedMap* weightedMap, int x, int y);
     bool TryToCreateRoomInsideSubDungeon(SubDungeon* dungeon);
-    static bool CellIsSolidRock(EDungeonCell::Type** map, int x, int y);
-    static bool CellIsSolidRock(EDungeonCell::Type** map, const ZPosition& position);
+    static bool CellIsSolidRock(EDungeonCell** map, int x, int y);
+    static bool CellIsSolidRock(EDungeonCell** map, const ZPosition& position);
 
     // returns true if room was successfully digged
-    static bool DigRoomIfAllCellsAreSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, const ZDungeonLevel::ZRoom& room);
+    static bool DigRoomIfAllCellsAreSolidAndNotBlocked(EDungeonCell** map, path::ZWeightedMap* weightedMap, const ZDungeonLevel::ZRoom& room);
 
     void ConnectCells(const ZPosition& someCell, const ZPosition& anotherCell);
 
@@ -67,7 +67,7 @@ private:
     void ConnectUpStaircasesWithSomeValidCell(const ZPosition& someValidCell);
     void DigRandomDownStaircases();
 
-    EDungeonCell::Type** mMap;
+    EDungeonCell** mMap;
     path::ZWeightedMap* mWeightedMap;
     ZDungeonLevel::ZRoomList mRooms;
     ZDungeonLevel::ZRoomList mNextLevelStaircaseRooms;

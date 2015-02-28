@@ -11,7 +11,7 @@ mRadius(0) {
     utl::ZMatrix::Allocate(&mData, 1, 1, EDungeonCell::Monster);
 }
 
-ZFieldOfView::ZFieldOfView(unsigned int radius, EDungeonCell::Type** fovData) :
+ZFieldOfView::ZFieldOfView(unsigned int radius, EDungeonCell** fovData) :
 mRadius(radius),
 mData(fovData) {
 }
@@ -45,7 +45,7 @@ void swap(ZFieldOfView& left, ZFieldOfView& right) {
     swap(left.mData, right.mData);
 }
 
-EDungeonCell::Type ZFieldOfView::GetCell(int dx, int dy) const {
+EDungeonCell ZFieldOfView::GetCell(int dx, int dy) const {
     if ((unsigned int)(dx * dx + dy * dy) > mRadius * mRadius) {
         return EDungeonCell::Unknown;
     }

@@ -64,12 +64,12 @@ void ADefaultPlayerController::SetupObservers() {
     }
 }
 
-void ADefaultPlayerController::Move(prz::mdl::EMoveDirection::Type direction) {
+void ADefaultPlayerController::Move(prz::mdl::EMoveDirection direction) {
     prz::mdl::IGame* game = GET_SERVICE(prz::mdl::IGame);
     game->TryToMovePlayer(direction);
 }
 
-void ADefaultPlayerController::Turn(prz::mdl::ETurnDirection::Type direction) {
+void ADefaultPlayerController::Turn(prz::mdl::ETurnDirection direction) {
     prz::mdl::IGame* game = GET_SERVICE(prz::mdl::IGame);
     game->TurnPlayer(direction);
 }

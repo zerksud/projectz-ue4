@@ -64,11 +64,11 @@ struct BSPTreeNode {
     }
 };
 
-void ZDungeonLevelGenerator::DigCellIfSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, const ZPosition& position) {
+void ZDungeonLevelGenerator::DigCellIfSolidAndNotBlocked(EDungeonCell** map, path::ZWeightedMap* weightedMap, const ZPosition& position) {
     DigCellIfSolidAndNotBlocked(map, weightedMap, position.GetX(), position.GetY());
 }
 
-void ZDungeonLevelGenerator::DigCellIfSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, int x, int y) {
+void ZDungeonLevelGenerator::DigCellIfSolidAndNotBlocked(EDungeonCell** map, path::ZWeightedMap* weightedMap, int x, int y) {
     if (map[x][y] == EDungeonCell::SolidRock && !path::ZPathFinder::CellIsBlocked(*weightedMap, x, y)) {
         map[x][y] = EDungeonCell::Emptiness;
         weightedMap->SetCellWeight(x, y, path::ZPathFinder::kEmptyCellWeight);
@@ -156,7 +156,7 @@ bool ZDungeonLevelGenerator::TryToCreateRoomInsideSubDungeon(SubDungeon* subDung
     return roomDigged;
 }
 
-bool ZDungeonLevelGenerator::CellIsSolidRock(EDungeonCell::Type** map, int x, int y) {
+bool ZDungeonLevelGenerator::CellIsSolidRock(EDungeonCell** map, int x, int y) {
     if (x < 0 || x >= kDungeonLevelWidth
             || y < 0 || y >= kDungeonLevelHeight) {
         return true;
@@ -165,7 +165,7 @@ bool ZDungeonLevelGenerator::CellIsSolidRock(EDungeonCell::Type** map, int x, in
     return map[x][y] == EDungeonCell::SolidRock;
 }
 
-bool ZDungeonLevelGenerator::CellIsSolidRock(EDungeonCell::Type** map, const ZPosition& position) {
+bool ZDungeonLevelGenerator::CellIsSolidRock(EDungeonCell** map, const ZPosition& position) {
     return CellIsSolidRock(map, position.GetX(), position.GetY());
 }
 
@@ -186,7 +186,7 @@ void PushBackValidWallCells(std::vector<ZPosition>* wallCells, int roomMinX, int
     }
 }
 
-bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(EDungeonCell::Type** map, path::ZWeightedMap* weightedMap, const ZDungeonLevel::ZRoom& room) {
+bool ZDungeonLevelGenerator::DigRoomIfAllCellsAreSolidAndNotBlocked(EDungeonCell** map, path::ZWeightedMap* weightedMap, const ZDungeonLevel::ZRoom& room) {
     int minX = room.minX;
     int maxX = room.maxX;
     int minY = room.minY;
@@ -256,7 +256,7 @@ void ZDungeonLevelGenerator::DigRandomTunnels() {
 }
 
 int ZDungeonLevelGenerator::CountCellSolidNeighbours(const ZPosition& cell) const {
-    static const ETurnDirection::Type adjacentCellsDirections[] = {
+    static const ETurnDirection adjacentCellsDirections[] = {
         ETurnDirection::BackLeft,
         ETurnDirection::Left,
         ETurnDirection::ForwardLeft,
@@ -314,7 +314,7 @@ void ZDungeonLevelGenerator::DigRandomDownStaircases() {
     }
 
     path::ZWeightedMap nextLevelMapTemplate(kDungeonLevelWidth, kDungeonLevelHeight, path::ZPathFinder::kSolidRockCellWeight);
-    EDungeonCell::Type** fakeNextLevelMap;
+    EDungeonCell** fakeNextLevelMap;
     utl::ZMatrix::Allocate(&fakeNextLevelMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
 
     while (distancedRooms.size() > 0 && staircasesGeneratedCount < staircasesToBeGeneratedCount) {
@@ -396,7 +396,7 @@ void ZDungeonLevelGenerator::DigRandomDownStaircases() {
         distancedRooms.pop_back();
     }
 
-    utl::ZMatrix::Deallocate<EDungeonCell::Type>(&fakeNextLevelMap, kDungeonLevelHeight);
+    utl::ZMatrix::Deallocate<EDungeonCell>(&fakeNextLevelMap, kDungeonLevelHeight);
 }
 
 const ZDungeonLevelGenerator::ZDirectionalStaircase ZDungeonLevelGenerator::CalcUpStaircase(const ZPosition& downStaircasePosition, const ZDirection& downStaircaseDirection) {
@@ -424,7 +424,7 @@ void ZDungeonLevelGenerator::CalcUpStaircases(const ZDungeonLevel* previousLevel
 void ZDungeonLevelGenerator::BlockStaircasePocketCells(path::ZWeightedMap* weightedMap, const ZDirectionalStaircase& staircase) {
     ZDirection blockedDirection = staircase.direction;
 
-    static ETurnDirection::Type blockedCellsDirections[] = {
+    static ETurnDirection blockedCellsDirections[] = {
         ETurnDirection::Left,
         ETurnDirection::ForwardLeft,
         ETurnDirection::Forward,

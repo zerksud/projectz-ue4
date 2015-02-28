@@ -3,8 +3,7 @@
 namespace prz {
 namespace mdl {
 
-namespace EDungeonCell {
-enum Type {
+enum class EDungeonCell {
     Unknown,
     SolidRock,
     Emptiness,
@@ -12,13 +11,12 @@ enum Type {
     UpStaircase,
     Monster
 };
-}
 
 class ZFieldOfView {
 public:
     ZFieldOfView();
     // ZFieldOfView owns fovData
-    ZFieldOfView(unsigned int radius, EDungeonCell::Type** fovData);
+    ZFieldOfView(unsigned int radius, EDungeonCell** fovData);
     ZFieldOfView(const ZFieldOfView& other);
     ZFieldOfView(ZFieldOfView&& other);
     virtual ~ZFieldOfView();
@@ -28,11 +26,11 @@ public:
     friend void swap(ZFieldOfView& left, ZFieldOfView& right);
 
     unsigned int GetRadius() const;
-    EDungeonCell::Type GetCell(int dx, int dy) const;
+    EDungeonCell GetCell(int dx, int dy) const;
 
 private:
     unsigned int mRadius;
-    EDungeonCell::Type** mData;
+    EDungeonCell** mData;
 };
 
 }
