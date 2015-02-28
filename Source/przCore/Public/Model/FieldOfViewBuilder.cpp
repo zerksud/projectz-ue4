@@ -54,13 +54,12 @@ struct SectorScanData {
 namespace CellSlope {
     enum Type {
         Left,
-        Center,
         Right
     };
 }
 
-static float CalcSlope(const ZPositionDiff& positionDiff, CellSlope::Type slope = CellSlope::Center) {
-    static const float kSlopeRowDiff[] = {-0.5f, 0.0f, 0.5f};
+static float CalcSlope(const ZPositionDiff& positionDiff, CellSlope::Type slope) {
+    static const float kSlopeRowDiff[] = {-0.5f, 0.5f};
 
     float slopeDeltaX = positionDiff.GetdX() + kSlopeRowDiff[slope];
     float slopeDeltaY = positionDiff.GetdY() - kSlopeRowDiff[slope];
@@ -91,7 +90,6 @@ void ScanSector(SectorScanData* sectorScanData, int rowNumber, float leftMaxSlop
         currentRowLeftMaxSlope = nextRowLeftMaxSlope;
         
         for (ZPositionDiff cellDiff = rowFirstCellDiff; cellDiff != rowCellAfterLastDiff; cellDiff += kRowDiff) {
-            float cellSlope = CalcSlope(cellDiff);
             float cellLeftSlope = CalcSlope(cellDiff, CellSlope::Left);
             float cellRightSlope = CalcSlope(cellDiff, CellSlope::Right);
 
