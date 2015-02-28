@@ -72,7 +72,9 @@ static const ZPositionDiff kRightEdgeDiff = ZPositionDiff(0, -1);
 static const ZPositionDiff kRowDiff = kRightEdgeDiff - kLeftEdgeDiff;
 
 void ScanSector(SectorScanData* sectorScanData, int rowNumber, float leftMaxSlope, float rightMinSlope) {
+    LOGD("new sector scan from row #%d, slope %f -> %f", rowNumber, leftMaxSlope, rightMinSlope);
     if (leftMaxSlope < rightMinSlope) {
+        LOGD("left slope < right slope; abort current scan");
         return;
     }
 
@@ -89,6 +91,7 @@ void ScanSector(SectorScanData* sectorScanData, int rowNumber, float leftMaxSlop
 
         currentRowLeftMaxSlope = nextRowLeftMaxSlope;
         
+        LOGD("scan row #%d, slope %f -> %f", currentRowNumber, currentRowLeftMaxSlope, rightMinSlope);
         for (ZPositionDiff cellDiff = rowFirstCellDiff; cellDiff != rowCellAfterLastDiff; cellDiff += kRowDiff) {
             float cellLeftSlope = CalcSlope(cellDiff, CellSlope::Left);
             float cellRightSlope = CalcSlope(cellDiff, CellSlope::Right);
@@ -103,6 +106,7 @@ void ScanSector(SectorScanData* sectorScanData, int rowNumber, float leftMaxSlop
 
             ZPositionDiff realSectorCellDiff = sectorScanData->conversionMatrix * cellDiff;
             if (fieldOfViewData->CellIsCloseEnough(realSectorCellDiff)) {
+                LOGD("cell %s with slopes [%f; %f] is visible", cellDiff.ToString().c_str(), cellLeftSlope, cellRightSlope);
                 fieldOfViewData->MarkCellAsVisible(realSectorCellDiff);
             } else {
                 continue;
@@ -114,6 +118,7 @@ void ScanSector(SectorScanData* sectorScanData, int rowNumber, float leftMaxSlop
                 if (previousCellIsSolid) {
                     continue;
                 } else {
+                    LOGD("current cell is first solid; initiating subscan");
                     ScanSector(sectorScanData, currentRowNumber + 1, currentRowLeftMaxSlope, cellLeftSlope);
                 }
             }
@@ -136,11 +141,14 @@ static ZMatrix2D kFirstSectorConversionMatrices[] = {
 };
 
 ZFieldOfView ZFieldOfViewBuilder::Build(const ZPosition& position, int viewDistance, const ZDungeonLevel& dungeonLevel) {
+    LOGD("build FOV from %s", position.ToString().c_str());
+    
     FieldOfViewData fieldOfViewData(position, viewDistance, dungeonLevel);
     fieldOfViewData.MarkCellAsVisible(ZPositionDiff(0, 0));
     
     for (int sectorIndex = 0; sectorIndex < kSectorCount; ++sectorIndex) {
         SectorScanData sectorScaneData(&fieldOfViewData, kFirstSectorConversionMatrices[sectorIndex]);
+        LOGD("Scan sector %d", sectorIndex);
         ScanSector(&sectorScaneData, 1, 1.0f, 0.0f);
     }
 
