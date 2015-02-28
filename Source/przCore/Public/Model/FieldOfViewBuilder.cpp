@@ -93,13 +93,12 @@ void ScanSector(SectorScanData* sectorScanData, int rowNumber, float leftMaxSlop
         
         LOGD("scan row #%d, slope %f -> %f", currentRowNumber, currentRowLeftMaxSlope, rightMinSlope);
         for (ZPositionDiff cellDiff = rowFirstCellDiff; cellDiff != rowCellAfterLastDiff; cellDiff += kRowDiff) {
-            float cellLeftSlope = CalcSlope(cellDiff, CellSlope::Left);
             float cellRightSlope = CalcSlope(cellDiff, CellSlope::Right);
-
             if (cellRightSlope > currentRowLeftMaxSlope) {
                 continue;
             }
 
+            float cellLeftSlope = CalcSlope(cellDiff, CellSlope::Left);
             if (cellLeftSlope < rightMinSlope) {
                 break;
             }
