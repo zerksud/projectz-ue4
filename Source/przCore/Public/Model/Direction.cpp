@@ -8,9 +8,12 @@
 
 namespace prz {
 namespace mdl {
-const double ZDirection::kPi = 3.14159265359;
+static const double kPi = 3.14159265359;
 
-const ZDirection::ZPredictedMovesMap ZDirection::kPredictedMoves = {
+typedef std::map<int, ZPositionDiff> ZPredictedMovesMap;
+typedef std::map<ETurnDirection::Type, int> ZTurnDirectionToAngleMap;
+
+static const ZPredictedMovesMap kPredictedMoves = {
         {0, ZPositionDiff(1.0f, 0.0f)},
         {45, ZPositionDiff(1.0f, -1.0f)},
         {90, ZPositionDiff(0.0f, -1.0f)},
@@ -20,7 +23,7 @@ const ZDirection::ZPredictedMovesMap ZDirection::kPredictedMoves = {
         {270, ZPositionDiff(0.0f, 1.0f)},
         {315, ZPositionDiff(1.0f, 1.0f)}};
 
-const ZDirection::ZTurnDirectionToAngleMap ZDirection::kTurnDirectionToAngle = {
+static const ZTurnDirectionToAngleMap kTurnDirectionToAngle = {
         {ETurnDirection::Forward, 0},
         {ETurnDirection::Left, 90},
         {ETurnDirection::Right, -90},
