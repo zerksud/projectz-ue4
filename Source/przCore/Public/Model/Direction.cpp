@@ -11,7 +11,6 @@ namespace mdl {
 static const double kPi = 3.14159265359;
 
 typedef std::map<int, ZPositionDiff> ZPredictedMovesMap;
-typedef std::map<ETurnDirection::Type, int> ZTurnDirectionToAngleMap;
 
 static const ZPredictedMovesMap kPredictedMoves = {
         {0, ZPositionDiff(1.0f, 0.0f)},
@@ -23,15 +22,15 @@ static const ZPredictedMovesMap kPredictedMoves = {
         {270, ZPositionDiff(0.0f, 1.0f)},
         {315, ZPositionDiff(1.0f, 1.0f)}};
 
-static const ZTurnDirectionToAngleMap kTurnDirectionToAngle = {
-        {ETurnDirection::Forward, 0},
-        {ETurnDirection::Left, 90},
-        {ETurnDirection::Right, -90},
-        {ETurnDirection::Back, 180},
-        {ETurnDirection::ForwardLeft, 45},
-        {ETurnDirection::ForwardRight, -45},
-        {ETurnDirection::BackLeft, 135},
-        {ETurnDirection::BackRight, -135}
+static const int kTurnDirectionToAngle[] = {
+        0,      // Forward
+        90,     // Left
+        -90,    // Right
+        180,    // Back
+        45,     // ForwardLeft
+        -45,    // ForwardRight
+        135,    // BackLeft
+        -135    // BackRight
 };
 
 const ZDirection ZDirection::kForward;
@@ -49,11 +48,10 @@ ZDirection::ZDirection(ETurnDirection::Type direction)
 }
 
 void ZDirection::Turn(ETurnDirection::Type direction) {
-    auto pos = kTurnDirectionToAngle.find(direction);
-    if (pos != kTurnDirectionToAngle.end()) {
-        Turn(pos->second);
-    } else {
+    if (direction > ETurnDirection::BackRight) {
         LOGE("Got unsupported ETurnDirection = %d", direction);
+    } else {
+        Turn(kTurnDirectionToAngle[direction]);
     }
 }
 
