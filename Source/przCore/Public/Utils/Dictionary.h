@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <utility>
 
-#include "Core.h"
+#include "Platform.h"
 
 namespace prz {
 namespace utl {

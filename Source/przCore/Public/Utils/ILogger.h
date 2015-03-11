@@ -2,18 +2,21 @@
 
 #include <functional>
 
-#include "Core.h"
-
 namespace prz {
 namespace utl {
 
+enum class ELogPriority {
+	Debug,
+	Error
+};
+	
 class ILogger {
 public:
     virtual ~ILogger() = default;
 
-    typedef std::function<void(ELogVerbosity::Type verbosity, const FString& message)> ZLogCallback;
+    typedef std::function<void(ELogPriority priority, const char* fileName, int lineNum, const char* message)> ZLogCallback;
 
-    virtual void Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const ANSICHAR* format, ...) const = 0;
+    virtual void Log(ELogPriority priority, const char* fileName, int lineNum, const char* format, ...) const = 0;
     virtual void SetLogCallback(ZLogCallback callback) = 0;
 };
 

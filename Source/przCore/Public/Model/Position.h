@@ -2,8 +2,6 @@
 
 #include <string>
 
-#include "Core.h"
-
 namespace prz {
 namespace mdl {
 

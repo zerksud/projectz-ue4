@@ -3,7 +3,7 @@
 #include <limits>
 #include <unordered_set>
 
-#include "Core.h"
+#include "Platform.h"
 
 #include "Utils/IUniqueIdRegistry.h"
 

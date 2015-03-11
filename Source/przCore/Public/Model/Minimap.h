@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include "Core.h"
+#include "Platform.h"
 
 #include "Model/DungeonLevel.h"
 

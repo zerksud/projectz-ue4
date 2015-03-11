@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core.h"
+#include "Platform.h"
 
 namespace prz {
 namespace mdl {

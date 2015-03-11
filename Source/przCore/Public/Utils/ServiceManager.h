@@ -5,7 +5,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "Core.h"
+#include "Platform.h"
 
 #define SERVICE_MANAGER_REGISTER_SERVICE(serviceManagerInstance, serviceTypeName, serviceInstance) \
     ((serviceManagerInstance).Register< ::serviceTypeName >(serviceInstance, #serviceTypeName))

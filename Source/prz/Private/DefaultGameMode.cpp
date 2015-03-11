@@ -12,6 +12,8 @@
 
 #include "Model/Game.h"
 
+DEFINE_LOG_CATEGORY_STATIC(ProjectZ, All, All)
+
 ADefaultGameMode::ADefaultGameMode(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer) {
     DefaultPawnClass = ADefaultPlayerCharacter::StaticClass();
@@ -22,10 +24,13 @@ ADefaultGameMode::ADefaultGameMode(const FObjectInitializer& ObjectInitializer)
 void initializeServices() {
     prz::utl::ILogger* loggerService = new prz::utl::ZLogger();
 
-    loggerService->SetLogCallback([](ELogVerbosity::Type verbosity, const FString& message) {
-        if (GEngine && verbosity < ELogVerbosity::VeryVerbose) {
-            GEngine->AddOnScreenDebugMessage(-1, 5.0f, (verbosity == ELogVerbosity::Error) ? FColor::Red : FColor::Yellow, message);
+    loggerService->SetLogCallback([](prz::utl::ELogPriority priority, const char* fileName, int lineNum, const char* message) {
+        if (GEngine && priority == prz::utl::ELogPriority::Error) {
+            GEngine->AddOnScreenDebugMessage(-1, 5.0f, (priority == prz::utl::ELogPriority::Error) ? FColor::Red : FColor::Yellow, message);
         }
+        
+		ELogVerbosity::Type verbosity = priority == prz::utl::ELogPriority::Error ? ELogVerbosity::Error : ELogVerbosity::VeryVerbose;
+		FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, ANSI_TO_TCHAR(message));
     });
 
     REGISTER_SERVICE(prz::utl::ILogger, loggerService);

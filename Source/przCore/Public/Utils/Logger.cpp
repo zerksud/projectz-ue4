@@ -1,40 +1,16 @@
 #include "przCorePCH.h"
 #include "Logger.h"
 
-DEFINE_LOG_CATEGORY_STATIC(ProjectZ, All, All)
-
-//#define VERBOSE
-
 namespace prz {
 namespace utl {
 
-const char* ZLogger::kLogFormat =
-#ifdef VERBOSE
-"[%s][%s:%d] "
-#endif
-    "%s";
-
-FString ZLogger::FormatUserMessage(const ANSICHAR* fileName, int32 lineNum, const TCHAR* userMessage) {
-#ifdef VERBOSE
-    const FString currentDate = FDateTime::UtcNow().ToString();
-#endif
-    const FString logMessage = FString::Printf(ANSI_TO_TCHAR(kLogFormat),
-#ifdef VERBOSE
-        *currentDate, ANSI_TO_TCHAR(fileName), lineNum,
-#endif
-        userMessage);
-
-    return logMessage;
-}
-
-void ZLogger::Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const ANSICHAR* format, ...) const {
+void ZLogger::Log(ELogPriority priority, const char* fileName, int lineNum, const char* format, ...) const {
     va_list args;
     va_start(args, format);
     int32 messageSize = vsnprintf(nullptr, 0, format, args);
     va_end(args);
 
     if (messageSize < 0) {
-        UE_LOG(ProjectZ, Error, TEXT("Can't use format '%s' for logging from %s:%d"), ANSI_TO_TCHAR(format), ANSI_TO_TCHAR(fileName), lineNum);
         return;
     }
 
@@ -43,12 +19,8 @@ void ZLogger::Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32
     vsprintf(userMessage, format, args);
     va_end(args);
 
-    const FString logMessage = FormatUserMessage(fileName, lineNum, ANSI_TO_TCHAR(userMessage));
-
-    FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, *logMessage);
-
     if (mLogCallback) {
-        mLogCallback(verbosity, userMessage);
+        mLogCallback(priority, fileName, lineNum, userMessage);
     }
 
     delete[] userMessage;

@@ -4,7 +4,7 @@
 #include "Utils/Services.h"
 
 #define LOGD(...) \
-    (GET_SERVICE(prz::utl::ILogger)->Log(ELogVerbosity::VeryVerbose, __FILE__, __LINE__, __VA_ARGS__))
+    (GET_SERVICE(prz::utl::ILogger)->Log(prz::utl::ELogPriority::Debug, __FILE__, __LINE__, __VA_ARGS__))
 
 #define LOGE(...) \
-    (GET_SERVICE(prz::utl::ILogger)->Log(ELogVerbosity::Error, __FILE__, __LINE__, __VA_ARGS__))
+    (GET_SERVICE(prz::utl::ILogger)->Log(prz::utl::ELogPriority::Error, __FILE__, __LINE__, __VA_ARGS__))

@@ -2,6 +2,8 @@
 
 #include "Utils/ILogger.h"
 
+#include "Platform.h"
+
 namespace prz {
 namespace utl {
 
@@ -10,13 +12,10 @@ public:
     ZLogger() = default;
     virtual ~ZLogger() = default;
 
-    virtual void Log(ELogVerbosity::Type verbosity, const ANSICHAR* fileName, int32 lineNum, const ANSICHAR* format, ...) const override;
+    virtual void Log(ELogPriority priority, const char* fileName, int lineNum, const char* format, ...) const override;
     virtual void SetLogCallback(ZLogCallback callback) override;
 
 private:
-    static const char* kLogFormat;
-    static FString FormatUserMessage(const ANSICHAR* fileName, int32 lineNum, const TCHAR* userMessage);
-
     ZLogCallback mLogCallback;
 };
 
