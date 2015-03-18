@@ -5,9 +5,9 @@ namespace prz {
 namespace mdl {
 namespace path {
 
-const int ZWeight::kInfiniteWeight = -1;
+static const int kInfiniteWeight = -1;
 
-const ZWeight ZWeight::kInfinity(ZWeight::kInfiniteWeight);
+const ZWeight ZWeight::kInfinity(kInfiniteWeight);
 const ZWeight ZWeight::kZero(0);
 
 ZWeight::ZWeight()

@@ -22,11 +22,6 @@ public:
     virtual const std::string& GetLogHistory() override;
 
 private:
-    static const int kMinimapRadius;
-    static const int kMinimapSize;
-
-    static const int kLogHistoryMaxSize;
-
     ZDungeon* mDungeon;
     utl::ZIdType mPlayerId;
 

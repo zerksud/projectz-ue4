@@ -8,9 +8,9 @@
 namespace prz {
 namespace mdl {
 
-const int ZGame::kMinimapRadius = 35;
-const int ZGame::kMinimapSize = 1 + kMinimapRadius * 2;
-const int ZGame::kLogHistoryMaxSize = 4;
+static const int kMinimapRadius = 35;
+static const int kMinimapSize = 1 + kMinimapRadius * 2;
+static const int kLogHistoryMaxSize = 4;
 
 ZGame::ZGame() {
     StartNewGame();

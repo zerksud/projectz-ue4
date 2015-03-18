@@ -94,9 +94,6 @@ public:
     bool TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
 
 private:
-    typedef std::map<EMoveDirection, ETurnDirection> ZMoveToTurnDirectionMap;
-    static const ZMoveToTurnDirectionMap kMoveToTurnDirectionMap;
-
     void CreateFailSafeDungeon();
 
     void ParseMap(EDungeonCell*** map);

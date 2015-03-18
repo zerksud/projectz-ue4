@@ -19,17 +19,6 @@ public:
     virtual ZDungeonLevel* GenerateLevel(const ZDungeonLevel* previousLevel = nullptr) override;
 
 private:
-    static const int kDungeonLevelWidth;
-    static const int kDungeonLevelHeight;
-
-    static const int kSubDungeonMinSize;
-    static const int kRoomMaxSize;
-    static const int kRoomMinSize;
-
-    static const float kRoomCountFractionToDigRandomTunnelsFrom;
-
-    static const int kStaircaseCount;
-
     struct ZDirectionalStaircase {
         ZPosition position;
         ZDirection direction;

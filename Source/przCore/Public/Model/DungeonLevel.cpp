@@ -10,7 +10,8 @@
 namespace prz {
 namespace mdl {
 
-const ZDungeonLevel::ZMoveToTurnDirectionMap ZDungeonLevel::kMoveToTurnDirectionMap = {
+typedef std::map<EMoveDirection, ETurnDirection> ZMoveToTurnDirectionMap;
+static const ZMoveToTurnDirectionMap kMoveToTurnDirectionMap = {
         {EMoveDirection::Forward, ETurnDirection::Forward},
         {EMoveDirection::Backward, ETurnDirection::Back},
         {EMoveDirection::Left, ETurnDirection::Left},

@@ -14,16 +14,16 @@
 namespace prz {
 namespace mdl {
 
-const int ZDungeonLevelGenerator::kDungeonLevelWidth = 64;
-const int ZDungeonLevelGenerator::kDungeonLevelHeight = 64;
+static const int kDungeonLevelWidth = 64;
+static const int kDungeonLevelHeight = 64;
 
-const int ZDungeonLevelGenerator::kSubDungeonMinSize = 8;
-const int ZDungeonLevelGenerator::kRoomMaxSize = 10;
-const int ZDungeonLevelGenerator::kRoomMinSize = 5;
+static const int kSubDungeonMinSize = 8;
+static const int kRoomMaxSize = 10;
+static const int kRoomMinSize = 5;
 
-const float ZDungeonLevelGenerator::kRoomCountFractionToDigRandomTunnelsFrom = 0.25f;
+static const float kRoomCountFractionToDigRandomTunnelsFrom = 0.25f;
 
-const int ZDungeonLevelGenerator::kStaircaseCount = 3;
+static const int kStaircaseCount = 3;
 
 struct SubDungeon : public ZBounds {
 

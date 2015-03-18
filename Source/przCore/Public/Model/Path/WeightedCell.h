@@ -21,8 +21,6 @@ public:
     ZWeight& operator+=(const ZWeight& other);
 
 private:
-    static const int kInfiniteWeight;
-
     int mValue;
 };
 
