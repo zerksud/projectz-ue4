@@ -256,7 +256,7 @@ void ZDungeonLevelGenerator::DigRandomTunnels() {
 }
 
 int ZDungeonLevelGenerator::CountCellSolidNeighbours(const ZPosition& cell) const {
-    static const ETurnDirection adjacentCellsDirections[] = {
+    static const ETurnDirection kAdjacentCellsDirections[] = {
         ETurnDirection::BackLeft,
         ETurnDirection::Left,
         ETurnDirection::ForwardLeft,
@@ -266,12 +266,12 @@ int ZDungeonLevelGenerator::CountCellSolidNeighbours(const ZPosition& cell) cons
         ETurnDirection::BackRight,
         ETurnDirection::Back
     };
-    static const size_t adjacentCellsDirectionsCount = sizeof(adjacentCellsDirections) / sizeof(*adjacentCellsDirections);
-    static const ZDirection baseDirection;
+    static const size_t kAdjacentCellsDirectionsCount = sizeof(kAdjacentCellsDirections) / sizeof(*kAdjacentCellsDirections);
+    static const ZDirection kBaseDirection;
 
     int count = 0;
-    for (int i = 0; i < adjacentCellsDirectionsCount; ++i) {
-        ZPosition adjacentCell = cell + baseDirection.TurnCopy(adjacentCellsDirections[i]).PredictMove();
+    for (int i = 0; i < kAdjacentCellsDirectionsCount; ++i) {
+        ZPosition adjacentCell = cell + kBaseDirection.TurnCopy(kAdjacentCellsDirections[i]).PredictMove();
 
         bool adjacentCellIsOnBorder = adjacentCell.GetX() == 0
             || adjacentCell.GetX() == kDungeonLevelWidth
