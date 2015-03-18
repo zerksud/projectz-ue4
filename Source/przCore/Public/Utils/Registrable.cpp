@@ -8,6 +8,8 @@
 namespace prz {
 namespace utl {
 
+const ZIdType ZRegistrable::kNoId = 0;
+
 ZRegistrable::ZRegistrable() : mId(kNoId) {
 }
 

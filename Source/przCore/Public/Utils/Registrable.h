@@ -7,7 +7,7 @@ typedef unsigned int ZIdType;
 
 class ZRegistrable {
 public:
-    static const ZIdType kNoId = 0;
+    static const ZIdType kNoId;
 
     ZRegistrable();
     ZRegistrable(const ZRegistrable& other) = default;
