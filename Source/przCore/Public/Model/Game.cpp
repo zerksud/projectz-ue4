@@ -8,7 +8,7 @@
 namespace prz {
 namespace mdl {
 
-static const int kMinimapRadius = 35;
+static const int kMinimapRadius = 14;
 static const int kMinimapSize = 1 + kMinimapRadius * 2;
 static const int kLogHistoryMaxSize = 4;
 
