@@ -10,14 +10,6 @@
 namespace prz {
 namespace mdl {
 
-typedef std::map<EMoveDirection, ETurnDirection> ZMoveToTurnDirectionMap;
-static const ZMoveToTurnDirectionMap kMoveToTurnDirectionMap = {
-        {EMoveDirection::Forward, ETurnDirection::Forward},
-        {EMoveDirection::Backward, ETurnDirection::Back},
-        {EMoveDirection::Left, ETurnDirection::Left},
-        {EMoveDirection::Right, ETurnDirection::Right}
-};
-
 void ZDungeonLevel::CreateFailSafeDungeon() {
     mWidth = 1;
     mHeight = 1;
@@ -285,21 +277,15 @@ bool ZDungeonLevel::MovementIsDiagonalAroundTheCorner(const ZPosition& origin, c
         CellIsSolidImpl(origin.GetX() + diff.GetdX(), origin.GetY());
 }
 
-bool ZDungeonLevel::TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection direction, ZPositionDiff* OutExpectedMoveDiff) {
+bool ZDungeonLevel::TryToMoveMonster(utl::ZIdType monsterId, ETurnDirection direction, ZPositionDiff* OutExpectedMoveDiff) {
     ZPlacedMonster* placedMonster = GetPlacedMonster(monsterId);
     if (placedMonster == nullptr) {
         LOGE("Can't move not-placed monster with id = %d", monsterId);
         return false;
     }
 
-    auto pos = kMoveToTurnDirectionMap.find(direction);
-    if (pos == kMoveToTurnDirectionMap.end()) {
-        LOGE("Got unsupported move direction %d", direction);
-        return false;
-    }
-
     ZDirection alignedDirection = placedMonster->monster->GetDirection();
-    alignedDirection.Turn(pos->second);
+    alignedDirection.Turn(direction);
 
     ZPositionDiff expectedDiff = alignedDirection.PredictMove();
     ZPosition expectedPosition = placedMonster->position + expectedDiff;

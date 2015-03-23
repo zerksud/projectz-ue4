@@ -95,7 +95,7 @@ const ZPosition* ZDungeon::GetMonsterPosition(utl::ZIdType monsterId) const {
     return position;
 }
 
-bool ZDungeon::TryToMoveMonster(utl::ZIdType monsterId, EMoveDirection direction, ZPositionDiff* OutExpectedMoveDiff) {
+bool ZDungeon::TryToMoveMonster(utl::ZIdType monsterId, ETurnDirection direction, ZPositionDiff* OutExpectedMoveDiff) {
     auto monsterLevelIterator = mMonsterLevelMap.find(monsterId);
     if (monsterLevelIterator == mMonsterLevelMap.end()) {
         LOGE("Can't move not-placed monster with id = %d", monsterId);

@@ -37,7 +37,7 @@ void ZGame::StartNewGame() {
     mLogHistory.Log("It's dark in here.");
 }
 
-bool ZGame::TryToMovePlayer(EMoveDirection direction) {
+bool ZGame::TryToMovePlayer(ETurnDirection direction) {
     unsigned int levelIndexBeforeMove = mDungeon->GetMonsterLevelIndex(mPlayerId);
     bool success = mDungeon->TryToMoveMonster(mPlayerId, direction);
     if (success) {

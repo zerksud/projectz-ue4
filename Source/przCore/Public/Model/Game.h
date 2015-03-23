@@ -13,7 +13,7 @@ public:
 
     virtual void StartNewGame() override;
 
-    virtual bool TryToMovePlayer(EMoveDirection direction) override;
+    virtual bool TryToMovePlayer(ETurnDirection direction) override;
     virtual void TurnPlayer(ETurnDirection direction) override;
 
     virtual const ZMinimap GetMinimap() override;
