@@ -8,6 +8,7 @@
 
 namespace prz {
 namespace mdl {
+
 static const double kPi = 3.14159265359;
 
 typedef std::map<int, ZPositionDiff> ZPredictedMovesMap;
@@ -25,12 +26,12 @@ static const ZPredictedMovesMap kPredictedMoves = {
 static const int kDirectionToAngle[] = {
         0,      // Forward
         90,     // Left
-        -90,    // Right
+        270,    // Right
         180,    // Back
         45,     // ForwardLeft
-        -45,    // ForwardRight
+        315,    // ForwardRight
         135,    // BackLeft
-        -135    // BackRight
+        225     // BackRight
 };
 
 const ZDirection ZDirection::kForward;
@@ -45,6 +46,19 @@ ZDirection::ZDirection()
 ZDirection::ZDirection(EDirection direction)
     : mAngle(0) {
     Turn(direction);
+}
+
+EDirection ZDirection::GetDirection() const {
+    static const int kDirectionCount = sizeof(kDirectionToAngle) / sizeof(kDirectionToAngle[0]);
+    for (int i = 0; i < kDirectionCount; ++i) {
+        if (kDirectionToAngle[i] == mAngle) {
+            return static_cast<EDirection>(i);
+        }
+    }
+    
+    LOGD("Can't find direction for angle = %d", mAngle);
+    
+    return EDirection::Forward;
 }
 
 ZDirection& ZDirection::Turn(EDirection direction) {

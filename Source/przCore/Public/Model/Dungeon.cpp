@@ -117,6 +117,8 @@ bool ZDungeon::TryToMoveMonster(utl::ZIdType monsterId, EDirection direction, ZP
                 nextLevelIndex = monsterLevelIndex - 1;
                 nextLevel = mLevels[nextLevelIndex];
             } else {
+                EDirection backDirection = ZDirection(direction).Turn(EDirection::Back).GetDirection();
+                mLevels[monsterLevelIndex]->TryToMoveMonster(monsterId, backDirection);
                 return false;   // monster can't leave dungeon
             }
         }

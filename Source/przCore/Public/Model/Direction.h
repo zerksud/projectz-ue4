@@ -29,6 +29,8 @@ public:
     ZDirection(EDirection direction);
     virtual ~ZDirection() = default;
 
+    EDirection GetDirection() const;
+    
     ZDirection& Turn(EDirection direction);
     ZDirection TurnCopy(EDirection direction) const;
 
