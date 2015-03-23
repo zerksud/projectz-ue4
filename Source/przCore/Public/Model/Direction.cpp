@@ -47,8 +47,10 @@ ZDirection::ZDirection(ETurnDirection direction)
     Turn(direction);
 }
 
-void ZDirection::Turn(ETurnDirection direction) {
+ZDirection& ZDirection::Turn(ETurnDirection direction) {
     Turn(kTurnDirectionToAngle[(int)direction]);
+    
+    return *this;
 }
 
 ZDirection ZDirection::TurnCopy(ETurnDirection direction) const {

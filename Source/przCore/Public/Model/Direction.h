@@ -29,7 +29,7 @@ public:
     ZDirection(ETurnDirection direction);
     virtual ~ZDirection() = default;
 
-    void Turn(ETurnDirection direction);
+    ZDirection& Turn(ETurnDirection direction);
     ZDirection TurnCopy(ETurnDirection direction) const;
 
     ZPositionDiff PredictMove() const;

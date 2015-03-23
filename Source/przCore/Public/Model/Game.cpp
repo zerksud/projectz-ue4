@@ -23,10 +23,16 @@ ZGame::~ZGame() {
 void ZGame::StartNewGame() {
     mDungeon = new ZDungeon();
     const ZDungeonLevel* level = mDungeon->GetLevel(0);
-    const ZPosition& startPosition = level->GetUpStaircases().front();
+    
     ZMonster* player = ZMonster::CreateMonster();
     mPlayerId = player->GetId();
+    
+    const ZPosition& startPosition = level->GetUpStaircases().front();
+    ZDirection staircaseDirection = level->GetStaircaseDirection(startPosition);
+    player->GetDirection() = staircaseDirection.Turn(ETurnDirection::Back);
+    
     mDungeon->PlaceMonster(player, 0, startPosition);
+    
     mLogHistory.Clear();
     mLogHistory.Log("It's dark in here.");
 }
