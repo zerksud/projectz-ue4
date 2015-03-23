@@ -7,7 +7,7 @@
 namespace prz {
 namespace mdl {
 
-enum class ETurnDirection {
+enum class EDirection {
     Forward,
     Left,
     Right,
@@ -26,11 +26,11 @@ public:
     static const ZDirection kBack;
 
     ZDirection();
-    ZDirection(ETurnDirection direction);
+    ZDirection(EDirection direction);
     virtual ~ZDirection() = default;
 
-    ZDirection& Turn(ETurnDirection direction);
-    ZDirection TurnCopy(ETurnDirection direction) const;
+    ZDirection& Turn(EDirection direction);
+    ZDirection TurnCopy(EDirection direction) const;
 
     ZPositionDiff PredictMove() const;
     void Align(const ZPositionDiff& diff);

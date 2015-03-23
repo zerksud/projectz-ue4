@@ -22,7 +22,7 @@ static const ZPredictedMovesMap kPredictedMoves = {
         {270, ZPositionDiff(0.0f, 1.0f)},
         {315, ZPositionDiff(1.0f, 1.0f)}};
 
-static const int kTurnDirectionToAngle[] = {
+static const int kDirectionToAngle[] = {
         0,      // Forward
         90,     // Left
         -90,    // Right
@@ -34,26 +34,26 @@ static const int kTurnDirectionToAngle[] = {
 };
 
 const ZDirection ZDirection::kForward;
-const ZDirection ZDirection::kLeft(ETurnDirection::Left);
-const ZDirection ZDirection::kRight(ETurnDirection::Right);
-const ZDirection ZDirection::kBack(ETurnDirection::Back);
+const ZDirection ZDirection::kLeft(EDirection::Left);
+const ZDirection ZDirection::kRight(EDirection::Right);
+const ZDirection ZDirection::kBack(EDirection::Back);
 
 ZDirection::ZDirection()
     : mAngle(0) {
 }
 
-ZDirection::ZDirection(ETurnDirection direction)
+ZDirection::ZDirection(EDirection direction)
     : mAngle(0) {
     Turn(direction);
 }
 
-ZDirection& ZDirection::Turn(ETurnDirection direction) {
-    Turn(kTurnDirectionToAngle[(int)direction]);
+ZDirection& ZDirection::Turn(EDirection direction) {
+    Turn(kDirectionToAngle[(int)direction]);
     
     return *this;
 }
 
-ZDirection ZDirection::TurnCopy(ETurnDirection direction) const {
+ZDirection ZDirection::TurnCopy(EDirection direction) const {
     ZDirection directionCopy(*this);
     directionCopy.Turn(direction);
 

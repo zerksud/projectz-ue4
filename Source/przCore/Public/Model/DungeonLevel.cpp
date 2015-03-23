@@ -103,11 +103,11 @@ const ZDirection ZDungeonLevel::GetStaircaseDirection(const ZPosition& position)
     ZDirection direction;
 
     if (!CellIsSolid(position.GetX() + 1, position.GetY())) {
-        direction.Turn(ETurnDirection::Back);
+        direction.Turn(EDirection::Back);
     } else if (!CellIsSolid(position.GetX(), position.GetY() - 1)) {
-        direction.Turn(ETurnDirection::Right);
+        direction.Turn(EDirection::Right);
     } else if (!CellIsSolid(position.GetX(), position.GetY() + 1)) {
-        direction.Turn(ETurnDirection::Left);
+        direction.Turn(EDirection::Left);
     }
 
     return direction;
@@ -277,7 +277,7 @@ bool ZDungeonLevel::MovementIsDiagonalAroundTheCorner(const ZPosition& origin, c
         CellIsSolidImpl(origin.GetX() + diff.GetdX(), origin.GetY());
 }
 
-bool ZDungeonLevel::TryToMoveMonster(utl::ZIdType monsterId, ETurnDirection direction, ZPositionDiff* OutExpectedMoveDiff) {
+bool ZDungeonLevel::TryToMoveMonster(utl::ZIdType monsterId, EDirection direction, ZPositionDiff* OutExpectedMoveDiff) {
     ZPlacedMonster* placedMonster = GetPlacedMonster(monsterId);
     if (placedMonster == nullptr) {
         LOGE("Can't move not-placed monster with id = %d", monsterId);

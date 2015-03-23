@@ -29,7 +29,7 @@ void ZGame::StartNewGame() {
     
     const ZPosition& startPosition = level->GetUpStaircases().front();
     ZDirection staircaseDirection = level->GetStaircaseDirection(startPosition);
-    player->GetDirection() = staircaseDirection.Turn(ETurnDirection::Back);
+    player->GetDirection() = staircaseDirection.Turn(EDirection::Back);
     
     mDungeon->PlaceMonster(player, 0, startPosition);
     
@@ -37,7 +37,7 @@ void ZGame::StartNewGame() {
     mLogHistory.Log("It's dark in here.");
 }
 
-bool ZGame::TryToMovePlayer(ETurnDirection direction) {
+bool ZGame::TryToMovePlayer(EDirection direction) {
     unsigned int levelIndexBeforeMove = mDungeon->GetMonsterLevelIndex(mPlayerId);
     bool success = mDungeon->TryToMoveMonster(mPlayerId, direction);
     if (success) {
@@ -55,7 +55,7 @@ bool ZGame::TryToMovePlayer(ETurnDirection direction) {
     return success;
 }
 
-void ZGame::TurnPlayer(ETurnDirection direction) {
+void ZGame::TurnPlayer(EDirection direction) {
     mDungeon->GetMonster(mPlayerId)->GetDirection().Turn(direction);
 }
 
@@ -82,7 +82,7 @@ const ZMinimap ZGame::GetMinimap() {
 
     prz::mdl::ZMonster* player = mDungeon->GetMonster(mPlayerId);
     ZDirection minimapDirection = player->GetDirection();
-    minimapDirection.Turn(ETurnDirection::Right);
+    minimapDirection.Turn(EDirection::Right);
     const ZPositionDiff minimapDirectionSinCos = minimapDirection.PredictMove();
 
     const ZFieldOfView& playerFOV = player->GetFieldOfView();

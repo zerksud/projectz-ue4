@@ -84,7 +84,7 @@ public:
 
     bool UpdateFieldOfView(utl::ZIdType monsterId);
 
-    bool TryToMoveMonster(utl::ZIdType monsterId, ETurnDirection direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
+    bool TryToMoveMonster(utl::ZIdType monsterId, EDirection direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
 
 private:
     void CreateFailSafeDungeon();

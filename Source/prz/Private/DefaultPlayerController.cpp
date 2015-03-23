@@ -64,38 +64,38 @@ void ADefaultPlayerController::SetupObservers() {
     }
 }
 
-void ADefaultPlayerController::Move(prz::mdl::ETurnDirection direction) {
+void ADefaultPlayerController::Move(prz::mdl::EDirection direction) {
     prz::mdl::IGame* game = GET_SERVICE(prz::mdl::IGame);
     game->TryToMovePlayer(direction);
 }
 
-void ADefaultPlayerController::Turn(prz::mdl::ETurnDirection direction) {
+void ADefaultPlayerController::Turn(prz::mdl::EDirection direction) {
     prz::mdl::IGame* game = GET_SERVICE(prz::mdl::IGame);
     game->TurnPlayer(direction);
 }
 
 void ADefaultPlayerController::MoveForward() {
-    Move(prz::mdl::ETurnDirection::Forward);
+    Move(prz::mdl::EDirection::Forward);
 }
 
 void ADefaultPlayerController::MoveBackward() {
-    Move(prz::mdl::ETurnDirection::Back);
+    Move(prz::mdl::EDirection::Back);
 }
 
 void ADefaultPlayerController::StrafeRight() {
-    Move(prz::mdl::ETurnDirection::Right);
+    Move(prz::mdl::EDirection::Right);
 }
 
 void ADefaultPlayerController::StrafeLeft() {
-    Move(prz::mdl::ETurnDirection::Left);
+    Move(prz::mdl::EDirection::Left);
 }
 
 void ADefaultPlayerController::TurnRight() {
-    Turn(prz::mdl::ETurnDirection::Right);
+    Turn(prz::mdl::EDirection::Right);
 }
 
 void ADefaultPlayerController::TurnLeft() {
-    Turn(prz::mdl::ETurnDirection::Left);
+    Turn(prz::mdl::EDirection::Left);
 }
 
 void ADefaultPlayerController::Quit() {

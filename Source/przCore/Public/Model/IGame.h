@@ -12,8 +12,8 @@ public:
 
     virtual void StartNewGame() = 0;
 
-    virtual bool TryToMovePlayer(ETurnDirection direction) = 0;
-    virtual void TurnPlayer(ETurnDirection direction) = 0;
+    virtual bool TryToMovePlayer(EDirection direction) = 0;
+    virtual void TurnPlayer(EDirection direction) = 0;
 
     virtual const ZMinimap GetMinimap() = 0;
     virtual unsigned int GetMinimapSize() const = 0;

@@ -256,15 +256,15 @@ void ZDungeonLevelGenerator::DigRandomTunnels() {
 }
 
 int ZDungeonLevelGenerator::CountCellSolidNeighbours(const ZPosition& cell) const {
-    static const ETurnDirection kAdjacentCellsDirections[] = {
-        ETurnDirection::BackLeft,
-        ETurnDirection::Left,
-        ETurnDirection::ForwardLeft,
-        ETurnDirection::Forward,
-        ETurnDirection::ForwardRight,
-        ETurnDirection::Right,
-        ETurnDirection::BackRight,
-        ETurnDirection::Back
+    static const EDirection kAdjacentCellsDirections[] = {
+        EDirection::BackLeft,
+        EDirection::Left,
+        EDirection::ForwardLeft,
+        EDirection::Forward,
+        EDirection::ForwardRight,
+        EDirection::Right,
+        EDirection::BackRight,
+        EDirection::Back
     };
     static const size_t kAdjacentCellsDirectionsCount = sizeof(kAdjacentCellsDirections) / sizeof(*kAdjacentCellsDirections);
     static const ZDirection kBaseDirection;
@@ -401,7 +401,7 @@ void ZDungeonLevelGenerator::DigRandomDownStaircases() {
 
 const ZDungeonLevelGenerator::ZDirectionalStaircase ZDungeonLevelGenerator::CalcUpStaircase(const ZPosition& downStaircasePosition, const ZDirection& downStaircaseDirection) {
     ZPosition upStaircasePosition = downStaircasePosition + downStaircaseDirection.PredictMove();
-    ZDirection upStaircaseDirection = downStaircaseDirection.TurnCopy(ETurnDirection::Back);
+    ZDirection upStaircaseDirection = downStaircaseDirection.TurnCopy(EDirection::Back);
 
     return ZDirectionalStaircase(upStaircasePosition, upStaircaseDirection);
 }
@@ -424,12 +424,12 @@ void ZDungeonLevelGenerator::CalcUpStaircases(const ZDungeonLevel* previousLevel
 void ZDungeonLevelGenerator::BlockStaircasePocketCells(path::ZWeightedMap* weightedMap, const ZDirectionalStaircase& staircase) {
     ZDirection blockedDirection = staircase.direction;
 
-    static ETurnDirection blockedCellsDirections[] = {
-        ETurnDirection::Left,
-        ETurnDirection::ForwardLeft,
-        ETurnDirection::Forward,
-        ETurnDirection::ForwardRight,
-        ETurnDirection::Right
+    static EDirection blockedCellsDirections[] = {
+        EDirection::Left,
+        EDirection::ForwardLeft,
+        EDirection::Forward,
+        EDirection::ForwardRight,
+        EDirection::Right
     };
     static size_t blockedCellsDirectionsSize = sizeof(blockedCellsDirections) / sizeof(*blockedCellsDirections);
 
@@ -455,10 +455,10 @@ ZPosition ZDungeonLevelGenerator::CropPositionInsideLevel(const ZPosition& posit
 }
 
 bool ZDungeonLevelGenerator::TryToCalcRoomNearStaircase(const ZDirectionalStaircase& staircase, int minSize, int maxSize, ZDungeonLevel::ZRoom* room) {
-    ZDirection directionInsideRoom = staircase.direction.TurnCopy(ETurnDirection::Back);
+    ZDirection directionInsideRoom = staircase.direction.TurnCopy(EDirection::Back);
     ZPosition someEdgeCell = staircase.position + directionInsideRoom.PredictMove();
 
-    ZDirection nearWallLeftDirection = directionInsideRoom.TurnCopy(ETurnDirection::Left);
+    ZDirection nearWallLeftDirection = directionInsideRoom.TurnCopy(EDirection::Left);
     int nearWallLeftPartMaxLength = maxSize - 1;   // cause staircases shouldn't be adjacent to room's corner
     int nearWallLeftPartMinLength = 2;
     int nearWallLeftPartLength = utl::ZRandomHelpers::GetRandomValue(nearWallLeftPartMinLength, nearWallLeftPartMaxLength);
@@ -466,7 +466,7 @@ bool ZDungeonLevelGenerator::TryToCalcRoomNearStaircase(const ZDirectionalStairc
     nearWallLeftEnd = CropPositionInsideLevel(nearWallLeftEnd);
 
     int nearWallLength = utl::ZRandomHelpers::GetRandomValue(std::max(nearWallLeftPartLength + 1, minSize), maxSize);
-    ZPosition nearWallRightEnd = nearWallLeftEnd + (nearWallLength - 1) * nearWallLeftDirection.TurnCopy(ETurnDirection::Back).PredictMove();
+    ZPosition nearWallRightEnd = nearWallLeftEnd + (nearWallLength - 1) * nearWallLeftDirection.TurnCopy(EDirection::Back).PredictMove();
     nearWallRightEnd = CropPositionInsideLevel(nearWallRightEnd);
 
     int farWallDistance = utl::ZRandomHelpers::GetRandomValue(minSize, maxSize);
@@ -505,7 +505,7 @@ void ZDungeonLevelGenerator::DigRoomsNearUpStaircases(const ZDungeonLevel* previ
             if (success) {
                 roomList.push_back(room);
             } else {
-                ZPosition firstCellOutOfStaircase = staircase.position + staircase.direction.TurnCopy(ETurnDirection::Back).PredictMove();
+                ZPosition firstCellOutOfStaircase = staircase.position + staircase.direction.TurnCopy(EDirection::Back).PredictMove();
                 DigCellIfSolidAndNotBlocked(mMap, mWeightedMap, firstCellOutOfStaircase);
             }
         }
@@ -536,11 +536,11 @@ void ZDungeonLevelGenerator::ConnectUpStaircasesWithSomeValidCell(const ZPositio
             mWeightedMap->SetCellWeight(x, y, path::ZPathFinder::kEmptyCellWeight);
         }
 
-        ZPosition staircaseConnectedCellPosition = staircase.position + staircase.direction.TurnCopy(ETurnDirection::Back).PredictMove();
+        ZPosition staircaseConnectedCellPosition = staircase.position + staircase.direction.TurnCopy(EDirection::Back).PredictMove();
         if (path::ZPathFinder::CellIsBlocked(*mWeightedMap, staircaseConnectedCellPosition)) {
             mWeightedMap->SetCellWeight(staircaseConnectedCellPosition, path::ZPathFinder::kEmptyCellWeight);
-            path::ZPathFinder::BlockCell(mWeightedMap, staircaseConnectedCellPosition + staircase.direction.TurnCopy(ETurnDirection::Left).PredictMove());
-            path::ZPathFinder::BlockCell(mWeightedMap, staircaseConnectedCellPosition + staircase.direction.TurnCopy(ETurnDirection::Right).PredictMove());
+            path::ZPathFinder::BlockCell(mWeightedMap, staircaseConnectedCellPosition + staircase.direction.TurnCopy(EDirection::Left).PredictMove());
+            path::ZPathFinder::BlockCell(mWeightedMap, staircaseConnectedCellPosition + staircase.direction.TurnCopy(EDirection::Right).PredictMove());
         }
 
         ConnectCells(staircase.position, someValidCell);

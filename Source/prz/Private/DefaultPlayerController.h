@@ -43,6 +43,6 @@ protected:
 private:
     void SetupObservers();
 
-    void Move(prz::mdl::ETurnDirection direction);
-    void Turn(prz::mdl::ETurnDirection direction);
+    void Move(prz::mdl::EDirection direction);
+    void Turn(prz::mdl::EDirection direction);
 };
