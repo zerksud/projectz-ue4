@@ -28,10 +28,9 @@ void ZGame::StartNewGame() {
     mPlayerId = player->GetId();
     
     const ZPosition& startPosition = level->GetUpStaircases().front();
-    ZDirection staircaseDirection = level->GetStaircaseDirection(startPosition);
-    player->GetDirection() = staircaseDirection.Turn(EDirection::Back);
+    player->GetDirection() = level->GetStaircaseDirection(startPosition).TurnCopy(EDirection::Back);
     
-    mDungeon->PlaceMonster(player, 0, startPosition);
+    mDungeon->PlaceMonster(player, 0, startPosition + player->GetDirection().PredictMove());
     
     mLogHistory.Clear();
     mLogHistory.Log("It's dark in here.");
