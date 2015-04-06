@@ -373,9 +373,9 @@ void ZDungeonLevelGenerator::DigRandomDownStaircases() {
                 LOGD("map with new staircase room:\n%s", nextLevelMapTemplateCopy.ToString().c_str());
             }
 
-            LOGD("mustBeDigged = %d; isLocatedInPocket = %d; canDigRoom = %d", mustBeDigged, isLocatedInPocket, canDigRoom);
+            LOGD("mustBeDigged = %d; isNotBlocked = %d; isLocatedInPocket = %d; canDigRoom = %d", mustBeDigged, isNotBlocked, isLocatedInPocket, canDigRoom);
 
-            if (mustBeDigged && isLocatedInPocket && canDigRoom) {
+            if (mustBeDigged && isNotBlocked && isLocatedInPocket && canDigRoom) {
                 mMap[staircase.position.GetX()][staircase.position.GetY()] = EDungeonCell::DownStaircase;
                 ++staircasesGeneratedCount;
 
