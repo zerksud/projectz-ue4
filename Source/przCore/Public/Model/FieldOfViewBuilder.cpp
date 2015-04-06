@@ -78,16 +78,14 @@ void ScanSector(SectorScanData* sectorScanData, int rowNumber, float leftMaxSlop
 
     FieldOfViewData* fieldOfViewData = sectorScanData->fieldOfViewData;
 
-    float currentRowLeftMaxSlope = 0.0f;
     float nextRowLeftMaxSlope = leftMaxSlope;
-
     bool previousCellIsSolid = false;
     
     for (int currentRowNumber = rowNumber; currentRowNumber <= fieldOfViewData->viewDistance && !previousCellIsSolid; ++currentRowNumber) {
         ZPositionDiff rowFirstCellDiff = kLeftEdgeDiff * currentRowNumber;
         ZPositionDiff rowCellAfterLastDiff = kRightEdgeDiff * currentRowNumber + kRowDiff;
 
-        currentRowLeftMaxSlope = nextRowLeftMaxSlope;
+        float currentRowLeftMaxSlope = nextRowLeftMaxSlope;
         
         LOGD("scan row #%d, slope %f -> %f", currentRowNumber, currentRowLeftMaxSlope, rightMinSlope);
         for (ZPositionDiff cellDiff = rowFirstCellDiff; cellDiff != rowCellAfterLastDiff; cellDiff += kRowDiff) {
