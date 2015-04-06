@@ -72,20 +72,12 @@ const ZMinimap ZGame::GetMinimap() {
     EDungeonCell** cells;
     utl::ZMatrix::Allocate(&cells, kMinimapSize);
 
-    unsigned int currentLevel = mDungeon->GetMonsterLevelIndex(mPlayerId);
-    const ZDungeonLevel* level = mDungeon->GetLevel(currentLevel);
-
-    const ZPosition* playerPosition = level->GetMonsterPosition(mPlayerId);
-    int baseX = playerPosition->GetX();
-    int baseY = playerPosition->GetY();
-
     prz::mdl::ZMonster* player = mDungeon->GetMonster(mPlayerId);
     ZDirection minimapDirection = player->GetDirection();
     minimapDirection.Turn(EDirection::Right);
     const ZPositionDiff minimapDirectionSinCos = minimapDirection.PredictMove();
 
     const ZFieldOfView& playerFOV = player->GetFieldOfView();
-    int viewDistance = player->GetViewDistance();
 
     for (int dx = -kMinimapRadius; dx <= kMinimapRadius; ++dx) {
         for (int dy = -kMinimapRadius; dy <= kMinimapRadius; ++dy) {

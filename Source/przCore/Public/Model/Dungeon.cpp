@@ -160,7 +160,6 @@ void ZDungeon::GenerateAbsentLevels(unsigned int maxLevelIndex) {
 
     mLevels.reserve(maxLevelIndex + 1);
     for (unsigned int newLevelIndex = mLevels.size(); newLevelIndex <= maxLevelIndex; ++newLevelIndex) {
-        const ZDungeonLevel::StaircaseList& aboveLevelDownStaircases = mLevels[newLevelIndex - 1]->GetDownStaircases();
         ZDungeonLevel* level = mLevelGenerator->GenerateLevel(mLevels[newLevelIndex - 1]);
         mLevels.push_back(level);
     }

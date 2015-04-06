@@ -558,7 +558,7 @@ ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previo
 
     BSPTreeNode subDungeonsTreeRoot(0, 0, kDungeonLevelWidth, kDungeonLevelHeight);
     utl::ZRandomHelpers::Initialize();
-    bool success = TryToGenerateBSPTree(&subDungeonsTreeRoot);
+    TryToGenerateBSPTree(&subDungeonsTreeRoot);
 
     DigRandomTunnels();
     ConnectUpStaircasesWithSomeValidCell(subDungeonsTreeRoot.dungeon.someValidCell);
