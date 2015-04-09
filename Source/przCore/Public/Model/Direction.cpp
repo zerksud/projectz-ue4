@@ -14,14 +14,14 @@ static const double kPi = 3.14159265359;
 typedef std::map<int, ZPositionDiff> ZPredictedMovesMap;
 
 static const ZPredictedMovesMap kPredictedMoves = {
-        {0, ZPositionDiff(1.0f, 0.0f)},
-        {45, ZPositionDiff(1.0f, -1.0f)},
-        {90, ZPositionDiff(0.0f, -1.0f)},
-        {135, ZPositionDiff(-1.0f, -1.0f)},
-        {180, ZPositionDiff(-1.0f, 0.0f)},
-        {225, ZPositionDiff(-1.0f, 1.0f)},
-        {270, ZPositionDiff(0.0f, 1.0f)},
-        {315, ZPositionDiff(1.0f, 1.0f)}};
+        {0, ZPositionDiff(1, 0)},
+        {45, ZPositionDiff(1, -1)},
+        {90, ZPositionDiff(0, -1)},
+        {135, ZPositionDiff(-1, -1)},
+        {180, ZPositionDiff(-1, 0)},
+        {225, ZPositionDiff(-1, 1)},
+        {270, ZPositionDiff(0, 1)},
+        {315, ZPositionDiff(1, 1)}};
 
 static const int kDirectionToAngle[] = {
         0,      // Forward
