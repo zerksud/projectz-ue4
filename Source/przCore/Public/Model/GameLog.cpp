@@ -1,6 +1,8 @@
 #include "przCorePCH.h"
 #include "Model/GameLog.h"
 
+#include <stdarg.h>
+
 #include "Utils/LOG.h"
 #include "Utils/StringHelpers.h"
 

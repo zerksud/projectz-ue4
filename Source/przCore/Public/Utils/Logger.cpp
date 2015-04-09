@@ -1,6 +1,8 @@
 #include "przCorePCH.h"
 #include "Logger.h"
 
+#include <stdarg.h>
+
 namespace prz {
 namespace utl {
 

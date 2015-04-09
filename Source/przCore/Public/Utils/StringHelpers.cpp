@@ -1,6 +1,8 @@
 #include "przCorePCH.h"
 #include "Utils/StringHelpers.h"
 
+#include <stdarg.h>
+
 #include <sstream>
 
 #include "Utils/LOG.h"
