@@ -382,10 +382,10 @@ void ZDungeonLevelGenerator::DigRandomDownStaircases() {
                 nextLevelMapTemplate = nextLevelMapTemplateCopy;
                 mNextLevelStaircaseRooms.push_back(staircaseRoom);
 
-                for (auto& room : distancedRooms) {
-                    int pathSize = path::ZPathFinder::FindPathBetweenCells(*mWeightedMap, staircase.position, room.someValidCell).size();
-                    if (pathSize > 0 && pathSize < room.distanceToClosestStaircase) {
-                        room.distanceToClosestStaircase = pathSize;
+                for (auto& distancedRoom : distancedRooms) {
+                    int pathSize = path::ZPathFinder::FindPathBetweenCells(*mWeightedMap, staircase.position, distancedRoom.someValidCell).size();
+                    if (pathSize > 0 && pathSize < distancedRoom.distanceToClosestStaircase) {
+                        distancedRoom.distanceToClosestStaircase = pathSize;
                     }
                 }
 
