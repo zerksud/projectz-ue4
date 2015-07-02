@@ -28,9 +28,9 @@ private:
         void* observerOwner;
         ZNotificationEventHandler handler;
 
-        ZObserver(void* observerOwner, ZNotificationEventHandler handler) {
-            this->observerOwner = observerOwner;
-            this->handler = handler;
+        ZObserver(void* pObserverOwner, ZNotificationEventHandler pHandler) {
+            this->observerOwner = pObserverOwner;
+            this->handler = pHandler;
         }
     };
 
