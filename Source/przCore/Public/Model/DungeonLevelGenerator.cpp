@@ -422,8 +422,6 @@ void ZDungeonLevelGenerator::CalcUpStaircases(const ZDungeonLevel* previousLevel
 }
 
 void ZDungeonLevelGenerator::BlockStaircasePocketCells(path::ZWeightedMap* weightedMap, const ZDirectionalStaircase& staircase) {
-    ZDirection blockedDirection = staircase.direction;
-
     static EDirection blockedCellsDirections[] = {
         EDirection::Left,
         EDirection::ForwardLeft,
