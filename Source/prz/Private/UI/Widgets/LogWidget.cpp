@@ -8,7 +8,7 @@ void SLogWidget::Construct(const FArguments& InArgs) {
     ChildSlot
     [
         SNew(STextBlock)
-        .Font(FSlateFontInfo(FPaths::GameContentDir() / TEXT("Fonts/Inconsolata-Regular.ttf"), 20))
+        .Font(FSlateFontInfo(FPaths::GameContentDir() / TEXT("Fonts/orbitron-bold.otf"), 24))
         .Text(this, &SLogWidget::GetLogHistory)
     ];
 }
