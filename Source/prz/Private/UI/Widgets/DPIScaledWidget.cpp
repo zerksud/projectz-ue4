@@ -1,9 +1,9 @@
 #include "prz.h"
 #include "UI/Widgets/DPIScaledWidget.h"
 
-#include "Widgets/Layout/SDPIScaler.h"
-
 #include "Utils/LOG.h"
+
+#include "Widgets/Layout/SDPIScaler.h"
 
 void SDPIScaledWidget::Construct(const FArguments& InArgs) {
     OwnerHUD = InArgs._OwnerHUD;

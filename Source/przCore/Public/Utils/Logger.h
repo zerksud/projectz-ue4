@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Utils/ILogger.h"
-
 #include "Platform.h"
+
+#include "Utils/ILogger.h"
 
 namespace prz {
 namespace utl {

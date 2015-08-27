@@ -1,11 +1,11 @@
 #include "przCorePCH.h"
 #include "Model/DungeonLevel.h"
 
-#include "Model/FieldOfViewBuilder.h"
-
 #include "Utils/LOG.h"
 #include "Utils/VectorHelpers.h"
 #include "Utils/MatrixHelpers.h"
+
+#include "Model/FieldOfViewBuilder.h"
 
 namespace prz {
 namespace mdl {

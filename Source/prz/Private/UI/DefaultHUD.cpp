@@ -3,13 +3,14 @@
 
 #include <algorithm>
 
+#include "Utils/Services.h"
+
+#include "Model/IGame.h"
+
 #include "UI/Widgets/DPIScaledWidget.h"
 #include "UI/Widgets/NavigationWidget.h"
 #include "UI/Widgets/MinimapWidget.h"
 #include "UI/Widgets/LogWidget.h"
-
-#include "Utils/Services.h"
-#include "Model/IGame.h"
 
 ADefaultHUD::ADefaultHUD(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer) {

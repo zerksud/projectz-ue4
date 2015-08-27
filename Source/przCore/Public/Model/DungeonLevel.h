@@ -3,10 +3,11 @@
 #include <unordered_map>
 #include <vector>
 
+#include "Utils/RandomHelpers.h"
+
 #include "Model/FieldOfView.h"
 #include "Model/Position.h"
 #include "Model/Monster.h"
-#include "Utils/RandomHelpers.h"
 
 namespace prz {
 namespace mdl {

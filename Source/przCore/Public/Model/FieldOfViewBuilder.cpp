@@ -3,10 +3,10 @@
 
 #include <utility>
 
-#include "Model/Matrix2D.h"
-
 #include "Utils/MatrixHelpers.h"
 #include "Utils/LOG.h"
+
+#include "Model/Matrix2D.h"
 
 namespace prz {
 namespace mdl {

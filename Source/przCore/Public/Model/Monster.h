@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Utils/Registrable.h"
+
 #include "Model/Direction.h"
 #include "Model/FieldOfView.h"
-#include "Utils/Registrable.h"
 
 namespace prz {
 namespace mdl {

@@ -3,8 +3,9 @@
 #include <algorithm>
 #include <cmath>
 
-#include "Model/Direction.h"
 #include "Utils/LOG.h"
+
+#include "Model/Direction.h"
 
 namespace prz {
 namespace mdl {
