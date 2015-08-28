@@ -10,7 +10,7 @@
 namespace prz {
 namespace utl {
 
-std::string ZString::Format(const ANSICHAR* format, ...) {
+std::string ZString::Format(const char* format, ...) {
     va_list args;
     va_start(args, format);
     int32 messageSize = vsnprintf(nullptr, 0, format, args);
