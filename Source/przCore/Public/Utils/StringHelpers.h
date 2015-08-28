@@ -5,16 +5,12 @@
 
 namespace prz {
 namespace utl {
+namespace string_helpers {
 
-class ZString {
-public:
-    ZString() = delete;
+    std::string Format(const char* format, ...);
 
-    static std::string Format(const char* format, ...);
+    std::string Join(const std::list<std::string>& stringList, const std::string& delimeter = "\n");
 
-    static std::string Join(const std::list<std::string>& stringList, const std::string& delimeter = "\n");
-
-};
-
+}
 }
 }

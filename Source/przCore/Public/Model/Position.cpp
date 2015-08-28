@@ -42,7 +42,7 @@ int ZPositionDiff::LengthSquare() const {
 }
 
 std::string ZPositionDiff::ToString() const {
-    return utl::ZString::Format("[%d;%d]", mdX, mdY);
+    return utl::string_helpers::Format("[%d;%d]", mdX, mdY);
 }
 
 ZPositionDiff& ZPositionDiff::operator+=(const ZPositionDiff& other) {
@@ -142,7 +142,7 @@ ZPosition& ZPosition::operator+=(const ZPositionDiff& diff) {
 }
 
 std::string ZPosition::ToString() const {
-    return utl::ZString::Format("[%d;%d]", mX, mY);
+    return utl::string_helpers::Format("[%d;%d]", mX, mY);
 }
 
 }

@@ -9,8 +9,9 @@
 
 namespace prz {
 namespace utl {
+namespace string_helpers {
 
-std::string ZString::Format(const char* format, ...) {
+std::string Format(const char* format, ...) {
     va_list args;
     va_start(args, format);
     int32 messageSize = vsnprintf(nullptr, 0, format, args);
@@ -33,7 +34,7 @@ std::string ZString::Format(const char* format, ...) {
     return result;
 }
 
-std::string ZString::Join(const std::list<std::string> & stringList, const std::string& delimeter) {
+std::string Join(const std::list<std::string> & stringList, const std::string& delimeter) {
     std::stringstream ss;
     if (stringList.size() > 0) {
         ss << stringList.front();
@@ -45,5 +46,6 @@ std::string ZString::Join(const std::list<std::string> & stringList, const std::
     return ss.str();
 }
 
+}
 }
 }

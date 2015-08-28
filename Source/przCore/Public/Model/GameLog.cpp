@@ -59,7 +59,7 @@ void ZGameLog::SetHistoryMaxSize(unsigned int size) {
 
 const std::string& ZGameLog::GetHistory(const std::string& delimeter) {
     if (!mCachedHistoryIsValid) {
-        mCachedHistory = utl::ZString::Join(mHistory, delimeter);
+        mCachedHistory = utl::string_helpers::Join(mHistory, delimeter);
         mCachedHistoryIsValid = true;
     }
 
