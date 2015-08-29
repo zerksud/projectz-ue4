@@ -1,10 +1,8 @@
 #pragma once
 
-#include <string>
-#include <unordered_map>
-#include <utility>
-
 #include "Platform.h"
+
+#include "Utils/StandartLibrary.h"
 
 namespace prz {
 namespace utl {
@@ -26,14 +24,14 @@ public:
     bool AsBool() const;
 
     friend void swap(ZDictionary& left, ZDictionary& right) {
-        using std::swap;
+        using utl::swap;
 
         swap(left.mValue, right.mValue);
         swap(left.mValueType, right.mValueType);
     }
 
 private:
-    typedef std::unordered_map<std::string, ZDictionary> ZDictionaryMap;
+    typedef utl::ZUnorderedMap<ZString, ZDictionary> ZDictionaryMap;
 
     typedef union {
         int asInt;

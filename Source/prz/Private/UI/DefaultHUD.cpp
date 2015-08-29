@@ -1,8 +1,7 @@
 #include "prz.h"
 #include "DefaultHUD.h"
 
-#include <algorithm>
-
+#include "Utils/StandartLibrary.h"
 #include "Utils/Services.h"
 
 #include "Model/IGame.h"
@@ -67,7 +66,7 @@ void ADefaultHUD::DrawHUD() {
     float scaleX = sizeX / 120.0f / RequestedContentScaleFactor;
     float scaleY = sizeY / 90.0f / RequestedContentScaleFactor;
 
-    int32 scale = std::floor(std::min(scaleX, scaleY));
+    int32 scale = prz::utl::floor(prz::utl::min(scaleX, scaleY));
     mDPIScaledWidget->SetDPIScale(scale);
 
     prz::mdl::IGame* game = GET_SERVICE(prz::mdl::IGame);

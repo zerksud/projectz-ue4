@@ -11,7 +11,7 @@ namespace prz {
 namespace utl {
 namespace string_helpers {
 
-std::string Format(const char* format, ...) {
+ZString Format(const char* format, ...) {
     va_list args;
     va_start(args, format);
     int32 messageSize = vsnprintf(nullptr, 0, format, args);
@@ -27,14 +27,14 @@ std::string Format(const char* format, ...) {
     vsprintf(userMessage, format, args);
     va_end(args);
 
-    std::string result = userMessage;
+    ZString result = userMessage;
 
     delete[] userMessage;
 
     return result;
 }
 
-std::string Join(const std::list<std::string> & stringList, const std::string& delimeter) {
+ZString Join(const ZList<ZString> &stringList, const ZString &delimeter) {
     std::stringstream ss;
     if (stringList.size() > 0) {
         ss << stringList.front();

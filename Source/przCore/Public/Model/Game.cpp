@@ -99,7 +99,7 @@ unsigned int ZGame::GetMinimapSize() const {
     return kMinimapSize;
 }
 
-const std::string& ZGame::GetLogHistory() {
+const utl::ZString& ZGame::GetLogHistory() {
     return mLogHistory.GetHistory();
 }
 

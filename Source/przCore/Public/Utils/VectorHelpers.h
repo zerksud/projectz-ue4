@@ -1,21 +1,20 @@
 #pragma once
 
-#include <algorithm>
-#include <vector>
+#include "Utils/StandartLibrary.h"
 
 namespace prz {
 namespace utl {
 
 template<typename T>
-bool VectorContains(const std::vector<T>& vector, const T& value) {
-    auto pos = std::find(vector.begin(), vector.end(), value);
+bool VectorContains(const ZVector<T>& vector, const T& value) {
+    auto pos = find(vector.begin(), vector.end(), value);
     bool contains = pos != vector.end();
 
     return contains;
 }
 
 template<typename T>
-void VectorInsertAll(std::vector<T>* dst, const std::vector<T>& src) {
+void VectorInsertAll(ZVector<T>* dst, const ZVector<T>& src) {
     dst->insert(dst->end(), src.begin(), src.end());
 }
 

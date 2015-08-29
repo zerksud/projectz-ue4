@@ -1,5 +1,4 @@
-#ifndef MATRIX2D_H
-#define MATRIX2D_H
+#pragma once
 
 #include "Model/Position.h"
 
@@ -29,4 +28,3 @@ private:
 
 }
 }
-#endif // MATRIX2D_H

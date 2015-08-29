@@ -2,8 +2,6 @@
 
 #include "Model/Position.h"
 
-#include <map>
-
 namespace prz {
 namespace mdl {
 

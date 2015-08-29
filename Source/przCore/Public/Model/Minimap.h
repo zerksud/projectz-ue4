@@ -1,7 +1,5 @@
 #pragma once
 
-#include <utility>
-
 #include "Platform.h"
 
 #include "Model/DungeonLevel.h"
@@ -19,7 +17,7 @@ public:
     virtual ~ZMinimap();
 
     friend void swap(ZMinimap& left, ZMinimap& right) {
-        using std::swap;
+        using utl::swap;
 
         swap(left.mSize, right.mSize);
         swap(left.mCells, right.mCells);

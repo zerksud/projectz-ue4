@@ -1,11 +1,8 @@
 #pragma once
 
-#include <functional>
-#include <list>
-#include <string>
-#include <unordered_map>
-
 #include "Platform.h"
+
+#include "Utils/StandartLibrary.h"
 
 #define SERVICE_MANAGER_REGISTER_SERVICE(serviceManagerInstance, serviceTypeName, serviceInstance) \
     ((serviceManagerInstance).Register< ::serviceTypeName >(serviceInstance, #serviceTypeName))
@@ -25,7 +22,7 @@ public:
     ZServiceManager(const ZServiceManager& other) = delete;
     virtual ~ZServiceManager();
 
-    template<typename TServiceType> bool Register(TServiceType* instance, std::string typeName) {
+    template<typename TServiceType> bool Register(TServiceType* instance, ZString typeName) {
         if (typeName.empty()) {
             //LOGE("Can't register service of empty type");
             return false;
@@ -54,7 +51,7 @@ public:
         return true;
     }
 
-    template<typename TServiceType> TServiceType* Get(std::string typeName) {
+    template<typename TServiceType> TServiceType* Get(ZString typeName) {
         auto pos = mServiceMap.find(typeName);
         if (pos != mServiceMap.end()) {
             return static_cast<TServiceType*>(pos->second->instance);
@@ -63,7 +60,7 @@ public:
         return nullptr;
     }
 
-    template<typename TServiceType> bool Unregister(std::string typeName) {
+    template<typename TServiceType> bool Unregister(ZString typeName) {
         auto pos = mServiceMap.find(typeName);
         if (pos != mServiceMap.end()) {
             mServiceRegisterOrder.remove(pos->second);
@@ -77,7 +74,7 @@ public:
     }
 
 private:
-    typedef std::function<void()> ZServiceDestructor;
+    typedef utl::ZFunction<void()> ZServiceDestructor;
     struct ZServiceBox {
         void* instance = nullptr;
         ZServiceDestructor destructor;
@@ -88,8 +85,8 @@ private:
             }
         }
     };
-    typedef std::unordered_map<std::string, ZServiceBox*> ZServiceMap;
-    typedef std::list<ZServiceBox*> ZServiceRegisterOrder;
+    typedef utl::ZUnorderedMap<ZString, ZServiceBox*> ZServiceMap;
+    typedef utl::ZList<ZServiceBox*> ZServiceRegisterOrder;
 
     ZServiceMap mServiceMap;
     ZServiceRegisterOrder mServiceRegisterOrder;

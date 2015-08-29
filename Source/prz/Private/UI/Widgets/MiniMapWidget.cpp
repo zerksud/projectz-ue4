@@ -1,12 +1,12 @@
 #include "prz.h"
 #include "UI/Widgets/MinimapWidget.h"
 
-#include <map>
+#include "Utils/StandartLibrary.h"
 
 #include "UI/Styles/PrzStyleManager.h"
 #include "UI/Styles/MinimapWidgetStyle.h"
 
-typedef std::map<prz::mdl::EDungeonCell, FColor> DungeonCellColorMap;
+typedef prz::utl::ZMap<prz::mdl::EDungeonCell, FColor> DungeonCellColorMap;
 
 DungeonCellColorMap GetDungeonCellColorMap() {
     using namespace prz::mdl;

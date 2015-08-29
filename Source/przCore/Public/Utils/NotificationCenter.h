@@ -1,10 +1,8 @@
 #pragma once
 
-#include <unordered_map>
-#include <vector>
-
 #include "Platform.h"
 
+#include "Utils/StandartLibrary.h"
 #include "Utils/INotificationCenter.h"
 
 namespace prz {
@@ -17,11 +15,11 @@ public:
     ZNotificationCenter& operator=(const ZNotificationCenter& other) = delete;
     virtual ~ZNotificationCenter();
 
-    virtual bool AddObserver(const std::string& name, void* observerOwner, ZNotificationEventHandler handler) override;
-    virtual bool RemoveObserver(const std::string& name, void* observerOwner) override;
+    virtual bool AddObserver(const ZString& name, void* observerOwner, ZNotificationEventHandler handler) override;
+    virtual bool RemoveObserver(const ZString& name, void* observerOwner) override;
 
-    virtual bool PostNotification(const std::string& name) override;
-    virtual bool PostNotification(const std::string& name, const ZDictionary& dict) override;
+    virtual bool PostNotification(const ZString& name) override;
+    virtual bool PostNotification(const ZString& name, const ZDictionary& dict) override;
 
 private:
     struct ZObserver {
@@ -34,9 +32,9 @@ private:
         }
     };
 
-    typedef std::vector<ZObserver> ZObserverList;
-    typedef std::unordered_map<std::string, ZObserverList*> ZObserverListTable;
-    typedef std::pair<std::string, ZObserverList*> ZObserverListTablePair;
+    typedef utl::ZVector<ZObserver> ZObserverList;
+    typedef utl::ZUnorderedMap<utl::ZString, ZObserverList*> ZObserverListTable;
+    typedef utl::ZPair<ZString, ZObserverList*> ZObserverListTablePair;
 
     ZObserverListTable mObservers;
 };

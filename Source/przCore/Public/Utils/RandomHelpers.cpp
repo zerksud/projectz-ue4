@@ -1,18 +1,17 @@
 #include "przCorePCH.h"
 #include "Utils/RandomHelpers.h"
 
-#include <cstdlib>
-#include <ctime>
+#include "Utils/StandartLibrary.h"
 
 namespace prz {
 namespace utl {
 
 void ZRandomHelpers::Initialize() {
-    std::srand(static_cast<unsigned int>(std::time(0)));
+    utl::srand(static_cast<unsigned int>(utl::time(0)));
 }
 
 bool ZRandomHelpers::FlipCoin() {
-    if (std::rand() % 2) {
+    if (utl::rand() % 2) {
         return true;
     }
 
@@ -20,12 +19,12 @@ bool ZRandomHelpers::FlipCoin() {
 }
 
 int ZRandomHelpers::GetRandomValue(int maxValue) {
-    int value = std::rand() % (maxValue + 1);
+    int value = utl::rand() % (maxValue + 1);
     return value;
 }
 
 int ZRandomHelpers::GetRandomValue(int minValue, int maxValue) {
-    int value = minValue + std::rand() % (maxValue - minValue + 1);
+    int value = minValue + utl::rand() % (maxValue - minValue + 1);
     return value;
 }
 

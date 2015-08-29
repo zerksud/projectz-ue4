@@ -1,8 +1,6 @@
 #include "przCorePCH.h"
 #include "Model/Position.h"
 
-#include <utility>
-
 #include "Utils/StringHelpers.h"
 
 namespace prz {
@@ -41,7 +39,7 @@ int ZPositionDiff::LengthSquare() const {
     return mdX * mdX + mdY * mdY;
 }
 
-std::string ZPositionDiff::ToString() const {
+utl::ZString ZPositionDiff::ToString() const {
     return utl::string_helpers::Format("[%d;%d]", mdX, mdY);
 }
 
@@ -67,7 +65,7 @@ const ZPositionDiff operator-(const ZPositionDiff& left, const ZPositionDiff& ri
 }
 
 void swap(ZPositionDiff& left, ZPositionDiff&right) {
-    using std::swap;
+    using utl::swap;
 
     swap(left.mdX, right.mdX);
     swap(left.mdY, right.mdY);
@@ -141,7 +139,7 @@ ZPosition& ZPosition::operator+=(const ZPositionDiff& diff) {
     return *this;
 }
 
-std::string ZPosition::ToString() const {
+utl::ZString ZPosition::ToString() const {
     return utl::string_helpers::Format("[%d;%d]", mX, mY);
 }
 

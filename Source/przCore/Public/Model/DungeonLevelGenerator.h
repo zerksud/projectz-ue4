@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Utils/StandartLibrary.h"
+
 #include "Model/IDungeonLevelGenerator.h"
 #include "Model/Path/WeightedCell.h"
 #include "Model/Path/PathFinder.h"
@@ -27,7 +29,7 @@ private:
             : position(pPosition), direction(pDirection) {
         }
     };
-    typedef std::vector<ZDirectionalStaircase> ZDirectionalStaircaseList;
+    typedef utl::ZVector<ZDirectionalStaircase> ZDirectionalStaircaseList;
 
     bool TryToGenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically = true);
     void SplitSubDungeonVertically(BSPTreeNode* rootNode);

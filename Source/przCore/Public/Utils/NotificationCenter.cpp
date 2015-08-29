@@ -1,8 +1,6 @@
 #include "przCorePCH.h"
 #include "NotificationCenter.h"
 
-#include <algorithm>
-
 #include "Utils/LOG.h"
 
 namespace prz {
@@ -15,7 +13,7 @@ ZNotificationCenter::~ZNotificationCenter() {
     }
 }
 
-bool ZNotificationCenter::AddObserver(const std::string& name, void* observerOwner, ZNotificationEventHandler handler) {
+bool ZNotificationCenter::AddObserver(const ZString &name, void* observerOwner, ZNotificationEventHandler handler) {
     if (name.empty()) {
         LOGE("Can't add observer for empty notification");
         return false;
@@ -40,7 +38,7 @@ bool ZNotificationCenter::AddObserver(const std::string& name, void* observerOwn
         list = pos->second;
     }
 
-    ZObserverList::const_iterator listPos = std::find_if(list->begin(), list->end(), [observerOwner](const ZObserver& observer) {
+    ZObserverList::const_iterator listPos = utl::find_if(list->begin(), list->end(), [observerOwner](const ZObserver& observer) {
         return (observerOwner == observer.observerOwner);
     });
 
@@ -53,7 +51,7 @@ bool ZNotificationCenter::AddObserver(const std::string& name, void* observerOwn
     return true;
 }
 
-bool ZNotificationCenter::RemoveObserver(const std::string& name, void* observerOwner) {
+bool ZNotificationCenter::RemoveObserver(const ZString &name, void* observerOwner) {
     ZObserverList* list;
     ZObserverListTable::iterator pos = mObservers.find(name);
     if (pos == mObservers.end()) {
@@ -63,7 +61,7 @@ bool ZNotificationCenter::RemoveObserver(const std::string& name, void* observer
         list = pos->second;
     }
 
-    ZObserverList::iterator listPos = std::find_if(list->begin(), list->end(), [observerOwner](const ZObserver& observer) {
+    ZObserverList::iterator listPos = utl::find_if(list->begin(), list->end(), [observerOwner](const ZObserver& observer) {
         return (observerOwner == observer.observerOwner);
     });
 
@@ -76,11 +74,11 @@ bool ZNotificationCenter::RemoveObserver(const std::string& name, void* observer
     return true;
 }
 
-bool ZNotificationCenter::PostNotification(const std::string& name) {
+bool ZNotificationCenter::PostNotification(const ZString &name) {
     return PostNotification(name, ZDictionary());
 }
 
-bool ZNotificationCenter::PostNotification(const std::string& name, const ZDictionary& dict) {
+bool ZNotificationCenter::PostNotification(const ZString &name, const ZDictionary& dict) {
     if (name.empty()) {
         LOGE("Can't post empty notification");
         return false;

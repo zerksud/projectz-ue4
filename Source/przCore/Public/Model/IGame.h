@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Utils/StandartLibrary.h"
+
 #include "Model/Minimap.h"
 #include "Model/Dungeon.h"
 
@@ -18,7 +20,7 @@ public:
     virtual const ZMinimap GetMinimap() = 0;
     virtual unsigned int GetMinimapSize() const = 0;
 
-    virtual const std::string& GetLogHistory() = 0;
+    virtual const utl::ZString& GetLogHistory() = 0;
 };
 
 }

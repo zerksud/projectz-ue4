@@ -39,7 +39,7 @@ ZFieldOfView& ZFieldOfView::operator=(ZFieldOfView other) {
 }
 
 void swap(ZFieldOfView& left, ZFieldOfView& right) {
-    using std::swap;
+    using utl::swap;
 
     swap(left.mRadius, right.mRadius);
     swap(left.mData, right.mData);

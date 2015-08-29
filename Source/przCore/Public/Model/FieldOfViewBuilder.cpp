@@ -1,8 +1,6 @@
 #include "przCorePCH.h"
 #include "Model/FieldOfViewBuilder.h"
 
-#include <utility>
-
 #include "Utils/MatrixHelpers.h"
 #include "Utils/LOG.h"
 

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "SlateBasics.h"
 
 class SLogWidget : public SCompoundWidget {

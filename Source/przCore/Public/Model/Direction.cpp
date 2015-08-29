@@ -1,8 +1,6 @@
 #include "przCorePCH.h"
 
-#include <algorithm>
-#include <cmath>
-
+#include "Utils/StandartLibrary.h"
 #include "Utils/LOG.h"
 
 #include "Model/Direction.h"
@@ -12,7 +10,7 @@ namespace mdl {
 
 static const double kPi = 3.14159265359;
 
-typedef std::map<int, ZPositionDiff> ZPredictedMovesMap;
+typedef utl::ZMap<int, ZPositionDiff> ZPredictedMovesMap;
 
 static const ZPredictedMovesMap kPredictedMoves = {
         {0, ZPositionDiff(1, 0)},

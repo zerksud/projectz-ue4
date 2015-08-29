@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include "Utils/StandartLibrary.h"
 
 #include "Model/Position.h"
 #include "Model/Path/WeightedMap.h"
@@ -29,7 +29,7 @@ public:
     static bool CellIsBlocked(const ZWeightedMap& map, const ZPosition& position);
     static bool CellIsBlocked(const ZWeightedMap& map, int x, int y);
 
-    typedef std::vector<ZPosition> PathCells;
+    typedef utl::ZVector<ZPosition> PathCells;
     //returns list of path cells starting from finishCell if path between cells exists, or empty list otherwise
     static PathCells FindPathBetweenCells(const ZWeightedMap& map, const ZPosition& startCellPosition, const ZPosition& finishCellPosition, bool diggingIsAllowed = false);
 

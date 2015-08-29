@@ -1,7 +1,6 @@
 #include "przCorePCH.h"
 #include "Model/Path/WeightedMap.h"
 
-#include <algorithm>
 #include <sstream>
 
 #include "Utils/MatrixHelpers.h"
@@ -33,7 +32,7 @@ ZWeightedMap& ZWeightedMap::operator=(ZWeightedMap other) {
 }
 
 void swap(ZWeightedMap& left, ZWeightedMap& right) {
-    using std::swap;
+    using utl::swap;
 
     swap(left.mWidth, right.mWidth);
     swap(left.mHeight, right.mHeight);
@@ -83,7 +82,7 @@ char GetWeightChar(const ZWeight& weight) {
     return kPositiveWeight;
 }
 
-const std::string ZWeightedMap::ToString() const {
+const utl::ZString ZWeightedMap::ToString() const {
     std::stringstream ss;
     for (int x = mWidth - 1; x >= 0; --x) {
         for (int y = 0; y < mHeight; ++y) {

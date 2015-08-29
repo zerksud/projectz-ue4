@@ -1,7 +1,8 @@
 #pragma once
 
-#include <algorithm>
-#include <cstring>
+#include <string.h>
+
+#include "Utils/StandartLibrary.h"
 
 namespace prz {
 namespace utl {
@@ -20,7 +21,7 @@ template<typename T>
 void Allocate(T*** matrix, unsigned int width, unsigned int height, T defaultValue) {
     Allocate(matrix, width, height);
     for (unsigned int i = 0; i < height; ++i) {
-        std::fill_n((*matrix)[i], width, defaultValue);
+        fill_n((*matrix)[i], width, defaultValue);
     }
 }
 

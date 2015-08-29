@@ -1,8 +1,6 @@
 #pragma once
 
-#include <memory>
-#include <unordered_map>
-#include <vector>
+#include "Utils/StandartLibrary.h"
 
 #include "Model/IDungeonLevelGenerator.h"
 #include "Model/DungeonLevelGenerator.h"
@@ -29,8 +27,8 @@ public:
     bool TryToMoveMonster(utl::ZIdType monsterId, EDirection direction, ZPositionDiff* OutExpectedMoveDiff = nullptr);
 
 private:
-    typedef std::vector<ZDungeonLevel*> ZDungeonLevelList;
-    typedef std::unordered_map<utl::ZIdType, unsigned int> ZMonsterLevelMap;
+    typedef utl::ZVector<ZDungeonLevel*> ZDungeonLevelList;
+    typedef utl::ZUnorderedMap<utl::ZIdType, unsigned int> ZMonsterLevelMap;
 
     ZDungeonLevel* GetExistingLevelOrGenerateNew(unsigned int level);
     void GenerateAbsentLevels(unsigned int maxLevelIndex);

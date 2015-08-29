@@ -1,10 +1,8 @@
 #pragma once
 
-#include <limits>
-#include <unordered_set>
-
 #include "Platform.h"
 
+#include "Utils/StandartLibrary.h"
 #include "Utils/IUniqueIdRegistry.h"
 
 namespace prz {
@@ -12,7 +10,7 @@ namespace utl {
 
 class PRZCORE_API ZUniqueIdRegistry : public IUniqueIdRegistry {
 public:
-    ZUniqueIdRegistry(ZIdType maxId = std::numeric_limits<ZIdType>::max());
+    ZUniqueIdRegistry(ZIdType maxId = utl::ZNumericLimits<ZIdType>::max());
     ZUniqueIdRegistry(const ZUniqueIdRegistry& other) = delete;
     ZUniqueIdRegistry& operator=(const ZUniqueIdRegistry& other) = delete;
     virtual ~ZUniqueIdRegistry() = default;
@@ -23,7 +21,7 @@ public:
     unsigned int GetAssignedUniqueIdCount() const override;
 
 private:
-    typedef std::unordered_set<ZIdType> ZReleasedIdSet;
+    typedef utl::ZUnorderedSet<ZIdType> ZReleasedIdSet;
 
     ZIdType mMaxId;
     ZIdType mNextFreeId;
