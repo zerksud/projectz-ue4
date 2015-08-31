@@ -1,7 +1,7 @@
 #include "przCorePCH.h"
 #include "Model/Path/WeightedMap.h"
 
-#include <sstream>
+#include <string.h>
 
 #include "Utils/MatrixHelpers.h"
 
@@ -83,15 +83,21 @@ char GetWeightChar(const ZWeight& weight) {
 }
 
 const utl::ZString ZWeightedMap::ToString() const {
-    std::stringstream ss;
+    char* resultBuffer = new char[(mWidth + 1) * mHeight + 1];
+    char* currentCharPos = resultBuffer;
+    
     for (int x = mWidth - 1; x >= 0; --x) {
         for (int y = 0; y < mHeight; ++y) {
-            ss << GetWeightChar(mCellWeights[x][y]);
+            *(currentCharPos++) = GetWeightChar(mCellWeights[x][y]);
         }
-        ss << std::endl;
+        *(currentCharPos++) = '\n';
     }
-
-    return ss.str();
+    *currentCharPos = 0;
+    
+    utl::ZString result(resultBuffer);
+    delete[] resultBuffer;
+    
+    return result;
 }
 
 }
