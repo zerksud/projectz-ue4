@@ -34,33 +34,33 @@ ZString Format(const char* format, ...) {
 }
 
 ZString Join(const ZList<ZString> &stringList, const ZString &delimeter) {
-    size_t result_length = 0;
+    size_t resultLength = 0;
     for (const ZString& str : stringList) {
-        result_length += strlen(str.c_str());
+        resultLength += strlen(str.c_str());
     }
-    result_length += strlen(delimeter.c_str()) * (stringList.size() - 1) + 1;
+    resultLength += strlen(delimeter.c_str()) * (stringList.size() - 1) + 1;
     
-    char* buffer = new char[result_length];
+    char* resultBuffer = new char[resultLength];
     if (stringList.size() > 0) {
-        const char* first_string = stringList.front().c_str();
-        strcpy(buffer, first_string);
-        char* current_buffer_end = buffer + strlen(first_string);
+        const char* firstString = stringList.front().c_str();
+        strcpy(resultBuffer, firstString);
+        char* currentBufferEnd = resultBuffer + strlen(firstString);
         
-        const char* delimeter_str = delimeter.c_str();
-        const size_t delimeter_length = strlen(delimeter_str);
+        const char* delimeterStr = delimeter.c_str();
+        const size_t delimeterLength = strlen(delimeterStr);
         
         for (auto i = ++stringList.begin(), end = stringList.end(); i != end; ++i) {
-            strcat(current_buffer_end, delimeter_str);
-            current_buffer_end += delimeter_length;
+            strcat(currentBufferEnd, delimeterStr);
+            currentBufferEnd += delimeterLength;
             
             const char* str = (*i).c_str();
-            strcat(current_buffer_end, str);
-            current_buffer_end += strlen(str);
+            strcat(currentBufferEnd, str);
+            currentBufferEnd += strlen(str);
         }
     }
 
-    ZString result(buffer);
-    delete[] buffer;
+    ZString result(resultBuffer);
+    delete[] resultBuffer;
     
     return result;
 }
