@@ -2,9 +2,9 @@
 
 #include "Platform.h"
 
-#include "Utils/StandartLibrary/UnorderedMap.h"
-#include "Utils/StandartLibrary/Utility.h"
-#include "Utils/StandartLibrary/Vector.h"
+#include "Utils/StandardLibrary/UnorderedMap.h"
+#include "Utils/StandardLibrary/Utility.h"
+#include "Utils/StandardLibrary/Vector.h"
 #include "Utils/INotificationCenter.h"
 
 namespace prz {

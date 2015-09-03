@@ -1,8 +1,8 @@
 #include "przCorePCH.h"
 #include "Utils/RandomHelpers.h"
 
-#include "Utils/StandartLibrary/StdLib.h"
-#include "Utils/StandartLibrary/Time.h"
+#include "Utils/StandardLibrary/StdLib.h"
+#include "Utils/StandardLibrary/Time.h"
 
 namespace prz {
 namespace utl {

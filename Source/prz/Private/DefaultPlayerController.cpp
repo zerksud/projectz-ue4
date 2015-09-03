@@ -2,8 +2,8 @@
 #include "DefaultPlayerController.h"
 
 #include "Utils/Services.h"
-#include "Utils/StandartLibrary/Map.h"
-#include "Utils/StandartLibrary/String.h"
+#include "Utils/StandardLibrary/Map.h"
+#include "Utils/StandardLibrary/String.h"
 #include "Utils/INotificationCenter.h"
 #include "Utils/LOG.h"
 

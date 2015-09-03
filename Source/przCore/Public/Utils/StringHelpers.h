@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Utils/StandartLibrary/List.h"
-#include "Utils/StandartLibrary/String.h"
+#include "Utils/StandardLibrary/List.h"
+#include "Utils/StandardLibrary/String.h"
 
 namespace prz {
 namespace utl {

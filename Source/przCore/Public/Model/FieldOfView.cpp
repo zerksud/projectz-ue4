@@ -2,7 +2,7 @@
 #include "FieldOfView.h"
 
 #include "Utils/MatrixHelpers.h"
-#include "Utils/StandartLibrary/Utility.h"
+#include "Utils/StandardLibrary/Utility.h"
 
 namespace prz {
 namespace mdl {

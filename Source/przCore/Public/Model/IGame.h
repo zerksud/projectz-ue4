@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/StandartLibrary/String.h"
+#include "Utils/StandardLibrary/String.h"
 
 #include "Model/Minimap.h"
 #include "Model/Dungeon.h"

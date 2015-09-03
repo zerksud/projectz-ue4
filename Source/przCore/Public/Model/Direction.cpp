@@ -1,7 +1,7 @@
 #include "przCorePCH.h"
 
-#include "Utils/StandartLibrary/Map.h"
-#include "Utils/StandartLibrary/Math.h"
+#include "Utils/StandardLibrary/Map.h"
+#include "Utils/StandardLibrary/Math.h"
 #include "Utils/LOG.h"
 
 #include "Model/Direction.h"

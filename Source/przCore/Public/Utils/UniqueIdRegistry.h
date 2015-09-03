@@ -2,8 +2,8 @@
 
 #include "Platform.h"
 
-#include "Utils/StandartLibrary/Limits.h"
-#include "Utils/StandartLibrary/UnorderedSet.h"
+#include "Utils/StandardLibrary/Limits.h"
+#include "Utils/StandardLibrary/UnorderedSet.h"
 #include "Utils/IUniqueIdRegistry.h"
 
 namespace prz {

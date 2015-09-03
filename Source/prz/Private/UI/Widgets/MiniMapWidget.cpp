@@ -1,7 +1,7 @@
 #include "prz.h"
 #include "UI/Widgets/MinimapWidget.h"
 
-#include "Utils/StandartLibrary/Map.h"
+#include "Utils/StandardLibrary/Map.h"
 
 #include "UI/Styles/PrzStyleManager.h"
 #include "UI/Styles/MinimapWidgetStyle.h"

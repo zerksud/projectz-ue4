@@ -3,9 +3,9 @@
 
 #include "Utils/MatrixHelpers.h"
 #include "Utils/RandomHelpers.h"
-#include "Utils/StandartLibrary/Algorithm.h"
-#include "Utils/StandartLibrary/Limits.h"
-#include "Utils/StandartLibrary/Random.h"
+#include "Utils/StandardLibrary/Algorithm.h"
+#include "Utils/StandardLibrary/Limits.h"
+#include "Utils/StandardLibrary/Random.h"
 #include "Utils/LOG.h"
 
 namespace prz {
