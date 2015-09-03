@@ -1,7 +1,8 @@
 #include "prz.h"
 #include "DefaultHUD.h"
 
-#include "Utils/StandartLibrary.h"
+#include "Utils/StandartLibrary/Algorithm.h"
+#include "Utils/StandartLibrary/Math.h"
 #include "Utils/Services.h"
 
 #include "Model/IGame.h"

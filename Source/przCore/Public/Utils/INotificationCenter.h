@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Utils/Dictionary.h"
-#include "Utils/StandartLibrary.h"
+#include "Utils/StandartLibrary/Functional.h"
 
 namespace prz {
 namespace utl {

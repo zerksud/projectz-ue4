@@ -2,6 +2,7 @@
 #include "NotificationCenter.h"
 
 #include "Utils/LOG.h"
+#include "Utils/StandartLibrary/Algorithm.h"
 
 namespace prz {
 namespace utl {

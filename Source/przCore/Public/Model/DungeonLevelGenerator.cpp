@@ -1,9 +1,11 @@
 #include "przCorePCH.h"
 #include "Model/DungeonLevelGenerator.h"
 
-#include "Utils/StandartLibrary.h"
 #include "Utils/MatrixHelpers.h"
 #include "Utils/RandomHelpers.h"
+#include "Utils/StandartLibrary/Algorithm.h"
+#include "Utils/StandartLibrary/Limits.h"
+#include "Utils/StandartLibrary/Random.h"
 #include "Utils/LOG.h"
 
 namespace prz {

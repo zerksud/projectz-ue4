@@ -2,7 +2,10 @@
 
 #include "Platform.h"
 
-#include "Utils/StandartLibrary.h"
+#include "Utils/StandartLibrary/Functional.h"
+#include "Utils/StandartLibrary/List.h"
+#include "Utils/StandartLibrary/String.h"
+#include "Utils/StandartLibrary/UnorderedMap.h"
 
 #define SERVICE_MANAGER_REGISTER_SERVICE(serviceManagerInstance, serviceTypeName, serviceInstance) \
     ((serviceManagerInstance).Register< ::serviceTypeName >(serviceInstance, #serviceTypeName))

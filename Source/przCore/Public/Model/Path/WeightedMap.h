@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Utils/StandartLibrary.h"
+#include "Utils/StandartLibrary/String.h"
+#include "Utils/StandartLibrary/Utility.h"
 
 #include "Model/Path/WeightedCell.h"
 #include "Model/Position.h"

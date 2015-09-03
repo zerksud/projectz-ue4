@@ -1,7 +1,10 @@
 #include "przCorePCH.h"
 #include "Model/Path/PathFinder.h"
 
-#include "Utils/StandartLibrary.h"
+#include "Utils/StandartLibrary/Math.h"
+#include "Utils/StandartLibrary/Queue.h"
+#include "Utils/StandartLibrary/Utility.h"
+#include "Utils/StandartLibrary/Vector.h"
 #include "Utils/MatrixHelpers.h"
 #include "Utils/RandomHelpers.h"
 

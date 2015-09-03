@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Utils/StandartLibrary.h"
+#include "Utils/StandartLibrary/UnorderedMap.h"
+#include "Utils/StandartLibrary/Vector.h"
 #include "Utils/RandomHelpers.h"
 
 #include "Model/FieldOfView.h"

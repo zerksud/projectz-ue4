@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Utils/StandartLibrary.h"
+#include "Utils/StandartLibrary/Algorithm.h"
+#include "Utils/StandartLibrary/Vector.h"
 
 namespace prz {
 namespace utl {

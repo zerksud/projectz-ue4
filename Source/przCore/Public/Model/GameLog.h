@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Utils/StandartLibrary.h"
+#include "Utils/StandartLibrary/List.h"
+#include "Utils/StandartLibrary/String.h"
 
 namespace prz {
 namespace mdl {
