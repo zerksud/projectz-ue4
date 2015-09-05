@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/StandardLibrary/Vector.h"
+#include "Utils/StandardLibrary/ZVector.h"
 
 #include "Model/IDungeonLevelGenerator.h"
 #include "Model/Path/WeightedCell.h"

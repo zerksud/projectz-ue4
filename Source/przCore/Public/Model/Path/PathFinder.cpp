@@ -2,9 +2,9 @@
 #include "Model/Path/PathFinder.h"
 
 #include "Utils/StandardLibrary/Math.h"
-#include "Utils/StandardLibrary/Queue.h"
+#include "Utils/StandardLibrary/ZQueue.h"
 #include "Utils/StandardLibrary/Utility.h"
-#include "Utils/StandardLibrary/Vector.h"
+#include "Utils/StandardLibrary/ZVector.h"
 #include "Utils/MatrixHelpers.h"
 #include "Utils/RandomHelpers.h"
 

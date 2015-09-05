@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/StandardLibrary/String.h"
+#include "Utils/StandardLibrary/ZString.h"
 #include "Utils/StandardLibrary/Utility.h"
 
 namespace prz {

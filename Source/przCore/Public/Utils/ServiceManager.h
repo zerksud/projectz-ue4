@@ -3,9 +3,9 @@
 #include "Platform.h"
 
 #include "Utils/StandardLibrary/Functional.h"
-#include "Utils/StandardLibrary/List.h"
-#include "Utils/StandardLibrary/String.h"
-#include "Utils/StandardLibrary/UnorderedMap.h"
+#include "Utils/StandardLibrary/ZList.h"
+#include "Utils/StandardLibrary/ZString.h"
+#include "Utils/StandardLibrary/ZUnorderedMap.h"
 
 #define SERVICE_MANAGER_REGISTER_SERVICE(serviceManagerInstance, serviceTypeName, serviceInstance) \
     ((serviceManagerInstance).Register< ::serviceTypeName >(serviceInstance, #serviceTypeName))
