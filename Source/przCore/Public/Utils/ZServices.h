@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/ServiceManager.h"
+#include "Utils/ZServiceManager.h"
 
 #define REGISTER_SERVICE(serviceTypeName, serviceInstance) \
     SERVICE_MANAGER_REGISTER_SERVICE(prz::utl::ZServices::GetInstance(), serviceTypeName, serviceInstance)

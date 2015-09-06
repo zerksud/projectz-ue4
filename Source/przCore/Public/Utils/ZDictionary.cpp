@@ -1,5 +1,5 @@
 #include "przCorePCH.h"
-#include "Utils/Dictionary.h"
+#include "Utils/ZDictionary.h"
 
 #include "Utils/LOG.h"
 

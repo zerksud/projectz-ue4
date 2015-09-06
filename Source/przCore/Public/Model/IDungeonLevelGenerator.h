@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Model/DungeonLevel.h"
+#include "Model/ZDungeonLevel.h"
 
 namespace prz {
 namespace mdl {

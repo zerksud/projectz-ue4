@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/Registrable.h"
+#include "Utils/ZRegistrable.h"
 
 namespace prz {
 namespace utl {

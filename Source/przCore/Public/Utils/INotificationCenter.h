@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/Dictionary.h"
+#include "Utils/ZDictionary.h"
 #include "Utils/StandardLibrary/Functional.h"
 
 namespace prz {

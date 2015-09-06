@@ -4,7 +4,7 @@
 #include "Utils/StandardLibrary/ZVector.h"
 
 #include "Model/IDungeonLevelGenerator.h"
-#include "Model/DungeonLevelGenerator.h"
+#include "Model/ZDungeonLevelGenerator.h"
 
 namespace prz {
 namespace mdl {

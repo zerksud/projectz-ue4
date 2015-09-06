@@ -1,10 +1,10 @@
 #include "przCorePCH.h"
-#include "Model/FieldOfViewBuilder.h"
+#include "Model/ZFieldOfViewBuilder.h"
 
 #include "Utils/MatrixHelpers.h"
 #include "Utils/LOG.h"
 
-#include "Model/Matrix2D.h"
+#include "Model/ZMatrix2D.h"
 
 namespace prz {
 namespace mdl {

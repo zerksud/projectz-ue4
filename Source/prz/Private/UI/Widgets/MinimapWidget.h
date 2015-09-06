@@ -2,7 +2,7 @@
 
 #include "SlateBasics.h"
 
-#include "Model/Minimap.h"
+#include "Model/ZMinimap.h"
 
 class SMinimapWidget : public SCompoundWidget {
     SLATE_BEGIN_ARGS(SMinimapWidget) {

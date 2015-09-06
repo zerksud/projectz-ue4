@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Model/DungeonLevel.h"
-#include "Model/FieldOfView.h"
+#include "Model/ZDungeonLevel.h"
+#include "Model/ZFieldOfView.h"
 
 namespace prz {
 namespace mdl {

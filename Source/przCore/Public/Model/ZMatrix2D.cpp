@@ -1,7 +1,7 @@
 #include "przCorePCH.h"
-#include "Matrix2D.h"
+#include "ZMatrix2D.h"
 
-#include "Model/Direction.h"
+#include "Model/ZDirection.h"
 
 namespace prz {
 namespace mdl {

@@ -1,5 +1,5 @@
 #include "przCorePCH.h"
-#include "Logger.h"
+#include "ZLogger.h"
 
 #include <stdarg.h>
 

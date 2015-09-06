@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Model/Position.h"
+#include "Model/ZPosition.h"
 
 namespace prz {
 namespace mdl {

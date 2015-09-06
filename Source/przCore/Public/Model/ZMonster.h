@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Utils/Registrable.h"
+#include "Utils/ZRegistrable.h"
 
-#include "Model/Direction.h"
-#include "Model/FieldOfView.h"
+#include "Model/ZDirection.h"
+#include "Model/ZFieldOfView.h"
 
 namespace prz {
 namespace mdl {

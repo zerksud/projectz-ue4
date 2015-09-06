@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Model/IGame.h"
-#include "Model/GameLog.h"
+#include "Model/ZGameLog.h"
 
 namespace prz {
 namespace mdl {

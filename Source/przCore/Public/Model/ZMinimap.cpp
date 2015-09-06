@@ -1,5 +1,5 @@
 #include "przCorePCH.h"
-#include "Model/Minimap.h"
+#include "Model/ZMinimap.h"
 
 #include "Utils/LOG.h"
 #include "Utils/MatrixHelpers.h"

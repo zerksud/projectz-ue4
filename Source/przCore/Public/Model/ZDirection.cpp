@@ -4,7 +4,7 @@
 #include "Utils/StandardLibrary/Math.h"
 #include "Utils/LOG.h"
 
-#include "Model/Direction.h"
+#include "Model/ZDirection.h"
 
 namespace prz {
 namespace mdl {

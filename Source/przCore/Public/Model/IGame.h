@@ -2,8 +2,8 @@
 
 #include "Utils/StandardLibrary/ZString.h"
 
-#include "Model/Minimap.h"
-#include "Model/Dungeon.h"
+#include "Model/ZMinimap.h"
+#include "Model/ZDungeon.h"
 
 namespace prz {
 namespace mdl {

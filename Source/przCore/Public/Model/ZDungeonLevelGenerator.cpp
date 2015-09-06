@@ -1,5 +1,5 @@
 #include "przCorePCH.h"
-#include "Model/DungeonLevelGenerator.h"
+#include "Model/ZDungeonLevelGenerator.h"
 
 #include "Utils/MatrixHelpers.h"
 #include "Utils/RandomHelpers.h"

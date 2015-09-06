@@ -4,7 +4,7 @@
 #include "Utils/StandardLibrary/Utility.h"
 
 #include "Model/Path/WeightedCell.h"
-#include "Model/Position.h"
+#include "Model/ZPosition.h"
 
 namespace prz {
 namespace mdl {

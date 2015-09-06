@@ -4,9 +4,9 @@
 #include "Utils/StandardLibrary/ZVector.h"
 #include "Utils/RandomHelpers.h"
 
-#include "Model/FieldOfView.h"
-#include "Model/Position.h"
-#include "Model/Monster.h"
+#include "Model/ZFieldOfView.h"
+#include "Model/ZPosition.h"
+#include "Model/ZMonster.h"
 
 namespace prz {
 namespace mdl {

@@ -1,7 +1,7 @@
 #include "przCorePCH.h"
-#include "Model/Monster.h"
+#include "Model/ZMonster.h"
 
-#include "Utils/Services.h"
+#include "Utils/ZServices.h"
 #include "Utils/IUniqueIdRegistry.h"
 #include "Utils/LOG.h"
 

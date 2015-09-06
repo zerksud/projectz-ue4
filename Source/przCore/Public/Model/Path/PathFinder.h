@@ -2,7 +2,7 @@
 
 #include "Utils/StandardLibrary/ZVector.h"
 
-#include "Model/Position.h"
+#include "Model/ZPosition.h"
 #include "Model/Path/WeightedMap.h"
 
 namespace prz {

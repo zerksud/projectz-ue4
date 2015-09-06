@@ -1,5 +1,5 @@
 #include "przCorePCH.h"
-#include "FieldOfView.h"
+#include "ZFieldOfView.h"
 
 #include "Utils/MatrixHelpers.h"
 #include "Utils/StandardLibrary/Utility.h"

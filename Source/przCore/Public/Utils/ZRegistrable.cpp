@@ -1,7 +1,7 @@
 #include "przCorePCH.h"
-#include "Utils/Registrable.h"
+#include "Utils/ZRegistrable.h"
 
-#include "Utils/Services.h"
+#include "Utils/ZServices.h"
 #include "Utils/IUniqueIdRegistry.h"
 #include "Utils/LOG.h"
 

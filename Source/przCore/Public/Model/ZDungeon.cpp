@@ -1,10 +1,10 @@
 #include "przCorePCH.h"
-#include "Model/Dungeon.h"
+#include "Model/ZDungeon.h"
 
 #include "Utils/VectorHelpers.h"
 #include "Utils/LOG.h"
 
-#include "Model/DungeonLevelGenerator.h"
+#include "Model/ZDungeonLevelGenerator.h"
 
 namespace prz {
 namespace mdl {

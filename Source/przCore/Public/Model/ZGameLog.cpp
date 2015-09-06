@@ -1,5 +1,5 @@
 #include "przCorePCH.h"
-#include "Model/GameLog.h"
+#include "Model/ZGameLog.h"
 
 #include <stdarg.h>
 
