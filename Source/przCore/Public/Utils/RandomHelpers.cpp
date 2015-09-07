@@ -6,12 +6,13 @@
 
 namespace prz {
 namespace utl {
+namespace random_helpers {
 
-void ZRandomHelpers::Initialize() {
+void Initialize() {
     utl::srand(static_cast<unsigned int>(utl::time(0)));
 }
 
-bool ZRandomHelpers::FlipCoin() {
+bool FlipCoin() {
     if (utl::rand() % 2) {
         return true;
     }
@@ -19,15 +20,16 @@ bool ZRandomHelpers::FlipCoin() {
     return false;
 }
 
-int ZRandomHelpers::GetRandomValue(int maxValue) {
+int GetRandomValue(int maxValue) {
     int value = utl::rand() % (maxValue + 1);
     return value;
 }
 
-int ZRandomHelpers::GetRandomValue(int minValue, int maxValue) {
+int GetRandomValue(int minValue, int maxValue) {
     int value = minValue + utl::rand() % (maxValue - minValue + 1);
     return value;
 }
 
+}
 }
 }

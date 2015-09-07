@@ -2,16 +2,13 @@
 
 namespace prz {
 namespace utl {
+namespace random_helpers {
 
-class ZRandomHelpers {
-public:
-    ZRandomHelpers() = delete;
+    void Initialize();
+    bool FlipCoin();
+    int GetRandomValue(int maxValue);
+    int GetRandomValue(int minValue, int maxValue);
 
-    static void Initialize();
-    static bool FlipCoin();
-    static int GetRandomValue(int maxValue);
-    static int GetRandomValue(int minValue, int maxValue);
-};
-
+}
 }
 }

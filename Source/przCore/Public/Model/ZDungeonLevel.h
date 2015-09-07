@@ -36,8 +36,8 @@ public:
         }
 
         const ZPosition GetRandomCell() const {
-            int randomX = utl::ZRandomHelpers::GetRandomValue(minX, maxX);
-            int randomY = utl::ZRandomHelpers::GetRandomValue(minY, maxY);
+            int randomX = utl::random_helpers::GetRandomValue(minX, maxX);
+            int randomY = utl::random_helpers::GetRandomValue(minY, maxY);
 
             return ZPosition(randomX, randomY);
         }
