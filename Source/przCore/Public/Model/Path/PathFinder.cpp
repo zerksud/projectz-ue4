@@ -31,7 +31,7 @@ struct PathCellConnection {
 
     PathCellConnection()
         : pathToCellWeight(ZWeight::kInfinity), previousPathCell(nullptr) {
-    };
+    }
 
     PathCellConnection(const PathCellConnection& other) {
         pathToCellWeight = other.pathToCellWeight;
