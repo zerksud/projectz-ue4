@@ -13,7 +13,7 @@ ZWeightedMap::ZWeightedMap(int width, int height, const ZWeight& defaultCellWeig
     : mWidth(width),
         mHeight(height) {
     utl::ZMatrix::Allocate(&mCellWeights, mWidth, mHeight, defaultCellWeight);
-};
+}
 
 ZWeightedMap::ZWeightedMap(const ZWeightedMap& other)
     : mWidth(other.mWidth),
