@@ -1,5 +1,5 @@
 #include "przCorePCH.h"
-#include "Model/Path/WeightedMap.h"
+#include "Model/Path/ZWeightedMap.h"
 
 #include <string.h>
 

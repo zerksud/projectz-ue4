@@ -1,5 +1,5 @@
 #include "przCorePCH.h"
-#include "Model/Path/PathFinder.h"
+#include "Model/Path/ZPathFinder.h"
 
 #include "Utils/StandardLibrary/Math.h"
 #include "Utils/StandardLibrary/ZQueue.h"

@@ -3,7 +3,7 @@
 #include "Utils/StandardLibrary/ZVector.h"
 
 #include "Model/ZPosition.h"
-#include "Model/Path/WeightedMap.h"
+#include "Model/Path/ZWeightedMap.h"
 
 namespace prz {
 namespace mdl {

@@ -3,7 +3,7 @@
 #include "Utils/StandardLibrary/ZString.h"
 #include "Utils/StandardLibrary/Utility.h"
 
-#include "Model/Path/WeightedCell.h"
+#include "Model/Path/ZWeightedCell.h"
 #include "Model/ZPosition.h"
 
 namespace prz {

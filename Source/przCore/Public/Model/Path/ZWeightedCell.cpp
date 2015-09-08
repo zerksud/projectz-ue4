@@ -1,5 +1,5 @@
 #include "przCorePCH.h"
-#include "Model/Path/WeightedCell.h"
+#include "Model/Path/ZWeightedCell.h"
 
 namespace prz {
 namespace mdl {
