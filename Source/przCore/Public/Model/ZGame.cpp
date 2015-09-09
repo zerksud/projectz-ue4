@@ -70,7 +70,7 @@ ZPosition GetRotatedPosition(const ZPositionDiff& sinCosOfReversedAngle, int x, 
 
 const ZMinimap ZGame::GetMinimap() {
     EDungeonCell** cells;
-    utl::ZMatrix::Allocate(&cells, kMinimapSize);
+    utl::matrix_helpers::Allocate(&cells, kMinimapSize);
 
     prz::mdl::ZMonster* player = mDungeon->GetMonster(mPlayerId);
     ZDirection minimapDirection = player->GetDirection();

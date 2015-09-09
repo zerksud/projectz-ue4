@@ -6,8 +6,7 @@
 
 namespace prz {
 namespace utl {
-
-namespace ZMatrix {
+namespace matrix_helpers {
 
 template<typename T>
 void Allocate(T*** matrix, unsigned int width, unsigned int height) {
@@ -53,6 +52,5 @@ void Deallocate(T*** matrix, unsigned int height) {
 }
 
 }
-
 }
 }

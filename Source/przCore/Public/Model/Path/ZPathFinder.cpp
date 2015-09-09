@@ -123,7 +123,7 @@ ZWeightedCell* ZPathFinder::CreateNextPathCellIfMorePromising(const ZWeightedMap
 
 ZPathFinder::PathCells ZPathFinder::FindPathBetweenCells(const ZWeightedMap& map, const ZPosition& startCellPosition, const ZPosition& finishCellPosition, bool diggingIsAllowed) {
     PathCellConnection** pathConnections;
-    utl::ZMatrix::Allocate(&pathConnections, map.GetWidth(), map.GetHeight());
+    utl::matrix_helpers::Allocate(&pathConnections, map.GetWidth(), map.GetHeight());
 
     utl::ZPriorityQueue<ZWeightedCell*, utl::ZVector<ZWeightedCell*>, ZWeightedCellPtrAscendingOrder> queue;
 
@@ -192,7 +192,7 @@ ZPathFinder::PathCells ZPathFinder::FindPathBetweenCells(const ZWeightedMap& map
         delete cell;
     }
 
-    utl::ZMatrix::Deallocate(&pathConnections, map.GetHeight());
+    utl::matrix_helpers::Deallocate(&pathConnections, map.GetHeight());
 
     return path;
 }

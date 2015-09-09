@@ -15,7 +15,7 @@ void ZDungeonLevel::CreateFailSafeDungeon() {
     mHeight = 1;
 
     EDungeonCell** map;
-    utl::ZMatrix::Allocate(&map, 1);
+    utl::matrix_helpers::Allocate(&map, 1);
     map[0][0] = EDungeonCell::DownStaircase;
 
     ParseMap(&map);
@@ -56,7 +56,7 @@ ZDungeonLevel::~ZDungeonLevel() {
         delete pair.second;
     }
 
-    utl::ZMatrix::Deallocate<EDungeonCell>(&mTerrain, mHeight);
+    utl::matrix_helpers::Deallocate<EDungeonCell>(&mTerrain, mHeight);
 }
 
 int ZDungeonLevel::GetWidth() const {

@@ -12,17 +12,17 @@ namespace path {
 ZWeightedMap::ZWeightedMap(int width, int height, const ZWeight& defaultCellWeight)
     : mWidth(width),
         mHeight(height) {
-    utl::ZMatrix::Allocate(&mCellWeights, mWidth, mHeight, defaultCellWeight);
+    utl::matrix_helpers::Allocate(&mCellWeights, mWidth, mHeight, defaultCellWeight);
 }
 
 ZWeightedMap::ZWeightedMap(const ZWeightedMap& other)
     : mWidth(other.mWidth),
         mHeight(other.mHeight) {
-    utl::ZMatrix::AllocateAndCopy(&mCellWeights, other.mCellWeights, mWidth, mHeight);
+    utl::matrix_helpers::AllocateAndCopy(&mCellWeights, other.mCellWeights, mWidth, mHeight);
 }
 
 ZWeightedMap::~ZWeightedMap() {
-    utl::ZMatrix::Deallocate(&mCellWeights, mHeight);
+    utl::matrix_helpers::Deallocate(&mCellWeights, mHeight);
 }
 
 ZWeightedMap& ZWeightedMap::operator=(ZWeightedMap other) {

@@ -15,7 +15,7 @@ ZMinimap::ZMinimap(unsigned int sideSize, EDungeonCell*** cells) {
 
 ZMinimap::ZMinimap(const ZMinimap& other) {
     mSize = other.mSize;
-    utl::ZMatrix::AllocateAndCopy<EDungeonCell>(&mCells, other.mCells, mSize);
+    utl::matrix_helpers::AllocateAndCopy<EDungeonCell>(&mCells, other.mCells, mSize);
 }
 
 ZMinimap::ZMinimap(ZMinimap&& other) {
@@ -31,7 +31,7 @@ ZMinimap& ZMinimap::operator=(ZMinimap other) {
 }
 
 ZMinimap::~ZMinimap() {
-    utl::ZMatrix::Deallocate(&mCells, mSize);
+    utl::matrix_helpers::Deallocate(&mCells, mSize);
 }
 
 unsigned int ZMinimap::GetSize() const {

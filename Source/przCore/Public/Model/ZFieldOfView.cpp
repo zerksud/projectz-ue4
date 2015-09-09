@@ -9,7 +9,7 @@ namespace mdl {
 
 ZFieldOfView::ZFieldOfView():
 mRadius(0) {
-    utl::ZMatrix::Allocate(&mData, 1, 1, EDungeonCell::Monster);
+    utl::matrix_helpers::Allocate(&mData, 1, 1, EDungeonCell::Monster);
 }
 
 ZFieldOfView::ZFieldOfView(unsigned int radius, EDungeonCell** fovData) :
@@ -19,18 +19,18 @@ mData(fovData) {
 
 ZFieldOfView::ZFieldOfView(const ZFieldOfView& other) {
     mRadius = other.mRadius;
-    utl::ZMatrix::AllocateAndCopy(&mData, other.mData, mRadius * 2 + 1);
+    utl::matrix_helpers::AllocateAndCopy(&mData, other.mData, mRadius * 2 + 1);
 }
 
 ZFieldOfView::ZFieldOfView(ZFieldOfView&& other) {
     swap(*this, other);
 
     other.mRadius = 0;
-    utl::ZMatrix::Allocate(&other.mData, 1, 1, EDungeonCell::Monster);
+    utl::matrix_helpers::Allocate(&other.mData, 1, 1, EDungeonCell::Monster);
 }
 
 ZFieldOfView::~ZFieldOfView() {
-    utl::ZMatrix::Deallocate(&mData, mRadius * 2 + 1);
+    utl::matrix_helpers::Deallocate(&mData, mRadius * 2 + 1);
 }
 
 ZFieldOfView& ZFieldOfView::operator=(ZFieldOfView other) {

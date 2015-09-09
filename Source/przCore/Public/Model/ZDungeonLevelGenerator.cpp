@@ -312,7 +312,7 @@ void ZDungeonLevelGenerator::DigRandomDownStaircases() {
 
     path::ZWeightedMap nextLevelMapTemplate(kDungeonLevelWidth, kDungeonLevelHeight, path::ZPathFinder::kSolidRockCellWeight);
     EDungeonCell** fakeNextLevelMap;
-    utl::ZMatrix::Allocate(&fakeNextLevelMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
+    utl::matrix_helpers::Allocate(&fakeNextLevelMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
 
     while (distancedRooms.size() > 0 && staircasesGeneratedCount < staircasesToBeGeneratedCount) {
         LOGD("got %d staircases, %d more to get", staircasesGeneratedCount, staircasesToBeGeneratedCount - staircasesGeneratedCount);
@@ -393,7 +393,7 @@ void ZDungeonLevelGenerator::DigRandomDownStaircases() {
         distancedRooms.pop_back();
     }
 
-    utl::ZMatrix::Deallocate<EDungeonCell>(&fakeNextLevelMap, kDungeonLevelHeight);
+    utl::matrix_helpers::Deallocate<EDungeonCell>(&fakeNextLevelMap, kDungeonLevelHeight);
 }
 
 const ZDungeonLevelGenerator::ZDirectionalStaircase ZDungeonLevelGenerator::CalcUpStaircase(const ZPosition& downStaircasePosition, const ZDirection& downStaircaseDirection) {
@@ -543,7 +543,7 @@ void ZDungeonLevelGenerator::ConnectUpStaircasesWithSomeValidCell(const ZPositio
 }
 
 ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previousLevel) {
-    utl::ZMatrix::Allocate(&mMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
+    utl::matrix_helpers::Allocate(&mMap, kDungeonLevelWidth, kDungeonLevelHeight, EDungeonCell::SolidRock);
     mWeightedMap = new path::ZWeightedMap(kDungeonLevelWidth, kDungeonLevelHeight, path::ZPathFinder::kSolidRockCellWeight);
 
     CalcUpStaircases(previousLevel);

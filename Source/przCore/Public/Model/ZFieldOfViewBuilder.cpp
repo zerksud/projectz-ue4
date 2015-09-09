@@ -20,7 +20,7 @@ struct FieldOfViewData {
     viewDistance(pViewDistance),
     dungeonLevel(pDungeonLevel) {
         int size = viewDistance * 2 + 1;
-        utl::ZMatrix::Allocate(&cells, size, size, EDungeonCell::Unknown);
+        utl::matrix_helpers::Allocate(&cells, size, size, EDungeonCell::Unknown);
     }
 
     bool CellIsIsTooFar(const ZPositionDiff& positionDiff) const {
