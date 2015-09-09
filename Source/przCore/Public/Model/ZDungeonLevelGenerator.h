@@ -3,8 +3,8 @@
 #include "Utils/StandardLibrary/ZVector.h"
 
 #include "Model/IDungeonLevelGenerator.h"
-#include "Model/Path/WeightedCell.h"
-#include "Model/Path/PathFinder.h"
+#include "Model/Path/ZWeightedCell.h"
+#include "Model/Path/ZPathFinder.h"
 
 namespace prz {
 namespace mdl {
