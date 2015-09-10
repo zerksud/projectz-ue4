@@ -1,8 +1,6 @@
 #include "przCorePCH.h"
 #include "Model/Path/ZWeightedMap.h"
 
-#include <string.h>
-
 #include "Utils/MatrixHelpers.h"
 
 namespace prz {
