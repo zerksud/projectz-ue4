@@ -7,7 +7,6 @@ public class prz : ModuleRules {
 
         PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore", "przCore" });
 
-        string modulePath = Path.GetDirectoryName(RulesCompiler.GetModuleFilename(this.GetType().Name));
-        PrivateIncludePaths.Add(Path.Combine(modulePath, "Private"));
+        PrivateIncludePaths.Add(Path.Combine(ModuleDirectory, "Private"));
     }
 }
