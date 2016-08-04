@@ -15,7 +15,7 @@
 #pragma once
 
 #include "Utils/ZDictionary.h"
-#include "Utils/StandardLibrary/Functional.h"
+#include "Utils/StandardLibrary/ZFunctional.h"
 
 namespace prz {
 namespace utl {

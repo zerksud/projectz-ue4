@@ -15,7 +15,7 @@
 #include "przCorePCH.h"
 
 #include "Utils/StandardLibrary/ZMap.h"
-#include "Utils/StandardLibrary/Math.h"
+#include "Utils/StandardLibrary/ZMath.h"
 #include "Utils/LOG.h"
 
 #include "Model/ZDirection.h"

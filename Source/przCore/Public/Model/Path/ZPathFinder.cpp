@@ -15,9 +15,9 @@
 #include "przCorePCH.h"
 #include "Model/Path/ZPathFinder.h"
 
-#include "Utils/StandardLibrary/Math.h"
+#include "Utils/StandardLibrary/ZMath.h"
 #include "Utils/StandardLibrary/ZQueue.h"
-#include "Utils/StandardLibrary/Utility.h"
+#include "Utils/StandardLibrary/ZUtility.h"
 #include "Utils/StandardLibrary/ZVector.h"
 #include "Utils/MatrixHelpers.h"
 #include "Utils/RandomHelpers.h"

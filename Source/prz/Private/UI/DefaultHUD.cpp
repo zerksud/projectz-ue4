@@ -15,8 +15,8 @@
 #include "prz.h"
 #include "DefaultHUD.h"
 
-#include "Utils/StandardLibrary/Algorithm.h"
-#include "Utils/StandardLibrary/Math.h"
+#include "Utils/StandardLibrary/ZAlgorithm.h"
+#include "Utils/StandardLibrary/ZMath.h"
 #include "Utils/ZServices.h"
 
 #include "Model/IGame.h"

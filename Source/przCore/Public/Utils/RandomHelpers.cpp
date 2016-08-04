@@ -15,8 +15,8 @@
 #include "przCorePCH.h"
 #include "Utils/RandomHelpers.h"
 
-#include "Utils/StandardLibrary/StdLib.h"
-#include "Utils/StandardLibrary/Time.h"
+#include "Utils/StandardLibrary/ZStdLib.h"
+#include "Utils/StandardLibrary/ZTime.h"
 
 namespace prz {
 namespace utl {

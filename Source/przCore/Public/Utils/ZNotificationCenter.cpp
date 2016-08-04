@@ -16,7 +16,7 @@
 #include "ZNotificationCenter.h"
 
 #include "Utils/LOG.h"
-#include "Utils/StandardLibrary/Algorithm.h"
+#include "Utils/StandardLibrary/ZAlgorithm.h"
 
 namespace prz {
 namespace utl {

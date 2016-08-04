@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "Utils/StandardLibrary/Algorithm.h"
+#include "Utils/StandardLibrary/ZAlgorithm.h"
 #include "Utils/StandardLibrary/ZVector.h"
 
 namespace prz {

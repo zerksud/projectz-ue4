@@ -16,7 +16,7 @@
 #include "ZFieldOfView.h"
 
 #include "Utils/MatrixHelpers.h"
-#include "Utils/StandardLibrary/Utility.h"
+#include "Utils/StandardLibrary/ZUtility.h"
 
 namespace prz {
 namespace mdl {
