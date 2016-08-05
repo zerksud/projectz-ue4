@@ -13,7 +13,7 @@
 // limitations under the License.
 
 #include "przCorePCH.h"
-#include "Model/PlayerNavigation.h"
+#include "Model/ZPlayerNavigation.h"
 
 namespace prz {
 namespace mdl {

@@ -18,7 +18,7 @@
 #include "Utils/ZServices.h"
 #include "Utils/INotificationCenter.h"
 
-#include "Model/PlayerNavigation.h"
+#include "Model/ZPlayerNavigation.h"
 
 #include "UI/Styles/PrzStyleManager.h"
 #include "UI/Styles/NavigationWidgetStyle.h"

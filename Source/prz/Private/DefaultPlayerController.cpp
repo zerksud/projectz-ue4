@@ -22,7 +22,7 @@
 #include "Utils/LOG.h"
 
 #include "Model/IGame.h"
-#include "Model/PlayerNavigation.h"
+#include "Model/ZPlayerNavigation.h"
 
 ADefaultPlayerController::ADefaultPlayerController(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer) {
