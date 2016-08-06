@@ -88,13 +88,13 @@ ZDirection ZDirection::TurnCopy(EDirection direction) const {
     return directionCopy;
 }
 
-float ZDirection::GetAngleFromDiff(const ZPositionDiff& diff) {
+int ZDirection::GetAngleFromDiff(const ZPositionDiff& diff) {
     int dx = diff.GetdX();
     int dy = -diff.GetdY();
-    float alpha = atan2(dy, dx);
+    double alpha = atan2(dy, dx);
     alpha = alpha / kPi * 180.0;
 
-    return alpha;
+    return static_cast<int>(alpha);
 }
 
 ZPositionDiff ZDirection::GetPositionDiff(int angle) {

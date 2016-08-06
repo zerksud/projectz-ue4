@@ -50,7 +50,7 @@ public:
     void Align(const ZPositionDiff& diff);
 
 private:
-    static float GetAngleFromDiff(const ZPositionDiff& diff);
+    static int GetAngleFromDiff(const ZPositionDiff& diff);
     static ZPositionDiff GetPositionDiff(int angle);
 
     void Turn(int angle);
