@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "Utils/StandardLibrary/ZString.h"
+#include <string>
 
 #include "Model/ZMinimap.h"
 #include "Model/ZDungeon.h"
@@ -34,7 +34,7 @@ public:
     virtual const ZMinimap GetMinimap() = 0;
     virtual unsigned int GetMinimapSize() const = 0;
 
-    virtual const utl::ZString& GetLogHistory() = 0;
+    virtual const std::string& GetLogHistory() = 0;
 };
 
 }

@@ -54,7 +54,7 @@ void ZGameLog::Log(const char* format, ...) {
     delete[] userMessage;
 }
 
-void ZGameLog::AddMessage(const utl::ZString &message) {
+void ZGameLog::AddMessage(const std::string &message) {
     if (mHistory.size() >= mHistoryMaxSize) {
         mHistory.pop_back();
     }
@@ -71,7 +71,7 @@ void ZGameLog::SetHistoryMaxSize(unsigned int size) {
     }
 }
 
-const utl::ZString &ZGameLog::GetHistory(const utl::ZString &delimeter) {
+const std::string &ZGameLog::GetHistory(const std::string &delimeter) {
     if (!mCachedHistoryIsValid) {
         mCachedHistory = utl::string_helpers::Join(mHistory, delimeter);
         mCachedHistoryIsValid = true;

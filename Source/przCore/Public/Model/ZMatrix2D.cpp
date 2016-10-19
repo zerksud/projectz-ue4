@@ -48,7 +48,7 @@ ZMatrix2D& ZMatrix2D::operator=(ZMatrix2D other) {
 }
 
 void swap(ZMatrix2D& left, ZMatrix2D& right) {
-    using utl::swap;
+    using std::swap;
     
     swap(left.mData, right.mData);
 }

@@ -15,10 +15,11 @@
 #include "przCorePCH.h"
 #include "Model/Path/ZPathFinder.h"
 
-#include "Utils/StandardLibrary/ZMath.h"
-#include "Utils/StandardLibrary/ZQueue.h"
-#include "Utils/StandardLibrary/ZUtility.h"
-#include "Utils/StandardLibrary/ZVector.h"
+#include <cmath>
+#include <queue>
+#include <utility>
+#include <vector>
+
 #include "Utils/MatrixHelpers.h"
 #include "Utils/RandomHelpers.h"
 
@@ -57,7 +58,7 @@ struct PathCellConnection {
     }
 
     friend void swap(PathCellConnection& left, PathCellConnection& right) {
-        using utl::swap;
+        using std::swap;
 
         swap(left.pathToCellWeight, right.pathToCellWeight);
         swap(left.previousPathCell, right.previousPathCell);
@@ -83,7 +84,7 @@ struct PathCellConnection {
 
 int ZPathFinder::CalcCellsDistance(const ZPosition& left, const ZPosition& right) {
     ZPositionDiff diff = right - left;
-    int distance = utl::abs(diff.GetdX()) + utl::abs(diff.GetdY());
+    int distance = std::abs(diff.GetdX()) + std::abs(diff.GetdY());
 
     return distance;
 }
@@ -139,7 +140,7 @@ ZPathFinder::PathCells ZPathFinder::FindPathBetweenCells(const ZWeightedMap& map
     PathCellConnection** pathConnections;
     utl::matrix_helpers::Allocate(&pathConnections, map.GetWidth(), map.GetHeight());
 
-    utl::ZPriorityQueue<ZWeightedCell*, utl::ZVector<ZWeightedCell*>, ZWeightedCellPtrAscendingOrder> queue;
+    std::priority_queue<ZWeightedCell*, std::vector<ZWeightedCell*>, ZWeightedCellPtrAscendingOrder> queue;
 
     ZWeight pathFromStartCellEstimatedWeight = CalcCellsDistance(startCellPosition, finishCellPosition);
     ZWeightedCell* startCell = new ZWeightedCell(startCellPosition, 0, pathFromStartCellEstimatedWeight);

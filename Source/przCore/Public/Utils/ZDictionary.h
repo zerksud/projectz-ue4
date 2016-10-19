@@ -16,9 +16,9 @@
 
 #include "Platform.h"
 
-#include "Utils/StandardLibrary/ZString.h"
-#include "Utils/StandardLibrary/ZUnorderedMap.h"
-#include "Utils/StandardLibrary/ZUtility.h"
+#include <string>
+#include <unordered_map>
+#include <utility>
 
 namespace prz {
 namespace utl {
@@ -40,14 +40,14 @@ public:
     bool AsBool() const;
 
     friend void swap(ZDictionary& left, ZDictionary& right) {
-        using utl::swap;
+        using std::swap;
 
         swap(left.mValue, right.mValue);
         swap(left.mValueType, right.mValueType);
     }
 
 private:
-    typedef utl::ZUnorderedMap<ZString, ZDictionary> ZDictionaryMap;
+    typedef std::unordered_map<std::string, ZDictionary> ZDictionaryMap;
 
     typedef union {
         int asInt;

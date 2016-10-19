@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "Utils/StandardLibrary/ZVector.h"
+#include <vector>
 
 #include "Model/IDungeonLevelGenerator.h"
 #include "Model/Path/ZWeightedCell.h"
@@ -43,7 +43,7 @@ private:
             : position(pPosition), direction(pDirection) {
         }
     };
-    typedef utl::ZVector<ZDirectionalStaircase> ZDirectionalStaircaseList;
+    typedef std::vector<ZDirectionalStaircase> ZDirectionalStaircaseList;
 
     bool TryToGenerateBSPTree(BSPTreeNode* rootNode, bool tryToSplitVertically = true);
     void SplitSubDungeonVertically(BSPTreeNode* rootNode);

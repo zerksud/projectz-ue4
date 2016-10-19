@@ -33,7 +33,7 @@ public:
     virtual const ZMinimap GetMinimap() override;
     virtual unsigned int GetMinimapSize() const override;
 
-    virtual const utl::ZString& GetLogHistory() override;
+    virtual const std::string& GetLogHistory() override;
 
 private:
     ZDungeon* mDungeon;

@@ -14,8 +14,8 @@
 
 #pragma once
 
-#include "Utils/StandardLibrary/ZString.h"
-#include "Utils/StandardLibrary/ZUtility.h"
+#include <string>
+#include <utility>
 
 namespace prz {
 namespace mdl {
@@ -34,7 +34,7 @@ public:
     
     int LengthSquare() const;
 
-    utl::ZString ToString() const;
+    std::string ToString() const;
 
     ZPositionDiff& operator+=(const ZPositionDiff& other);
     
@@ -70,7 +70,7 @@ public:
     ZPosition& operator=(const ZPosition& other);
     ZPosition& operator+=(const ZPositionDiff& diff);
 
-    utl::ZString ToString() const;
+    std::string ToString() const;
 
 private:
     int mX;

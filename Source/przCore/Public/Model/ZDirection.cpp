@@ -14,8 +14,9 @@
 
 #include "przCorePCH.h"
 
-#include "Utils/StandardLibrary/ZMap.h"
-#include "Utils/StandardLibrary/ZMath.h"
+#include <map>
+#include <cmath>
+
 #include "Utils/LOG.h"
 
 #include "Model/ZDirection.h"
@@ -25,7 +26,7 @@ namespace mdl {
 
 static const double kPi = 3.14159265359;
 
-typedef utl::ZMap<int, ZPositionDiff> ZPredictedMovesMap;
+typedef std::map<int, ZPositionDiff> ZPredictedMovesMap;
 
 static const ZPredictedMovesMap kPredictedMoves = {
         {0, ZPositionDiff(1, 0)},

@@ -14,16 +14,16 @@
 
 #pragma once
 
-#include "Utils/StandardLibrary/ZList.h"
-#include "Utils/StandardLibrary/ZString.h"
+#include <list>
+#include <string>
 
 namespace prz {
 namespace utl {
 namespace string_helpers {
 
-    ZString Format(const char* format, ...);
+    std::string Format(const char* format, ...);
 
-    ZString Join(const ZList<ZString>& stringList, const ZString& delimeter = "\n");
+    std::string Join(const std::list<std::string>& stringList, const std::string& delimeter = "\n");
 
 }
 }

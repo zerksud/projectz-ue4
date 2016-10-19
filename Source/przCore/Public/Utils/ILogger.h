@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "Utils/StandardLibrary/ZFunctional.h"
+#include <functional>
 
 namespace prz {
 namespace utl {
@@ -28,7 +28,7 @@ class ILogger {
 public:
     virtual ~ILogger() = default;
 
-    typedef utl::ZFunction<void(ELogPriority priority, const char* fileName, int lineNum, const char* message)> ZLogCallback;
+    typedef std::function<void(ELogPriority priority, const char* fileName, int lineNum, const char* message)> ZLogCallback;
 
     virtual void Log(ELogPriority priority, const char* fileName, int lineNum, const char* format, ...) const = 0;
     virtual void SetLogCallback(ZLogCallback callback) = 0;

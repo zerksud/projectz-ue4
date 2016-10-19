@@ -14,8 +14,8 @@
 
 #pragma once
 
-#include "Utils/StandardLibrary/ZList.h"
-#include "Utils/StandardLibrary/ZString.h"
+#include <list>
+#include <string>
 
 namespace prz {
 namespace mdl {
@@ -29,17 +29,17 @@ public:
     void Log(const char* format, ...);
     void SetHistoryMaxSize(unsigned int size);
 
-    typedef utl::ZList<utl::ZString> LogHistory;
-    const utl::ZString& GetHistory(const utl::ZString& delimeter = "\n");
+    typedef std::list<std::string> LogHistory;
+    const std::string& GetHistory(const std::string& delimeter = "\n");
 
 private:
-    void AddMessage(const utl::ZString& message);
+    void AddMessage(const std::string& message);
 
     LogHistory mHistory;
     unsigned int mHistoryMaxSize;
 
     bool mCachedHistoryIsValid;
-    utl::ZString mCachedHistory;
+    std::string mCachedHistory;
 };
 
 }

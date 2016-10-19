@@ -14,14 +14,14 @@
 
 #pragma once
 
-#include "Utils/StandardLibrary/ZAlgorithm.h"
-#include "Utils/StandardLibrary/ZVector.h"
+#include <algorithm>
+#include <vector>
 
 namespace prz {
 namespace utl {
 
 template<typename T>
-bool VectorContains(const ZVector<T>& vector, const T& value) {
+bool VectorContains(const std::vector<T>& vector, const T& value) {
     auto pos = find(vector.begin(), vector.end(), value);
     bool contains = pos != vector.end();
 
@@ -29,7 +29,7 @@ bool VectorContains(const ZVector<T>& vector, const T& value) {
 }
 
 template<typename T>
-void VectorInsertAll(ZVector<T>* dst, const ZVector<T>& src) {
+void VectorInsertAll(std::vector<T>* dst, const std::vector<T>& src) {
     dst->insert(dst->end(), src.begin(), src.end());
 }
 

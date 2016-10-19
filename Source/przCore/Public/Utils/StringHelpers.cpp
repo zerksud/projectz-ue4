@@ -24,7 +24,7 @@ namespace prz {
 namespace utl {
 namespace string_helpers {
 
-ZString Format(const char* format, ...) {
+std::string Format(const char* format, ...) {
     va_list args;
     va_start(args, format);
     int32 messageSize = vsnprintf(nullptr, 0, format, args);
@@ -40,16 +40,16 @@ ZString Format(const char* format, ...) {
     vsprintf(userMessage, format, args);
     va_end(args);
 
-    ZString result = userMessage;
+    std::string result = userMessage;
 
     delete[] userMessage;
 
     return result;
 }
 
-ZString Join(const ZList<ZString> &stringList, const ZString &delimeter) {
+std::string Join(const std::list<std::string> &stringList, const std::string &delimeter) {
     size_t resultLength = 0;
-    for (const ZString& str : stringList) {
+    for (const std::string& str : stringList) {
         resultLength += strlen(str.c_str());
     }
     resultLength += strlen(delimeter.c_str()) * (stringList.size() - 1) + 1;
@@ -73,7 +73,7 @@ ZString Join(const ZList<ZString> &stringList, const ZString &delimeter) {
         }
     }
 
-    ZString result(resultBuffer);
+    std::string result(resultBuffer);
     delete[] resultBuffer;
     
     return result;

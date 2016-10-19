@@ -14,8 +14,8 @@
 
 #pragma once
 
-#include "Utils/StandardLibrary/ZString.h"
-#include "Utils/StandardLibrary/ZUtility.h"
+#include <string>
+#include <utility>
 
 #include "Model/Path/ZWeightedCell.h"
 #include "Model/ZPosition.h"
@@ -43,7 +43,7 @@ public:
     const ZWeight& GetCellWeight(const ZPosition& pos) const;
     const ZWeight& GetCellWeight(int x, int y) const;
 
-    const utl::ZString ToString() const;
+    const std::string ToString() const;
 
 private:
     int mWidth;

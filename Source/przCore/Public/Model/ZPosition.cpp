@@ -53,7 +53,7 @@ int ZPositionDiff::LengthSquare() const {
     return mdX * mdX + mdY * mdY;
 }
 
-utl::ZString ZPositionDiff::ToString() const {
+std::string ZPositionDiff::ToString() const {
     return utl::string_helpers::Format("[%d;%d]", mdX, mdY);
 }
 
@@ -79,7 +79,7 @@ const ZPositionDiff operator-(const ZPositionDiff& left, const ZPositionDiff& ri
 }
 
 void swap(ZPositionDiff& left, ZPositionDiff&right) {
-    using utl::swap;
+    using std::swap;
 
     swap(left.mdX, right.mdX);
     swap(left.mdY, right.mdY);
@@ -153,7 +153,7 @@ ZPosition& ZPosition::operator+=(const ZPositionDiff& diff) {
     return *this;
 }
 
-utl::ZString ZPosition::ToString() const {
+std::string ZPosition::ToString() const {
     return utl::string_helpers::Format("[%d;%d]", mX, mY);
 }
 

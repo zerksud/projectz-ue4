@@ -44,7 +44,7 @@ ZWeightedMap& ZWeightedMap::operator=(ZWeightedMap other) {
 }
 
 void swap(ZWeightedMap& left, ZWeightedMap& right) {
-    using utl::swap;
+    using std::swap;
 
     swap(left.mWidth, right.mWidth);
     swap(left.mHeight, right.mHeight);
@@ -94,7 +94,7 @@ char GetWeightChar(const ZWeight& weight) {
     return kPositiveWeight;
 }
 
-const utl::ZString ZWeightedMap::ToString() const {
+const std::string ZWeightedMap::ToString() const {
     char* resultBuffer = new char[(mWidth + 1) * mHeight + 1];
     char* currentCharPos = resultBuffer;
     
@@ -106,7 +106,7 @@ const utl::ZString ZWeightedMap::ToString() const {
     }
     *currentCharPos = 0;
     
-    utl::ZString result(resultBuffer);
+    std::string result(resultBuffer);
     delete[] resultBuffer;
     
     return result;

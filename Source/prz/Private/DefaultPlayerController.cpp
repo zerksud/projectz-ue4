@@ -15,9 +15,10 @@
 #include "prz.h"
 #include "DefaultPlayerController.h"
 
+#include <map>
+#include <string>
+
 #include "Utils/ZServices.h"
-#include "Utils/StandardLibrary/ZMap.h"
-#include "Utils/StandardLibrary/ZString.h"
 #include "Utils/INotificationCenter.h"
 #include "Utils/LOG.h"
 
@@ -35,7 +36,7 @@ typedef void (ADefaultPlayerController::*FMethodNoParamsPtr)();
 void ADefaultPlayerController::SetupInputComponent() {
     Super::SetupInputComponent();
 
-    prz::utl::ZMap<prz::utl::ZString, FMethodNoParamsPtr> actionMap = {
+    std::map<std::string, FMethodNoParamsPtr> actionMap = {
         {"MoveForward", &ADefaultPlayerController::MoveForward},
         {"MoveBackward", &ADefaultPlayerController::MoveBackward},
         {"StrafeLeft", &ADefaultPlayerController::StrafeLeft},
@@ -60,7 +61,7 @@ void ADefaultPlayerController::SetupObservers() {
 
     prz::utl::INotificationCenter* nc = GET_SERVICE(prz::utl::INotificationCenter);
     if (nc) {
-        prz::utl::ZMap<prz::utl::ZString, FMethodNoParamsPtr> notificationMethodMap = {
+        std::map<std::string, FMethodNoParamsPtr> notificationMethodMap = {
             {ZPlayerNavigation::kTurnLeftNotification, &ADefaultPlayerController::TurnLeft},
             {ZPlayerNavigation::kMoveForwardNotification, &ADefaultPlayerController::MoveForward},
             {ZPlayerNavigation::kTurnRightNotification, &ADefaultPlayerController::TurnRight},

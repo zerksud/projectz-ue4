@@ -31,7 +31,7 @@ public:
     virtual ~ZMinimap();
 
     friend void swap(ZMinimap& left, ZMinimap& right) {
-        using utl::swap;
+        using std::swap;
 
         swap(left.mSize, right.mSize);
         swap(left.mCells, right.mCells);

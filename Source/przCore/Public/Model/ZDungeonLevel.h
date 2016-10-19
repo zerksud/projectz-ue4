@@ -14,8 +14,9 @@
 
 #pragma once
 
-#include "Utils/StandardLibrary/ZUnorderedMap.h"
-#include "Utils/StandardLibrary/ZVector.h"
+#include <unordered_map>
+#include <vector>
+
 #include "Utils/RandomHelpers.h"
 
 #include "Model/ZFieldOfView.h"
@@ -56,7 +57,7 @@ public:
             return ZPosition(randomX, randomY);
         }
     };
-    typedef utl::ZVector<ZRoom> ZRoomList;
+    typedef std::vector<ZRoom> ZRoomList;
 
     // holds map matrix
     ZDungeonLevel(int width, int height, EDungeonCell*** map, const ZRoomList& rooms = ZRoomList(), const ZRoomList& nextLevelStaircaseRooms = ZRoomList());
@@ -73,7 +74,7 @@ public:
     bool CellIsSolid(int x, int y) const;
     bool CellIsSolid(const ZPosition& pos) const;
 
-    typedef utl::ZVector<ZPosition> StaircaseList;
+    typedef std::vector<ZPosition> StaircaseList;
     const StaircaseList& GetUpStaircases() const;
     const StaircaseList& GetDownStaircases() const;
 
@@ -129,8 +130,8 @@ private:
 
     bool MovementIsDiagonalAroundTheCorner(const ZPosition& origin, const ZPositionDiff& diff) const;
 
-    typedef utl::ZUnorderedMap<int, utl::ZIdType> ZMonsterIdByPositionMap;
-    typedef utl::ZUnorderedMap<utl::ZIdType, ZPlacedMonster*> ZMonsterList;
+    typedef std::unordered_map<int, utl::ZIdType> ZMonsterIdByPositionMap;
+    typedef std::unordered_map<utl::ZIdType, ZPlacedMonster*> ZMonsterList;
 
     ZPlacedMonster* GetPlacedMonster(utl::ZIdType monsterId);
     ZPlacedMonster* GetPlacedMonster(int x, int y);

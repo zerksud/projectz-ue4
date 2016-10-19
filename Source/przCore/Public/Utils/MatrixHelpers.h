@@ -16,7 +16,7 @@
 
 #include <string.h>
 
-#include "Utils/StandardLibrary/ZAlgorithm.h"
+#include <algorithm>
 
 namespace prz {
 namespace utl {
@@ -34,7 +34,7 @@ template<typename T>
 void Allocate(T*** matrix, unsigned int width, unsigned int height, T defaultValue) {
     Allocate(matrix, width, height);
     for (unsigned int i = 0; i < height; ++i) {
-        fill_n((*matrix)[i], width, defaultValue);
+        std::fill_n((*matrix)[i], width, defaultValue);
     }
 }
 

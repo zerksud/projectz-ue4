@@ -15,8 +15,9 @@
 #include "przCorePCH.h"
 #include "ZFieldOfView.h"
 
+#include <utility>
+
 #include "Utils/MatrixHelpers.h"
-#include "Utils/StandardLibrary/ZUtility.h"
 
 namespace prz {
 namespace mdl {
@@ -54,7 +55,7 @@ ZFieldOfView& ZFieldOfView::operator=(ZFieldOfView other) {
 }
 
 void swap(ZFieldOfView& left, ZFieldOfView& right) {
-    using utl::swap;
+    using std::swap;
 
     swap(left.mRadius, right.mRadius);
     swap(left.mData, right.mData);
