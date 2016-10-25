@@ -567,7 +567,6 @@ ZDungeonLevel* ZDungeonLevelGenerator::GenerateLevel(const ZDungeonLevel* previo
     DigUpStaircases();
 
     BSPTreeNode subDungeonsTreeRoot(0, 0, kDungeonLevelWidth, kDungeonLevelHeight);
-    utl::random_helpers::Initialize();
     TryToGenerateBSPTree(&subDungeonsTreeRoot);
 
     DigRandomTunnels();

@@ -22,9 +22,13 @@ namespace prz {
 namespace utl {
 namespace random_helpers {
 
-void Initialize() {
-    std::srand(static_cast<unsigned int>(std::time(0)));
-}
+class ZRandomInitializer {
+public:
+    ZRandomInitializer() {
+        std::srand(static_cast<unsigned int>(std::time(0)));
+    }
+};
+static ZRandomInitializer gRandomInitializer;
 
 bool FlipCoin() {
     if (std::rand() % 2) {
