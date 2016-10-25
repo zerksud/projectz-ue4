@@ -30,14 +30,6 @@ public:
 };
 static ZRandomInitializer gRandomInitializer;
 
-bool FlipCoin() {
-    if (std::rand() % 2) {
-        return true;
-    }
-
-    return false;
-}
-
 int GetRandomValue(int maxValue) {
     int value = std::rand() % (maxValue + 1);
     return value;

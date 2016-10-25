@@ -18,7 +18,6 @@ namespace prz {
 namespace utl {
 namespace random_helpers {
 
-    bool FlipCoin();
     int GetRandomValue(int maxValue);
     int GetRandomValue(int minValue, int maxValue);
 
