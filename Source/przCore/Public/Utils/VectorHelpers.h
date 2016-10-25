@@ -19,6 +19,7 @@
 
 namespace prz {
 namespace utl {
+namespace vector_helpers {
 
 template<typename T>
 bool VectorContains(const std::vector<T>& vector, const T& value) {
@@ -28,5 +29,6 @@ bool VectorContains(const std::vector<T>& vector, const T& value) {
     return contains;
 }
 
+}
 }
 }

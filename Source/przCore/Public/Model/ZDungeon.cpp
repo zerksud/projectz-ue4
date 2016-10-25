@@ -124,10 +124,10 @@ bool ZDungeon::TryToMoveMonster(utl::ZIdType monsterId, EDirection direction, ZP
         ZDungeonLevel* nextLevel = nullptr;
         const ZPosition* monsterPosition = mLevels[monsterLevelIndex]->GetMonsterPosition(monsterId);
         unsigned int nextLevelIndex = 0;
-        if (utl::VectorContains(mLevels[monsterLevelIndex]->GetDownStaircases(), *monsterPosition)) {
+        if (utl::vector_helpers::VectorContains(mLevels[monsterLevelIndex]->GetDownStaircases(), *monsterPosition)) {
             nextLevelIndex = monsterLevelIndex + 1;
             nextLevel = GetExistingLevelOrGenerateNew(nextLevelIndex);
-        } else if (utl::VectorContains(mLevels[monsterLevelIndex]->GetUpStaircases(), *monsterPosition)) {
+        } else if (utl::vector_helpers::VectorContains(mLevels[monsterLevelIndex]->GetUpStaircases(), *monsterPosition)) {
             if (monsterLevelIndex > 0) {
                 nextLevelIndex = monsterLevelIndex - 1;
                 nextLevel = mLevels[nextLevelIndex];
