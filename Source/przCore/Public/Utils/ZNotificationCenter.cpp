@@ -29,7 +29,7 @@ ZNotificationCenter::~ZNotificationCenter() {
     }
 }
 
-bool ZNotificationCenter::AddObserver(const std::string &name, void* observerOwner, ZNotificationEventHandler handler) {
+bool ZNotificationCenter::AddObserver(const std::string& name, void* observerOwner, ZNotificationEventHandler handler) {
     if (name.empty()) {
         LOGE("Can't add observer for empty notification");
         return false;
@@ -67,7 +67,7 @@ bool ZNotificationCenter::AddObserver(const std::string &name, void* observerOwn
     return true;
 }
 
-bool ZNotificationCenter::RemoveObserver(const std::string &name, void* observerOwner) {
+bool ZNotificationCenter::RemoveObserver(const std::string& name, void* observerOwner) {
     ZObserverList* list;
     ZObserverListTable::iterator pos = mObservers.find(name);
     if (pos == mObservers.end()) {
@@ -90,11 +90,11 @@ bool ZNotificationCenter::RemoveObserver(const std::string &name, void* observer
     return true;
 }
 
-bool ZNotificationCenter::PostNotification(const std::string &name) {
+bool ZNotificationCenter::PostNotification(const std::string& name) {
     return PostNotification(name, ZDictionary());
 }
 
-bool ZNotificationCenter::PostNotification(const std::string &name, const ZDictionary& dict) {
+bool ZNotificationCenter::PostNotification(const std::string& name, const ZDictionary& dict) {
     if (name.empty()) {
         LOGE("Can't post empty notification");
         return false;

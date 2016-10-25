@@ -47,7 +47,7 @@ std::string Format(const char* format, ...) {
     return result;
 }
 
-std::string Join(const std::list<std::string> &stringList, const std::string &delimeter) {
+std::string Join(const std::list<std::string>& stringList, const std::string& delimeter) {
     size_t resultLength = 0;
     for (const std::string& str : stringList) {
         resultLength += strlen(str.c_str());
