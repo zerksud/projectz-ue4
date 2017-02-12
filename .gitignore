@@ -16,3 +16,9 @@
 
 #KDevelop files:
 .kdev_include_paths
+
+#Qt Creator files:
+defines.pri
+includes.pri
+prz.pro
+prz.pro.user
