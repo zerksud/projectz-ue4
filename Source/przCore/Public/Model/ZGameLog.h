@@ -20,10 +20,9 @@
 namespace prz {
 namespace mdl {
 
-class ZGameLog {
+class ZGameLog final {
 public:
     ZGameLog();
-    virtual ~ZGameLog() = default;
 
     void Clear();
     void Log(const char* format, ...);

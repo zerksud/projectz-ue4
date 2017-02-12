@@ -30,9 +30,6 @@ ZPositionDiff::ZPositionDiff(int dXValue, int dYValue) {
     mdY = dYValue;
 }
 
-ZPositionDiff::~ZPositionDiff() {
-}
-
 int ZPositionDiff::GetdX() const {
     return mdX;
 }
@@ -98,9 +95,6 @@ ZPosition::ZPosition(const ZPosition& other) {
 ZPosition::ZPosition(int xValue, int yValue) {
     mX = xValue;
     mY = yValue;
-}
-
-ZPosition::~ZPosition() {
 }
 
 int ZPosition::GetX() const {

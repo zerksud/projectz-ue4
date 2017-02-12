@@ -20,11 +20,10 @@
 namespace prz {
 namespace mdl {
 
-class ZPositionDiff {
+class ZPositionDiff final {
 public:
     ZPositionDiff();
     ZPositionDiff(int dXValue, int dYValue);
-    virtual ~ZPositionDiff();
 
     int GetdX() const;
     int GetdY() const;
@@ -50,12 +49,11 @@ private:
     int mdY;
 };
 
-class ZPosition {
+class ZPosition final {
 public:
     ZPosition();
     ZPosition(const ZPosition& other);
     ZPosition(int xValue, int yValue);
-    virtual ~ZPosition();
 
     int GetX() const;
     int GetY() const;

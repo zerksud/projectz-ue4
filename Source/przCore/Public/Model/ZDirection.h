@@ -30,7 +30,7 @@ enum class EDirection {
     BackRight
 };
 
-class ZDirection {
+class ZDirection final {
 public:
     static const ZDirection kForward;
     static const ZDirection kLeft;
@@ -39,7 +39,6 @@ public:
 
     ZDirection();
     ZDirection(EDirection direction);
-    virtual ~ZDirection() = default;
 
     EDirection GetDirection() const;
     
