@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "prz.h"
+#include "przPCH.h"
 #include "UI/Styles/PrzStyleManager.h"
 
 #include "SlateGameResources.h"
