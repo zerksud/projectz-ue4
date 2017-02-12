@@ -69,9 +69,5 @@ bool ZUniqueIdRegistry::ReleaseUniqueId(ZRegistrable* object) {
     return true;
 }
 
-unsigned int ZUniqueIdRegistry::GetAssignedUniqueIdCount() const {
-    return mNextFreeId - ZRegistrable::kNoId - 1 - mReleasedIds.size();
-}
-
 }
 }

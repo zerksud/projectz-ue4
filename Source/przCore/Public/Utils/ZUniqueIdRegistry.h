@@ -34,8 +34,6 @@ public:
     bool AssignUniqueId(ZRegistrable* object) override;
     bool ReleaseUniqueId(ZRegistrable* object) override;
 
-    unsigned int GetAssignedUniqueIdCount() const override;
-
 private:
     typedef std::unordered_set<ZIdType> ZReleasedIdSet;
 
