@@ -27,7 +27,7 @@ namespace string_helpers {
 std::string Format(const char* format, ...) {
     va_list args;
     va_start(args, format);
-    int32 messageSize = vsnprintf(nullptr, 0, format, args);
+    int messageSize = vsnprintf(nullptr, 0, format, args);
     va_end(args);
 
     if (messageSize < 0) {
