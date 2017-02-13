@@ -43,8 +43,8 @@ void initializeServices() {
             GEngine->AddOnScreenDebugMessage(-1, 5.0f, (priority == prz::utl::ELogPriority::Error) ? FColor::Red : FColor::Yellow, message);
         }
         
-		ELogVerbosity::Type verbosity = priority == prz::utl::ELogPriority::Error ? ELogVerbosity::Error : ELogVerbosity::VeryVerbose;
-		FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, ANSI_TO_TCHAR(message));
+        ELogVerbosity::Type verbosity = priority == prz::utl::ELogPriority::Error ? ELogVerbosity::Error : ELogVerbosity::VeryVerbose;
+        FMsg::Logf(fileName, lineNum, ProjectZ.GetCategoryName(), verbosity, ANSI_TO_TCHAR(message));
     });
 
     REGISTER_SERVICE(prz::utl::ILogger, loggerService);

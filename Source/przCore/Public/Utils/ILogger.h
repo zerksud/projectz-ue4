@@ -20,10 +20,10 @@ namespace prz {
 namespace utl {
 
 enum class ELogPriority {
-	Debug,
-	Error
+    Debug,
+    Error
 };
-	
+
 class ILogger {
 public:
     virtual ~ILogger() = default;
