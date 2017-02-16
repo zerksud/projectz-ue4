@@ -25,6 +25,9 @@
 #define UNREGISTER_SERVICE(serviceTypeName) \
     SERVICE_MANAGER_UNREGISTER_SERVICE(prz::utl::ZServices::GetInstance(), serviceTypeName)
 
+#define UNREGISTER_ALL_SERVICES() \
+    SERVICE_MANAGER_UNREGISTER_ALL_SERVICES(prz::utl::ZServices::GetInstance())
+
 namespace prz {
 namespace utl {
 

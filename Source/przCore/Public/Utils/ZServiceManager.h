@@ -30,6 +30,9 @@
 #define SERVICE_MANAGER_UNREGISTER_SERVICE(serviceManagerInstance, serviceTypeName) \
     ((serviceManagerInstance).Unregister< ::serviceTypeName >(#serviceTypeName))
 
+#define SERVICE_MANAGER_UNREGISTER_ALL_SERVICES(serviceManagerInstance) \
+    ((serviceManagerInstance).UnregisterAll())
+
 namespace prz {
 namespace utl {
 
@@ -89,6 +92,8 @@ public:
 
         return false;
     }
+
+    void UnregisterAll();
 
 private:
     typedef std::function<void()> ZServiceDestructor;

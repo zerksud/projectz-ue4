@@ -19,9 +19,15 @@ namespace prz {
 namespace utl {
 
 ZServiceManager::~ZServiceManager() {
+    UnregisterAll();
+}
+
+void ZServiceManager::UnregisterAll() {
     for (auto i = mServiceRegisterOrder.rbegin(); i != mServiceRegisterOrder.rend(); ++i) {
         delete *i;
     }
+    mServiceRegisterOrder.clear();
+    mServiceMap.clear();
 }
 
 }
