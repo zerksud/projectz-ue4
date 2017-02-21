@@ -58,7 +58,7 @@ void ADefaultGameMode::InitGame(const FString& MapName, const FString& Options, 
     initializeServices();
 }
 
-void ADefaultGameMode::Logout(AController *Exiting) {
+void ADefaultGameMode::Logout(AController* Exiting) {
     UNREGISTER_ALL_SERVICES();
     Super::Logout(Exiting);
 }
