@@ -21,7 +21,7 @@
  *
  */
 UCLASS()
-class ADefaultGameMode : public AGameMode {
+class ADefaultGameMode : public AGameModeBase {
     GENERATED_UCLASS_BODY()
 public:
     virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
